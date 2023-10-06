@@ -1,0 +1,940 @@
+\documentclass[]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[many]{tcolorbox}
+\usepackage{listings}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem*{definition*}{Def}
+\newtheorem{algorithm}{Algorithm}
+
+\tcolorboxenvironment{lemma}{
+	colback=yellow!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition*}{
+	colback=green!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+\begin{document}
+	
+\title{Automated Deduction Compendium SS2023}
+\author{Ida Hönigmann}
+
+\maketitle
+
+\section{Introduction, SAT Solving}
+
+\subsubsection{Proposition, Formulas}
+\begin{definition*}[Proposition]
+	Proposition is a statement that can be either true or false.
+\end{definition*}
+
+\begin{definition*}[Propositional formula, Atom, Connective]
+	Atoms are boolean variables (e.g. p,q).
+	
+	\begin{itemize}
+		\item Atoms are formulas.
+		\item $\top$, $\bot$ are formulas.
+		\item If $A$ is a formula, then $\lnot A$ is a formula.
+		\item If $A_1, ..., A_n$ are formulas, then $(A_1 \land ... \land A_n)$ and $(A_1 \lor ... \lor A_n)$ are formulas.
+		\item If $A$ and $B$ are formulas, then $A \rightarrow B$ and $A \leftrightarrow B$ are formulas.
+	\end{itemize}
+
+	The symbols $\top, \bot, \land, \lor, \lnot, \rightarrow, \leftrightarrow$ are called logical connectives.
+\end{definition*}
+
+\subsubsection{Precedence}
+\begin{center}
+	\begin{tabular}{|c c c|}
+		\hline
+		Connective & Name & Precedence \\
+		\hline
+		$\top$            & verum       &   \\  
+		$\bot$            & falsum      &   \\
+		$\lnot$           & negation    & 5 \\  
+		$\land$           & conjunction & 4 \\
+		$\lor$            & disjunction & 3 \\  
+		$\rightarrow$     & implication & 2 \\
+		$\leftrightarrow$ & equivalence & 1 \\  
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection{Boolean Values, Interpretation}
+\begin{definition*}[Boolean values, Interpretation]
+	There are two boolean vales: true ($1$) and false ($0$).
+	
+	An interpretation for a set $P$ of boolean variables is a mapping $I : P \rightarrow \{0,1\}$.
+\end{definition*}
+
+\subsubsection{Interpreting formulas}
+\begin{itemize}
+	\item $I(\top) = 1$ and $I(\bot) = 0$
+	\item $I(A_1 \land ... \land A_n) = 1$ iff $I(A_i) = 1$ for all $i$
+	\item $I(A_1 \lor ... \lor A_n) = 1$ iff $I(A_i) = 1$ for some $i$
+	\item $I(\lnot A) = 1$ iff $I(A) = 0$
+	\item $I(A_1 \rightarrow A_2) = 1$ iff $I(A_1) = 0$ or $I(A_2) = 1$
+	\item $I(A_1 \leftrightarrow A_2) = 1$ iff $I(A_1) = I(A_2)$
+\end{itemize}
+
+\subsubsection{Safisfiable, Valid, Model}
+\begin{definition*}[Satisfiable, Model, Valid]
+	If $I(A) = 1$ then $I$ satisfies $A$ and $I$ is a model of $A$, denoted by $I \models A$.
+	
+	$A$ is satisfiable if some interpretation is a model of $A$.
+	
+	$A$ is valid if every interpretation is a model of $A$.
+	
+	$A$ and $B$ are equivalent, denoted by $A \equiv B$, if they have the same models.
+\end{definition*}
+
+\subsubsection{Connection valid, satisfiable}
+\begin{itemize}
+	\item $A$ is valid iff $\lnot A$ is unsatisfiable.
+	\item $A$ is satisfiable iff $\lnot A$ is not valid.
+\end{itemize}
+
+\subsubsection{Equivalent replacement}
+\begin{definition*}[Equivalent replacement]
+	$A[B]$ is a formula $A$ with a fixed occurrence of subformula $B$. $A[B']$ is the formula $A$ where every occurrence of $B$ is replaced by $B'$.
+\end{definition*}
+
+\begin{lemma}[Equivalent Replacement]
+	Let $I$ be an interpretation and $I \models A_1 \leftrightarrow A_2$. Then $I \models B[A_1] \leftrightarrow B[A_2]$.
+	
+	Let $A_1 \equiv A_2$. Then $B[A_1] \equiv B[A_2]$.
+\end{lemma}
+
+
+\subsubsection{Evaluating a formula}
+\begin{algorithm}
+\begin{verbatim}
+procedure evaluate(G,I)
+input: formula G, interpretation I
+output: the boolean value I(G)
+begin
+  forall atoms p occurring in G
+    if I models p
+      then replace all occurrences of p in G by 1;
+      else replace all occurrences of p in G by 0;
+  rewrite G into a normal form using the rewrite rules
+  if G = 1 then return 1 else return 0
+end
+\end{verbatim}
+\end{algorithm}
+
+\section{Splitting, Polarities}
+
+\subsubsection{Soundness of Splitting}
+
+$A_p^\bot$ and $A_p^\top$ are obtained by replacing in $A$ all occurrences of $p$ by $\bot$ and $\top$ respectively.
+
+\begin{lemma}
+	Let $p$ be an atom, $A$ be a formula, and $I$ be an interpretation.
+	
+	\begin{itemize}
+		\item If $I \not\models p$, then $A$ is equivalent to $A_p^\bot$ in $I$.
+		\item If $I \models p$, then $A$ is equivalent to $A_p^\top$ in $I$.
+	\end{itemize}
+\end{lemma}
+
+\begin{lemma}
+	Let $A$ be a formula and $p$ an atom.
+	
+	Then $A$ is satisfiable iff at least one of the formulas $A_p^\top$ and $A_p^\bot$ is satisfiable.
+\end{lemma}
+
+\subsubsection{Splitting}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure split(G)
+		parameters: function select
+		input: formula G
+		output: ''satisfiable'' or ''unsatisfiable''
+		begin
+		  G := simplify(G)		# rewrite rules
+		  if G = 1 then return ''satisfiable''
+		  if G = 0 then return ''unsatisfiable''
+		  (p,b) := select(G)
+		  case b of
+		  1 =>
+		    if split(replace(G,p,1)) = ''satisfiable''
+		      then return ''satisfiable''
+		      else return split(replace(G,p,0))
+		  0 =>
+		    if split(replace(G,p,0)) = ''satisfiable''
+		      then return ''satisfiable''
+		      else return split(replace(G,p,1))
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\subsubsection{Polarities}
+\begin{itemize}
+	\item $A|_\epsilon = A$ and $pol(A,\epsilon) = 1$
+	\item If $A|\pi = B_1 \land ... \land B_n$ or $A|\pi = B_1 \lor ... \lor B_n$ then $A|_{\pi.i} = B_i$ and $pol(A,\pi.i) = pol(A,\pi)$.
+	\item If $A|_pi = \lnot B$ then $A|_{\pi.1} = B$ and $pol(A,\pi.1) = -pol(A,\pi)$.
+	\item If $A|_\pi = B_1 \rightarrow B_2$ then $A|_{\pi.1} = B_1$, $A|_{\pi.2} = B_2$ and $pol(A,\pi.1) = -pol(A,\pi)$, $pol(A,\pi.2) = pol(A,\pi)$.
+	\item If $A|_\pi = B_1 \leftrightarrow B_2$ then $A|_{\pi.1} = B_1$, $A|_{\pi.2} = B_2$ and $pol(A,\pi.1) = 0 = pol(A,\pi.2)$.
+\end{itemize}
+
+\subsubsection{Monotonic replacement}
+
+Denote with $A[B]_\pi$ formula $A$ with the subformula at the position $\pi$ replaced by $B$.
+
+\begin{lemma}[Monotonic Replacement]
+	Let $A,B,B'$ be formulas, $I$ be an interpretation, and $I \models B \rightarrow B'$. If $pol(A,\pi) = 1$, then $I \models A[B]_\pi \rightarrow A[B']_\pi$. Likewise, if $pol(A,\pi) = -1$ then $I \models A[B']_\pi \rightarrow A[B]_\pi$.
+\end{lemma}
+
+\subsubsection{Pure Atom}
+
+\begin{definition*}
+	Atom $p$ is pure in a formula $A$, if either all occurrences of $p$ in $A$ are positive or all occurrences of $p$ in $A$ are negative.
+\end{definition*}
+
+\begin{lemma}[Pure Atom]
+	Let $p$ have only positive occurrences in $A$ and $I \models A$. Define $I' = I + (p\mapsto 1)$. Then $I' \models A$. Likewise, let $p$ have only negative occurrences in $A$ and $I \models A$. Define $I' = I + (p\mapsto 0)$. Then $I' \models A$.
+\end{lemma}
+
+\begin{lemma}[Pure Atom]
+	Let an atom $p$ have only positive (respectively, only negative) occurrences in $A$. Then $A$ is satisfiable iff $A_p^\top$ (respectively, $A_p^\bot$) is satisfiable.
+\end{lemma}
+
+\subsubsection{Splitting with pure atom optimization}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure split(G)
+		parameters: function select
+		input: formula G
+		output: ''satisfiable'' or ''unsatisfiable''
+		begin
+		  G := simplify_with_pure_atoms(G)
+		  if G = 1 then return ''satisfiable''
+		  if G = 0 then return ''unsatisfiable''
+		  (p,b) := select(G)
+		  case b of
+		  1 =>
+		    if split(replace(G,p,1)) = ''satisfiable''
+		      then return ''satisfiable''
+		      else return split(replace(G,p,0))
+		  0 =>
+		    if split(replace(G,p,0)) = ''satisfiable''
+		      then return ''satisfiable''
+		      else return split(replace(G,p,1))
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\section{CNF, DPLL, MiniSat}
+
+\subsubsection{Clause}
+
+\begin{definition*}[Literal, Clause, Empty clause, Unit clause, Horn clause]
+	A literal is either an atom $p$ or its negation $\lnot p$.
+	
+	A clause is a disjunction of literals $L_1 \lor ... \lor L_n$.
+	
+	The empty clause $\square$ is false in every interpretation.
+	
+	If $n=1$ then the clause is called unit clause.
+	
+	A horn clause is a clause with at most one positive literal.
+\end{definition*}
+
+\subsubsection{CNF}
+
+\begin{definition*}[CNF]
+	A formula $A$ is in conjenctive normal form if it is $\top$, $\bot$ or a conjunction of disjunctions of literals $\bigwedge_i \bigvee_j L_{i,j}$.
+\end{definition*}
+
+\subsubsection{Naming}
+
+If A is a non-trivial subformula $A$. Introduce a new name $n$ for it. Add formula $n \leftrightarrow A$ and replace subformula by its name in the original formula.
+
+\begin{lemma}[Naming]
+	Let $S$ be a set of formulas and $A$ a formula. Let $n$ be a boolean variable not occurring in $S$, nor in $A$.
+	
+	Then $S$ is satisfiable iff the set of formulas $S \cup \{n \leftrightarrow A\}$ is satisfiable.
+\end{lemma}
+
+\subsubsection{Optimized CNF Transformation}
+
+Introduce a new name $n$ every subformula $B$ and replace it with the name. If the subformula occurs only positively then add $n \rightarrow B$. If it occurs only negatively then add $B \rightarrow n$ and if it does not occur only positively or negatively than add $n \leftrightarrow B$.
+
+\begin{lemma}
+	A set of formulas is satisfiable iff the optimized CNF transformation of these formulas is satisfiable.
+\end{lemma}
+
+\subsubsection{Unit propagation}
+
+Let $S$ be a set of clauses. If $S$ contains a unit clause $L$ then remove from $S$ every clause of the form $L \lor C$ and replace in $S$ every clause of the form $\bar{L} \lor C$ by the clause $C$.
+
+\subsubsection{DPLL = splitting + unit propagation}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure DPLL(S)
+		input: set of clauses S
+		output: satisfiable or unsatisfiable
+		parameters: function select_literal
+		begin
+		  S := propagate(S) # unit propagation
+		  if S is empty then return satisfiable
+		  if S contains 0 then return unsatisfiable
+		  L := select_literals(S) # splitting
+		  if DPLL(S union {L}) = satisfiable
+		    then return satisfiable
+		    else return DPLL(S union {not L})
+		end
+	\end{verbatim}
+\end{algorithm}
+
+Tautologies (e.g. $p \lor \lnot p \lor C$) can be removed.
+
+\subsubsection{Pure literals}
+
+\begin{definition*}[Pure literal]
+	A literal $L$ in $S$ is called pure if $S$ contains no clauses of the form $\bar{L} \lor C$.
+\end{definition*}
+
+If $L$ is a pure literal in $S$ then all clauses containing this literal can be removed.
+
+\section{Random SAT, Horn clauses}
+
+\subsubsection{Random Clause Generation}
+
+Fix a number $n$ of boolean variables. Fix the length $k$ of the clause. Choose $k$ times a random literal $p_1, .., p_n, \lnot p_1, ..., \lnot p_n$ with equal probability.
+
+\subsubsection{k-SAT}
+
+We can reduce SAT to 3-SAT by naming: Let $L_1 \lor L_2 \lor L_3 \lor L4 \lor ...$ be a clause with more then 3 literals. Then we can replace it with $L_1 \lor L_2 \lor n$ and $\lnot n \lor L_3 \lor L4 \lor ...$ where $n$ is a new variable.
+
+SAT is NP-complete. 2-SAT is decidable in linear time. 3-SAT is NP-complete.
+
+\subsubsection{Chaos Algorithm, GSAT, WSAT}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure chaos(S)
+		input: set of clauses S
+		output: interpretation I such that I models S or don't know
+		parameters: positive interger max_tries
+		begin
+		  repeat max_tries times
+		    I := random interpretation
+		    if I models S then return I
+		  return don't know
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure GSAT(S)
+		input: set of clauses S
+		output: interpretation I such that I models S or don't know
+		parameters: positive intergers max_tries, max_flips
+		begin
+		  repeat max_tries times
+		    I := random interpretation
+		    if I models S then return I
+		    repeat max_flips times
+		      p := a variable such that flip(I, p) satisfies the maximal number of clauses in S
+		      I = flip(I,p)
+		      if I models S then return I
+		  return don't know
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure WSAT(S)
+		input: set of clauses S
+		output: interpretation I such that I models S or don't know
+		parameters: positive intergers max_tries, max_flips
+		begin
+		  repeat max_tries times
+		    I := random interpretation
+		    if I models S then return I
+		    repeat max_flips times
+		      randomly select a clause C in S such that I does not model C
+		      randomly select a variable p in C
+		      I = flip(I,p)
+		      if I models S then return I
+		  return don't know
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\subsubsection{SAT of Horn clauses}
+
+Satisfiability of horn clauses can be decided using unit propagation.
+
+\section{First-Order Logic, Theories}
+
+\subsubsection{Syntax}
+
+\begin{definition*}[Signature]
+	A signature consists of
+	\begin{itemize}
+		\item a set of sorts (e.g. integers, arrays of rationals) denoted by $\alpha, \beta$.
+		\item constants, denoted by $a,b,c$. Each constant $c$ has a sort $\alpha$, written $c: \alpha$.
+		\item function symbols, denoted by $f,g$. Each function symbol $f$ has a type $\alpha_1 \times ... \times \alpha_n \rightarrow \alpha$.
+		\item Predicate symbols, denoted by $p,q$. Each predicate symbol $p$ has a type $\alpha_1 \times ... \times \alpha_n$.
+	\end{itemize}
+\end{definition*}
+
+Variables are not part of the signature, but do have sorts.
+
+\begin{definition*}[Interpretation]
+	An interpretation $I$ maps
+	\begin{itemize}
+		\item each sort to a non-empty set, called the domain of this sort.
+		\item each constant $c:\alpha$ to an element $c' \in I(\alpha)$.
+		\item each variable $x: \alpha$ to an element $x' \in I(\alpha)$.
+		\item each function symbol $f: \alpha_1 \times ... \times \alpha_n \rightarrow \alpha$ to a function $f':I(\alpha_1) \times ... \times I(\alpha_n) \rightarrow I(\alpha)$.
+		\item each predicate symbol $p: \alpha_1 \times ... \times \alpha_n$ to a relation $p'$ on $I(\alpha_1) \times ... \times I(\alpha_n)$.
+	\end{itemize}
+\end{definition*}
+
+\begin{definition*}[Term, Atomic Formula]
+	Terms of the sort $\alpha$ are constants $c: \alpha$ or variables $x: \alpha$. If $t_1, ..., t_n$ are terms of the sorts $\alpha_1, ..., \alpha_n$ and $f: \alpha_1 \times ... \times \alpha_n \rightarrow \alpha$, then $f(t_1, ..., t_n)$ is a term of the sort $\alpha$.
+	
+	An atomic formula is an expression $p(t_1, ..., t_n)$ where $p: \alpha_1 \times ... \times \alpha_n$ and $t_1, ..., t_n$ are terms of sorts $\alpha_1, ..., \alpha_n$.
+\end{definition*}
+
+Note that $=$ and $>$ are interpreted, but other symbols are uninterpreted.
+
+\begin{definition*}[Formula, Quantifier, Bound, Free, Ground]
+	Let $A$ be a formula and $x$ a variable, then $\forall x A$ and $\exists x A$ are formulas.
+	
+	The symbols $\forall, \exists$ are called quantifiers.
+	
+	A variable occurring in a formula $A$ is called bound, if it is in the scope of a quantifier, otherwise it is called free.
+	
+	A formula is called ground or quantifier-free if it contains no occurrences of quantifiers.
+\end{definition*}
+
+\begin{definition*}[x-variants]
+	Let $\bar{x}$ be a sequence of variables. We say that two interpretations of the same signature $\Sigma$ are $\bar{x}$-variants if they coincide on all symbols and all variables not occurring in $\bar{x}$.
+\end{definition*}
+
+\begin{definition*}[Extension of interpretation]
+	Let $I$ be an interpretation and $t$ a term of sort $\alpha$. Define an element $t^I \in I(\alpha)$ as follows.
+	\begin{itemize}
+		\item for constants $c: \alpha$ and variables $x: \alpha$ we have $c^I \iff I(c)$ and $x^I \iff I(x)$.
+		\item $f(t_1,...,t_n)^I \iff f'(t_1^I,...,t_n^I)$.
+		\item $p(t_1,...,t_n)^I = 1 \iff (t_1^I,...,t_n^I) \in p^I$.
+		\item for connectives as before, e.g. $(A\rightarrow B)^I \iff (A^I = 0 \lor B^I = 1)$
+		\item $(\forall x A)^I = 1$ iff for all $\bar{x}$-variants $I'$ of $I$ we have $(A)^{I'} = 1$.
+		\item $(\exists x A)^I = 1$ iff for some $\bar{x}$-variants $I'$ of $I$ we have $(A)^{I'} = 1$.
+	\end{itemize}
+\end{definition*}
+
+\begin{definition*}[Satisfiable, Valid]
+	A formula $A$ with free variables $\bar{x}$ is said to be satisfiable in an interpretation $I$ if for some $\bar{x}$-variant $I'$ of $A$ we have $I' \models A$.
+	
+	$A$ is satisfiable iff it is satisfiable in some interpretation.
+	
+	A formula $A$ with free variables $\bar{x}$ is said to be valid in an interpretation $I$ if for every $\bar{x}$-variant $I'$ of $A$ we have $I' \models A$.
+	
+	$A$ is valid iff it is valid in every interpretation.
+\end{definition*}
+
+$A$ is valid iff $\lnot A$ is unsatisfiable.
+
+\subsubsection{Theory of Equality}
+
+The theory of equality is axiomatized by
+\begin{itemize}
+	\item reflexivity, symmetry and transitivity:
+	
+	$x = x$, $x = y \rightarrow y = x$, $x = y \land y = z \rightarrow x = z$
+	
+	\item congruence axioms for each function symbol $f$ in $\Sigma$:
+	
+	$x_1 = y_1 \land ... \land x_n = y_n \rightarrow f(x_1, ..., x_n) = f(y_1, ..., y_n)$
+	
+	\item congruence axioms for each predicate symbol $p$ of $\Sigma$:
+	
+	$x_1 = y_1 \land ... \land x_n = y_n \land p(x_1, ..., x_n) \rightarrow p(y_1, ..., y_n)$
+\end{itemize}
+
+\section{SMT, Theory of Equality, DPLL(T)}
+
+\subsubsection{Sat modulo theory}
+
+\begin{definition*}[T-interpretation, satisfiable modulo theory]
+	Let $\mathcal{T}$ be a theory axiomatized by $A_\mathcal{T}$. An interpretation $I$ with $I \models A_\mathcal{T}$ then $I$ is called a $\mathcal{T}$-interpretation.
+	
+	A formula $F$ is valid in $\mathcal{T}$ if $F$ is valid in every $\mathcal{T}$-interpretation.
+	
+	A formula $F$ is satisfiable in $\mathcal{T}$ if there exists a $\mathcal{T}$-interpretation which satisfies $F$.
+\end{definition*}
+
+\subsubsection{Congruence Closure}
+
+We can rewrite predicates into formulas (e.g. $p(x) \land \lnot q(x,y)$ gets rewritten to $f_p(x) = t \land f_q(x,y) \not= t$).
+
+\begin{definition*}[congruence class]
+	The congruence class of $t\in S$ under the congruence relation $R$ is $[t]_R = \{t' \in S | tRt'\}$.
+\end{definition*}
+
+\begin{algorithm}
+	\begin{verbatim}
+		procedure CongruenceClosure(F)
+		input: F is s1=t1 & ... & sn = tn & ~s(n+1)=t(n+1) & ... & ~sm=tm
+		output: satisfiable or unsatisfiable
+		parameters: function subterm_set
+		begin
+		  SF := subterm_set(F)
+		  R := {sRs | s in SF} union {{s} | s in SF}
+		  for every si = ti in F
+		    union si and ti in R
+		    propagate by function congruence
+		  if sjRtj for any j=n+1,...,m then return unsatisfiable
+		  else return satisfiable
+		end
+	\end{verbatim}
+\end{algorithm}
+
+\subsubsection{DPLL}
+
+For non-unit clauses in any theory:
+\begin{enumerate}
+	\item Abstract the problem by renaming every literal in the formulas.
+	\item Use a SAT solver to find a model.
+	\item If no model was found return unsat.
+	\item If a model was found use it to get a unit clause version of the original problem and solve it.
+	\item If it has a solution return sat.
+	\item If it does not have a solution rule out the sat model and jump to step 2.
+\end{enumerate}
+
+\section{Theory of Arrays, Theory Combination, Nelson-Oppen, Z3}
+
+\subsubsection{Theory of arrays}
+
+The theory of arrays $\mathcal{T}_A$ is defined by the signature $\{read, write\}$ and the axioms 
+
+$x = y \rightarrow read(write(A,x,v),y)=v$ and $x\not= y \rightarrow read(write(A,x,v),y)=read(A,y)$.
+
+Reduce $\mathcal{T}_A$ to $\mathcal{T}_E$ by
+\begin{itemize}
+	\item If $F$ contains no $write$ terms, replace $read(A,x)$ with $f_A(x)$ in $F$.
+	\item If $F$ contains $write$ terms ($read(write(A,x,v),y)$)
+	\begin{enumerate}
+		\item replace $F$ by $x=y \land F[v]$ where $F[v]$ is the formula obtained by replacing $read(write(A,x,v),y)$ by $v$ in $F$. If this is satisfiable return sat. Else try:
+		\item replace $F$ by $x\not= y \land F[read(A,y)]$ where $F[read(A,y)]$ is the formula obtained by replacing $read(write(A,x,v),y)$ by $read(A,y)$ in $F$. If this is satisfiable return sat. Else return unsat.
+	\end{enumerate}
+\end{itemize}
+
+\subsubsection{Combining theories}
+\begin{algorithm}
+	\begin{verbatim}
+		procedure SeparatingReasoning(F)
+		input: formula F in T1 union ... union Tn
+		output: equisatisfiable formulas F1 in T1, ..., Tn in Tn
+		assumptions: theory signatures S1, ..., Sn are disjoint
+		parameters: function head(t) returning the root symbol of a term t
+		begin
+		  repeat as long as possible
+		    if f in Si and head(t) in Sj with ~i=j:
+		      rewrite F[f(t_1,...,t,...,tm)] into F[f(t1, ..., c, ..., tm)] & c=t where c is a new variable
+		    if p in Si and head(t) in Sj with ~i=j:
+		      rewrite F[p(t_1,...,t,...,tm)] into F[p(t1, ..., c, ..., tm)] & c=t where c is a new variable
+		    if head(s) in Si and head(t) in Sj with ~i=j:
+		      rewrite F[s=t] into F[s=c] & c=t where c is a new variable
+		  end repeat
+		  return modified F as F1 & ... & Fn with each Fi in Ti
+	\end{verbatim}
+\end{algorithm}
+
+This only works if the theories have disjoint signatures and if each theory is stably infinite.
+
+\begin{definition*}[stably infinite, convex]
+	A theory $\mathcal{T}$ with signature $\Sigma$ is stably infinite if for every satisfiable formula $F \in \mathcal{T}$ there exists some $\mathcal{T}$ interpretation such that $I\models F$ and $I$ has a domain of infinite cardinality.
+	
+	A theory $\mathcal{T}$ is convex if for every formula $F \in \mathcal{T}$ such that $F$ is a conjunction of $\mathcal{T}$-literals: if $F \rightarrow \bigvee_{j=1}^k(u_j=v_j)$ then $F\rightarrow u_j = v_j$ for some $j \in \{1,...,k\}$.
+\end{definition*}
+
+Both $\mathcal{T}_{\mathbb{Z}}$ and $\mathcal{T}_A$ are not convex, but $\mathcal{T}_E$ and $\mathcal{T}_Q$ are.
+
+\subsubsection{Exchange of equality between theories}
+
+For a convex theory its decision procedure discovers a new equality $u=v$ for shared $u,v$. Pass this new equality to the decision procedure of the other theories.
+
+For a non-convex theory its decision procedure discovers a disjunction of new equalities $\bigvee_k u_k = v_k$ for shared $u_k, v_k$. Split the disjunction and exchange equalities along multiple branches.
+
+\section{First-Order Theorem Proving, TPTP, Inference Systems}
+
+\subsubsection{TPTP Syntax}
+\begin{verbatim}
+	fof(name, axiom/hypothesis/conjecture,
+	    formula).
+\end{verbatim}
+
+\begin{tabular}{c|c}
+	FOL & TPTP \\
+	\hline
+	$\top, \bot$                        & \verb*|$false,$true| \\
+	$\lnot a$                           & \verb*|~a| \\
+	$a_1 \land ... \land a_n$           & \verb*|a1&...&an| \\
+	$a_1 \lor ... \lor a_n$             & \verb*@a1|...|an@ \\
+	$a_1 \rightarrow a_2$               & \verb*|a1=>a2| \\
+	$(\forall x_1) ... (\forall x_n) a$ & \verb*|![X1,...,Xn]:a| \\
+	$(\exists x_1) ... (\exists x_n) a$ & \verb*|?[X1,...,Xn]:a| \\
+\end{tabular}
+
+\subsubsection{Inference System}
+
+\begin{definition*}[Inference, Inference rule, Inference system, Derivation, Proof]
+	An inference has the form
+	\begin{align*}
+		\frac{F_1 ... F_n}{G}
+	\end{align*}
+	where $n \geq 0$ and $F_1,...,F_n,G$ are formulas. $G$ is called the conclusion of the inference. $F_1,...,F_n$ are called the premises.
+	
+	An inference rule $R$ is a set of inferences. Every inference $I\in R$ is called an instance of $R$.
+	
+	An Inference system $\mathbb{I}$ is a set of inference rules.
+	
+	Axiom is a inference rule with no premises.
+	
+	A derivation in an inference system $\mathbb{I}$ is a tree built from inferences in $\mathbb{I}$. If the root of this derivation is $E$, we say it is a derivation of $E$. A derivation of $E$ from $E_1,...,E_m$ is a finite derivation of $E$ whose every leaf is either an axiom or one of the expressions $E_1,...,E_m$.
+	
+	A proof of $E$ is a finite derivation whose leaves are axioms.
+\end{definition*}
+
+\begin{definition*}[Soundness, Completeness]
+	An inference is sound if the conclusion is a logical consequence of its premises.
+	
+	An inference system is sound if every inference rule in this system is sound.
+	
+	An inference system is complete, if for every unsatisfiable $S$ there exists a derivation of $\square$ from $S$ in the inference system.
+\end{definition*}
+
+\subsubsection{Ground Binary Resolution Inference System}
+
+$\mathbb{BR}$ consists of two inference rules:
+\begin{align*}
+	\frac{p\lor C_1 \hspace{.5cm} \lnot p \lor C_2}{C_1 \lor C_2} (BR) \hspace{1cm} \frac{L\lor L \lor C}{L \lor C} (Fact)
+\end{align*}
+
+$\mathbb{BR}$ is sound.
+
+$\mathbb{BR}$ with selection:
+\begin{align*}
+	\frac{\underline{p}\lor C_1 \hspace{.5cm} \underline{\lnot p} \lor C_2}{C_1 \lor C_2} (BR) \hspace{1cm} \frac{\underline{p}\lor \underline{p} \lor C}{p \lor C} (Fact) \hspace{1cm} \frac{\underline{\lnot p}\lor \underline{\lnot p} \lor C}{\lnot p \lor C} (Fact)
+\end{align*}
+
+\subsubsection{Literal Orderings}
+
+\begin{definition*}[well-founded, well-behaved]
+	$>$ is called a well-founded ordering on atoms, if there exists no infinite decreasing chain of atoms.
+	
+	For a fixed ordering $>$ a well-behaved selection function selects either a negative literal or all maximal literals w.r.t. $>$ must be selected.
+\end{definition*}
+
+We can extend an ordering on atoms to one on literals by $p>q \implies \lnot p > p > \lnot q > q$.
+
+$\mathbb{BR}$ with selection is complete for every well-behaved selection function.
+
+\section{Selection functions, Saturation, Fairness and Redundancy}
+
+\subsubsection{Idea of a saturation algorithm}
+
+Initially $S=S_0$. Repeatedly apply inferences in $\mathbb{I}$ to clauses in $S$ and add their conclusions to $S$. Repeat until we either obtain $\square$ and know $S_0$ is unsat, or until every conclusion already is in $S$ and we know $S_0$ is sat.
+
+\begin{definition*}[Saturated, Closure, Inference process, Limit]
+	$S$ is called saturated with respect to $\mathbb{I}$, if for every inference of $\mathbb{I}$ with premises in $S$, the conclusion of this inference also belongs to $S$.
+	
+	The closure of $S$ with respect to $\mathbb{I}$ is the smallest set $S'$ containing $S$ and saturated with respect to $\mathbb{I}$.
+	
+	An $\mathbb{I}$-inference process is a sequence of sets of formulas $S_0 \implies S_1 \implies ...$ where every step is an $\mathbb{I}$-step.
+	
+	$S_i \implies S_{i+1}$ is an $\mathbb{I}$-step if there exists an inference $\frac{F_1 \hspace{0.2cm} ... \hspace{0.2cm} F_n}{F}$ in $\mathbb{I}$ such that $\{F_1,...,F_n\} \subseteq S_i$ and $S_{i+1} = S_i \cup \{F\}$.
+	
+	The limit of an inference process $S_0 \implies S_1 \implies ...$ is $\bigcup_i S_i$.
+\end{definition*}
+
+The limit of an inference process is the set of all derived formulas.
+
+\begin{definition*}[Fairness]
+	Let $S_0 \implies S_1 \implies ...$ be an inference process with the limit $S_\omega$. The process is called fair if for every $\mathbb{I}$-inference $\frac{F_1 \hspace{0.2cm} ... \hspace{0.2cm} F_n}{F}$ where $\{F_1, ..., F_n\} \subseteq S_\omega$ then there exists an $i$ such that $F \in S_i$.
+\end{definition*}
+
+\begin{lemma}
+	$\mathbb{I}$ is complete iff for every unsatisfiable set of formulas $S_0$ and any fair $\mathbb{I}$-inference process with the initial set $S_0$, the limit of this inference process contains $\square$.
+\end{lemma}
+
+There are three possible scenarios when performing a saturation algorithm:
+\begin{itemize}
+	\item The empty clause is generated at some point. In this case the input set of clauses is unsat.
+	\item Saturation terminates without generating the empty clause. In this case the input set of clauses is sat.
+	\item The saturation runs forever without generating the empty clause. In this case the input set of clauses is sat, but in practice we will run out of resources and the satisfiability is unknown.
+\end{itemize}
+
+\subsubsection{Redundancy}
+
+Tautologies (e.g. $p \lor \lnot p \lor C$) and subsumed clauses ($C$ and $C \lor D$) are redundant.
+
+\begin{definition*}[Bag extension]
+	Let $>$ be any (strict) ordering on a set $X$. The bag extension of $>$ is a binary relation $>^{bag}$ on bags over $X$ defined as the smallest transitive relation on bags such that
+	\begin{align*}
+		\{x,y_1,...,y_n\} >^{bag} \{x_1,...,x_m,y_1,...,y_n\} \text{ if } \forall i\in\{1,...,m\}: x>x_i
+	\end{align*}
+\end{definition*}
+
+$>^{bag}$ is an ordering. If $>$ is total then so is $>^{bag}$. If $>$ is well-founded then so is $>^{bag}$.
+
+We can now order clauses by interpreting them as bags of literals.
+
+\begin{definition*}[Redundancy]
+	A clause $C \in S$ is called redundant in $S$ if it is a logical consequence of clauses in $S$ strictly smaller than $C$.
+\end{definition*}
+
+\section{Redundancy, First-Order Reasoning with Equality}
+
+\subsubsection{Inference Process with Redundancy}
+
+Let $\mathbb{I}$ be an inference system. Consider an inference process with two kinds of steps $S_i \implies S_{i+1}$:
+\begin{itemize}
+	\item Adding the conclusion of an $\mathbb{I}$-inference with premises in $S_i$.
+	\item Deletion of a clause redundant in $S_i$, that is $S_{i+1}=S_i \setminus \{C\}$ where $C$ is redundant in $S_i$.
+\end{itemize}
+
+\begin{definition*}[Persistent, Limit, Fairness]
+	A clause $C$ is called persistent if $\exists i \forall j \geq i (C \in S_j)$.
+	
+	The limit $S_\omega$ of the inference process is the set of all persistent clauses $S_\omega = \bigcup_{i\in\mathbb{N}} \bigcap_{j\geq i} S_j$.
+	
+	The process is called $\mathbb{I}$-fair with redundancy if every inference with persistent premises in $S_\omega$ has been applied, that is, if $\frac{C_1 ... C_n}{C}$ is an inference in $\mathbb{I}$ and $\{C_1,...,C_n\} \subseteq S_\omega$ then $C \in S_i$ for some $i$.
+\end{definition*}
+
+\begin{lemma}
+	Let $>$ be a well-founded ordering and $\sigma$ a well-behaved selection function. Let $S_0$ be a set of clauses and $S_0 \implies S_1 \implies ...$ be a fair $\mathbb{BR}_\sigma$-inference process.
+	
+	Then $S_0$ is unsat iff $\square \in S_i$ for some $i$.
+\end{lemma}
+
+\begin{definition*}[Saturation up to Redundancy]
+	A set $S$ of clauses is called saturated up to redundancy if for every $\mathbb{I}$-inference $\frac{C_1...C_n}{C}$ with premises in $S$, either $C \in S$ or $C$ is redundant w.r.t. $S$.
+\end{definition*}
+
+\begin{lemma}
+	A set $S$ of clauses saturated up to redundancy is unsat iff $\square \in S$.
+\end{lemma}
+
+\subsubsection{Superposition Inference System}
+
+\begin{definition*}[Equality atom comparison]	
+	$(s' = t') >_{lit} (s=t) \iff \{s',t'\}>_{bag}\{s,t\}$ and
+	
+	$(s' \not= t') >_{lit} (s\not=t) \iff \{s',t'\}>_{bag}\{s,t\}$.
+	
+\end{definition*}
+
+
+Superposition consists of two superposition rules, Equality Resolution and Equality Factoring:
+\begin{align*}
+	\frac{\underline{l=r} \lor C \hspace{.5cm} \underline{s[l]=t} \lor D}{s[r]=t \lor C \lor D} (Sup-right) && \frac{\underline{l=r} \lor C \hspace{.5cm} \underline{s[l]\not=t} \lor D}{s[r]\not=t \lor C \lor D} (Sup-left)\\
+\end{align*}
+where (i) $l>r$, (ii)$s[l]>t$, (iii) $l=r$ is strictly greater than any literal in $C$, (iv) (only for sup-right) $s[l]=t$ is greater than or equal to any literal in $D$
+\begin{align*}
+	\frac{\underline{s\not= s} \lor C}{C} (ER) && \frac{\underline{s=t} \lor s=t' \lor C}{s=t \lor t\not= t' \lor C} (EF)
+\end{align*}
+where (i) $s>t\geq t'$, (ii) $s=t$ is greater than or equal to any literal in $C$.
+
+\section{Ground Superposition, Term Orderings}
+
+\subsubsection{Simplification Orderings}
+
+\begin{definition*}[Simplification ordering]
+	The ordering $>$ on terms is called a simplification ordering if
+	\begin{itemize}
+		\item $>$ is well-founded
+		\item $>$ is monotonic: if $l>r$ then $s[l]>s[r]$
+		\item $>$ is stable under substitutions: if $l>r$ then $l\theta > r\theta$.
+	\end{itemize}
+\end{definition*}
+
+Knuth-Bendix Ordering (KBO) for a given signature $\Sigma$, precedence relation $\gg$ and weight function $w:\Sigma \rightarrow \mathbb{N}$:
+
+Weight of a ground term is $|g(t_1,...,t_n)| = w(g)+ \sum_{i=1}^{n}|t_i|$.
+
+Then $g(t_1,...,t_n) >_{KBO} h(s_1,...,s_m)$ if
+\begin{enumerate}
+	\item $|g(t_1,...,t_n)| > |h(s_1,...,s_m)|$ or
+	\item $|g(t_1,...,t_n)| = |h(s_1,...,s_m)|$ and
+	\begin{enumerate}
+		\item $g\gg h$ or
+		\item $g=h$ and for some $1 \leq i \leq n$ we have $t_1=s_1,...,t_{i-1}=s_{i-1}$ and $t_i > s_i$.
+	\end{enumerate}
+\end{enumerate}
+
+Note that the weight function and the precedence must be compatible.
+
+\begin{definition*}[Weight function]
+	A weight function $w:\Sigma \rightarrow \mathbb{N}$ is a function satisfying:
+	\begin{enumerate}
+		\item $w(a)>0$ for any constant $a\in \Sigma$
+		\item if $w(f)=0$ for a unary function $f\in\Sigma$, then $f\gg g$ for all functions $g\in\Sigma$ with $f\not= g$. That is, $f$ is the greatest element of $\Sigma$ w.r.t. $\gg$.
+	\end{enumerate}
+\end{definition*}
+
+\subsubsection{Demodulation}
+
+Consider the following case of a superposition:
+
+\begin{align*}
+	\frac{\underline{l=r} \hspace{0.2cm} \underline{s[l]=t} \lor D}{s[r]=t \lor D}(Sup)
+\end{align*}
+
+Note that we have $l=r, s[r]=t \lor D \models s[l]=t \lor D$ and we have $s[l]=t \lor D \geq s[r]=t \lor D$. Therefore the second premise is redundant and can be removed.
+
+\section{Unification and Lifting}
+
+\subsubsection{Substitution}
+
+\begin{definition*}[Substitution]
+	A substitution $\theta$ is a mapping from variables to terms such that the set $\{x | \theta(x) \not= x\}$ is finite.
+	
+	This set is called the domain of $\theta$.
+	
+	We denote a substitution by $\{x_1 \mapsto t_1, ..., x_n \mapsto t_n\}$ where $x_1,...,x_n$ are pairwise different variables.
+\end{definition*}
+
+\begin{lemma}[Herbrand's Theorem]
+	Let $\Sigma$ be a signature with at least one constant symbol and $S$ be a set of (universal) clauses over $\Sigma$. Denote by $S^*$ the set of ground instances of clauses in $S$.
+	
+	Then $S$ is unsat iff $S^*$ is unsat.
+\end{lemma}
+
+\subsubsection{Lifting}
+
+Idea: Represent an infinite number of ground inferences by a single non-ground inference.
+
+\begin{definition*}[Unifier, Most General Unifiers]
+	A unifier of expressions $s_1$ and $s_2$ is a substitution $\theta$ such that $s_1\theta = s_2\theta$.
+	
+	A unifier $\theta$ of $s_1$ and $s_2$ is a mgu if for every other substitution $\theta'$ there exists a substitution $\tau$ such that $\theta\tau = \theta'$.
+\end{definition*}
+
+\begin{algorithm}
+	\begin{verbatim}
+		input: a finite set of equations E
+		output: a solution to E or failure
+		begin
+		  while there exists a non-isolated equation (s=t) in E
+		  do
+		    case (s,t) of
+		      (t,t): remove this equation from E
+		      (x,t):
+		        if x occurs in t then halt with failure
+		        else replace x by t in all other equations of E
+		      (t,x): replace this equation with (x=t)
+		      (c,d): halt with failure
+		      (c,f(t1,...,tn)): halt with failure
+		      (f(t1,...,tn),c): halt with failure
+		      (f(s1,...,sn),f(t1,...,tn)): replace this equation by the set s1=t1,...,sn=tn
+		      (f(s1,...,sm), g(t1,...,tn)): halt with failure
+		  end
+		  now E has the form {x1=r1,...,xl=rl}
+		  return the substitution {x1->r1,...,xl->rl}
+		end
+	\end{verbatim}
+\end{algorithm}
+
+If a unification exists the algorithm finds it. If there exists no unification the algorithm terminates with failure.
+
+\section{Non-Ground Superposition}
+
+\subsubsection{Weight Functions in the Non-Ground Case}
+
+\begin{definition*}[Weight function]
+	A weight function $w:\Sigma \cup Vars \rightarrow \mathbb{N}$ satisfies
+	\begin{itemize}
+		\item $w(x) = v_0$ for all variables $x \in Vars$, where $v_0 > 0$
+		\item $w(a) \geq v_0$ for any constant $a \in \Sigma$
+		\item if $w(f)=0$ for an unary function $f \in \Sigma$, then $f \gg g$ for all function $g \in \Sigma$ with $f\not= g$.
+	\end{itemize}
+\end{definition*}
+
+Denote with $\#(x,s)$ the number of occurrences of $x$ in $s$.
+
+KBO in the non-ground case for a given signature $\Sigma$, precedence relation $\gg$ and weight function $w:\Sigma \cup Vars \rightarrow \mathbb{N}$:
+
+The weight of a term is $|g(t_1,...,t_n)| = w(g) + \sum_{i=1}^{n}|t_i|$.
+
+$s >_{KBO} t$ if
+\begin{enumerate}
+	\item $\#(x,s) \geq \#(x,t)$ for all variables $x$ and $|s|>|t|$ or
+	\item $\#(x,s) \geq \#(x,t)$ for all variables $x$ and $|s|=|t|$ and one of the following holds:
+	\begin{enumerate}
+		\item $t=x$, $s=f^n(x)$ for some $n\geq 1$ or
+		\item $s=g(t_1,...,t_n)$, $t=h(s_1,...,s_m)$ and $g \gg h$ or
+		\item $s=g(t_1,...,t_n)$, $t=g(s_1,...,s_n)$ and for some $1\leq i \leq n$ we have $t_1=s_1,.., t_{i-1}=s_{i-1}$ and $t_i > s_i$.
+	\end{enumerate}
+\end{enumerate}
+
+\subsubsection{Non-ground Superposition}
+
+\begin{align*}
+	\frac{\underline{l=r} \lor C \hspace{.5cm} \underline{s[l']=t} \lor D}{(s[r]=t \lor C \lor D)\theta} (Sup-right) && \frac{\underline{l=r} \lor C \hspace{.5cm} \underline{s[l']\not=t} \lor D}{(s[r]\not=t \lor C \lor D)\theta} (Sup-left)\\
+\end{align*}
+where (i) $\theta$ is a mgu of $l$ and $l'$, (ii) $l'$ is not a variable, (iii) $r\theta \not\geq l\theta$, (iv) $t\theta\not\geq s[l']\theta$.
+\begin{align*}
+	\frac{\underline{s\not= s'} \lor C}{C\theta} (ER) && \frac{\underline{l=r} \lor l'=r' \lor C}{(l=r \lor r\not= r' \lor C)\theta} (EF)
+\end{align*}
+where $\theta$ is a mgu of $s$ and $s'$ in (ER) and where $\theta$ is a mgu of $l$ and $l'$, $r\theta \not\geq l\theta$, $r'\theta \not\geq l\theta$, and $r'\theta \not\geq r\theta$ in (EF).
+
+
+\subsubsection{Non-ground Binary Resolution}
+
+\begin{align*}
+	\frac{\underline{p}\lor C_1 \hspace{.5cm} \underline{\lnot p'} \lor C_2}{(C_1 \lor C_2)\theta} (BR) \hspace{1cm} \frac{\underline{p}\lor \underline{p'} \lor C}{(p \lor C)\theta} (Fact) \hspace{1cm} \frac{\underline{\lnot p}\lor \underline{\lnot p'} \lor C}{(\lnot p \lor C)\theta} (Fact)
+\end{align*}
+
+where $\theta$ is a mgu of $p$ and $p'$.
+
+\subsubsection{Redundancy}
+
+\begin{definition*}[Subsumption]
+	A clause $C$ subsumes a clause $D$ if $C\theta \subseteq D$ for some substitution $\theta$.
+\end{definition*}
+
+Demodulation in the non-ground case
+
+\begin{align*}
+	\frac{l=r \hspace{.5cm} L[l\theta] \lor D}{L[r\theta] \lor D}
+\end{align*}
+where $l\theta > r\theta$, and $(L[l']\lor D)\theta > (l\theta > r\theta)$.
+
+\begin{definition*}[simplifying, generating]
+	An inference $\frac{C_1 ... C_n}{C}$ is called simplifying if at least one premise $C_i$ becomes redundant after the addition of the conclusion $C$ to the search space.
+	
+	A non-simplifying inference is called generating.
+\end{definition*}
+
+\end{document}

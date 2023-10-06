@@ -1,0 +1,35 @@
+---
+title: "Problem_5"
+output: pdf_document
+date: '2022-04-06'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Sum and average
+
+## plots of a normal distribution
+
+```{r plots}
+curve(dnorm(x, mean = 5, sd = 2), from = 0, to = 10, main = "density")
+
+curve(pnorm(x, mean = 5, sd = 2), from = 0, to = 10, main = "distribution")
+```
+
+## expectation and standard deviation
+
+As X~1~, ..., X~50~ are idependent we have
+$$\mathbb{E}(S) = \mathbb{E}(X_1 + ... + X_{50}) = \mathbb{E}(X_1) + ... + \mathbb{E}(X_{50}) = 50 \cdot 5 = 250$$
+$$\mathbb{V}(S) = \mathbb{V}(X_1 + ... + X_{50}) = \mathbb{V}(X_1) + ... + \mathbb{V}(X_{50}) = 50 \cdot 2 = 100$$
+
+$$\mathbb{E}(\bar{X}) = \mathbb{E}(\frac{1}{50}S) = \frac{1}{50}\mathbb{E}(S) = 5$$
+$$\mathbb{V}(\bar{X}) = \mathbb{V}(\frac{1}{50}S) = \frac{1}{50^2}\mathbb{V}(S) = \frac{100}{2500} = \frac{1}{25}$$
+
+## histogram
+```{r histogram}
+hist(rnorm(50, mean = 5, sd = 2))
+
+hist(rnorm(500, mean = 5, sd = 2))
+```

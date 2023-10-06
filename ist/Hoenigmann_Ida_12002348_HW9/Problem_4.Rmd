@@ -1,0 +1,28 @@
+---
+title: "Problem_4"
+author: "Ida Hönigmann"
+date: '2022-05-25'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Confidence interval 3
+
+```{r cars}
+alpha = 0.1
+instance <- function(n) {
+  data = rpois(n, 1)
+  m = mean(data)
+  z = qnorm(1-alpha/2)
+  return(m-z*sqrt(m/n) <= 1 & 1 <= m+z*sqrt(m/n))
+}
+sum(replicate(10000, instance(30)))/10000
+sum(replicate(10000, instance(100)))/10000
+```
+
+fraction is (naturally) about 90 %.

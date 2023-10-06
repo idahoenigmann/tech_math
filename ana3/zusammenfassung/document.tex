@@ -1,0 +1,131 @@
+\documentclass[]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[many]{tcolorbox}
+
+\newtheorem*{theorem}{Satz}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Folgerung}
+\newtheorem*{definition}{Definition}
+\newtheorem*{remark}{Beberkung}
+\newtheorem*{example}{Beispiel}
+
+\tcolorboxenvironment{theorem}{
+	colback=blue!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{lemma}{
+	colback=yellow!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition}{
+	colback=green!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+
+%opening
+\title{ANA3 Wichtigstes}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\begin{theorem}[Fubini]
+	$f$ ... Lebesgue-messbare Funktion auf $\mathbb{R}^n$, integrierbar oder positiv; $i_1, ..., i_n$ ... Permutation von $1, ..., n$
+	\begin{align*}
+		\int_{\mathbb{R}} \cdots \int_{\mathbb{R}} f(x_1, ..., x_n) d\lambda(x_{i_1}) \cdots d\lambda(x_{i_k}) \text{ sind } \lambda^{n-k}\text{-messbare Funktionen auf }\mathbb{R}^{n-k}\\
+		\text{und } \int_{\mathbb{R}^n} f d\lambda^n = \int_{\mathbb{R}} \cdots \int_{\mathbb{R}} f(x_1, ..., x_n) d\lambda(x_{i_1}) \cdots d\lambda(x_{i_n})
+	\end{align*}
+\end{theorem}
+
+\begin{definition}[Durchmesser]
+	\begin{align*}
+		diam(A):=\sup\{d(x,y): x,y\in A\}
+	\end{align*}
+\end{definition}
+
+\begin{theorem}[Isodiametrische Ungleichung]
+	$A \subseteq \mathbb{R}^n$ ... beschränkt, $\omega_n$ ... Volumen der $n$-dimensionalen Einheitskugel
+	\begin{align*}
+		\lambda^n(A) \leq \omega_n(diam(A)/2)^n
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}
+	$f_t(\omega), t\in(a,b)$ ... messbar auf $(\Omega, \mu)$, $t\mapsto f_t(\omega)$ ... für $\mu$-f.a. $\omega$ stetig in $t_0$, $\exists g$ ... integrierbar auf $\Omega$ $\exists \delta > 0 \forall t: |t-t_0|<\delta \implies |f_t| \leq g \mu$-f.ü.
+	\begin{align*}
+		\implies \forall t: |t-t_0| < \delta \implies f_t \text{... integierbar und } \int_{\Omega} f_t(\omega) d\mu(\omega) \text{... stetig in }t_0\\
+		\text{d.h. } \lim\limits_{t\rightarrow t_0} \int_{\Omega} f_t d\mu = \int_{\Omega} f_{t_0} d\mu
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}
+		$f_t(\omega), t\in(t_0-\delta,t_0+\delta)$ ... messbar auf $(\Omega, \mu)$, $\exists \frac{\partial f_t}{\partial t}$ für $\mu$-f.a. $\omega$ bei $t_0$, $\exists g$ ... integrierbar auf $\Omega$: $\forall t: |t-t_0| < \delta \implies \left|\frac{f_t(\omega)-f_{t_0}(\omega)}{t-t_0}\right| \leq g(\omega)$ bzw. $\left|\frac{\partial f_t}{\partial t}(\omega)\right| \leq g(\omega)$
+	\begin{align*}
+		\implies t\mapsto \int_{\Omega} f_t(\omega) d\mu(\omega) \text{ ist in }t_0\text{ diffbar und }\left.\frac{d}{dt} \int_{\Omega} f_t(\omega) d\mu(\omega)\right|_{t=t_0} = \int_{\Omega}\left.\frac{\partial f_t(\omega)}{\partial t}\right|_{t=t_0} d\mu(\omega)
+	\end{align*}
+\end{theorem}
+
+\begin{definition}[Vervollständigung]
+	$(M,d)$ ... metr. Raum, $((\tilde{M}, \tilde{d}), \iota:M\rightarrow\tilde{M})$ heißt Vervollständigung, falls $(\tilde{M}, \tilde{d})$ ... vollständig metr. Raum; $\iota$ ... isometrische Abbildung mit dichtem Bild in $\tilde{M}$.
+\end{definition}
+
+\begin{definition}[Banachraum]
+	Banachraum ist ein normierter Raum, dessen induzierte Metrik vollständig ist.
+\end{definition}
+
+\begin{lemma}
+	$M$ ... Menge $\implies (l^\infty(M, \mathbb{R}), ||.||)$ ... Banachraum ($||.||$ ist Supremumsnorm).
+\end{lemma}
+
+\begin{lemma}
+	$(M, d)$ ... metr. Raum, $x_0 \in M$ fest $\implies M\rightarrow l^\infty(M, \mathbb{R}), x\mapsto f_x$ mit $f_x(t):=d(x_0, t) - d(x, t)$ ist Isometrie.
+\end{lemma}
+
+\begin{theorem}
+	$(X_1, d_1), (X_2, d_2)$ ... metr. Raum, $(X_2, d_2)$ ... vollständig, $A\subseteq X_1$, $f:A\rightarrow X_2$ ... glm. stetig
+	\begin{align*}
+		\implies \exists! F:\bar{A}\rightarrow X_2 : F|_A = f
+	\end{align*}
+	$F$ ist glm. stetig und $f$ ... isometrisch $\implies F$ ... isometrisch
+\end{theorem}
+
+\begin{definition}[Operatornorm]
+	$(X, ||.||_X), (Y, ||.||_Y)$ ... normierter Raum, $L(X,Y)$ ... Raum linearer, beschränkter Funktionen von $X$ nach $Y$. $||T||_{L(X,Y)}:= \sup\{\frac{||Tx||_Y}{||x||_X}: 0\neq x \in X\}$
+\end{definition}
+
+\begin{theorem}
+	Vollständige metr. Räume und normierte Räume haben jeweils eine eindeutige Vervollständigung bis auf Isometrien.
+\end{theorem}
+
+\begin{theorem}
+	$X$ ... nomierter Raum, $Y$... Banachraum $\implies L(X,Y)$ ... Banachraum
+\end{theorem}
+
+\end{document}

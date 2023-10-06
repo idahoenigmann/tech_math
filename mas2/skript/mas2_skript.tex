@@ -1,0 +1,3848 @@
+\documentclass[]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[many]{tcolorbox}
+
+\newtheorem{theorem}{Satz}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{corollary}{Folgerung}
+\newtheorem{definition}{Definition}
+\newtheorem*{definition*}{Def}
+\newtheorem*{remark}{Beberkung}
+\newtheorem*{example}{Beispiel}
+
+\tcolorboxenvironment{theorem}{
+	colback=blue!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{lemma}{
+	colback=yellow!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition}{
+	colback=green!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition*}{
+	colback=green!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+%opening
+\title{Maß- und Wahrscheinlichkeitstheorie Skript Felsenstein W2022}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Produkträume und Maße}
+Auf dem kartesischen Produkt von Grundmengen
+\begin{align*}
+	\Omega = \bigtimes_{i=1}^{n}\Omega_i
+\end{align*}
+wird eine Produkt-(Sigma)Algebra konstruiert, wobei $(\Omega_i, \mathcal{A}_i)$ Messräume sind. Es soll $(\Omega_i, \mathcal{A}_i)$ in $(\Omega, \mathcal{A})$ eingebettet werden.
+
+\begin{definition*}[Projektion]
+	\begin{align*}
+		\pi_i : \Omega \mapsto \Omega_i \text{ mit } \pi_i(\omega_1,...,\omega_n)=\omega_i
+	\end{align*}
+\end{definition*}
+Die Produktalgebra wird von den Projektionen erzeugt.
+
+\begin{definition}[Produktalgebra]
+	\begin{align*}
+		\mathcal{A} := \bigotimes_{i=1}^{n}\mathcal{A}_i := \sigma(\pi_1,...,\pi_n)\\
+		\text{d.h. } \pi_1^{-1}(A_1) \cap \pi_2^{-1}(A_2) \cap ... \cap \pi_n^{-1}(A_n) \text{ für } A_i \in \mathcal{A}_i
+	\end{align*}
+	erzeugen diese Algebra (bzw. $A_1\times A_2\times ...\times A_n$).
+\end{definition}
+
+Wenn $\mathcal{A}_i = \sigma(\mathcal{E}_i)$ erzeugt wird von $\mathcal{E}_i$, wird $\bigotimes\mathcal{A}_i$ von $\bigtimes\mathcal{E}_i$ erzeugt.
+
+\begin{theorem}[1.PR]
+	$\mathcal{A}_i=\sigma(\mathcal{E}_i)$ mit $\mathcal{E}_i\subset 2^{\Omega_i}$. $\Omega_i$ sei aus $\mathcal{E}_i$ monoton erreichbar ($E_{i,k} \nearrow \Omega_i$)\footnote{Man kann fordern, dass $\Omega_i \in \mathcal{E}_i$, dann ist es erfüllt.}.
+	\begin{align*}
+		\mathcal{E} = \{\bigtimes_{i=1}^{n}E_i, E_i\in\mathcal{E}_i\}
+	\end{align*}
+	Dann gilt
+	\begin{align*}
+		\bigotimes_{i=1}^{n}\mathcal{A}_i = \sigma(\mathcal{E}).
+	\end{align*}
+\end{theorem}
+
+\begin{proof}[Beweis Satz 1.PR]
+$\sigma(\mathcal{E})$ ist die kleinste Sigma-Algebra, sodass die Projektionen messbar sind: $\tilde{\mathcal{A}}$ sei Sigma-Algebra auf $\Omega = \bigtimes_i \Omega_i$.
+
+$\pi_i$ ist $\tilde{\mathcal{A}}-\mathcal{A}_i$ messbar $\iff \sigma(\mathcal{E}) \subseteq \tilde{\mathcal{A}}$.
+
+$\implies$: Alle $\pi_i$ seien $\tilde{\mathcal{A}}-\mathcal{A}_i$ messbar, d.h. $\pi_i^{-1}(\mathcal{E}_i) \subseteq \tilde{\mathcal{A}}$, wobei für $E_i \in \mathcal{E}_i$
+\begin{align*}
+	\pi_i^{-1}(E_i) = \Omega_1\times\Omega_2\times ...\times E_i\times\Omega_{i+1}\times ...\times\Omega_n
+\end{align*}
+Da
+\begin{align*}
+	\underbrace{\bigtimes_{i=1}^{n}E_i}_{\in \mathcal{E}} = \bigcap_{i=1}^{n}\pi_i^{-1}(E_i) \subseteq \tilde{\mathcal{A}} \implies \sigma(\mathcal{E}) \subseteq \tilde{\mathcal{A}}.
+\end{align*}
+
+$\impliedby$: Es gelte $\sigma(\mathcal{E}) \subseteq \tilde{\mathcal{A}}$.
+Jedes $\Omega_i$ ist aus $\mathcal{E}_i$ monoton erreichbar mit $E_{i,k}\nearrow \Omega_i, k\to\infty$.
+\begin{align*}
+	F_k = E_{1,k}\times E_{2,k}\times ... \times E_i \times ... \times E_{n,k} \nearrow \pi_i^{-1}(E_i) \\
+	\lim F_k = \bigcup_{k=1}^{\infty}F_k = \pi_i^{-1}(E_i) \in \sigma(\mathcal{E}) \subset \tilde{\mathcal{A}}
+\end{align*}
+Urbild vom Erzeuger in $\tilde{\mathcal{A}}$, $\pi_i^{-1}(\mathcal{E}_i)\subseteq \tilde{\mathcal{A}} \forall i$, alle $\pi_i$ sind $\tilde{\mathcal{A}}-\mathcal{A}_i$ messbar.
+
+Alle Projektionen $\sigma(\mathcal{E})$ messbar, also $\sigma(\pi_1,...,\pi_n) \subset \sigma(\mathcal{E})$. Nach obigem setze $\tilde{\mathcal{A}}=\sigma(\pi_1,...,\pi_n) \implies \sigma(\mathcal{E}) \subseteq \sigma(\pi_1,...,\pi_n)$ also $\sigma(\mathcal{E}) = \sigma(\pi_1,...,\pi_n)$.
+\end{proof}
+
+\begin{remark}
+	$\{A_1\times ...\times A_n | A_i \in \mathcal{A}_i\}$ ist keine Sigma-Algebra, da nicht Vereinigungs-stabil.
+\end{remark}
+
+Die komponentenweise Behandlung im Produktraum ist anwendbar auf n-dim. Funktionen.
+
+\begin{corollary}
+	\begin{align*}
+		f_i:\Omega_0 &\mapsto \Omega_i, f=(f_1,...,f_n) =: \otimes_i f_i\\
+		f: \Omega_0 &\mapsto \bigtimes_i\Omega_i = \Omega
+	\end{align*}
+	Dann gilt:
+	\begin{align*}
+		f \text{ ist } (\Omega_0,\mathcal{A}_0) \mapsto \underbrace{\bigotimes_{i=1}^{n}(\Omega_i, \mathcal{A}_i)}_{\text{Produktraum}}  \text{ messbar } \iff f_i \mathcal{A}_0-\mathcal{A}_i \text{ messbar}
+	\end{align*}
+\end{corollary}
+\begin{proof}[Beweis Folgerung]
+	$\implies$: Da $f_i=\pi_i\circ f$ und $\pi_i \otimes_j \mathcal{A}_j-\mathcal{A}_i$ messbar ist $f_i$ als Verkettung messbar.
+	
+	$\impliedby$: $A \in \otimes\mathcal{A}_i$ Menge aus der Produktalgebra mit $A = \times_{i=1}^{n}A_i \leftarrow$ erzeugen $\otimes_{i=1}^{n} \mathcal{A}_i$.
+	\begin{align*}
+		f^{-1}(A) = \bigcap_{i=1}^{n}f_i^{-1}(A_i) \in \mathcal{A}_0
+	\end{align*}
+	Diese Rechtecke erzeugen $\sigma(f) = \sigma(f_1,...,f_n) \subseteq \mathcal{A}_0$ also ist $f \mathcal{A}_0-\otimes\mathcal{A}_i$ messbar.
+\end{proof}
+
+Anwendung auf Borel-Algebra: $\mathcal{B}^k=\otimes_{i=1}^k\mathcal{B}$ erzeugt von den Rechtecken $\times_i (a_i,b_i]$. Die Lebesgue-Mengen werden nicht von den Produkten erzeugt: $\otimes_{i=1}^k\mathcal{L} \subsetneq \mathcal{L}_k$.
+
+Nicht alle Nullmengen von $\mathcal{B}^k$ sind durch die Produkte mit allen Nullmengen erzeugbar.
+
+\begin{definition*}[Schnitt]
+	Besondere Mengen (für Integralberechnungen) sind die Schnitte:
+	\begin{align*}
+		A \in \mathcal{A} = \mathcal{A}_1 \otimes \mathcal{A}_2\\
+		A_{x_1} := \{x_2 \in \Omega_2| (x_1,x_2) \in A\}\\
+		A_{x_2} := \{x_1 \in \Omega_1| (x_1,x_2) \in A\}
+	\end{align*}
+\end{definition*}
+
+Die Schnitte sind messbar.
+\begin{theorem}[2.PR]
+	$A \in \mathcal{A}_1\otimes\mathcal{A}_2$ messbar bez. Produktalgebra, dann ist $A_{x_1}\in\mathcal{A}_2$ und $A_{x_2}\in\mathcal{A}_1$ für alle $x_1$ bzw. $x_2$.
+\end{theorem}
+
+\begin{proof}
+	$x_1$ sei fest. Betrachte $\mathcal{M} = \{A\subseteq \Omega_1\times\Omega_2|A_{x_1}\in\mathcal{A}_2\}$. $\mathcal{M}$ ist Sigma-Algebra: $\Omega \in \mathcal{M}$, $(A_{x_1})^c = (A^c)_{x_1}$ und $\cup A_{x_i,1}=(\cup A_i)_{x_1}$.
+	
+	Für die Erzeuger Mengen $A_1\times A_2 \in \mathcal{E}$ mit $A_i \in \mathcal{A}_i$
+	\begin{align*}
+		(A_1\times A_2)_{x_1} = \begin{cases}
+									A_2, & x_1 \in A_1\\
+									\emptyset, & x_1 \notin A_1
+								\end{cases}
+	\end{align*}
+	also $(A_1\times A_2)_{x_1} \in \mathcal{A}_2$, $\mathcal{E} \subseteq \mathcal{M}$ und $\sigma(\mathcal{E}) = \mathcal{A}_1 \otimes \mathcal{A}_2 \subseteq \mathcal{M}$, alle Mengen, alle $x_1$ erfüllen die Messbarkeit-Bedingungen.
+\end{proof}
+
+Die Abbildungen $x_1 \mapsto \mu_2(A_{x_1})$ sind messbare Abbildungen.
+
+\begin{theorem}[3.PR]
+	$\mathcal{A}=\mathcal{A}_1\otimes\mathcal{A}_2$, auf $\mathcal{A}_2$ sei $\mu_2$ ein sigma-endliches Maß auf $(\Omega_2,\mathcal{A}_2,\mu_2)$. Dann ist $x_1 \mapsto \mu_2(A_{x_1})$ eine $\mathcal{A}_1$ messbare Abbildung (entsprechendes gilt auch für $x_2 \mapsto \mu_1(A_{x_2})$).
+\end{theorem}
+\begin{proof}
+	Für ein $A\in\mathcal{A}$ sei $f_A(x_1)=\mu_2(Ax_1)$
+	\begin{enumerate}
+		\item $\mu_2$ sei endlich. Betrachte $\mathcal{D}=\{E\in\mathcal{A}|f_E ist \mathcal{A}_1 \text{ Borel-messbar} (\mathbb{R}^+,\mathcal{B}^+)\}$
+		
+		$\mathcal{D}$ ist ein Dynkin-System:
+		\begin{itemize}
+			\item $\Omega \in \mathcal{D}$, da $\Omega_{x_1}=\Omega_2 \in \mathcal{A}_2 \forall x_1 : f_\Omega \equiv \mu_2(\Omega_2)$ konstant
+			
+			\item $A\subseteq\mathcal{B}$ und $f_A,f_B$ messbar
+			
+			$A_{x_1} \subseteq B_{x_1}$ und $\mu_2(B_{x_1}\setminus A_{x_1}) = \mu_2(B_{x_1}) - \mu_2(A_{x_1}) = f_B(x_1) - f_A(x_1)$ ist messbar als Differenz messbarer Funktionen.
+			
+			\item $A_i \in \mathcal{A}$ und disjunkt, $B=\bigcup_{i}A_i$
+			
+			Wenn $A_i \in \mathcal{D}$, $B_{x_1} = \bigcup A_{i,x_1}$
+			\begin{align*}
+				\mu_2(B_{x_1}) = f_B(x_1) = \sum_i f_{A_i}(x_1) = \mu_2(\bigcup A_{x_1})
+			\end{align*}
+			Eine abzählbare Summe messbarer Funktionen ist messbar (Darstellung jeder messbarer Funk $f=\sum_j c_j 1_{c_j}$).
+		\end{itemize}
+	
+		Jede Menge aus $\mathcal{E}=\{A_1\times A_2 | A_i \in \mathcal{A_i}\}$ (dem Erzeuger von $\mathcal{A}$) ist auch in $\mathcal{D}$, weil $f_{A_1\times A_2}(x_1) = \mu_2((A_1\times A_2)_{x_1}) = \mu_2(A_2) 1_{A_1}(x_1)$. $c1$ ist messbar.
+		
+		$\mathcal{E}$ ist ein durchschnitt-stabiler Erzeuger und $\mathcal{E}\subseteq\mathcal{D}\subseteq\mathcal{A}=\sigma(\mathcal{E})$ also $\mathcal{A}=\mathcal{D}$, alle solchen Funktionen sind messbar bez. $\mathcal{A_1}$.
+		
+		\item Ist $\mu_2$ sigma-endlich, es gibt eine Folge $A_{2,i}\nearrow\Omega_2$ mit endlichem Maß, daher auch eine disjunkte Folge ($D_n$), die eine Zerlegung von $\Omega_2$ sind und $\mu_2(B) = \mu_2(\bigcup_n(D_n\cap B)) = \sum_n \mu_2(B\cap D_n)$.
+		\begin{align*}
+			f_B(x_1) = \mu_2(B_{x_1}) = \sum_n \underbrace{\mu_2(B_{x_1} \cap D_n)}_{<\infty} = \sum_n f_{(B_{x_1}\cap D_n)}(x_1)
+		\end{align*}
+		also Summe messbarer Funktionen.
+	\end{enumerate}
+\end{proof}
+
+Mit diesen Funktionen wird das Produktmaß erklärt.
+\begin{definition*}[Produktmaß]
+	\begin{align*}
+		\mu\left(\bigtimes_{i=1}^k A_i\right) = \prod_{i=1}^{k}\mu_i(A_i)
+	\end{align*}
+	Wenn $\Omega = \Omega_1^k$ mit $\mu_i = \mu$ gilt
+	\begin{align*}
+		\mu\left(\bigtimes_{i=1}^k A_i\right) = \prod_{i=1}^{k}\mu(A_i).
+	\end{align*}
+\end{definition*}
+
+Dieses Maß ist eindeutig definiert, wenn $\mu_1$, $\mu_2$ sigma-endlich sind, dann sind die Funktionen $f_B(x_1)$ bzw. $f_B(x_2)$ die ''Dichten'' bezüglich den Randmaßen $\mu_1$ bzw. $\mu_2$. $\mu_1$, $\mu_2$ werden auch als marginale Maße bezeichnet.
+
+\begin{theorem}[4.PR]
+	\begin{enumerate}
+		\item $\mu_2$ sei sigma-endlich. Dann definiert
+		\begin{align*}
+			\mu(A) = \int_{\Omega_1}\mu_2(A_{x_1})d\mu_1(x_1)
+		\end{align*}
+		das Produktmaß auf $(\Omega, \mathcal{A})$.
+		
+		\item Sind beide Maße $\mu_1$,$\mu_2$ sigma-endlich, dann ist $\mu$ eindeutig und
+		\begin{align*}
+			\mu(A) = \int_{\Omega_1}\mu_2(A_{x_1})d\mu_1(x_1) = \int_{\Omega_2}\mu_1(A_{x_2})d\mu_2(x_2)
+		\end{align*}
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	$f_A(x_1)=\mu_2(A_{x_1})$ ist eine $\mathcal{A}_1$-messbare Funktion $\forall A$ und durch die Additivität $f_{\cup A_i} = \sum f_{A_i}$ ist $\mu$ ein Maß auf $(\Omega, \mathcal{A})$.
+	
+	Für $A=A_1\times A_2$ gilt
+	\begin{align*}
+		\mu(A_1\times A_2) = \int_{\Omega_1} \underbrace{\mu_2((A_1\times A_2)_{x_1})}_{\mu_2(A_2) 1_{A_1}(x_1)} d\mu_1 = \mu_2(A_2) \underbrace{\int_{A_1} d\mu_1}_{\mu_1(A_1)}
+	\end{align*}
+	ist Produktmaß.
+	
+	$\mu$ ist auf dem (durchschnitts-stabilen) Erzeuger definiert, da die Maße sigma-endlich sind, ist $\mu$ eindeutig (Eindeutigkeitssatz). Vice versa gelten alle Gleichungen analog bez. $\mu_2$.
+\end{proof}
+
+\begin{example}
+	Insbesonders bei endlichem Maß anwendbar. $X$,$Y$ stochastische Größen, dann wird eindeutig eine zweidim. Verteilung auf $\mathbb{R}^2$ durch $P[(X,Y)\in A\times B] := P[X\in A] P[Y \in B]$ Produktverteilung.
+\end{example}
+
+Verallgemeinerung der Maße von Schnitten ist die Schnittfunktion.
+\begin{definition}[Schnittfunktion]
+	\begin{align*}
+		f:\Omega_1\times\Omega_2 \mapsto\Omega' \text{ Dann heißt }\\
+		x_2 \mapsto f_{x_1}(x_2) = f(x_1,x_2) \text{ $x_1$-Schnitt}\\
+		x_1 \mapsto f_{x_2}(x_1) = f(x_1,x_2) \text{ $x_2$-Schnitt}\\
+	\end{align*}
+	von f. (messbare Funktion $\Omega_1\times\Omega_2 \to (\Omega', \mathcal{A}')$).
+\end{definition}
+
+\begin{theorem}[5.PR]
+	$f$ sei messbar $(\Omega, \mathcal{A}) \mapsto (\Omega', \mathcal{A}')$.
+	Die Schnittfunktionen sind messbar:
+	\begin{align*}
+		f_{x_1} \text{ ist messbar } (\Omega_2,\mathcal{A}_2) \mapsto (\Omega', \mathcal{A}')\\
+		f_{x_2} \text{ ist messbar } (\Omega_1,\mathcal{A}_1) \mapsto (\Omega', \mathcal{A}')
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	$A'\in\mathcal{A}'$
+	\begin{align*}
+		f_{x_1}^{-1}(A') = \{x_2\in\Omega_2 | f(x_1,x_2) \in A'\} = \{x_2\in \Omega_2 | (x_1,x_2) \in f^{-1}(A')\} = (\underbrace{f^{-1}(A')}_{\text{ mb } \in \mathcal{A}})_{x_1}
+	\end{align*}
+	jede Schnittmenge ist messbar.
+	
+	Analog für $f_{x_2}^{-1}(A') \in \mathcal{A}_1$.
+\end{proof}
+
+Mit den Funktionenschnitten lässt sich auch ein mehrdim. Integral "zerteilen".
+
+\begin{theorem}[6.PR Satz von Fubini (-Tonelli)]
+	Produktraum $(\Omega,\mathcal{A}, \mu) = \otimes_i (\Omega_i, \mathcal{A}_i, \mu_i)$, $f$ messbar $\Omega \mapsto \mathbb{R}$, $\mu_i$ sigma-endlich.
+	Das zweidimensionale Integral von $f$ ist aufspaltbar
+	\begin{align*}
+		\int f d\mu = \int_{\Omega_1}\left(\int_{\Omega_2}f_{x_1}(x_2) d\mu_2\right)d\mu_1 = \int_{\Omega_2}\left(\int_{\Omega_1}f_{x_2}(x_1) d\mu_1\right)d\mu_2
+	\end{align*}
+	wenn eine der folgenden Bedingungen gilt:
+	\begin{enumerate}
+		\item $f\geq 0$: Dann ist $x_2\mapsto \phi_2(x_2) = \int_{\Omega_1}f_{x_2}d\mu_1$ messbar $\mathcal{A}_2$ und $x_1\mapsto \phi_1(x_1) = \int_{\Omega_2}f_{x_1}d\mu_2$ messbar $\mathcal{A}_1$
+		\item $f$ ist integrierbar, $\int f d\mu < \infty$: Dann sind $f_{x_1}$ $\mu_2$-integrierbar $[\mu_1]$ f.ü. und $f_{x_2}$ $\mu_1$-integrierbar $[\mu_2]$ f.ü.
+		\item $\int_{\Omega_1}\int_{\Omega_2}|f_{x_1}|d\mu_2 d\mu_1 < \infty$ oder $\int_{\Omega_2}\int_{\Omega_1}|f_{x_2}|d\mu_1 d\mu_2 < \infty$: Daraus folgt $f$ integrierbar.
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\begin{enumerate}
+		\item $f \geq 0:$ 4 Schritte des Integralaufbaus
+		
+		$f = 1_A, A \in \mathcal{A}$
+		\begin{align*}
+			x_2 \mapsto \phi_2(x_2) = \int_{\Omega_1} \underbrace{(1_A)_{x_2}}_{1_{A_{x_2}}} d\mu_1 = \mu_1(A_{x_2})
+		\end{align*}
+	
+		$\phi_2$ ist messbar (laut Satz PR5) und nach Satz PR7 gilt
+		\begin{align*}
+			\int f d\mu = \mu(A) = \int_{\Omega_2} \mu_1(A_{x_2}) d\mu_2(x_2) = \int_{\Omega_2} \phi_2 d\mu_2
+		\end{align*}
+	
+		Für einfache Funktionen $f = \sum_{i=1}^{n}\alpha_i 1_{A_i}$ ergibt sich das aus der Linearität:
+		\begin{align*}
+			f_{x_2} = \sum \alpha_i 1_{(A_i)_{x_2}}(x_1)
+		\end{align*}
+	
+		Schritt 3: $f_2\nearrow f, f_n$... einfache Funktionen, dann gilt $(f_n)_{x_2}\nearrow f_{x_2}$ (wieder aus der Darstellung $f=\sum_{i=1}^{\infty}\alpha_i 1_{A_i}$ + monotone Konvergenz ablesbar)
+		
+		\item $f$ integrierbar, betrachte Positiv- und Negativteil
+		\begin{align*}
+			max(0,f)_{x_2} = max(0, f_{x_2}) = (f^+)_{x_2}\\
+			\text{also } (f^+)_{x_2} = (f_{x_2})^+ \text{ und } f_{x_2}^- = (f^-)_{x_2} \text{ mit } |f|_{x_2} = |f_{x_2}|
+		\end{align*}
+	
+		Wegen $\int |f| d\mu < \infty$ gilt wegen oben für $|f|$:
+		\begin{align*}
+			\int |f| d\mu = \int_{\Omega_1} \int_{\Omega_2} |f|_{x_1} d\mu_2 d\mu_1 = \int_{\Omega_1} \underbrace{\int_{\Omega_2} |f_{x_1}| d\mu_2}_{\phi_1} d\mu_1 < \infty
+		\end{align*}
+	
+		Daher muss $\phi_1$ integrierbar sein (wie auch $\phi_2$). Integrierbarkeit erfordert auch $(f^+), (f^-)$ integrierbar sind, aufgespalten $f = f^+-f^-$ und $f_{x_i} = f_{x_i}^+ - f_{x_i}^-$. Nach 1. für $f^+, f^-$ getrennt ergibt
+		\begin{align*}
+			\int f d\mu = \int f^+ - \int f^- = \int_{\Omega_1} \int_{\Omega_2} f_{x_1}^+ d\mu_2 d\mu_1 - \int\int f^- d\mu_2 d\mu_1
+		\end{align*}
+	
+		\item impliziert $\int_{\Omega_2} f_{x_1}^+ d\mu_2 < \infty, \int_{\Omega_2} f_{x_1}^- d\mu_2 < \infty$ und somit $f$ integrierbar und 2.
+	\end{enumerate}
+\end{proof}
+
+Durch Iteration gilt die Fubini-Schnitt Konstruktion auch für mehrdimensionale $k\in\mathbb{N}$ Integrale:
+
+Wenn $f:\Omega\mapsto\mathbb{R}$ messbar mit $\Omega=\Omega_1\times ...\times\Omega_n$
+\begin{align*}
+	\int f d\mu = \int_{\Omega_1}\left(\int_{\Omega_2\times ...\times\Omega_n} f_{x_1} d\mu_2\otimes ...\otimes \mu_k\right) d\mu_1(x_1)
+\end{align*}
+
+Viele Folgerungen: Doppelreihen-Satz $\sum_i\sum_j a_{ij} = \sum_j\sum_i a_{ij}$ Kriterien für Konvergenz
+
+\begin{corollary}[Maße mit Dichten bezüglich dem Produktmaß]
+	$\Omega = \Omega_1\times\Omega_2$, $\mathcal{A}=\mathcal{A}_1\otimes\mathcal{A}_2$,  $\mu=\mu_1\otimes\mu_2$
+	
+	$\nu$ sei absolut stetig bzgl. $\mu$ ($\nu \ll \mu$), es existiert ein $f=\frac{d\nu}{d\mu}\geq 0$ mit $\nu(A)=\int_A f d\mu$ ($f$ integrierbar)
+	
+	$\mu$ sei sigma-endlich, $\nu$ erzeugt ein $\nu_1 \ll \mu_1$ auf $(\Omega_1, \mathcal{A}_1)$ und ein $\nu_2 \ll \mu_2$ auf ($\Omega_2, \mathcal{A}_2$) mit den Dichten $\phi_1, \phi_2$.
+	\begin{align*}
+		A \in \mathcal{A}_1: \nu_1(A_1) = \int_{A_1}\phi_1(x_1)d\mu_1 = \int_{A_1} \int_{\Omega_2} f_{x_1}(x_2) d\mu_2 d\mu_1
+	\end{align*}
+\end{corollary}
+
+\begin{example}
+	2 dim SG mit Gleichverteilung auf dem Einheitskreis $P[(X,Y)\in K] = 1$. Dichte $f$ bezgl. $\lambda^2 = \lambda_1\otimes\lambda_1$. $f(x,y)=\frac{1}{\pi}1_K$.
+	\begin{align*}
+		\phi_1(x)=\int f_X(y)d\lambda = \int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}}\frac{1}{\pi} d\lambda(y) = \frac{2\sqrt{1-x^2}}{\pi}
+	\end{align*}
+	(Symmetrie: $\phi_2(y) = \frac{2\sqrt{1-y^2}}{\pi}$)
+	
+	Randverteilung $\nu_1$ $P[X\in A] = \int_A \frac{2}{\pi}\sqrt{1-y^2} d\lambda(y)$
+	
+	$\nu$ ist nicht das Produktmaß $\nu \neq \nu_1 \otimes \nu_2$ außer $f(x,y)=f_1(x)f_2(y)$.
+\end{example}
+
+\begin{definition*}[Ordinatenmenge, Graph]
+	Die Punkte unter einer positiven Funktion $f\geq 0$ heißt Ordinatenmenge $O_f=\{(x,y)|0\leq <\leq f(x)\}$ und der Graph ist $\Gamma_f=\{(x,f(x))|x\in\Omega\}$.
+\end{definition*}
+
+Für sigma-endliches Maß $\mu$ und $f$ messbar, dann ist $O_f$ eine bezüglich $\mathcal{A}\otimes\mathcal{B}$ messbare Menge und $\int f d\mu = (\mu \otimes \lambda)(O_f)$. Der Graph ist eine Nullmenge, $(\mu \otimes \lambda)(\Gamma_f) =0$
+
+\subsection{$\infty$-dim. Produkträume}
+Die Konstruktion der $\infty$-dim. Produkt-Messräume ist der endl. dim. Konstruktion entsprechend. $I$ sei Index-Menge,
+\begin{align*}
+	\otimes_{i\in I}\mathcal{A}_i := \sigma(\pi_i, i\in I) && \pi_i ... \text{ Projektion auf } \Omega_i
+\end{align*}
+beispielsweise $\otimes_{i\in I}\mathcal{B}$ auf $\Omega=\mathbb{R}^I$ (Funktionenraum).
+
+\begin{definition*}[Zylinder,Pfeiler]
+	$Z \subseteq \Omega^I$ heißt Zylinder, wenn $Z=\pi_j^{-1}(C)=C\times\Omega^{j^C}$ wobei $J\subseteq I$ eine endliche Teilindexmenge ist und $C$ die endlich dim. Basis des Zylinders ist;
+	und Pfeiler, wenn $C$ ein Rechteck $\times_{i \in J}A_i$ ist.
+\end{definition*}
+
+Auf den Pfeilern lässt sich das n-dim. Produktmaß erklären. $P^n(C)=\pi_{j\in J}P(A_j)$
+
+Im abzählbar unendlichen Fall ist die Vorgangsweise ähnlich, wie im endl. dim. Fall:
+
+\begin{theorem}[7.PR]
+	$X_i$ sei eine Folge von SGn auf $(\Omega_i,\mathcal{A}_i)$ mit gegebener gemeinsamer Verteilung
+	\begin{align*}
+		P_i(A) = P[X_j\in A_j, j\leq i, X_i \in A]
+	\end{align*}
+	für $A_j\in\mathcal{A}_j$ und $A\in\mathcal{A}_i$. D.h. die gemeinsame Verteilung von $(X_1,...,X_n)$ sind auf $(\times_i\Omega_i, \otimes_i\mathcal{A}_i)$ mit
+	\begin{align*}
+		P[(X_1,...,X_n)\in A_n, X_i \in \mathbb{R}, i>n] = P[(X_1,...,X_n) \in A_n]
+	\end{align*}
+	also für Zylinder $Z = \pi_{1,...,n}^{-1}(C_n)$, $C_n \in \otimes_i\mathcal{A}_i$ gilt $P[Z]=P_n(Cn)$.
+	
+	Wenn diese Wahrscheinlichkeitsverteilung verträglich sind, d.h. die Randverteilungen (bzw. alle Teilmengen endl.) eindeutig sind, lässt sich obiges Prinzip verallgemeinern.
+\end{theorem}
+
+\begin{theorem}[8.PR Satz von Kolmogoroff]
+	$(\Omega_i,\mathcal{A}_i), i\in I$ sei eine Familie von Messräumen und $P_j$ sind endl. dim. Verteilungen auf $(\mathbb{R}^J, \mathcal{B}_{|J|}), J \subset I, J$ endlich. Diese Verteilungen seien verträglich ($P_j=P_k\pi_{k,j}^{-1}, J \subset K, K$ ebenfalls endlich).
+	
+	Dann existiert ein eindeutiges Maß $P$ auf $(\mathbb{R}^I, \mathcal{B}_I=\otimes_{i\in I}\mathcal{B})$ mit genau diesen Randverteilungen ($P(A)=P_J(\pi_j^{-1}(A)), A \in \otimes_{i\in J}\mathcal{A}_i$).
+\end{theorem}
+
+Das Produktmaß $\mu_1\otimes\mu_2$ auf $\mathcal{A}_1\otimes\mathcal{A}_2$ muss nicht vollständig sein, wenn $(\Omega_i,\mathcal{A}_i,\mu_i), i=1,2$ vollständige Maßräume sind.
+
+\begin{example}
+	$(\mathbb{R}^2,\mathcal{L}_2,\lambda_2)$ ist ein vollständiger Maßraum. $\lambda_2(\mathbb{R}\times\{1\})=0$ und für beliebiges $A\subseteq\mathbb{R} \lambda_2(A\times\{1\})=0$. Wenn $A\notin\mathcal{L}$, dann sollte aber trotzdem der Schnitt von $A\times\{1\}$, $(A\times\{1\})_1=A\in \mathcal{L}$ messbar sein, das ist ein Widerspruch. Es folgt also $\mathcal{L}\otimes\mathcal{L}\neq\mathcal{L}_2$.
+\end{example}
+
+\begin{theorem}[9.PR]
+	$(\Omega_i,\mathcal{A}_i,\mu_i), i=1,2$ seinen sigma-endliche Maßräume. Wenn die messbaren Funktionen $f_i:(\Omega_i,\mathcal{A}:i)\rightarrow(\mathbb{R},\mathcal{B})$ entweder
+	\begin{itemize}
+		\item $f_i\geq 0$ oder
+		\item $f_i$ ist integrierbar, $i=1,2$
+	\end{itemize}
+	ist, dann gilt
+	\begin{align*}
+		\int f_1 \cdot f_2 d\mu_1\otimes d\mu_2 = \int f_1 d\mu_1 \cdot \int f_2 d\mu_2
+	\end{align*}
+	Im 2. Fall ist $f_1\cdot f_2$ auf $(\Omega_1\times\Omega_2, \mathcal{A}_1\otimes\mathcal{A}_2,\mu_1\otimes\mu_2)$ integrierbar.
+\end{theorem}
+
+\begin{proof}
+	Eigentlich klar, da $(f_1\cdot f_2)_{x_1} = f_1(x_1)\cdot f_2(.)$ $\mathcal{A}_2$ messbar ist und nach Fubini
+	\begin{align*}
+		\int f_1 \cdot f_2 d\mu_1\otimes d\mu_2 = \int_{\Omega_1}\int_{\Omega_2} f_1(x_1) f_2(x_2) d\mu_2(x_2) d\mu_1 = \int_{\Omega_1}\left(f_1(x_1) \int_{\Omega_2} f_2(x_2) d\mu_2(x_2) \right) = \int f_1 d\mu_1 \cdot \int f_2 d\mu_2 
+	\end{align*}
+	Genauso gilt $\int |f_1f_2| d\mu_1\otimes d\mu_2 = \int |f_1| d\mu_1 \int |f_2| d\mu_2$ und wenn die rechte Seite endlich ist, gilt $f_1\cdot f_2 \in \mathcal{L}_1$ bezüglich dem Produktraum.
+\end{proof}
+
+Die Betrachtung unabhängiger SGn $X_i, i=1,...,k$ erfolgt bequemer auf dem Produktraum. Auch wenn alle $\Omega_i=\Omega$, also alle SGn auf dem selben Raum definiert sind, übersiedelt man für die Erklärung der gemeinsamen Verteilung auf den Produktraum.
+
+Wenn $X=(X_1,...,X_k)$ ein Vektor unabhängiger SGn $X_i$ ist, gilt
+\begin{align*}
+	PX^{-1} = PX_1^{-1}\otimes ...\otimes PX_k^{-1}.
+\end{align*}
+Wenn $PX^{-1}$ ein Wahrscheinlichkeitsmaß mit Dichte ist, dann gilt
+\begin{align*}
+	PX^{-1}(A) = \int_A f_X d\lambda_k = \int_A f(x_1,...,x_k) d\lambda(x_1)...d\lambda(x_k)
+\end{align*}
+und die Randverteilung von $X_i$ ist mit Dichte
+\begin{align*}
+	PX_i^{-1}(A_i) = \int_{A_i\times\mathbb{R}^{k-1}} f_X d\lambda_k = \int_{A_i}\left(\int_\mathbb{R}...\int_\mathbb{R} f_X d\lambda ... d\lambda \right) d\lambda
+\end{align*}
+und wieder erhält man die Randdichte
+\begin{align*}
+	f_i(x_i) = \int_\mathbb{R} ...\int_\mathbb{R} f(x_1,...,x_k) d\lambda(x_1) ... d\lambda(x_{i-1}) d\lambda(x_{i+1}) ... d\lambda(x_k)
+\end{align*}
+(Das ist nicht neu, aber jetzt wird kein Umweg über das Riemann-Integral benötigt.)
+
+Wenn die $X_i$ unabhängig sind ist die gemeinsame Dichte
+\begin{align*}
+	f_X(x_1,...,x_k) = \prod_{i=1}^{k}f_i(x_i).
+\end{align*}
+Nach dem letzten Satz gilt für integrierbare $f$ und $g$ und unabhängige $X$ und $Y$
+\begin{align*}
+	\mathbb{E}f(X)g(Y) = \mathbb{E}f(X)\cdot\mathbb{E}g(Y)
+\end{align*}
+d.h. auch $\mathbb{E}XY = \mathbb{E}X \mathbb{E}Y$ und die SGn $X$ und $Y$ sind unkorreliert.
+
+Die Umkehrung gilt natürlich nicht, da Unkorreliertheit nur bedeutet, dass es keinen linearen Zusammenhang gibt.
+
+Wenn $Y=c$ f.s., dann sind $X$,$Y$ unabhängig, wenn $\mathbb{E}XY = \mathbb{E}X\mathbb{E}Y$, dass dann automatisch gilt. Auch wenn $X\sim A_{p_1}$ (Alternativ-verteilt) und $Y\sim A_{p_2}$ und
+\begin{align*}
+	\mathbb{E}XY = \mathbb{E}X\mathbb{E}Y = 0(1-p_1p_2) + 1p_1p_2 = p_1p_2
+\end{align*}
+d.h. $P(X=1)P(Y=1)=p_1p_2$ und $X$ und $Y$ sind unabhängig.
+
+Ansonsten ist nur bei Normalverteilung kein Unterschied zwischen Unkorreliertheit und Unabhängigkeit.
+
+\begin{example}
+	$(X,Y)\sim \mathcal{N}(\mu_x,\mu_y,\sigma_x^2,\sigma_y^2,\rho)$ o.B.d.A $\mu_x=\mu_y = 0$
+	
+	Die gemainsame Dichte zerfällt (siehe EI24)
+	\begin{align*}
+		f(x,y) = \underbrace{\frac{1}{\sqrt{2\pi}\sigma_x} exp\left(-\frac{1}{2}\left(\frac{x}{\sigma_x}\right)^2\right)}_{f_1(x)} \cdot \underbrace{\frac{1}{\sqrt{2\pi}\sigma_x} \frac{\sigma_x}{\sigma_y\sqrt{1-\rho^2}} exp\left(-\frac{1}{2}\left(\frac{\sigma_x^2(y-m)^2}{(1-\rho^2)\sigma_y^2}\right)^2\right)}_{f_2(x,y)}
+	\end{align*}
+	mit $m=\rho x \frac{\sigma_y}{\sigma_x}$ d.h.
+	\begin{align*}
+		\mathbb{E}XY = \int\int xyf(x,y)d\lambda_2 = \int\underbrace{\int y f_2(x,y) dy}_m xf_1(x) dx = \int m x f_1(x) dx = \rho \int x^2 f_1(x) dx = \rho \frac{\sigma_y}{\sigma_x}\sigma_x^2 = \rho\sigma_x\sigma_y
+	\end{align*}
+	$X$,$Y$ sind unkorreliert $\iff \rho = 0$, dann ist $f(x,y) = f_1(x)\cdot \Phi(\frac{y}{\sigma_y})$ ($\Phi$ Dichte der $\mathcal{N}(0,1)$) und sind $X$,$Y$ unabhängig.
+\end{example}
+
+Zwei Normalverteilungen können nur linear abhängen. Ansonsten kann sogar eine vollständige Abhängigkeit (nicht linear) bei unkorrelierten SGn vorliegen.
+
+\begin{example}
+	$X\sim U_{-1,1}, Y = X^2$. Dann gilt $\mathbb{E}X=0$ und $\mathbb{E}XY = \mathbb{E}X^3 = 0$ und $X$ und $Y$ sind unkorreliert.
+\end{example}
+
+Nur wenn für alle integrierbaren $f$,$g$ $f(X)$ und $g(Y)$ unkorreliert sind, dann sind $X$ und $Y$ unabhängig.
+
+Der Satz von Fubini ist ein wichtiges Werkzeug auch um bekannte Sätze der Integrationstheorie zu verallgemeinern, wie beispielsweise die partielle Integration.
+
+\begin{theorem}[10.PR]
+	$\mu_F$ und $\mu_G$ seinen Lebesgue-Stieltes Maße mit $F$ bzw. $G$ als Verteilungsfunktionen. $G_-(x)=\lim_{\tilde{x}\nearrow x}G(\tilde{x})$ ist der linksseitige Grenzwert von $G$. Dann gilt
+	\begin{align*}
+		\int_{(a,b]}Fd\mu_G + \int_{(a,b]}G_-d\mu_F = F(b)G(b)-F(a)G(a)
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	in der Übung.
+	
+	Wenn $F$ und $G$ stetig differenzierbar sind, dann gilt $d\mu_G = G'd\lambda$ und $d\mu_F = F'd\lambda$ und
+	\begin{align*}
+		\int_{(a,b]} F\cdot G' d\lambda + \int_{(a,b]} G\cdot F' d\lambda = F(b)G(b)-F(a)G(a)
+	\end{align*}
+	und in der üblichen Schreibweise für Stammfunktionen $\int FG' = FG - \int F'G$
+\end{proof}
+
+Mit dem Hauptsatz der Diff- u. Integrationstheorie lässt sich auch die bedingte Verteilung auf stetige Verteilungen erweitern.
+
+Für diskrete SGn $X$,$Y$ (beispielsweise auf $\mathbb{N}$ verteilt) ist
+\begin{align*}
+	P[X=k|Y=l] = \frac{P[X=k,Y=l]}{P[Y=l]}, k,l\in\mathbb{N}
+\end{align*}
+die Punktwahrscheinlichkeit $p_k$ der bedingten Verteilung $X|Y=l$.
+
+Besitzt $X$ eine stetig differenzierbare VF $F$ mit $F'=f_X$ als Dichte, gilt
+\begin{align*}
+	\lim\limits_{\triangle\rightarrow0}\frac{F(x+\triangle)-F(x)}{\triangle} = f_X(x) \text{ oder}\\
+	\frac{P[X\in[x-\triangle,x]]}{\triangle} \rightarrow f_X(x) \text{ für } \triangle\rightarrow0 \text{ oder}\\
+	P[X\in[x-\triangle,x]] \sim f_X(x)\triangle
+\end{align*}
+
+Mit dieser "infidezimalen Wahrscheinlichkeit" als Dichte erhält man, wenn auch $Y$ die Dichte $f_Y$ hat,
+\begin{align*}
+	P[X\in[x-\triangle,x]|Y\in[y-\triangle,y]] = \frac{P[X\in[x-\triangle,x], Y\in[y-\triangle,y]]}{P[Y\in[y-\triangle,y]]} =\\
+	\frac{\int_{x-\triangle}^{x}\int_{y-\triangle}^{y} f_{X,Y}(s,t) ds dt}{\int_{[y-\triangle,y]}f_Y(t) d\lambda(t)}\sim \frac{f_{X,Y}(x,y)\triangle^2}{f_Y(y)\triangle} = \frac{f_{X,Y}(x,y)\triangle}{f_Y(y)}
+\end{align*}
+
+\begin{definition}[bedingte Dichte]
+	$X:\Omega\rightarrow\mathbb{R}$ und $Y:\Omega\rightarrow\mathbb{R}$ sind SGn mit Dichte $f(x,y)$. $f_X$, $f_Y$ sind die Randdichten von $X$ und $Y$. Dann heißt für $y$ mit $f_Y(y)>0$
+	\begin{align*}
+		f(x|y) := \frac{f(x,y)}{f_Y(y)}
+	\end{align*}
+	die bedingte Dichte von $X$ bedingt durch $Y=y$. $f(x|y)$ ist $PY^{-1}_-$ f.s. definiert.
+\end{definition}
+
+Da für festes $y$
+\begin{align*}
+	\int_\mathbb{R} f(x|y) d\lambda(x) = \frac{\int_\mathbb{R} f(x,y) d\lambda(x)}{\int_\mathbb{R} f(x,y) d\lambda(x)} = 1 
+\end{align*}
+und $f(x|y)\geq 0$ ist $f(.|y)$ eine Wahrscheinlichkeitsdichte und tatsächlich eine Verteilung festgelegt.
+
+Wenn $X|Y=y PY^{-1}$-f.s. einen endlichen Erwartungswert besitzt, dann heißt die Funktion
+\begin{align*}
+	y\mapsto \mathbb{E}[X|Y=y] = \int x f(x|y) d\lambda(x)
+\end{align*} 
+bedingter Erwartungswert. Dann ist $h(Y):=\mathbb{E}[X|Y]$ eine $PY^{-1}$-f.s. messbare Funktion. $h(.)$ heißt auch Regressionsfunktion. $h(Y)$ ist als Prognose von $X$ nach der Beobachtung von $Y$ zu verstehen.
+
+\begin{example}
+	$(X,Y)$ sei bivariat normalverteilt $(X,Y)\sim\mathcal{N}(\mu_x,\mu_y,\sigma_x^2,\sigma_y^2, \rho)$. Die Darstellung der bivariaten Normalverteilungsdichte (PR18) führt auf die bedingte Dichte
+	\begin{align*}
+		f(x|y) = \frac{1}{\sqrt{2\pi v}}exp\left(-\frac{1}{2}\left(\frac{x-m}{v}\right)^2\right)\\
+		\text{mit } m = \mu_x + \rho\frac{\sigma_x}{\sigma_y}(y-\mu_y) \text{ und } v^2 = \sigma_x^2(1-\rho^2)
+	\end{align*}
+	d.h. $X|Y\sim\mathcal{N}(m,v^2)$.
+	
+	Die Regressionsfunktion ist linear
+	\begin{align*}
+		\mathbb{E}[X|Y] = \mu_x + \rho \frac{\sigma_x}{\sigma_y}(y-\mu_y)
+	\end{align*}
+	Auch diese Eigenschaft charakterisiert die Normalverteilung.
+\end{example}
+
+Für die Regressionsfunktion $H(Y):=\mathbb{E}[X|Y]$ gilt bei Normalverteilung $\mathbb{E}H(Y)=\mu_x$. Das ist generell der Fall:
+\begin{align*}
+	\mathbb{E}H(Y) = \int\mathbb{E}[X|Y=y]dPY^{-1} = \int\int x f(x|y) dx f_Y(y) dy\\
+	= \int\int x \underbrace{f(x|y)f_Y(y)}_{f(x,y)} dy dx =	\int\int x f(x,y) dy dx = \int x f_X(x) dx = \mathbb{E}X.
+\end{align*}
+Die mittlere Prognose entspricht dem unbedingten Erwartungswert.
+
+\subsection{Faltung von Maßen}
+\begin{definition}[Faltungsmaß]
+	$\mu_1,\mu_2$ sind sigma-endliche Maße auf $(\mathbb{R}, \mathcal{B})$. Das Faltungsmaß ist durch
+	\begin{align*}
+		\mu_1*\mu_2 (A) = \int \mu_1(A-y) \mu_2(dy)
+	\end{align*}
+	definiert.
+	
+	Das $\mu_1 * \mu_2$ tatsächlich ein Maß ist, ergibt sich daraus, dass es das von der Summe $S=X_1+X_2$ erzeugte Maß ist. D.h. $\mu_1 * \mu_2 = (\mu_1 \otimes \mu_2)S^{-1}$
+\end{definition}
+
+\begin{proof}
+	$S^{-1}(A) = \{(x,y)\in \mathbb{R}^2: x+y\in A\}$, wobei $A \in \mathcal{B}$. Der Schnitt von $S^{-1}(A)$ ist $S^{-1}(A)_y = \{x|x\in A-y\} = A-y$
+	
+	Die Darstellung des Produktmaßes mittels Schnitten wie zuvor,
+	\begin{align*}
+		\mu_1\otimes\mu_2(B) = \int \mu_1(B_y) d\mu_2(y), B \in \mathcal{A}_1 \otimes \mathcal{A}_2
+	\end{align*}
+	ergibt
+	\begin{align*}
+		\mu_1 * \mu_2(S^{-1}(A)) = \int \mu_1(A-y) d\mu_2(y) \text{ und }\\
+		(\mu_1\otimes\mu_2)S^{-1} = \mu_1 * \mu_2.
+	\end{align*}
+	Es ist auch in die andere "Richtung" darstellbar: $\mu_1 * \mu_2 = \int \mu_2(A-x) d\mu_1(dx)$
+\end{proof}
+
+Neben der Kommutativität $\mu_1 * \mu_2 = \mu_2 * \mu_1$ besitzt die Faltung noch folgende Eigenschaften:
+\begin{itemize}
+	\item $\mu_i, i=1,2,3$ sind sigma-endliche Maße auf $(\mathbb{R}, \mathcal{B})$
+	
+	\begin{align*}
+		(\mu_1*\mu_2)* \mu_3 = \mu_1 * (\mu_2 * \mu_3)
+	\end{align*}
+	\begin{proof}
+		$A \in \mathcal{B}_2$
+		\begin{align*}
+			(\mu_1 * \mu_2) * \mu_3(A) = \int \mu_1 * \mu_2 (A-z) d\mu_3(z) = \int\left(\int \mu_2(A-z-x) d\mu_1(x)\right) d\mu_3 = \\
+			\int\int \mu_2(A-z-x) d\mu_3(z) d\mu_1 = \int \mu_2 * \mu_3 (A-x) d\mu_1(x) = (\mu_2 * \mu_3) * \mu_1(A) = \mu_1 * (\mu_2 * \mu_3) (A)
+		\end{align*}
+	\end{proof}
+
+	\item $\mu_1(\mathbb{R}) = \mu_2(\mathbb{R}) = 1 \implies \mu_1 * \mu_2(\mathbb{R}) = 1$
+	
+	\begin{proof}
+		Da $\mathbb{R}-y=\mathbb{R} \forall y\in\mathbb{R}$ gilt
+		\begin{align*}
+			\mu_1 * \mu_2 (\mathbb{R}) = \int \mu_2(\mathbb{R}-x) d\mu_1(x) = \int \mu_2(\mathbb{R}) d\mu_1(x) = \mu_2(\mathbb{R}) \cdot \mu_1(\mathbb{R}) = 1
+		\end{align*}
+		
+		Die Faltung von Wahrscheinlichkeitsmaßen ist auch ein Wahrscheinlichkeitsmaß.
+	\end{proof}
+	
+	Sind $\mu_1 = PX_1^{-1}$ und $\mu_2=PX_2^{-1}$ von SGn $X_1$ bzw. $X_2$ induziert, dann ist $\mu_1 * \mu_2 = PX_1^{-1} * PX_2^{-1} = P(X_1+X_2)^{-1}$ das von $X_1,X_2$ induzierte Maß, vorausgesetzt $X_1,X_2$ sind unabhängig, also für $X=(X_1,X_2), PX = PX_1^{-1} \otimes PX_2^{-1}$.
+	
+	\item Es existiert auch ein neutrales Element der Faltung $\mu_0$ mit $\mu_0 * \mu = \mu = \mu * \mu_0$.
+	
+	\begin{proof}
+		Für $\mu_0 = \delta_0$, d.h. $\delta_0(A) = 1_A(0)$ gilt
+		\begin{align*}
+			\mu_0 * \mu(A) = \int \mu_0(A-x) d\mu(x) = \int \underbrace{1_{A-x}(0)}_{1_A(x)} d\mu(x) = \int 1_A(x) d\mu(x) = \mu(A).
+		\end{align*}
+	\end{proof}
+\end{itemize}
+
+Die Faltung bildet eine kommutative Halbgruppe.
+
+Die bereits vorher erklärte Faltung von messbaren Funktionen hängt erwartungsgemäß mit der Faltung von Maßen zusammen. Bei Maßen mit Dichten ist die Dichte der Faltung genau die Faltung der Dichten.
+
+\begin{theorem}[11.PR]
+	$\mu_1,\mu_2$ seien Maße mit Dichten bezüglich $\lambda$: $\mu_1 = \int f_1 d\lambda$ und $\mu_2 = \int f_2d\lambda$ und $f_1,f_2$ sind reellwertig.
+	
+	Dann ist
+	\begin{align*}
+		\mu_1 * \mu_2(A) = \int_A\left(\int_\mathbb{R} f_1(s-y) f_2(y) d\lambda(y) \right) d\lambda(s)
+	\end{align*}
+	 also die Dichte von $\mu_1 * \mu_2$ ist die Faltung der Dichten $f_1 * f_2$.
+\end{theorem}
+\begin{proof}
+	\begin{align*}
+		\mu_1 * \mu_2 (A) = \int_{\mathbb{R}} \mu_1(A-y) d\mu_2(y) = \int_{\mathbb{R}} \int_{A-y} f_1(x) d\lambda(x) f_2(y) d\lambda(y)
+	\end{align*}
+	Die Transformation $T_y(x) = x-y$ ist als lineare Transformation für $\lambda$ translationsinvariant. Für jedes $y$ gilt
+	\begin{align*}
+		\lambda T_y^{-1}(.) = \lambda(T_y^{-1}(.)) = \lambda(.)
+	\end{align*}
+	Das innere Integral ist nach dem Transformationssatz
+	\begin{align*}
+		\int_{A-y} f_1(x) d\lambda = \int_{T_y(A)} f_1 d\lambda = \int_A f_1\circ T_y(s) d\lambda(s)
+	\end{align*}
+	und mit dem Satz von Fubini ergibt sich
+	\begin{align*}
+		\mu_1 * \mu_2 (A) = \int_{\mathbb{R}} \left(\int_A f_1(s-y) d\lambda(s) \right) f_2(y) d\lambda(y) = \int_A \underbrace{\int_{\mathbb{R}} f_1(s-y) f_2(y) d\lambda(y)}_{f_1 * f_2} d\lambda(s)
+	\end{align*}
+	Analog gilt natürlich auch
+	\begin{align*}
+		\mu_1 * \mu_2 (A) = \int_A \left(\int f_2(s-x) f_1(x) d\lambda(x) \right) d\lambda(s).
+	\end{align*}
+\end{proof}
+
+Damit wurde die Faltung im stetigen Fall auf die Faltungsdichte zurückgeführt. Analog werden diskrete Maße gefaltet.
+
+\begin{theorem}[12.PR]
+	$\mu_i, i=1,2$ sind diskrete Maße auf $(\mathbb{R}, \mathcal{B})$ mit Trägermenge $D_i$ (abzählbar). Dann ist $\mu_1 * \mu_2$ diskret verteilt mit der Trägermenge $D = D_1 + D_2 = \{s|s=x+y, x\in D_1, y\in D_2\}$ und für $s\in \mathbb{R}$ gilt
+	\begin{align*}
+		\mu_1 * \mu_2(s) = \sum_{y \in D_2} \mu_1(\{s-y\})\mu_2(\{y\})
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	\begin{align*}
+		\mu_1 * \mu_2 (A) = \int_{D_2} \mu_1(A-y) d\mu_2(y) = \sum_{y\in D_2} \mu_1(A-y)\mu_2(\{y\})
+	\end{align*}
+	Die Trägermenge von $\mu_1 * \mu_2$ ist $D$, da $D^c-y \subseteq D_1^c$ für $y\in D_2$ und $\mu_1(D_1^c)=0$ gilt
+	\begin{align*}
+		\mu_1 * \mu_2 (D^c) = \sum_{y \in D_2} \underbrace{\mu_1(D^c-y)}_{=0}\mu_2(\{y\})\\
+		\implies \mu_1 * \mu_2 (D^c) = 0
+	\end{align*}
+	$\mu_1 * \mu_2(A) = \mu_1 * \mu_2 (A\cap D)$ und für $s\in D$ gilt
+	\begin{align*}
+		\mu_1 * \mu_2 (\{s\}) = \sum_{y \in D_2} \mu_1(\{s-y\})\mu_2(\{y\})
+	\end{align*}
+	oder mit vertauschten $\mu_i, i=1,2$
+	\begin{align*}
+		\mu_1 * \mu_2 (\{s\}) = \sum_{x \in D_1} \mu_2(\{s-x\}) \mu_1(\{x\})
+	\end{align*}
+\end{proof}
+
+Für stochastischen Größen und die entsprechenden induzierten Wahrscheinlichkeitsmaße wurde diese diskrete Faltung bereits erklärt, o.B.d.A sei $X$ auf $\mathbb{N}$ diskret verteilt, genauso wie $Y$, dann ist
+\begin{align*}
+	P(X+Y=k) = \sum_{m\geq 0} P(X=k-m) P(Y=m)
+\end{align*}
+wenn $X$,$Y$ unabhängig sind, bzw.
+\begin{align*}
+	P(X+Y=k) = \sum_{m\geq 0} P(X=k-m|Y=m) P(Y=m)
+\end{align*}
+wenn $X$,$Y$ nicht unabhängig sind.
+
+Mit der bedingten Dichte gilt auch im stetigen Fall für die Dichte von $X+Y=:S$ bei abhängigen $X$ und $Y$
+\begin{align*}
+	f_S(s) = \int f(s-t|Y=t) f_Y(t) d\lambda(t)
+\end{align*}
+wobei $f(x|y)$ die Dichte der bedingten Verteilung von $X|Y$ bezeichnet. Auch hier können die marginalen Dichten getauscht werden, d.h. mit $g(y|x)$ als bedingte Dichte $Y|X$
+\begin{align*}
+	f_S(s) = \int g(s-x|X=x) f_X(x) d\lambda(x).
+\end{align*}
+
+Für die Binomialverteilung wurde die Faltung bereits durchgeführt.
+
+\begin{example}[Faltung negativer Binomialverteilung]
+	$X$ ist $NegB_{k,p}$, wenn $X$ die Anzahl der Fehlversuche ($\backsimeq 0$) bis zum k-ten Erfolg ($\backsimeq 1$) bei unabhängigen $0-1$ Versuchen mit Erfolgswahrscheinlichkeit $p$.
+	\begin{align*}
+		P(X=m)=\binom{m+k-1}{k-1}p^k(1-p)^m
+	\end{align*}
+	Die geometrische Verteilung $G_p$ ist ein Spezialfall, $G_p=NegB_{1,p}$ (Variante 2 der geometrischen Verteilung ist hier gemeint).
+	\begin{align*}
+		X_i\sim G_p: P(X_i=m)=p(1-p)^m, m\in\mathbb{N}
+	\end{align*}
+
+	Die Faltung zweier $G_p$ heißt
+	\begin{align*}
+		P(X_1+X_2=m)=\sum_{l=0}^{m}p(1-p)^{m-l}p(1-p)^l = (m+1)p^2(1-p)^m = \binom{m+2-1}{2-1}p^2(1-p)^m
+	\end{align*}
+	daher $X_1+X_2\sim NegB_{2,p}$.
+	
+	Genauso ergibt die Faltung $NegB_{k,p}*G_p=:\mu$
+	\begin{align*}
+		\mu(\{m\}) = \sum_{i=0}^{m}\binom{i+k-1}{k-1}p^k(1-p)^ip(1-p)^{m-i} = p^{k+1}(1-p)^m\sum_{i=0}^{m}\binom{i+k-1}{k-1} = p^{k+1}(1-p)^m\binom{k+m}{k}
+	\end{align*}
+	Mit dem Pascalschen Dreieck $\binom{n+1}{k} = \binom{n}{k-1}\binom{n}{k}$ und Induktion kann gezeigt werden, dass $\sum_{i=0}^{m}\binom{i+k-1}{k-1} = \binom{k+m}{k}$.
+	
+	Somit ist $NegB_{k,p} * G_p = NegB_{k+1,p}$. Mit Induktion gilt daher sofort $NegB_{k,p}*NegB_{\tilde{k},p} = NegB_{k+\tilde{k},p}$.
+	
+	Die Summe unabhängiger $NegB$-Verteilungen (mit gleichem $p$) ist wieder negativ Binomialverteilt.
+	
+	Bei verschiedenen $p$ ist die Summe nicht nach einer $NegB$ verteilt.
+\end{example}
+
+Die Faltung eines (absolut) stetigen Maßes und eines diskreten Maßes ergibt wieder ein Maß mit Dichte.
+
+\begin{theorem}[13.PR]
+	$\mu$ sei ein Maß mit Dichte $f$ bez. $\lambda$. $\mu$ daher $\mu \ll\lambda$ und $\nu$ sei ein diskretes Maß mit Trägermenge $D$ (abzählbar) auf $(\mathbb{R},\mathcal{B})$. Dann ist $\mu * \nu \ll \lambda$ und
+	\begin{align*}
+		\mu * \nu (A) = \int_A \underbrace{\sum_{k\in D} f(x-k)\nu(\{k\})}_{\text{ Dichte von }\mu * \nu} d\lambda(x).
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	Da $\mu \ll \lambda$ gilt für eine Nullmenge $N$, $\lambda(N) = 0$ auch $\mu(N) = 0$. Wegen der Translationsinvarianz $\lambda(N-s) = 0$ für alle $s \in \mathbb{R}$, daher auch
+	\begin{align*}
+		\mu(N-s)=0 \text{ und } \mu * \nu (N) = \int \mu(N-s) \nu(ds) = 0\\
+		\implies \mu * \nu \ll \lambda.
+	\end{align*}
+
+	Sei $A = (-\infty, t], t\in \mathbb{R}$, dann gilt
+	\begin{align*}
+		\mu * \nu (A) = \int \sum_{k \leq t-s, k\in D} \nu(\{k\}) f(s) d\lambda(s) = \int \sum_{k\in D} \nu(\{k\}) 1_{(-\infty, t]}(k+s) f(s) d\lambda(s) = \\
+		\sum_{k\in D} \nu(k) \int 1_{(-\infty,t]}(x) f(x-k) d\lambda(x) = \int_{(-\infty,t]} \sum_{k\in D} f(x-k) \nu(k) d\lambda(x)
+	\end{align*}
+	Die Aussage gilt daher für Intervalle. Wegen des Fortsetzungssatzes gilt sie auch für jedes $A \in \mathcal{B}$.
+\end{proof}
+\begin{remark}
+	Bei mehr als 2 Maßen genügt ein Maß $\mu_i \ll \lambda$.
+\end{remark}
+\begin{example}
+	$\mu$ sei eine Exponentialverteilung $E_{x_1}$ mit Dichte $f(s)=e^{-s}1_{(0,\inf)}(s)$. $\nu$ entspreche einer Geometrischen Verteilung $G_{\frac{1}{2}}$ (Version 1). $\nu(\{k\}) = \frac{1}{2^k}, k\geq 1$.
+	
+	Die Lebesgue-Dichte des Faltungsmaßes ist
+	\begin{align*}
+		h(x) = \sum_{k\geq 1}\frac{1}{2^k} e^{-(x-k)} 1_{(0,\infty)}(x-k) = e^{-(x-1)}\frac{(\frac{e}{2})^{\lfloor x\rfloor} - 1}{e-2}
+	\end{align*}
+	was einer stückweisen (auf $[n,n+1)$) gewichteten Exponentialfunktion (Verteiliung) entspricht.
+\end{example}
+
+Die Faltung kann auch mit der Verteilungsfunktion durchgeführt werden:
+
+$X$ besitzt $F$ als Verteilungsfunktion $Y$ hat $G$ als VF, $X$ und $Y$ unabhängig. Die Verteilungsfunktion von $X+Y$ ist
+\begin{align*}
+	H(t) = \int F(t-s) dG(s) = \int G(t-s) dF(s)
+\end{align*}
+(siehe Übung).
+
+Wie im letzten Beispiel ist $H(.)$ bis auf eine Nullmenge differenzierbar, wenn $F$ und $G$ differenzierbar mit Dichten $F'=f$ und $G'=g$ sind. Die (stückweise) differenzierbar VF $H$ ergibt die Dichte aus Satz 11.PR.
+\begin{align*}
+	\frac{dH}{dx}(s) = \int \frac{dF}{dx}(s-t)\frac{dG}{dx}(t) d\lambda(t).
+\end{align*}
+
+Natürlich wird auch die Verteilung der Differenz $X-Y$ unabhängiger Sgn $X,Y$ mit der Faltung von $X$ und $-Y$ bestimmt.
+
+Wenn Dichten existieren ist die Dichte von $X-Y$ $h(t)=\inf f_X(s) f_Y(s-t) d\lambda(s)$. Die Wahrscheinlichkeit für $X \leq Y$ kann auch mit der FaltungsVF für $X-Y$ berechnet werden.
+
+\begin{lemma}
+	$X,Y$ SGn mit VF $F_X,F_Y$ und Dichten $f_X,f_Y$. Wenn $X$ u.a. $Y$, dann ist
+	\begin{align*}
+		P[X\leq Y] = \int_\mathbb{R} F_X(t)f_Y(t) d\lambda(t).
+	\end{align*}
+\end{lemma}
+\begin{proof}
+	\begin{align*}
+		P[X\leq Y] = \int_{\{x\leq y\}} f(x,y) d\lambda_2 = \int_\mathbb{R} \int_{(-\infty,Y]} f_X(x) f_Y(y) d\lambda_2(x,y) = \int_\mathbb{R} F_X(y)f_Y(y) d\lambda(y)
+	\end{align*}
+\end{proof}
+\begin{example}
+	$X,Y$ unabhängige Exponentialverteilungen mit Raten $\lambda_1,\lambda_2$, d.h. $X\sim E_{x_{\lambda_1}}, Y \sim E_{x_{\lambda_2}}$.
+	\begin{align*}
+		P(X\leq Y) = \int_{\mathbb{R}^+} (1-e^{-\lambda_1y})\lambda_2 e^{-\lambda_2y}d\lambda(y) = 1 - \frac{\lambda_2}{\lambda_1+\lambda_2} = \frac{\lambda_1}{\lambda_1 + \lambda_2}
+	\end{align*}
+	Anteil der Raten von $X$.
+\end{example}
+
+\section{Signierte Maße und Zerlegungen}
+
+Die Summe von Maßen ist wieder ein Maß, die Differenz von Maßen ist eine zumindest sigma-additive Mengenfunktion.
+
+\begin{definition}[signiertes Maß]
+	Die Mengenfunktion $\nu$ ist ein signiertes Maß, wenn auf $(\Omega, \mathcal{A})$ gilt $\nu:\mathcal{A} \rightarrow (-\infty, \infty]$ oder $[-\infty, \infty)$ mit $\nu(\emptyset) = 0$ und für disjunkte $A_i \in \mathcal{A}$ ist $\nu(\bigcup_{i=1}^{\infty}A_i) = \sum_{i=1}^{\infty}\nu(A_i)$.
+\end{definition}
+
+Viele Eigenschaften von Maßen lassen sich auf signierte Maße übertragen, allerdings ein Integral über ein signiertes Maß macht Schwierigkeiten.
+Es stellt sich aber heraus, dass signierte Maße sich als Differenz zweier Maße darstellen lässt. Das und vieles folgende wäre sofort klar, wenn es für $\nu$ eine Dichte $f:\Omega\rightarrow\mathbb{R}$ bezüglich eines Maßes $\mu$ gibt $\nu(A) = \int_A f d\mu$, was auch $\nu \ll \mu$ zur Folge hat.
+
+\begin{align*}
+	\nu(A) = \int_A f^+ - f^- d\mu = \underbrace{\int_A f^+ d\mu}_{\mu_1} - \underbrace{\int_A f^- d\mu}_{\mu_2}
+\end{align*}
+
+Für $A \subseteq [f^+>0]$ ist eine Menge mit $\nu(A)\geq 0$ und auch jede Teilmenge $B \subseteq A$ erfüllt $\nu(B)\geq 0$.
+
+\begin{definition}[positive Menge, negative Menge]
+	$(\Omega, \mathcal{A}, \nu)$ sei signierter Maßraum. $A^+$ heißt positive Menge bez. $\nu$, wenn $\forall B \subseteq A^+: \nu(B)\geq 0$ erfüllt, $A^-$ ist $\nu$-negative Menge, wenn $\nu(B)\leq 0$ für $B \subseteq A^-$.
+\end{definition}
+
+Negative Mengen eines signierten Maßraumes bilden einen sigma-Ring (Bezeichnung $\mathcal{A}^-$). $\mathcal{A}^-$ ist $\cap$-stabil und $\triangle$-stabil. Die Monotonie folgt aus der Stetigkeit von signierten Maßen.
+
+Sie Maße sind signierte Maße stetig von unten. Die monoton wachsende Folge $A_n\nearrow A$ wird wieder mit disjunkten Teilmengen dargestellt, $A = \bigcup_{n=1}^{\infty}A_n = A_1 \cup (A_2\setminus A_1) \dots$.
+
+Bei der Stetigkeit von oben wird noch $|\nu(A_{n_0})| < \infty$ für ein $n_0$ (damit für $n\geq n_0$) verlangt.
+
+\begin{definition}[Hahn-Zerlegung]
+	Eine Hahn-Zerlegung von $\Omega$ besteht aus $\{P,P^c\}$, wobei $P$ eine positive und $P^c$ eine negative Menge ist.
+\end{definition}
+
+\begin{theorem}[1.SZ]
+	Jeder signierte Maßraum $(\Omega, \mathcal{A}, \nu)$ besitzt eine Hahn Zerlegung von $\Omega$.
+\end{theorem}
+
+\begin{proof}
+	Sei $\nu: \mathcal{A}\rightarrow (-\infty, \infty]$. $\mathcal{A}^-$ das System der negativen Mengen. Sei $c:=\inf_{B\in\mathcal{A}'}\nu(B)$ daher gibt es eine Folge $B_n$ mit $\nu(B_n) < c + \frac{1}{n}$ und $B_n \in \mathcal{A}'$.
+	
+	$N:=\bigcup_n B_n$ ist eine negative Menge. Sei $P:=N^c$.
+	
+	Angenommen $P$ enthält eine negative Menge $B$ mit $\nu(B) < 0$, dann wäre $\nu(B\cup N) = \underbrace{\nu(B)}_{<0}+\nu(N) < c$ also $c$ nicht das Infimum.
+	
+	Demnach ist für jedes $B \subseteq P$ und $\nu(B) < 0$.
+	\begin{align*}
+		\mathcal{E}_1 := \sup\{\nu(M) | M \subseteq B\} > 0
+	\end{align*}
+
+	Es gibt ein $M_1 \subseteq B$ mit $\frac{\mathcal{E}_1}{2} \leq \nu(M_1) \neq \mathcal{E}_1$.
+	
+	Daher $\nu(B\setminus M_1) = \nu(B) - \nu(M_1) < \nu(B) < 0$. Auch $B\setminus M_1 \notin \mathcal{A}^-$, daher gibt es ein $M_2$ mit $\nu(B \setminus M_1 \setminus M_2) < 0$.
+	
+	Mit Induktion gibt es also eine Folge disjunkter Mengen $M_n \subseteq B$ mit $\nu(B\setminus \bigcup_{i=1}^{n}M_i) < 0$.
+	
+	Betrachte $D = B\setminus\bigcup_{i=1}^{\infty} M_i \implies B = \bigcup M_i \cup D$.
+	
+	Für $M_i$ gilt $\nu(M_i) > 0$ und $\nu(B) = \sum_i \nu(M_i) + \nu(D)$, daher $0 \leq \sum \nu(M_i) < \infty$ und $\nu(D) < 0$.
+	
+	Somit muss $\nu(M_i) \rightarrow 0$ und für $C \subseteq D \subseteq B \setminus \bigcup_{i=1}^{n} M_i$ jede Teilmenge $C$ erfüllt $\nu(C) \leq \mathcal{E}_n$ mit $\mathcal{E}_n \rightarrow 0 \implies \nu(C) \leq 0$.
+	
+	$D$ ist eine negative Menge mit $\nu(D) < 0$. Da $D \subseteq P = N^c$ wäre $N \cup D$ eine negative Menge mit $\nu(N \cup D) < \nu(N) = 0$. Damit kann $c = \inf_{B\in\mathcal{A}^-}\nu(B)$ nicht stimmen, die Annahme $\nu(B) < 0$ hält nicht, $P$ ist positive Menge.
+\end{proof}
+
+Hahn-Zerlegungen sind nicht eindeutig, für $\nu(.) = \inf_. f d\lambda$ kann der Trennungspunk gewählt werden. Aber die symmetrische Differenz positiver Mengen ist eine Nullmenge:
+
+Sei $\{P_1,P_1^c\}$ und $\{P_2, P_2^c\}$ jeweils eine Hahn-Zerlegung von $\Omega$. Dann gilt für $A \subseteq P_1 \setminus P_2$, dass $\nu(A) \geq 0$ ($A \subseteq P_1$) und $\nu(A) \leq 0$ ($A \subseteq P_2^c$), also $\nu(A) = 0$.
+
+\begin{definition}[Jordan-Zerlegung]
+	Eine Jordan-Zerlegung des signierten Maßes $\nu$ bilden Maße $\mu_1, \mu_2$ mit
+	\begin{align*}
+		\nu = \mu_1 - \mu_2,
+	\end{align*}
+	wobei $\mu_1,\mu_2$ singulär zueinander sind,
+	\begin{align*}
+		\mu_1 \perp \mu_2 \text{ d.h. } \exists M \text{ mit } \mu_1(M) = \mu_2(M^c) = 0.
+	\end{align*}
+\end{definition}
+
+Die Singularität führt auf folgende Minimaleigenschaft der Jordan-Zerlegung.
+
+Ist $\nu^+,\nu^-$ eine Jordanzerlegung von $\nu = \nu^+ - \nu^-$ und $\nu = \mu_1 - \mu_2$ für beliebige Maße $\mu_1,\mu_2$, dann gilt $\nu^+(A) \leq \mu_1(A)$ und $\nu^-(A) \leq \mu_2(A)$ für alle $A \in \mathcal{A}$.
+
+Mit obiger Trennungsmenge $M$ gilt
+\begin{align*}
+	\nu^+(A) = \underbrace{\nu^+(A\cap M)}_{=0} + \nu^+(A \cap M^c) = \nu^+(A \cap M^c) = \nu(A \cap M^c)\\
+	\nu^-(A) = \nu^-(A \cap M) + \underbrace{\nu^-(A \cap M^c)}_{=0} = \nu^-(A \cap M) = - \nu(A \cap M)\\
+	\implies \nu^+(A) = \mu_1(A \cap M^c) - \mu_2(A \cap M^c) \leq \mu_1(A)\\
+	\nu^-(A) = \mu_2(A\cap M) - \mu_1(A \cap M) \leq \mu_2(A)
+\end{align*}
+
+Mit der Hahn-Zerlegung findet man auch eine Jordan-Zerlegung.
+
+\begin{theorem}[2.SZ Jordan'scher Zerlegungssatz]
+	Jedes signierte Maß $\nu$ besitzt eine eindeutige Jordan-Zerlegung $\nu = \mu_1 - \mu_2$.
+\end{theorem}
+\begin{proof}
+	Aus der Hahn-Zerlegung $\Omega = P \cup P^c$ erhält man mit
+	\begin{align*}
+		\mu_1(A) = \nu(A \cap P) \text{ und } \mu_2(A) = - \nu(A \cap P^c)
+	\end{align*}
+	zwei singuläre Maße. Die Eindeutigkeit folgt aus der Minimaleigenschaft.
+	
+	Sei $\nu = \nu^+ - \nu^-$ mit singulären Maßen $\nu^+,\nu^-$, dann gilt $\nu^+ \leq \mu_1 \land \nu^- \leq \mu_2$ und $\mu_1 \leq \nu^+ \land \mu_2 \leq \nu^-$.
+\end{proof}
+
+\begin{definition*}[Totalvariation]
+	Durch $\mu_1 + \mu_2$ aus der Jordan-Zerlegung entsteht ein Maß, der Variation bzw. Totalvariation mit der Bezeichnung $|\nu| = \mu_1 + \mu_2$ genannt wird. Die Rechtfertigung der Bezeichnung gilt.
+\end{definition*}
+
+\begin{lemma}
+	Für das signierte Maß $\nu$ gilt
+	\begin{align*}
+		\forall A \in \mathcal{A}: |\nu(A)| \leq |\nu|(A).
+	\end{align*}
+\end{lemma}
+\begin{proof}
+	Die Aussage folgt sofort aus
+	\begin{align*}
+		|\nu(A)| = |\mu_1(A) - \mu_2(A)| \leq |\mu_1(A)| + |\mu_2(A)| = |\nu|(A).
+	\end{align*}
+\end{proof}
+
+Die Zerlegungssätze für signierte Maße werden für sigma-endliche Maße konkretisiert.
+
+\begin{definition}[Lebesgue-Zerlegung]
+	$\nu$ und $\mu$ seinen sigma-endliche Maße auf $(\Omega, \mathcal{A})$. Eine Lebesgue-Zerlegung von $\nu$ besteht aus Maßen $\nu_c,\nu_s$, sodass
+	\begin{align*}
+		\nu = \nu_c + \nu_s && \text{ und } && \nu_c \ll \mu && \text{ und } &&
+		\nu_s \perp \mu
+	\end{align*}
+	also $\nu_c$ absolut stetig bezüglich $\mu$ und $\nu_s$ singulär zu $\mu$ ist.
+\end{definition}
+
+$\nu$ ist in Bezug auf $\mu$ in einen stetigen und einen singulären Anteil zerlegt.
+
+Die zentrale Aussage ist, dass eine Lebesgue-Zerlegung für sigma-endliche Maße immer existiert und eindeutig ist. Für den Beweis können verschiedene Wege genommen werden. Eine Möglichkeit ist die Verwendung des Satzes von Riesz.
+
+\begin{theorem}[Darstellungssatz von Riesz-Frechet]
+	$(V,<.,.>)$ sei ein Hilbertraum und $H:V\rightarrow\mathbb{R}$ eine reellwertige Abbildung. Dann sind folgende Aussagen äquivalent:
+	\begin{itemize}
+		\item $H$ ist stetig und linear
+		\item $\exists a \in V$ mit $H(x) = <x,a>$ und $a$ ist eindeutig bestimmt.
+	\end{itemize}
+\end{theorem}
+
+Der Hilbertraum hier ist $\mathcal{L}_2(\mu)$ (also die quadratisch integrierbaren Funktionen) mit $<f,g> = \int fg d\mu$.
+
+Die Abbildung $H: \mathcal{L}^2(\mu) \rightarrow \mathbb{R}$ ist also genau dann stetig und linear, wenn es ein $f \in \mathcal{L}_2(\mu)$ gibt mit $H(g) = \int gf d\mu \forall g \in \mathcal{L}_2$.
+
+\begin{theorem}[3.SZ Zerlegungssatz von Lebesgue]
+	Ein sigma-endliches Maß $\nu$ auf dem sigma-endlichen Maßraum $(\Omega, \mathcal{A}, \mu)$ hat eine eindeutige Lebesgue Zerlegung.
+\end{theorem}
+
+\begin{theorem}[4.SZ Satz von Radon-Nikodym]
+	Für sigma-endliche Maße $\mu,\nu$ gilt $\nu \ll \mu \iff \nu$ ist Maß mit Dichte, d.h.
+	\begin{align*}
+		\nu(A) = \int_A f d\mu
+	\end{align*}
+	mit f.ü. eindeutiger Dichte $f \geq 0$; $f = \frac{d\nu}{d\mu}$.
+\end{theorem}
+\begin{proof}[Satz 3 und 4]
+	Da beide Maße als sigma-endlich vorausgesetzt werden, kann (wie üblich) sich auf den endlichen Fall beschränken. Sei für das Maß $\gamma := \mu + \nu$.
+	
+	$\gamma(\Omega) < \infty$. Für $f,g \in \mathcal{L}^2(\gamma)$ gilt
+	\begin{align*}
+		\int |f-g| d\nu \leq \int |f-g| d\mu \leq (1+\gamma(\Omega)) ||f-g||_{2} \text{ (Norm auf } \mathcal{L}^2(\gamma) \text{)}
+	\end{align*}
+	Das bedeutet $h \rightarrow \int h d\nu$ ist eine stetige Abbildung $\mathcal{L}_2(\gamma) \mapsto \mathbb{R}$ und natürlich auch eine lineare Abbildung.
+	
+	Nach dem Satz von Riesz-Frechet existiert ein $g \in \mathcal{L}_2(\gamma)$ mit
+	\begin{align*}
+		\text{(1) } \int h d\nu = \int hg d\gamma \forall h \in \mathcal{L}_2(\gamma) \text{ oder} \\
+		\text{(2) } \int \tilde{h}(1-g) d\gamma = \int \tilde{h} d\mu \forall \tilde{h} \in \mathcal{L}_2(\gamma).
+	\end{align*}
+	
+	Betrachtet man $h=1_{[g<0]}$ so gilt
+	\begin{align*}
+		0 \leq \underbrace{\nu([g<0])}_{=0} = \int h d\nu = \int 1_{[g<0]}g d\gamma \leq 0\\
+		\text{da, } \underbrace{\int 1_{g<0} g \nu}_{=0} + \underbrace{\int 1_{g<0} g \mu}_{=0}
+	\end{align*}
+	Das erste Integral ist über eine Nullmenge und das Zweite weil: Wäre $\mu[g < 0] > 0$, dann wäre das Integral $< 0$.
+	
+	Betrachtet man $\tilde{h} = 1_[g>1]$ ist genauso
+	\begin{align*}
+		\mu([g>1]) = \int 1_{[g>1]} (1-g) d\gamma \leq 0
+	\end{align*}
+	und $g\leq 1$ $\gamma$-f.ü.
+	
+	Es gilt $\gamma$-f.ü. $0 \leq g \leq 1$ und $\tilde{\gamma} := (1-g)\gamma$ ist ein Maß mit Dichte $(1-g)$, $\tilde{\gamma}(A) = \int_A (1-g) d\gamma$.
+	
+	Für jedes $h \geq 0$ existiert eine Folge $h_n \in \mathcal{L}_2(\tilde{\gamma})$ mit $h_n \nearrow h$ (beispielsweise sind Treppenfunktionen aus $\mathcal{L}^2$). Nach dem Satz von der monotonen Konvergenz gilt
+	
+	\begin{align*}
+		\int h d\tilde{\gamma} = \int \lim h_n d\tilde{\gamma} = \lim \int h_n d\tilde{\gamma} \overbrace{=}^{\text{wegen (2)}} \lim \int h_n d\mu = \int h d\mu.
+	\end{align*}
+	
+	Also gilt für alle $h \geq 0$ (1) und (2),
+	\begin{align*}
+		\int h(1-g) d\gamma = \int h d\mu
+	\end{align*}
+
+	Sei $E=[g=1]$ und $h=1_E$, dann folgt $\int h d\mu = 0 \implies \mu([g=1]) = 0$.
+	
+	Seien die (Spur-)Maße
+	\begin{align*}
+		\nu_c(A) = \nu(A\setminus E) && \text{ und } && \nu_s(A) = \nu(A \cap E)
+	\end{align*}
+	
+	Offensichtlich ist $\nu = \nu_c + \nu_s$ und die Maße sind singulär aufeinander, und $\nu_s \perp \mu$ da $\mu(E) = 0$ und $\nu_s(E^c) = 0$.
+	
+	Sei $A$ eine $\mu$-Nullmenge $\mu(A)=0$, dann genügt $A \cap E = \emptyset$ anzunehmen da $\mu(e) = 0$, dh. $\int_A (1-g) d(\mu + \nu) = 0$ (nach 2), da $1-g > 0$ auf $A$ ist $\mu(A) + \nu(A) = 0 \implies \nu(A) = 0$ und auch $\nu_c(A) = 0$.
+	
+	Daher ist $\nu_c \ll \mu$.
+	
+	Es bleibt noch die Dichte zu finden, sei 
+	\begin{align*}
+		&f := \frac{g}{1-g} 1_{E^c}. \\
+		&\int_A f d\mu \overbrace{=}^{\text{wegen (2)}} \int_A 1_{E^c} g d(\mu + \nu) \overbrace{=}^{wegen (1)} \int 1_A 1_{E^c} d\nu = \nu(A\setminus E) = \nu_c(A)
+	\end{align*}
+	und die Dichte ist $f$.
+	
+\end{proof}
+
+Der Satz von Radon-Nikodym ist damit auch gezeigt, da wenn $\nu \ll \mu$ wird $\nu_s \equiv 0$ in der Lebesgue-Zerlegung gesetzt.
+
+\begin{example}
+	$\mu_i, i=1,2$ seinen Poissonverteilungen mit Raten $\lambda_i > 0$
+	\begin{align*}
+		\mu_1(\{k\}) = \frac{\lambda_1^k}{k!} e^{-\lambda_1}, k \in \mathbb{N}
+	\end{align*}
+
+	$\mu_1 \ll \mu_2$ und $\mu_2 \ll \mu_1$, da $\mu_i(\{k\})>0 \forall k \in \mathbb{N}$.
+	\begin{align*}
+		\mu_2(\{k\}) = \left(\frac{\lambda_2}{\lambda_1}\right)^k e^{\lambda_1 - \lambda_2} \mu_1(\{k\}) \\
+		\text{also } \frac{d\mu_2}{d\mu_1} = \left(\frac{\lambda_2}{\lambda_1}\right)^k e^{\lambda_1 - \lambda_2} \text{ und}\\
+		\mu_2(A) = \sum_{k\in A} \left(\frac{\lambda_2}{\lambda_1}\right)^k e^{\lambda_1 - \lambda_2} \mu_1(\{k\})
+	\end{align*}
+\end{example}
+
+\begin{definition}[Äquivalenz]
+	Die Maße $\mu_1, \mu_2$ heißen äquivalent ($\mu_1 \approx \mu_2$), wenn $\mu_1 \ll \mu_2$ und $\mu_2 \ll \mu_1$.
+\end{definition}
+
+\begin{lemma}
+	Die sigma-endlichen Maße $\mu_1$ und $\mu_2$ seinen äquivalent $\mu_1 \approx \mu_2$. Dann gilt für die RN-Dichten
+	\begin{align*}
+		\frac{d\mu_1}{d\mu_2} = \left(\frac{d\mu_2}{d\mu_1}\right)^{-1} \mu_1\text{-f.ü.}
+	\end{align*}
+\end{lemma}
+\begin{proof}
+	Da $\mu_1 \ll \mu_2 \ll \mu_1$ ergibt die Anwendung der Kettenregel mit $\mu_2 = f_2 \cdot \mu_1$
+	\begin{align*}
+		\mu_1(A) = \int_A f_1 d\mu_2 = \int_A \underbrace{f_1}_{\frac{d\mu_1}{d\mu_2}} \underbrace{f_2}_{\frac{d\mu_2}{d\mu_1}} d\mu_1
+	\end{align*}
+	Da $\mu_1(A) = \int_A 1d\mu_1$ und die RN-Dichte f.ü. eindeutig ist, gilt $\mu_1$-f.ü.
+	\begin{align*}
+		\frac{d\mu_1}{d\mu_2} \frac{d\mu_2}{d\mu_1} = 1 \implies \frac{d\mu_1}{d\mu_2} = \left(\frac{d\mu_2}{d\mu_1}\right)^{-1}
+	\end{align*}
+	("Kehrwert und Ableitung sind vertauschbar.")
+\end{proof}
+
+Ein einfaches Beispiel zeigt, dass die (sigma-)Endlichkeit der Maße unverzichtbar ist.
+
+\begin{example}
+	$\mathcal{A}=\{\Omega,\emptyset\}$, $\mu_1(\emptyset) = 0 = \mu_2(\emptyset)$ und $\mu_1(\Omega) = 1, \mu_2(\Omega) = \infty$. $\mu_1 \approx \mu_2$
+	\begin{align*}
+		\mu_1(\Omega) = \int_\Omega f d\mu_2
+	\end{align*}
+	ist für keine messbare Funktion $f \geq 0$ möglich.
+\end{example}
+
+Im obigem Beispiel (Poissonverteilung) waren $\mu_i \ll \zeta$ (Zählmaß) und die Dichten wurden über den "Umweg" über $\zeta$ bestimmt.
+
+\section{Dichten und absolute Stetigkeit}
+
+Lebesgue-Stieltjes Maße auf $(\mathbb{R}, \mathcal{B})$ besitzen eine Verteilungsfunktion $F$ von $\mu$. Angenommen $F$ ist überall stetig differenzierbar, dann gilt
+\begin{align*}
+	\frac{dF}{dx} = \frac{d}{dx} \mu((-\infty,x]) = f \text{ und}\\
+	\mu((-\infty,x]) = \int_{-\infty}^{\infty} f(t) dt.
+\end{align*}
+Nach dem Hauptsatz der Differenzial- und Integralrechnung gilt
+\begin{align*}
+	f = \frac{dF}{dx}
+\end{align*}
+und die Dichte entspricht der Ableitung der Verteilungsfunktion.
+
+Im Gegensatz zu den vorigen (Existenz-)Sätzen zu Dichten, besteht jetzt eine einfache Möglichkeit eine Dichte (bezüglich $\lambda$) zu finden.
+
+Für eine Verallgemeinerung des obigen Prinzips, wird die stetige Differenzierbarkeit gegen schwächere Eigenschaften der Dichten gewechselt.
+
+\begin{definition}[Beschränkte Variation]
+	$f:[a,b]\rightarrow \mathbb{R}$ ist von beschränkter Variation mit Schranke $M$, wenn für jede endliche Partition des Intervalls, $a=x_0<x_1<...<x_n=b$
+	\begin{align*}
+		\sum_{i=1}^{n} |f(x_i) - f(x_{i-1}) | \leq M
+	\end{align*}
+\end{definition}
+\begin{definition}[Totalvariation]
+	Die Totalvariation von $f$ ist
+	\begin{align*}
+		V_a^b f := \sup \left\{ \sum_{i=1}^{n} |f(x_i) - f(x_{i-1}) |, n \in \mathbb{N} \right\}
+	\end{align*}
+	wobei das Supremum über alle solche Partitionen gebildet wird. Die Menge $BV(a,b)$ beherbergt alle $f$ von beschränkter Variation auf $[a,b]$.
+\end{definition}
+
+\begin{example}
+	$f(x) = x \sin(1/x)$ mit $f(0) = 0$ ist auf $[0,1]$ stetig, aber nicht von beschränkter Variation. Sei die Partition definiert durch
+	\begin{align*}
+		x_i = \left( \frac{\pi}{2} (1+2i) \right)^{-1}, i=1,2,...
+	\end{align*}
+	womit
+	\begin{align*}
+		|f(x_i) - f(x_{i-1})| \geq \frac{1}{\pi (i+\frac{3}{2})}.
+	\end{align*}
+	Die rechte Seite ist nicht summierbar, für jedes $M$ existiert eine Anzahl $n$ mit $\sum^n |f(x_i) - f(x_{i-1})| > M$.
+\end{example}
+\begin{lemma}
+	Wenn $f \in BV(a,b)$ und $a<c<b$ gilt
+	\begin{align*}
+		V_a^c f + V_c^b f = V_a^b f
+	\end{align*}
+\end{lemma}
+\begin{proof}
+	Für eine beliebige Partition mit $n$ Parametern des Intervalls $(a,b)$ sei $s(a,b) := \sum |f(x_i) - f(x_{i-1})|$ mit $x_0=a$, $x_n=b$.
+	
+	Ist $c$ ein Punkt von $a=x_0 < ... < x_n = b$ gilt
+	\begin{align*}
+		s(a,c) + s(c,b) \leq V_a^b f
+	\end{align*}
+	da die Partitionen von $(a,c)$ und $(c,b)$ beliebig waren, gilt auch
+	\begin{align*}
+		V_a^c f + V_c^b f \leq V_a^b f
+	\end{align*}
+
+	Ist $c$ kein Punkt und $x_i < c < x_i+1$
+	\begin{align*}
+		s(a,b) \leq s(a,x_j) + |f(x_{j+1}) - f(c)| + |f(c) - f(x_j)| + s(x_{j+1}, b).
+	\end{align*}
+	Auch das gilt für beliebige Partitionen, somit $V_a^b f \leq V_a^c f + V_c^b f$
+\end{proof}
+\begin{lemma}
+	$f\in BV(a,b)$ dann sind auf $(a,b)$
+	\begin{align*}
+		x \rightarrow V_a^x f \text{ und } x \rightarrow V_a^x f - f(x)
+	\end{align*}
+	monoton wachsende Funktionen.
+\end{lemma}
+\begin{proof}
+	$V(x) := V_a^x f$. Für $y > x$ gilt nach vorigem Lemma $V_a^y f = V_a^x f + V_x^y f$, d.h. $V(.)$ ist wachsend.
+	\begin{align*}
+		f(y) - f(x) \leq |f(y) - f(x)| \leq V_x^y f = V_a^y f - V_a^x f\\
+		\implies V_a^x f - f(x) \leq V_a^y f - f(y)
+	\end{align*}
+\end{proof}
+
+Die Darstellung von Funktionen mit beschränkter Variation durch monotone Funktionen ist auch eine Charakterisierung.
+\begin{theorem}[1.DS]
+	$f \in BV(a,b)$ genau dann, wenn $f=v-w$ mit monoton wachsenden Funktionen $v,w$.
+\end{theorem}
+\begin{proof}
+	Es ist nur mehr $\impliedby$ zu zeigen.
+	
+	Sei $f=v-w$
+	\begin{align*}
+		\sum |f(x_i) - f(x_{i-1})| = \sum |v(x_i) - v(x_{i-1}) + w(x_{i-1}) - w(x_i)| \leq \sum |v(x_i) - v(x_{i-1})| + \sum |w(x_i) - w(x_{i-1})|.
+	\end{align*}
+	Da jede monotone Funktion von beschränkter Variation ist, gilt
+	\begin{align*}
+		\sum |f(x_i) - f(x_{i-1})| \leq V_a^bv + V_a^b w < \infty.
+	\end{align*}
+\end{proof}
+
+Eine monotone Funktion hat nur höchstens abzählbar viele Unstetigkeitsstellen. $f:[a,b]\mapsto\mathbb{R}$ monoton steigend, d.h. $f_-(x) \leq f(x) \leq f_+(x)$ (also jeweils der linksseitige bzw. rechtsseitige Grenzwert).
+
+Jede Unstetigkeitsstelle $x_0$ erzeugt ein Intervall $(f_-(x_0), f_+(x_0))$, diese Intervalle sind eindeutig und disjunkt, wovon es nur höchstens abzählbar viele geben kann.
+
+Eine Funktion beschränkter Variation, $f \in BV(a,b)$ ist stetig $\lambda$-f.ü.
+
+Wenn $f\in BV(a,b)$ mit $f=F-G$ und $F,G$ monoton wachsend, dann kann $F,G$ an der Unstetigkeitsstellen durch den rechtsseitigen Grenzwert ersetzt werden.
+
+$F_+,G_+$ sind dann Verteilungsfunktionen von Lebesgue-Stieltjes Maßen.
+\begin{align*}
+	f_+ := F_+ - G_+ = f \lambda\text{-f.ü.}
+\end{align*}
+
+$f_+,f$ ist als Verteilungsfunktionen eines signierten LS-Maßes zu verstehen.
+
+Eine Verteilungsfunktion $F$ ist zerlegbar in $F=F_s + F_d$, wobei $F_s$ stetig ist und $F_d$ eine Verteilungsfunktion eines diskreten Maßes ist. (Abzählbare Trägermenge $\{x_i\}_{i\in I}$ mit $\mu(\{x_i\})> 0$).
+
+Der stetige Anteil ($F_s$) lässt sich weiter zerlegen. Dazu betrachten wir absolut stetige Funktionen.
+
+\begin{definition}[absolut stetig]
+	Die Funktion $f:[a,b] \rightarrow \mathbb{R}$ heißt absolut stetig, wenn zu beliebigem $\epsilon>0$ ein $\delta > 0$ existiert, sodass aus $\sum_{i=1}^{n} (b_i - a_i) < \delta$ folgt $\sum_{i=1}^{n} |f(b_i) - f(a_i)| < \epsilon$. Dabei sind $(a_i,b_i)$ disjunkte Teilintervalle von $[a,b]$, die Anzahl der Intervalle ist $n$ (beliebig).
+\end{definition}
+
+Solche absolut stetigen Funktionen liegen "zwischen" stetig differenzierbaren und gleichmäßig stetigen Funktionen.
+
+Wenn $f\in C^1[a,b]$, dann ist $f$ absolut stetig, da
+\begin{align*}
+	|f(b_i) - f(a_i)| \leq \sum_{x\in (a,b)} |f'(x)| (b_i - a_i), a_i < b_i
+\end{align*}
+
+\begin{lemma}
+	$f$ sei auf $[a,b]$ absolut stetig. Dann ist $f$ gleichmäßig stetig und $f\in BV[a,b]$.
+\end{lemma}
+\begin{proof}
+	Nach Voraussetzung existiert zu $\epsilon > 0$ ein $\delta > 0$ sodass aus $(b-a)< \delta \implies |f(b)-f(a)| < \epsilon$ egal was $a,b$ ist. Damit ist $f$ gleichmäßig stetig.
+	
+	Für eine Partition $a=x_0 < x_1 < ... < x_n = b$ mit $(x_i - x_{i-1}) < \delta \forall i$ gilt für jede endliche Partition $(a_i,b_i)$ des Intervalls $(x_{i-1},x_i)$
+	\begin{align*}
+		\sum_{i=1}^{m} |f(b_i) - f(a_i)| \leq V_{x_{i-1}}^{x_i} f < \epsilon
+	\end{align*}
+	nach Voraussetzung der absoluten Stetigkeit.
+	
+	$V_a^b f$ ist additiv, also
+	\begin{align*}
+		V_a^b f = \sum_{i=1}^{n} V_{x_{i-1}}^{x_i} < n \epsilon
+	\end{align*}
+	daher ist $V_a^b f$ endlich.
+\end{proof}
+
+Absolute Stetigkeit ist stärker als gleichmäßige Stetigkeit, aber glm. Stetigkeit ist nicht hinreichend. Lipschitz Stetigkeit wiederum ist hinreichend.
+
+Wenn $f \in C^1[a,b]$, also stetig differenzierbar ist, dann ist $f$ absolut stetig.
+
+Für $a_i, b_i \in [a,b]$ und $\sup_{x \in [a,b]} |f'(x)| < \infty$ ist
+\begin{align*}
+	|f(b_i) - f(a_i)| \leq \sup_{x \in [a,b]} |f'(x)| |b_i - a_i|
+\end{align*}
+und daher ist $f$ absolut stetig.
+
+Im folgenden soll geklärt werden, wie weit die komfortable Situation einer stetig differenzierbaren Verteilungsfunktion mit daraus folgender Maßdichte auf absolut stetige Verteilungsfunktionen übertragen werden kann. Damit könnte dann auch die Dichte eines Maßes $\mu$ mit $\mu \ll \lambda$ bestimmt werden.
+
+Für eine absolut stetige Funktion diene eine Verteilungsfunktion eines signierten Maßes als Vorlage. Das rechtfertigt folgender Satz.
+
+\begin{theorem}[2.DS]
+	$f:[a,b]\rightarrow\mathbb{R}$ ist absolut stetig. Dann ist $f = F-G$, wobei beide Funktionen $F,G$ monoton wachsend und absolut stetig sind.
+\end{theorem}
+\begin{proof}
+	Zunächst wird gezeigt, dass $x \rightarrow V_a^x f$ eine absolut stetige Funktion ist.
+	
+	Für $\epsilon > 0$ existiert ein $\delta$, sodass eine Partition $P = \{(a_i,b_i)|i=1,...,n\}$ disjunkter Intervalle mit $\sum (b_i - a_i) < \delta$ existiert, sodass $\sum_{i=1}^{n} |f(b_i) - f(a_i)| < \epsilon$.
+	
+	Wird jedes einzelne Intervall $(a_i, b_i)$ wieder zerlegt, $a_i \leq a_{i_0} < ... < a_{i_{m_i}} = b_i$, ist
+	\begin{align*}
+		\sum_{i=1}^{n} \sum_{j=1}^{m_i} (a_{i_j} - a_{i_{j-1}}) = \sum_{i=1}^{n} b_i - a_i < \delta
+	\end{align*}
+	und nach Voraussetzung
+	\begin{align*}
+		\sum_{i=1}^{n} \underbrace{\sum_{j=1}^{m_i} |f(a_{i_j}) - f(a_{i_{j-1}})}_{=V_{a_{i-1}}^{a_i}} < \epsilon
+	\end{align*}
+
+	Da die Zerlegung von $(a_i,b_i)$ beliebig war, ist auch
+	\begin{align*}
+		\sum_{i=1}^{n} \sup \left\{\sum_{j=1}^{m_i} |f(a_{i_j}) - f({a_{i_{j-1}}})| \big| a_i = a_{i_0} < ... < a_{i_{m_i}} = b_i\right\} = \sum_{i=1}^{n} V_{a_i}^{b_i} f = \sum_{i=1}^{n} \underbrace{|V_a^{b_i}f - V_a^{a_i} f|}_{=V_{a_i}^{b_i} f} < \epsilon
+	\end{align*}
+	also $v(x)=V_a^x f$ ist absolut stetig. Dann ist auch $v(x)-f(x)$ absolut stetig (als Summe von absolut stetigen Funktionen) Nach vorigem Lemma sind $v(.)$ und $v(.)-f(.)$ beide monoton wachsend.
+\end{proof}
+
+Die Bezeichnung "absolut stetig" für Maße $\mu \ll \lambda$ kommt von einer der gleichmäßigen Stetigkeit entsprechenden Eigenschaft für Funktionen.
+
+\begin{theorem}[3.DS]
+	$\mu$ sei ein LS-Maß auf $(\mathbb{R}, \mathcal{B})$ mit Verteilungsfunktion $F$. $[a,b] \subseteq \mathbb{R}$.
+	
+	$\mu \ll \lambda$ ist äquivalent mit:
+	\begin{enumerate}
+		\item $\epsilon,\delta$-Kriterium: Zu $\epsilon > 0$ existiert ein $\delta > 0$, sodass aus $\lambda(A)< \delta \implies \mu(A) < \epsilon$, wenn $\mu$ endlich ist, $A \in \mathcal{B}$.
+		
+		\item $F|_{[a,b]}$ ist Verteilungsfunktion von $\mu$ auf $([a,b], \mathcal{B}|_{[a,b]})$ ist absolut stetig.
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\begin{enumerate}
+		\item Wenn das $\epsilon,\delta$ Kriterium gilt und $\lambda(A)=0$ aber $\mu(A)>0$, dann ist für $\epsilon = \frac{\mu(A)}{2}$, zwar $\lambda(A) < \delta$ für alle $\delta > 0$ aber es gilt nicht $\mu(A) < \epsilon$.
+		
+		Es sei $\mu \ll \lambda$. Da $\mu$ endlich ist (und daher natürlich sigma-endlich) existiert eine RN-Dichte $f$ mit $\mu(A) = \int_A f d\lambda$.
+		
+		Da $\mu$ endlich $\lambda([f=\infty])=0$ $\lambda([f>m])\rightarrow 0$ für $m \rightarrow \infty$. Mit $\Omega = [a,b]$ folgt
+		\begin{align*}
+			\int_{\Omega} f 1_{[f>m]} d\lambda \rightarrow 0
+		\end{align*}
+		wegen der Stetigkeit von oben des Maßes $\mu$. Für $\epsilon > 0$ wähle $m$ mit
+		\begin{align*}
+			\int_{\Omega} f 1_{[f>m]} d\lambda < \frac{\epsilon}{2}
+		\end{align*}
+		und $\delta < \frac{\epsilon}{2m}$, dann gilt
+		\begin{align*}
+			\mu(A) = \int_A f 1_{[f>m]} d\lambda + \int_A f 1_{[f\leq m]} d\lambda \leq \frac{\epsilon}{2} + m \lambda(A) \text{, wenn}\\
+			\lambda(A) < \delta \implies \mu(A) < \epsilon.
+		\end{align*}
+	
+		Bemerkung: Teil 1) gilt für beliebige (endliche) Maße $\mu,\nu$ mit $\mu \ll \nu$.
+		
+		\item Wenn $\mu \ll \lambda$ gilt nach dem $\epsilon,\delta$ Kriterium für $A=\bigcup_{i=1}^{n} (a_i,b_i]$ mit $\lambda(A) = \sum_{i=1}^{n} (b_i - a_i) < \delta$
+		\begin{align*}
+			\mu(A) = \sum_{i=1}^{n} F(b_i) - F(a_i) = \sum |F(b_i) - F(a_i)| < \epsilon
+		\end{align*}
+		und $F$ ist absolut stetig.
+		
+		Sei $F$ absolut stetig und $A \in \mathcal{B} \cap [a,b]$.
+		
+		$\lambda$ ist (auch) das äußere Maß, somit gilt
+		\begin{align*}
+			\lambda(A) = \inf \left\{ \sum_{i=1}^{\infty} (b_i - a_i) \big| A \subseteq \bigcup_{i=1}^{\infty} (a_i,b_i] \right\}
+		\end{align*}
+		Sei $A=N$ eine $\lambda$-Nullmenge, $\lambda(N)=0$, dann existieren disjunkte Intervalle $(a_i,b_i]$ mit $N \subseteq \bigcup_i (a_i,b_i]$ und $\sum_i (b_i-a_i) < \delta$
+	
+		Für jede endliche Auswahl gilt $\sum_{i=1}^{n} (b_i - a_i) < \delta$ und nach Voraussetzung
+		\begin{align*}
+			\sum_{i=1}^{n}F(b_i) - F(a_i) < \epsilon
+		\end{align*}
+		für jedes $\epsilon > 0$. Das bedeutet
+		\begin{align*}
+			\mu(N) \leq \mu\left(\bigcup_{i=1}^{\infty} (a_i,b_i]\right) \leq \sum_{i=1}^{n} |F(b_i) - F(a_i)| < \epsilon
+		\end{align*}
+		$N$ ist auch eine $\mu$-Nullmenge.
+	\end{enumerate}
+\end{proof}
+
+\begin{theorem}[4.DS]
+	Eine Funktion $F:[a,b]\rightarrow \mathbb{R}$ besitzt genau dann eine Integraldarstellung
+	\begin{align*}
+		F(x) = \int_{(a,x]} f d\lambda + c, x \in [a,b]
+	\end{align*}
+	mit $f \in \mathcal{L}_1(\lambda|_{[a,b]})$, wenn $F$ absolut stetig ist.
+\end{theorem}
+\begin{proof}
+	$F$ als Verteilungsfunktion eines signierten Maßes aufgefasst erklärt den Zusammenhang:
+	
+	Ist $F$ absolut stetig, so existieren monoton wachsende Funktionen $G,H$ mit $F=G-H$ und beide $G,H$ sind absolut stetig.
+	
+	Die zugehörigen LS-Maße seien $\mu_G,\mu_H$ und beide $\mu_G \ll \lambda, \mu_H \ll \lambda$ mit RN-Dichten
+	\begin{align*}
+		g:=\frac{d\mu_G}{d\lambda} \text{ und } h := \frac{d\mu_H}{d\lambda} \text{, somit ist}\\
+		F(x) - F(a) = \mu_G((a,x]) - \mu_H((a,x]) - F(a)\\
+		\implies F(x) = F(a) + \int_{(a,x]} g-h d\lambda
+	\end{align*}
+
+	Besitzt $F$ die Integraldarstellung mit $f$
+	\begin{align*}
+		F(x) = F(a) + \int_{(a,x]} f d\lambda
+	\end{align*}
+	dann ist $f^+$ die Dichte des Maßes $\mu_G$, $f^-$ die von $H$ und $\mu_G \ll \lambda, \mu_G \ll \lambda$. Die Verteilungsfunktionen beider Maße $G,H$ sind absolut stetig.
+	
+	Für $x \in (a,b]$ ist
+	\begin{align*}
+		F(x) = G(x) - G(a) - (H(x) - H(a))
+	\end{align*}
+	und $F$ ist die Differenz zweier absolut stetigen Funktionen und auch absolut stetig.
+\end{proof}
+
+Für die Klärung, in wie weit die Integraldarstellung mit der Ableitung $f=F'$ gelingt wird zuerst die Lebesgue-Zerlegung von $\mu$ bezüglich $\lambda$ untersucht
+\begin{align*}
+	\mu = \mu_c + \mu_s, \mu_s \perp \lambda, \mu_c \ll \lambda
+\end{align*}
+Für folgenden Satz, der den Zusammenhang zwischen Nullmengen und Ableitung angibt, wird ein Hilfssatz benötigt.
+
+\begin{lemma}
+	$A \in \mathcal{B}|_{[a,b]}$ für ein endliches Intervall $[a,b]$ und $\mu$ sei ein endliches Maß auf $\mathcal{B}|_{[a,b]}$.
+	
+	Wenn $\mu(A) = 0$, dann ist für $n \in \mathbb{N}$
+	\begin{align*}
+		\lambda\left( x\in A \big| \bar{\lim_{h \searrow 0}} \frac{\mu((x-h,x+h])}{2h} > \frac{1}{n} \right) = 0
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	ohne Beweis. Der Beweis ist eine Folgerung des Überdeckungslemmas von Vitali, Deteils findet man in Elstrodt, "Maß- und Integrationstheorie".
+\end{proof}
+
+\begin{theorem}[5.DS]
+	$\mu$ sei ein endliches Maß auf $\mathcal{B}|_{[a,b]}$ mit Verteilungsfunktion $F(x)=\mu([a,x])$. Wenn $\mu(A)=0$, dann ist $F'=0$ $\lambda$-f.ü. auf $A$.
+\end{theorem}
+\begin{proof}
+	$F$ ist wachsend, $F'=0$ bedeutet
+	\begin{align*}
+		\frac{F(x+h)-F(x-h)}{2h} = \frac{\mu((x-h,x+h])}{2h} \rightarrow 0
+	\end{align*}
+	wenn $h\rightarrow0$ für $\lambda$-f.ü. Punkte $x\in A$.
+	
+	Wir zeigen
+	\begin{align}
+		\label{5DS_1}
+		\bar{\lim\limits_{h\rightarrow0}} \frac{\mu(x-h,x+h]}{2h} = \bar{\lim\limits_{k\rightarrow\infty}} \frac{\mu(x-\frac{1}{k}, x+\frac{1}{k})}{\frac{2}{k}}
+	\end{align}
+	sonst könnte die Menge
+	\begin{align*}
+		A_n := \left\{ x\in A \big| \bar{\lim\limits_{h\searrow0}} \frac{\mu(x-h,x+h]}{2h} > \frac{1}{n} \right\}
+	\end{align*}
+	nicht unbedingt messbar sein, $A_n \in \mathcal{B}$.
+	
+	(\ref{5DS_1}) gilt, da für $\frac{1}{k+1} < h \leq \frac{1}{k}$
+	\begin{align*}
+		\frac{\mu(x-\frac{1}{k+1}, x+\frac{1}{k+1}]}{\frac{1}{k+1}} \frac{\frac{1}{k+1}}{\frac{1}{k}} \leq \frac{\mu(x-h,x+h]}{h} \leq \frac{\mu(x-\frac{1}{k}, x+\frac{1}{k}]}{\frac{1}{k}} \frac{\frac{1}{k}}{\frac{1}{k+1}}
+	\end{align*}
+
+	Für $k\rightarrow\infty$ gilt mit $\frac{k+1}{k}\rightarrow 1$ auch (\ref{5DS_1}) ($\bar{\lim}$ von abzählbaren Funktionen ist messbar).
+	
+	Nach vorigem Lemma ist $\lambda(A_n) = 0$ und daher auch der Grenzwert $n \rightarrow \infty$, also
+	\begin{align*}
+		\lambda\left(\bigcup_{n=1}^{\infty} A_n \right) = 0
+	\end{align*}
+	und $F'=0$ $\lambda$-f.ü.
+\end{proof}
+
+\begin{theorem}[6.DS]
+	$\mu$ sei ein endliches Maß auf $([a,b], \mathcal{B}|_{[a,b]})$ und singulär zu $\lambda$, $\mu \perp \lambda$. Die Verteilungsfunktion $F_\mu$ von $\mu$ erfüllt $F'=0$ $\lambda$-f.ü. auf $[a,b]$.
+\end{theorem}
+\begin{proof}
+	Wenn $\mu \perp \lambda$ existiert ein $A \in \mathcal{B}|_{[a,b]}$ mit $\mu(A) = 0$ und $\lambda(A^c) = 0$. Nach Satz 5.DS gilt $F'=0$ $\lambda$-f.ü. auf $A$. Da $\lambda(A^c) = 0$ gilt das auch auf $[a,b]$ $\lambda$-f.ü.
+\end{proof}
+
+\begin{example}
+	Wir haben die Cantor-Menge
+	\begin{align*}
+		C = \{ x \in [0,1] | x = \sum_{i=1}^{\infty} \frac{x_i}{3^i}, x_i = 0 \lor 2 \}
+	\end{align*}
+	bereits behandelt, mit $\lambda(C) = 0$ und die Funktion für $x \in C$
+	\begin{align*}
+		F_C(x) = \sum_{i=1}^{\infty} \frac{\frac{x_i}{2}}{2^i}
+	\end{align*}
+	bzw. die Fortsetzung auf $[0,1]$
+	\begin{align*}
+		\tilde{F_C}(x) = \begin{cases}
+			F_C(x) & x \in C\\
+			\sup \{F_C(y) | y \in C, y \leq x\} & x \notin C
+		\end{cases}
+	\end{align*}
+	diskutiert. $\tilde{F_C}$ ist monoton und stetig. Daher gehört $\tilde{F_C}$ als Verteilungsfunktion zu einem Maß (sogar einem Wahrscheinlichkeitsmaß).
+	
+	Die Verteilung heißt Cantor-Verteilung.
+	
+	$\tilde{F_C}$ ist eine stetige Verteilungsfunktion eines zu $\lambda$ singulären Maßes (Der Vollständigkeit wegen sei $\tilde{F_C}(x) = 0, x \leq 0$ und $\tilde{F_C}(x) = 1, x > 1$).
+\end{example}
+
+Die bisherigen Sätze sind für Verteilungsfunktionen auf endlichen Intervallen formuliert. Durch Erweiterung auf $\mathbb{R}$ (stückweise Verknüpfung) bleiben die Aussagen für VF bzw. LS-Maße auf $(\mathbb{R}, \mathcal{B})$ erhalten.
+
+So ist beispielsweise die VF $F$ eines LS-Maßes $\mu$ auf jeder $\mu$-Nullmenge differenzierbar ($\lambda$-f.ü.) und $F' = 0$ $\lambda$-f.ü.
+
+Zur Klärung, ob $F'$ die Dichte des LS-Maßes ist, betrachten wir die einseitigen Ableitungen.
+\begin{align*}
+	\text{rechtsseitig } \begin{cases}
+		\delta^r f(x) := \lim\limits_{n\rightarrow\infty} \sup_{x < y < x + 1/n} \frac{f(y)-f(x)}{y-x} \\
+		\delta_r f(x) := \lim\limits_{n\rightarrow\infty} \inf_{x < y < x + 1/n} \frac{f(y)-f(x)}{y-x}
+	\end{cases}\\
+	\text{linksseitig } \begin{cases}
+		\delta^l f(x) := \lim\limits_{n\rightarrow\infty} \inf_{x - 1/n < y < x} \frac{f(y)-f(x)}{y-x} \\
+		\delta_l f(x) := \lim\limits_{n\rightarrow\infty} \sup_{x - 1/n < y < x} \frac{f(y)-f(x)}{y-x}
+	\end{cases}
+\end{align*}
+
+\begin{theorem}[7.DS]
+	Für das LS-Maß $\mu$ mit $\mu \ll \lambda$ gilt $F' = \frac{d\mu}{d\lambda}$ $\lambda$-f.ü, wobei $F$ die VF von $\mu$ ist.
+\end{theorem}
+\begin{proof}
+	Es sei $\bar{\delta F}$ die "obere" Ableitung $\bar{\delta F} = \max (\delta^r F, \delta^l F)$.
+	
+	Die Menge $[\bar{\delta F} > \frac{d\mu}{d\lambda}]$ soll eine $\lambda$-Nullmenge sein, d.h. für alle $q\in \mathbb{Q}$ soll
+	\begin{align*}
+		\lambda [\bar{\delta F} > q > \frac{d\mu}{d\lambda}] = 0
+	\end{align*}
+	sein.
+	
+	Dazu betrachten wir
+	\begin{align*}
+		\nu(A) := \int_{A\cap [\frac{d\mu}{d\lambda} \geq q]} \left(\frac{d\mu}{d\lambda} - q\right) d\lambda
+	\end{align*}
+
+	$\nu$ ist ein LS-Maß und $\nu(\frac{d\mu}{d\lambda} < q) = 0$.
+	Nach Satz 5.DS gilt für die VF $F_\nu$ von $\nu$
+	\begin{align*}
+		F_\nu' = 0 \text{ auf } [\frac{d\mu}{d\lambda} < q] \text{ } \lambda\text{-f.ü.}
+	\end{align*}
+	Das signierte Maß $\gamma$ erfüllt
+	\begin{align*}
+		\gamma(A) := \mu(A) - \lambda(A) = \int_A \left(\frac{d\mu}{d\lambda} - q\right) d\lambda \leq \int_{A\cap [\frac{d\mu}{d\lambda} \geq q]} (\frac{d\mu}{d\lambda} - q) d\lambda = \nu(A)
+	\end{align*}
+
+	Daher folgt für $x,y \in \mathbb{R}$
+	\begin{align*}
+		\gamma((\min(x,y), \max(x,y)]) = \mu((\min, \max]) - \lambda(\min, \max) q\\
+		\implies \frac{F(y)-F(x)}{y-x} - q \leq \frac{F_\nu(y) - F_\nu(x)}{y-x}\\
+		\implies \bar{\delta F} - q \leq F_\nu' = 0 \text{ auf } [\frac{d\mu}{d\lambda} < q]\\
+		\text{d.h. } \lambda\left( \frac{d\mu}{d\lambda} < q < \bar{\delta F} \right) = 0
+	\end{align*}
+	
+	Dieselbe Vorgangsweise für die "untere" Ableitung angewandt auf $\bar{\delta (-F)}$ liefert
+	\begin{align*}
+		\lambda \left( \underline{\delta F} < \frac{d\mu}{d\lambda} \right) = 0\\
+		\implies F' = \frac{d\mu}{d\lambda} \lambda\text{-f.ü.}
+	\end{align*}
+\end{proof}
+
+Die VF $F$ eines beliebigen LS-Maßes $\mu$ auf $(\mathbb{R}, \mathcal{B})$ wurde bereits in eine stetige VF $F_0$ und eine diskrete VF $F_d$ zerlegt. Nach der Lebesgue-Zerlegung des Maßes $\mu_0$ (von $F_0$ erzeugt) $\mu_0 = \mu_c + \mu_s$ $\mu_c \ll \lambda$ und $\mu_s \perp \lambda$ mit VFen $F = F_c + F_s + F_d$.
+
+Die vorigen Ergebnisse zusammengefasst bedeutet, $F$ ist $\lambda$-f.ü. differenzierbar
+\begin{align*}
+	F' = \underbrace{F_c'}_{=\frac{d\mu}{d\lambda}} + \underbrace{F_s'}_{=0} + (F_d') \lambda\text{-f.ü.}
+\end{align*}
+
+Ein LS-Maß $\mu$ mit $F$ für das $F'=0$ $\lambda$-f.ü. gilt, ist zu $\lambda$ singulär. Das folgt daraus, dass der absolut stetige Teil $\mu_c$ die Dichte $F' = \frac{d\mu_c}{d\lambda}$ $\lambda$-f.ü. besitzt.
+\begin{align*}
+	\mu_c(A) = \int_A \underbrace{\frac{d\mu_c}{d\lambda}}_{=0 \lambda\text{-f.ü.}} d\lambda = 0
+\end{align*}
+
+Aus der Zerlegung ergibt sich, dass für jede monoton wachsende Funktion
+\begin{align*}
+	\underbrace{F(b)-F(a)}_{\mu(a,b]} \geq \underbrace{\int_{[a,b]} F' d\lambda}_{\mu_c([a,b])}
+\end{align*}
+gilt und $F$ ist $\lambda$-f.ü. differenzierbar.
+
+Wenn $F$ keine VF ist (also nicht rechtsstetig), wird $F$ an den Unstetigkeitsstellen (sind höchstens abzählbar viele) geändert, ohne dass sich bezüglich $\lambda$ etwas ändert, ($F'$ $\lambda$-f.ü. oder $\int F' d\lambda$ etc).
+
+Damit sind aber auch Funktionen von beschränkter Variation $\lambda$-f.ü. differenzierbar, da sie als Differenz monoton wachsender Funktionen darstellbar ist.
+
+Die Aussagen zusammen ergeben
+\begin{theorem}[8.DS (Satz von Lebesgue für Differenzierbarkeit)]
+	$F:[a,b]\rightarrow\mathbb{R}$ sei von beschränkter Variation. Dann ist $F$ $\lambda$-f.ü. differenzierbar.
+	
+	Ist $F$ monoton steigend, dann ist $F$ $\lambda$-f.ü. differenzierbar und
+	\begin{align*}
+		F(b)-F(a) \geq \int_{[a,b]} F' d\lambda
+	\end{align*}
+\end{theorem}
+
+Die einzelnen Ergebnisse dieses Abschnitts münden in der Formulierung des Hauptsatzes der Differential- und Integralrechung. Die gewohnte Form des Hauptsatzes für das Riemann-Integral wird die absolute Stetigkeit nicht benötigt, dagegen gilt der Hauptsatz für $\mathcal{L}_1$-Funktionen in folgender Form.
+
+\begin{theorem}[9.DS (Hauptsatz der DI-Rechnung für das Lebesgue-Integral)]
+	$f:[a,b]\rightarrow\mathbb{R}$ sei $\in \mathcal{L}_1$, also $\lambda$-integrierbar. Dann ist
+	\begin{align*}
+		F(x) := \int_{[a,x]} f d\lambda
+	\end{align*}
+	absolut stetig und $\lambda$-f.ü. differenzierbar mit $F'=f$ $\lambda$-f.ü.
+	
+	Ist $F:[a,b]\rightarrow\mathbb{R}$ absolut stetig, dann existiert $\lambda$-f.ü. $F'$ mit
+	\begin{align*}
+		F(x)-F(a) = \int_{[a,x]} F' d\lambda, x\in [a,b]
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	$F$ kann zerlegt werden in
+	\begin{align*}
+		F(x) = F_1(x) - F_2(x) = \int_{[a,x]} f^+ d\lambda - \int_{[a,x]} f^- d\lambda
+	\end{align*}
+	$F_1,F_2$ sind monoton und $\mu^+(A) = \int_A f^+ d\lambda$ ist absolut stetig bezüglich $\lambda$ und $F_1' = \frac{d\mu^+}{d\lambda} = f^+$ genauso mit $f^-$.
+	
+	Ist $F$ absolut stetig, dann ist das (signierte) Maß absolut stetig mit $F'=\frac{d\mu}{d\lambda}$ und $\int_A F' d\lambda = \int_A \frac{d\mu}{d\lambda} d\lambda = \mu(A)$ mit $A=[a,x]$ ergibt den Hauptsatz.
+\end{proof}
+
+\subsection{Weitere Eigenschaften der Dichten}
+Im folgenden seien die behandelten Maße als sigma-endlich angenommen.
+\begin{itemize}
+	\item Wenn $\nu_i \ll \mu, i=1,...,n$, dann ist $\tau := \sum_{i=1}^{n}\nu_i$ ein sigma-endliches Maß, $\tau \ll \mu$ und die Dichte ist auch die Summe
+	\begin{align*}
+		\frac{d\tau}{d\mu} = \sum_{i=1}^{n} \frac{d\nu_i}{d\mu} \mu\text{-f.ü.}
+	\end{align*}
+
+	\item $T$ sei $\Omega\rightarrow\Omega'$ und $\mathcal{A}/\mathcal{A}'$ messbar. Wenn $\nu \ll \mu$, dann sind die induzierten Maße $\nu^T$ und $\mu^T$ auf $(\Omega', \mathcal{A}')$ auch $\nu^T \ll \mu^T$ absolut stetig.
+	
+	Da für $B \in \mathcal{A}'$ mit $\mu^T(B) = 0$
+	\begin{align*}
+		\mu^T(B) = \mu(T^{-1}(B)) = 0 \implies \nu(T^{-1}(B)) = 0.
+	\end{align*}
+	$\mu^T,\nu^T$ sind auch endlich, da für $B_n\nearrow\Omega'$ und $\mu,\nu$ endlich sind.
+	
+	Es kann aber die Dichte $\frac{d\nu^T}{d\mu^T}$ keinerlei Verwandtschaft zu $\frac{d\nu}{d\mu}$ haben. Das hängt davon ab, in wieweit $T$ Nullmengen in Nullmengen abbildet.
+	
+	\item $\mu$ auf $(\mathbb{R}, \mathcal{B})$ sei $\mu \ll \lambda$ und $T$ eine messbare (sogar monotone) Abbildung. Dann ist $\mu^T$ i.a. nicht mehr $\mu^T \ll \lambda$ absolut stetig.
+	
+	Betrachtet man beispielsweise die Cantor-Funktion $F_C:C\rightarrow[0,1]$ bzw. $F_C^{-1}:[0,1]\rightarrow C$
+	\begin{align*}
+		\lambda^{F_C^{-1}}(C) = \lambda([0,1]) = 1 \text{ aber } \lambda(C) = 0.
+	\end{align*}
+
+	\item Allgemein werden Nullmengen nicht von bijektiven Transformationen erhalten.
+	
+	\begin{example}
+		$\Omega=\{1,2\}, \mathcal{A}=2^\Omega, T(x)=3-x, T:\Omega\rightarrow\Omega$ bijektiv, sei $\mu({1})=1, \mu({2}) = 0$, dann ist $A=\{2\}$ eine Nullmenge, aber $\mu^T(A)=\mu(T^{-1}(\{2\}))=\mu({1})=1$
+	\end{example}
+
+	Für bijektive Abbildungen $T:(\Omega,\mathcal{A})\rightarrow(\Omega', \mathcal{A}')$ kann die Dichte dargestellt werden.
+	
+	Genauer muss $T$ nur eine "Links-Inverse" haben. Es existiere ein $\tilde{T}:(\Omega',\mathcal{A}')\rightarrow(\Omega,\mathcal{A})$ mit $\tilde{T}\circ T = id_\Omega$, also $id_\Omega(\omega)=\omega, \omega\in \Omega$. Dann kann mit dem allgemeinen Transformationssatz die Dichte von $\nu^T$ bzw. $\mu^T$ bestimmt werden.
+\end{itemize}
+
+\begin{theorem}[10.DS]
+	$\nu,\mu$ sind sigma-endlich und $\nu \ll \mu$. $T:\Omega\rightarrow\Omega'$ besitzt ein $\tilde{T}$ mit $\tilde{T}\circ T = id_{\Omega}$ dann gilt $\nu^T \ll \mu^T$ mit der Dichte
+	\begin{align*}
+		\frac{d\nu^T}{d\mu^T} = \frac{d\nu}{d\mu} \circ \tilde{T} \mu^T\text{-f.ü.}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	$\nu^T \ll \mu^T$ ist klar. $T$ ist injektiv, wenn $T(x) = T(y) \implies x = \tilde{T}\circ T(x) = \tilde{T}\circ T(y) = y$.
+	
+	$\frac{d\nu}{d\mu} = f$, dann gilt für $B' \in \mathcal{A}'$
+	\begin{align*}
+		\nu^T(B') = \nu(T^{-1}(B')) = \int_{T^{-1}(B')} f d\mu = \int 1_{T^{-1}(B')}(\omega) f(\omega) d\mu = \int 1_{B'}(T(\omega)) f \circ \tilde{T} \circ T(\omega) d\mu(\omega)
+	\end{align*}
+	nach dem Transformationssatz
+	\begin{align*}
+		= \int 1_{B'} (\omega') f\circ \tilde{T}(\omega') d\mu^T
+	\end{align*}
+	Also ist $\frac{d\nu^T}{d\mu^T} = f \circ \tilde{T}$
+\end{proof}
+
+Betrachtet man Maße $\mu \ll \lambda$, dann ist auch $\mu^T \ll \lambda$, wenn $T$ $\lambda$-Nullmengen immer in $\lambda$-Nullmengen abbildet.
+
+Sei $T:\mathbb{R}\rightarrow\mathbb{R}$ bijektiv und differenzierbar ($\lambda$-f.ü.) und auch $T^{-1}$ ist $\lambda$-f.ü. differenzierbar $T' \neq 0$ $\lambda$-f.ü. und $T^{-1} \neq 0$. $T$ sei wachsend
+\begin{align*}
+	\lambda^T((a,b]) = \lambda((T^{-1}(a), T^{-1}(b)]) = \int_{[T^{-1}(a),T^{-1}(b)]} d\lambda
+\end{align*}
+
+Auf $(a,b]$ sei $T'\neq 0, T^{-1'} \neq 0$, dann ist
+\begin{align*}
+	\lambda^T(a,b] = \int 1_{(T^{-1}(a),T^{-1}(b)]} d\lambda (s=T(\omega)) = \int 1_{(a,b]}(s) |T^{-1'}(s)| d\lambda(s)
+\end{align*}
+d.h. die Dichte von $\lambda^T$ ist $|T^{-1'}(s)|=\frac{d\lambda^T}{d\lambda}$.
+
+Die Bestimmung der Dichte einer Transformation einer stochastischen Größe $Y=T(X)$, wobei die Verteilung von $X$, $P^X \ll \lambda$ mit $F_X$ als Verteilungsfunktion, erfolgt über die Verteilungsfunktion von $X$. $T$ sei wieder differenzierbar mit $T'\neq 0$ (auf $[a,b]$) und wachsend.
+\begin{align*}
+	F_Y(y) = P[Y \in (-\infty, y]] = P[T(X) \in (-\infty, y]] = P[X \in (-\infty, T^{-1}(y))] = F_X(T^{-1}(y))
+\end{align*}
+und die Dichte von $Y$ ist $\lambda$-f.ü.
+\begin{align*}
+	f_Y(y) = f_X(T^{-1}(y)) |T^{-1'}(y)|
+\end{align*}
+
+Diese beiden Beispiele für die Bestimmung von Dichten können auf $\mathbb{R}^k$ verallgemeinert werden.
+
+$T:\mathbb{R}^k\rightarrow\mathbb{R}^k$ sei ein Diffeomorphismus, also $T$ ist bijektiv und die Jakobi-Determinanten
+\begin{align*}
+	\left| det \left( \frac{\delta T_i}{\delta x_j}(x) \right)\right| \neq 0, x\in\mathbb{R}^k \text{ und}\\
+	\left| det \left( \frac{\delta T'_i}{\delta y_j}(y) \right)\right| \neq 0, y\in\mathbb{R}^k
+\end{align*}
+dann ist $\lambda^T \ll \lambda$ (hier ist $\lambda = \lambda_k$ das k-dimensionale Lebesgue-Maß) und die Dichte ist
+\begin{align*}
+	\frac{d\lambda_k^T}{d\lambda_k} = \left| det \left( \frac{\delta T_i^{-1}}{\delta y_j}\right)(y)\right|.
+\end{align*}
+
+Wenn $X\in \mathbb{R}^k$ eine SG mit $P^X \ll \lambda_k$ und Dichte $\frac{dP^X}{d\lambda_k} = f_X$, $T$ sei bijektiv, diffbar und $|det T^{-1}| \neq 0$, dann gilt für $Y=T\circ X$ $P^Y \ll \lambda_k$ mit der Dichte
+\begin{align*}
+	f_Y(y) = f_X(T^{-1}(y)) \left| det \left( \frac{\delta T_i^{-1}}{\delta y_j} \right) (y) \right|.
+\end{align*}
+
+\subsubsection{Stückweise Anwendung}
+$\mathbb{R}^k = \bigcup_{i=1}^{n} B_i$ und $\underbrace{T|_{B_i}}_{T_i}$ hat obige Eigenschaften.
+\begin{align*}
+	|J_i^{-1}| := \left| det \frac{\delta T_i^{-1}}{\delta x_j} \right| \neq 0 \text{ auf } B_i \text{ für}\\
+	T := \sum_{i=1}^{n} T_i 1_{B_i} \text{ ist die Dichte von } Y=T\circ X\\
+	f_Y(y) = \sum_{i=1}^{n} f(T_i^{-1}) |J_i^{-1}|
+\end{align*}
+
+\subsection{Illustrative Beispiele}
+\begin{enumerate}
+	\item \begin{align*}
+		\mu = \xi_\mathbb{N}, X \sim B_{N,p} = \nu, \nu(k) = P[X=k] = \binom{N}{k} p^k (1-p)^{N-k}, k\leq N\\
+		T : x \mapsto N-x, x \leq N, (Tx=x, x\geq N)\\
+		Y=T\circ X = N-X\\
+		P[Y=y] = P[T(X)=y] = P[N-X=y] = P[X=N-y] = \nu(N-y) = \underbrace{\binom{N}{N-y}}_{\binom{N}{y}} P^{N-y} (1-p)^y\\
+		Y \sim B_{N,1-p} \text{ (Anzahl der "0")}
+	\end{align*}
+
+	\item \begin{align*}
+		X \sim \mathcal{N}_k(\mu, \Sigma), f_X(x) = \frac{1}{(2\pi)^{k/2} \sqrt{det \Sigma}} exp\{-1/2 (x-\mu)^T \Sigma ^{-1}(x-\mu)\}\\
+		A \text{ reguläre Matrix, } Y=AX, f_Y(y) = f_X(A^{-1}y) |A^{-1}|\\
+		f_Y(y) = \frac{1}{(2\pi)^{k/2} \sqrt{det \Sigma}} exp\{-1/2 \underbrace{(A^{-1}y - A^{-1}A\mu)^T \Sigma^{-1}( )}_{(y-A\mu)^T \underbrace{(A^{-1}\Sigma^{-1}A^{-1})}_{(A\Sigma A^T)^{-1} = \tilde{\Sigma}}^{-1}(y-A\mu)} \}|A^{-1}|\\
+		\text{Wegen } \frac{|A^{-1}|}{\sqrt{det \Sigma}} = \frac{1}{\sqrt{(det A)^2 det\Sigma}} = \frac{1}{\sqrt{det \tilde{\Sigma}}}\\
+		Y \sim \mathcal{N}(A\mu, A\Sigma A^T)
+	\end{align*}
+
+	\item $X\sim \mathcal{N}(\mu, \sigma^2)$, $Y=e^X$ log-Normalverteilung, $X=\log(Y)$
+	\begin{align*}
+		f_Y(y) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{1}{2} \left( \frac{log Y - \mu}{\sigma^2} \right)} \frac{1}{|y|}, y \geq 0
+	\end{align*}
+
+	\item $(X_1,X_2)$ u.a. exponential
+	\begin{align*}
+		f(x_1,x_2) = e^{-x_1-x_2}, x_1,x_2 \geq 0\\
+		Y = \binom{x_1^2+x_2^2}{x_1} = T \circ X, y_1 = x_1^2 + x_2^2, y_2 = x_1, x_1 = y_2, x_2 = \sqrt{y_1 - y_2^2}, y_1 \geq y_2^2\\
+		|J| = \left| \begin{matrix}
+			2x_1 & 2x_2\\
+			1 & 0
+		\end{matrix} \right| = |-2x_2| = 2|x_2|\\
+		|J^{-1}| = \frac{1}{2x_2} = \frac{1}{2\sqrt{y_1 - y_2^2}}\\
+		\text{Dichte von }Y: f_Y(y) = e^{-y_2 -\sqrt{y_1-y_2^2}}\frac{1}{2\sqrt{y_1-y_2^2}} \text{ für } y_1 > y_2^2 \geq 0
+	\end{align*}
+
+	\item $X \sim \mathcal{N}(0,1)$, $Y=X^2$ stückweise invertierbar auf $\mathbb{R}^+$
+	\begin{align*}
+		T_1^{-1}(y) = \sqrt{y}, y\geq 0, B_1 = (0, \infty)\\
+		T_2^{-1}(y) = -\sqrt{y}, y < 0, B_2 = (-\infty, 0]\\
+		\text{allgemein gilt dann} f_Y(y) = f_X(\sqrt{y}) \left| \frac{1}{2\sqrt{y}} \right| + f_X(-\sqrt{y}) \left| - \frac{1}{2\sqrt{y}} \right|\\
+		\text{bei symmetrischer Dichte von $X$, also } f_X(\sqrt{y}) = f_X(-\sqrt{y})\\
+		f_Y(y) = \frac{1}{\sqrt{y}} f_X(\sqrt{y})\\
+		\mathcal{N}(0,1) \text{ für } f_X: f_Y(y) = \frac{1}{\sqrt{2\pi}} e^{-\frac{(\sqrt{y})^2}{2}} \frac{1}{\sqrt{y}} \sim \gamma(\frac{1}{2}, \frac{1}{2})\\
+		\chi^2 \text{-Verteilung mit Freiheitsgrad 1}
+	\end{align*}
+\end{enumerate}
+
+\section{$L_p$-Räume}
+Der Raum der integrierbaren Funktionen bilden einen Vektorraum $\mathcal{L}(\mu)$ (genauer $(\mathcal{L}(\mu), +, \mathbb{R})$) mit $||f|| = \int |f| d\mu$ sogar einen normierten Raum, also einen metrischen Raum, wenn man $f=g [\mu]$ als gleich ansieht.
+
+\begin{definition*}[Pseudonorm, Pseudometrik]
+	$||.||$ bildet eine Pseudonorm (=Halbnorm), es gilt also
+	\begin{align*}
+		||\alpha f|| = |\alpha| ||f||\\
+		||f+g|| \leq ||f|| + ||g|| \text{$\triangle$-Ungleichung (damit bereits $||f|| \geq 0$ und $||0|| = 0$)} 
+	\end{align*}
+	Norm: $||f||=0 \implies f=0$ Das ist vorläufig nicht erfüllt.
+	
+	$||.||$ führt zu einer Pseudometrik, also $d(x,y) := ||y-x||$ mit
+	\begin{align*}
+		d(x,y) = d(y,x); d(x,x)=0; \text{ und } d(x,y) \leq d(x,z) + d(z,y)
+	\end{align*}
+	Metrik: $d(x,y)=0 \iff x=y$
+\end{definition*}
+
+Die Funktionenräume der p-fach integrierbaren Funktionen bilden wesentliche, abstrakte Funktionenräume deren Analyse wichtig ist (besonders $L_2$).
+
+\begin{definition}[p-fach integrierbar]
+	$f$ heißt p-fach integrierbar für $1\leq p < \infty$ wenn
+	\begin{align*}
+		||f||_p := \left( \int |f|^p d\mu \right)^{1/p} < \infty
+	\end{align*}
+\end{definition}
+
+Raum: $\mathcal{L}^p(\mu)$
+
+Wenn $f=g[\mu]$ als gleich angesehen wird, bildet dieser Raum einen normierten Vektorraum.
+
+Wenn eine Funktion beschränkt ist, dann ist auch
+\begin{align*}
+	\int |f|^p d\mu < \infty \forall p \geq 1
+\end{align*}
+
+Es sei daher $||f||_\infty := \inf\{K\geq 0 | \mu(|f|>k)=0\} = ess\sup |f|$ essentielles Supremum.
+
+$||f||_\infty$ bildet genauso eine Pseudonorm.
+
+Eine Norm (bzw. Metrik) entsteht durch Übergang zum Quotientenraum. Es sei
+\begin{align*}
+	\mathcal{N} := \{f \text{ messbar und } f = 0 [\mu] \text{ f.ü.}\}
+\end{align*}
+
+\begin{definition}[Lp-Raum]
+	\begin{align*}
+		L^p(\Omega, \mathcal{A}, \mu) := \mathcal{L}^p(\mu) / \mathcal{N} = \{\bar{f} = f + g; f\in\mathcal{L}^p, g \in \mathcal{N}\}
+	\end{align*}
+\end{definition}	
+$L^p$ enthält die Repräsentanten und alle Elemente aus einer Klasse haben die gleiche Norm: $||f||_p = ||g||_p$, wenn $f=g[\mu]$.
+
+Um zu zeigen, dass $L^p(\mu)$ wirklich ein normierter Vektorraum ist, benötigen wir noch die $\triangle$-Ungleichung, die gleich folgt.
+
+Die Norm (bzw. Metrik) ergibt eine Konvergenz Definition im $L^p$.
+
+\begin{definition}[Konvergenz im p-ten Mittel]
+	$f_i$ sei eine Folge in $\mathcal{L}^p(\mu)$.
+	\begin{align*}
+		f_n \rightarrow^{L^p} f \text{ wenn } ||f_n - f||_p \rightarrow 0, n\rightarrow \infty.
+	\end{align*}
+\end{definition}
+
+Für SG $X$ in einem W-Raum $(\Omega, \mathcal{A}, P)$ heißt
+\begin{align*}
+	&\int X dp = \mathbb{E} X \text{ Erwartung}\\
+	\text{und } &\int X^k dP = \mathbb{E}X^k \text{ k-tes Moment}\\
+	\text{sowie falls } \mathbb{E}X < \infty \text{: } &\mathbb{E}|X-\mathbb{E}X|^k \text{ k-tes zentrales Moment}
+\end{align*}
+
+Besondere Rolle spielt das 2. zentrale Moment: 
+\begin{align*}
+	\text{Varianz } \mathbb{E}(X-\mathbb{E}X)^2 \text{ und } ||X-\mathbb{E}X||_2 \text{ Streuung}
+\end{align*}
+
+\begin{example}
+	$X\sim \mathcal{N}(\mu, \sigma^2)$ Normalverteilung besitzt alle Momente, da
+	\begin{align*}
+		\forall p: \mathbb{E}X^p = \int_{-\infty}^{\infty} x^p \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2}} dx < \infty
+	\end{align*}
+\end{example}
+
+\begin{definition*}
+	Die Folge von SG $X_i$ konvergiert gegen $X$ im p-ten Mittel, wenn $\mathbb{E}|X_n - X|^p \rightarrow 0$.
+	
+	Schreibweise: $X_n \rightarrow^{L^p} X$.
+\end{definition*}
+
+Aus der Konvergenz der Integrale folgt natürlich i.a. nicht, dass die Funktionen konvergieren $[\mu]$.
+
+\begin{example}
+	$X_n$ ... SG mit Wahrscheinlichkeitsmaß $P[X_n=0]=1-\frac{1}{n^{p+1}} = 1 - P[X=n]$ auf $\{0,n\}$. Es sei $X_0 \sim \delta_0$. Dann gilt
+	\begin{align*}
+		\mathbb{E}|X_n - X_0|^p = n^p \frac{1}{n^{p+1}} = \frac{1}{n} \rightarrow 0 \implies X_n \rightarrow^{L^p} X_0
+	\end{align*}
+	Aber $limsup X_n = \infty$ also $X_n \nrightarrow X_0$ $P$-f.s. $\lim X_n$ existiert nicht.
+\end{example}
+
+Auch, wenn die Funktionen beschränkt sind, muss nicht $f_n \rightarrow^{L^p} f$ folgen.
+\begin{example}
+	\begin{enumerate}
+		\item $f_n := 1_[a_n,b_n]$ mit $a_n = \frac{n - \lfloor \sqrt{n} \rfloor^2}{2 \lfloor \sqrt{n} \rfloor + 1}$ und $b_n = \frac{n + 1 - \lfloor \sqrt{n} \rfloor^2}{2 \lfloor \sqrt{n} \rfloor + 1}$ bildet eine Folge auf $([0,1], \mathcal{B}|_{[0,1]}, \lambda|_{[0,1]})$ die nicht punktweise ($\lambda$-f.ü.) konvergiert.
+		
+		Da $b_n - a_n = \frac{1}{2\lfloor \sqrt{n} \rfloor + 1} \rightarrow 0$ gilt $||f_n - 0||_p \rightarrow 0 \forall p \geq 1$.
+		
+		Dass die Umkehrung zwischen punktweiser und $L_p$-Konvergenz auch nicht uneingeschränkt gilt, scheint überraschender zu sein.
+		
+		\item $f_n := \frac{1}{n^{1/p}}1_{[0,n]}$ konvergiert glm. $f_n \rightarrow 0$ aber
+		\begin{align*}
+			\int f_n^p d\lambda = \frac{1}{n} \int_{[0,n]} d\lambda = 1\\
+			||f_n||_p \nrightarrow ||f_0||_p, f_0=0
+		\end{align*}
+	\end{enumerate}	
+\end{example}
+
+In dem letzten Beispiel war $||f_n||_p \rightarrow ||f_0||$ nicht erfüllt.
+
+Fügt man weitere Bedingungen ein, dann kann Äquivalenz zwischen $||f_n-f||_p \rightarrow 0$ und $f_n \rightarrow f \mu$-f.ü. erreicht werden.
+
+In Beispiel 2) ist die Folge konvergent auch konvergent im Maß
+\begin{align*}
+	\lambda(|f_n-f_0| > \epsilon) = 0
+\end{align*}
+wenn für $\epsilon > 0 n$ gewählt wird, sodass $\frac{1}{n^{1/p}} < \epsilon \implies n > (\frac{1}{\epsilon})^p$.
+
+Konvergenz im Maß garantiert nicht $L_p$-Konvergenz. Die Umkehrung gilt.
+
+\begin{theorem}[1.LP]
+	Für $1\leq p \leq \infty$ gelte $f_n \rightarrow^{L_p} f; ||f_n-f||_p\rightarrow 0$, dann gilt $\forall \epsilon > 0: \lim\limits_{n\rightarrow\infty} \mu(|f_n-f| > \epsilon) = 0, f_n \rightarrow^\mu f$
+\end{theorem}
+\begin{proof}
+	Folgt unmittelbar aus der Markov-Ungleichung (Satz 1.UG) mit $\phi(x)=|x|^p$
+	\begin{align*}
+		\mu(|f_n-f|>\epsilon) \leq \frac{\int |f_n - f|^p d\mu}{\epsilon^p} = \frac{||f_n - f||_p^p}{\epsilon^p}
+	\end{align*}
+\end{proof}
+
+\begin{definition*}[vollständig]
+	Ein metrischer Raum $M$ heißt vollständig, wenn jede Cauchy-Folge konvergiert, d.h. Cauchy-Folge: $x_n \in M: \forall \epsilon > 0 \exists N_\epsilon \forall m,n \geq N_\epsilon: d(x_m, x_n) < \epsilon$ hat Grenzwert $x_0 \in M$.
+\end{definition*}
+
+$L^p$-Raum für $1\leq p \leq \infty$ ist vollständig (folgt später).
+
+\subsection{Wichtige Ungleichungen für p-integrierbare Funktionen}
+\begin{lemma}
+	$p,q \in (1,\infty)$ und $\frac{1}{p}+\frac{1}{q} = 1$ (zueinander konjugiert) für $x,y\geq 0$ gilt $xy \leq \frac{x^p}{p} + \frac{y^q}{q}$.
+\end{lemma}
+
+\begin{proof}
+	$f(x):= \frac{x^p}{p} + \frac{y^q}{q} - xy$; $f'=x^{p-1}-y$; $f''=(p-1)x^{p-2} \geq 0$ konvex mit Minimierung in $x_0=y^{\frac{1}{p-1}}$ da $\frac{p}{p-1}=q$ gilt $x_0^p = y^q$ und $f(x_0)=0 \implies f(x)\geq 0$
+\end{proof}
+
+\begin{theorem}[Allgemeinerer Satz von Young (Young'sche Ungleichung)]
+	$f:\mathbb{R}^+ \rightarrow \mathbb{R}^+$, $f(0)=0$, strikt monoton, $f(x)\rightarrow\infty, x\rightarrow\infty$, $f$ stetig diffbar, also Umkehrfunktion $f^{-1}=g$. Mit den Stammfunktionen $F(x)=\int_{0}^{x}f(t)dt$, $G(y)=\int_{0}^{y}g(t)dt$ gilt $xy \leq F(x) + G(y)$.
+\end{theorem}
+
+Siehe Skizze. Spezialfall $p=q=2: xy \leq \frac{x^2}{2} + \frac{y^2}{2} \iff (x-y)^2 \geq 0$
+
+\begin{theorem}[Hölder'sche Ungleichung]
+	Für $\frac{1}{p} + \frac{1}{q} = 1$ für $p \in [1, \infty]$ (wenn $p=1$ ist $q=\infty$) gilt für $f\in \mathcal{L}^p, g \in \mathcal{L}^q$ (oder rechte Seite $\infty$ möglich)
+	\begin{align*}
+		|| f\cdot g||_1 \leq ||f||_p \cdot ||g||_q
+	\end{align*}
+	und daher $f\cdot g \in \mathcal{L}^1$.
+\end{theorem}
+
+\begin{proof}
+	$p=1$ bzw. $p=\infty$ unmittelbar (UE)
+	
+	$p\in(1,\infty)$ Definiere $\tilde{f}:= \frac{|f|}{||f||_p}, \tilde{g}:= \frac{|g|}{||g||_q}$. Nach Young $\tilde{f}\tilde{g} \leq \frac{\tilde{f}^p}{p} + \frac{\tilde{g}^q}{q}$ eingesetzt ins Integral und Monotonie:
+	\begin{align*}
+		\int \tilde{f} \tilde{g} d\mu \leq \frac{1}{p} \frac{\int |f|^p d\mu}{||f||^p_p} + \frac{1}{q} \frac{\int |g|^q d\mu}{||g||^q_q} = 1\\
+		\implies \int |fg| d\mu \leq ||f||_p ||g||_q
+	\end{align*}
+\end{proof}
+
+Spezialfall: $f,g \in \mathcal{L}^2 \implies \int |fg| d\mu \leq ||f||_2 ||g||_2$.
+Für SG $X,Y$ bezüglich $(\Omega, \mathcal{A}, P)$ mit 2. Moment: $\mathbb{E}XY \leq \mathbb{E}|X||Y| \leq \sqrt{\mathbb{E}X^2 \mathbb{E}Y^2}$.
+
+\begin{theorem}[Minkowski-Ungleichung]
+	$f,g \in \mathcal{L}^p(\mu), 1 \leq p \leq \infty$ Dann gilt:
+	\begin{align*}
+		||f+g||_p \leq ||f||_p + ||g||_p
+	\end{align*}
+\end{theorem}
+\begin{proof}
+	$p=1$ oder $p=\infty$ Übung
+	
+	$\infty > p > 1:$
+	\begin{align*}
+		(f+g)^p = (f+g)(f+g)^{p-1} = f(f+g)^{p-1} + g(f+g)^{p-1}\\
+		|f+g|^p \leq |f|\cdot |f+g|^{p-1} + |g|\cdot |f+g|^{p-1} \text{ also durch integrieren}\\
+		||f+g||^p_p \leq \int|f|\cdot |f+g|^{p-1} + \int |g|\cdot |f+g|^{p-1} \text{mit Hölder}\\
+		\leq ||f||_p \cdot ||(f+g)^{p-1}||_q + ||g||_p \cdot ||(f+g)^{p-1}||_q + \int |g|\cdot |f+g|^{p-1} \text{ mit } q=\frac{p}{p-1}\\
+		= (||f||_p + ||g||_p) \cdot || |f+g|^{p-1}||_q + \int |g|\cdot |f+g|^{p-1} = (||f||_p + ||g||_p) \cdot ||f+g||^{p-1}_p + \int |g|\cdot |f+g|^{p-1}\\
+		|| |f+g|^{p-1}||_q = \left(\int |f+g|^{(p-1)q}\right)^{\frac{p-1}{p}} = \left(\int |f+g|^p\right)^{\frac{p-1}{p}} = ||f+g||^{p-1}_p
+	\end{align*}
+	Dividiert durch den letzten Wert ist
+	\begin{align*}
+		||f+g||_p = \frac{||f+g||_p^p}{||f+g||_p^{p-1}} \leq ||f||_p + ||g||_p
+	\end{align*}
+	Die linke Seite ist definiert (also endlich) weil aus $f,g \in \mathcal{L}^p$ folgt
+	\begin{align*}
+		|f+g|^p \leq (2\cdot \max(|f|,|g|))^p \leq 2^p\cdot \underbrace{\max(|f|^p, |g|^p)}_{\leq |f|^p + |g|^p}.
+	\end{align*}
+\end{proof}
+
+Mit der Minkowski-Ungleichung ist jetzt $L^p$ ein Vektorraum ($f,g \in \mathcal{L}^p \implies f+g\in \mathcal{L}^p$) und $||f||_p$ eine Norm mit der Dreiecksungleichung.
+
+\begin{lemma}[Streuungsungleichung]
+	SG $X,Y \in \mathcal{L}^p$. $SD(X+Y) \leq SD(X) + SD(Y)$
+\end{lemma}
+
+Die Bezeichnung $L_\infty$ kann man aus folgendem Zusammenhang rechtfertigen:
+
+\begin{theorem}[2.LP]
+	$\mu$ ... endlich, dann gilt
+	\begin{align*}
+		\lim\limits_{p\rightarrow\infty} ||f||_p = ||f||_\infty
+	\end{align*}
+	(wenn $f$ nicht $p$-fach integrierbar ist, gilt $\infty$ auf beiden Seiten).
+\end{theorem}
+
+\begin{proof}
+	\begin{align*}
+		\int |f|^p d\mu \leq K^p \int d\mu = K^p \mu(\Omega) && K := ess\sup_c \{c| \mu(|f|>c)=0\} (K=\infty\text{ möglich}) && |f| \leq K [\mu]\\
+		\implies ||f||^p_p \leq ||f||_\infty^p \mu(\Omega) && \implies ||f||_p \leq ||f||_\infty (\mu(\Omega)^{\frac{1}{p}})\\
+		\limsup_{p\rightarrow\infty} ||f||_p \leq ||f||_\infty && \text{da } \limsup_{p\rightarrow\infty}(\mu(\Omega)^{\frac{1}{p}}) = 1
+	\end{align*}
+
+	Die andere Ungleichung folgt aus der Markoff-Ungleichung $\phi(x)=x^p$
+	\begin{align*}
+		\int |f|^p d\mu \geq C^p \mu(|f|>c) \forall C>0 &&
+		\liminf_{p\rightarrow\infty} ||f||_p \geq C \cdot \liminf_{p\rightarrow\infty} \underbrace{(\mu(|f|>C))^{\frac{1}{p}}}_{>0 \text{ wenn } C < ||f||_\infty = K}\\
+	\end{align*}
+	\begin{align*}
+		\implies \liminf ||f||_p \geq C \forall 0 < C < ||f||_\infty \implies \liminf ||f||_p \geq ||f||_\infty\\
+		\text{Aus } ||f||_\infty \leq \liminf_p ||f||_p \limsup_p ||f||_p \leq ||f||_\infty \implies \lim_p ||f||_p = ||f||_\infty
+	\end{align*}
+\end{proof}
+
+Für endliche Maße gelten spezielle Aussagen, wie etwa:
+
+\begin{theorem}[3.LP, Schachtelung der $L^p$-Räume]
+	$\mu$ sei endlich. $1\leq p \leq \tilde{p} \leq \infty$.
+	\begin{align*}
+		\mathcal{L}^{\tilde{p}}(\mu) \subset \mathcal{L}^p(\mu)
+	\end{align*}
+	Also auf $||f||_{\tilde{p}} < \infty$ folgt $||f||_p < \infty$.
+\end{theorem}
+
+\begin{proof}
+	Es sei $\tilde{p}=\infty$, da $||f||_\infty = \int\{K>0| \mu(|f|>K)=0\}$ also $|f| \leq ||f||_\infty [\mu]$-f.s
+	\begin{align*}
+		\int |f|^p d\mu \leq \int ||f||_\infty^p d\mu = |f||_\infty^p \mu(\mathbb{R}) < \infty
+	\end{align*}
+	Sonst $\tilde{p}$ bel. $p < \tilde{p}$: Da $|f|^p = |f|^p \cdot 1_{(|f|\leq 1)} + |f|^p 1_{(|f| >1)} \leq 1 + |f|^{\tilde{p}}$ und Minkowski-Ungl.
+	\begin{align*}
+		\int |f|^p d\mu \leq \int 1 d\mu + \int |f|^{\tilde{p}} d\mu = \mu(\Omega) + ||f||_{\tilde{p}}^{\tilde{p}} < \infty
+	\end{align*}
+\end{proof}
+
+Für sigma-endliche (aber nicht endliche) Maße gilt diese Schachtelung i.a. nicht. Es gibt sogar sigma-endliche Maße $\mu$, wo die umgedrehte Schachtelung gilt $\mathcal{L}^p(\mu) \subseteq \mathcal{L}^{\tilde{p}}(\mu)$.
+
+Weder die Schachtelung noch die Normkonvergenz gilt i.A. für nicht endliche Maße. Etwa $f=1$ ist für $\lambda$: $||f||_p = 1 \forall p \geq 1, ||f||_\infty = \infty$.
+
+Nach Satz 8.MS ist $L_\infty$ ein Banachraum. Die Vollständigkeit wird für alle $L_p$-Räume nachgewiesen.
+
+\begin{theorem}[4.LP, Satz von Riesz-Fischer]
+	Eine $L_p$ konvergente Folge $f_n \in \mathcal{L}_p, 1 \leq p \leq \infty$ mit Grenzfunktion $f$, $||f_n - f||_p \rightarrow 0$, führt auf $f \in \mathcal{L}_p$. $L_p(\Omega, \mathcal{A}, \mu)$ sind für jedes $p \geq 1$ Banachräume.
+\end{theorem}
+
+\begin{proof}
+	$p=\infty$ ist Satz 8.MS. Für endliches $p\geq 1$ gehen wir den Umweg über die Konvergenz im Maß. $f_n$ sei eine Cauchyfolge aus $\mathcal{L}_p$. $\implies f_n$ ist Cauchyfolge im Maß.
+	
+	Nach Satz 10.MS existiert eine $\mu$-fast glm. konvergente Teilfolge $f_{n_k} \rightarrow f$ $\mu$-fast glm.
+	
+	Daher gilt auch $f_{n_k}\rightarrow f$ $\mu$-f.ü. Diese Teilfolge ist nach Voraussetzung auch $L_p$-konvergent.
+	
+	Für $\epsilon > 0 \exists n_{\epsilon}: ||f_n-f_m||_p^p < \epsilon; n,m\geq n_\epsilon$ und für festes $n \geq n_\epsilon ||f_n-f_{n_k}||_p^p < \epsilon; n_k\geq n_\epsilon$, dh. $|f_n-f|^p = \liminf_{k\rightarrow\infty} |f_n-f_{n_k}|^p$
+	\begin{align*}
+		\int |f_n - f|^p d\mu = \int \liminf_k |f_n - f_{n_k}|^p d\mu \leq \liminf_k \int |f_n - f_{n_k}|^p d\mu < \epsilon \text{ mit Lemma von Fatou}
+	\end{align*}
+	
+	Somit ist $f$ der Grenzwert der Folge $f_n$. Aus der Dreiecksungleichung folgt
+	\begin{align*}
+		||f||_p = ||f-f_n+f_n||_p \leq ||f_n||_p + \underbrace{||f-f_n||_p}_{<\epsilon^{\frac{1}{p}}} \leq \inf_n ||f_n||_p + \epsilon^{\frac{1}{p}} < \infty
+	\end{align*}
+	und $f\in\mathcal{L}_p$.
+\end{proof}
+
+$L_p$-Räume sind Banachräume und $L_2$ ist sogar ein Hilbertraum mit $<f,g> := \int f\cdot g d\mu$.
+
+Es folgt sofort, dass Grenzwerte in $\mathcal{L}_p$ $\mu$-f.ü. eindeutig sein müssen,
+\begin{align*}
+	f_n \rightarrow^{L_p} f, f_n \rightarrow^{L_p} g : ||f-g||_p \leq ||f-f_n|| + ||f_n - g|| < \epsilon, n > n_\epsilon\\
+	\implies ||f-g||_p = 0, \int |f-g|^p d\mu = 0 \implies |f-g|=0 \implies f=g \mu\text{-f.ü.}
+\end{align*}
+
+Die Existenz einer Teilfolge, die konvergiert, wird sich oft als sehr nützlich erweisen.
+
+Das ist speziell für separable Räume (abzählbar dichte Teilmenge) der Fall.
+
+Sei $([0,1], \mathcal{A}, \lambda)$: $L_p$ separabel $p\geq 1$, $L_\infty$ nicht!
+
+\subsubsection{$L^p$ für $0<p<1$}
+TODO
+
+\subsection{Dualraum von $L_p$}
+Prinzipiell existiert zu einem normierten linearen Raum $(V, ||.||)$ der Vektorraum der linearen Funktionale $T:V\rightarrow\mathbb{R}, T(\alpha x + \beta y) = \alpha T(x) + \beta T(y)$, die auch stetig sind. Um die Stetigkeit definieren zu können, muss $V$ ein Banachraum sein.
+
+\begin{definition*}[Dualraum, beschränkt]
+	Der Dualraum $V'$ zu $V$ ist $V'=\{F | F:V\rightarrow\mathbb{R}, \text{ linear und stetig}\}$.
+	
+	Auch $V'$ wird durch $||T|| := \sup\{|T(x)| : ||x|| \leq 1\}$ zu einem Banachraum. $T$ heißt beschränkt, wenn $||T|| \leq C < \infty$.
+\end{definition*}
+
+$T$ ist genau dann linear und stetig, wenn $T$ linear und beschränkt ist. (UE)
+
+Wir haben den Satz von Riesz-Frechet für die Darstellung der Elemente von $V'$ bereits verwendet. Wenn $(V,<.,.>)$ ein Hilbertraum ist, dann hat $F\in V'$ eine eindeutige Darstellung durch ein $f\in V$ mit $F(v) = <v,f>$.
+
+Für Hilberträume können $V$ und $V'$ in dem Sinn identifiziert werden, dass eine Isometrie zwischen $V$ und $V'$ existiert.
+
+Für den Banachraum $(L^p, ||.||_p)$ kann eine solche Isometrie gefunden werden.
+
+\begin{lemma}
+	$1 \leq p \leq \infty$ Zu $f\in \mathcal{L}^p$ existiert eine Folge $t_n \in \mathcal{L}^p$ von Treppenfunktionen mit $||t_n||_p \leq ||f||_p \forall n$ und $\lim\limits_{n\rightarrow\infty}||f-t_n||_p = 0$.
+\end{lemma}
+\begin{proof}
+	Für die Konstruktion des Integrals wurde beispielsweise die Folge von Treppenfunktionen
+	\begin{align*}
+		t_n(w):= \begin{cases}
+			n & f(w)\geq n\\
+			\frac{k-1}{2^n} & \frac{k-1}{2^n} \leq f(w) \leq \frac{k}{2^n}
+		\end{cases}
+	\end{align*}
+	verwendet. $|t_n|\nearrow |f|$ mit $|t_n| \leq |f|$, daher $||t_n||_p \leq ||f||_p$ und $|f-t_n|^p \leq 2^p |f|^p \in L^p$
+	
+	Da $\lim\limits_{n\rightarrow\infty}|f-t_n|^p=0$ gilt nach dem Satz der dominierten Konvergenz
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} ||f-t_n||^p_p = \lim\limits_{n\rightarrow\infty} \int|f-t_n|^p = \int \underbrace{\lim\limits_{n\rightarrow\infty}|f-t_n|^p}_{=0} = 0
+	\end{align*}
+	für $p <\infty$.
+	
+	Bei $p=\infty$ konvergieren obige $t_n$ sogar gleichmäßig gegen $f\in L_\infty$ und $||f-t_n||_\infty \rightarrow 0$.
+\end{proof}
+
+Zwischen $L^q$ und $(L^p)'$ sei die kanonische Abbildung
+\begin{align*}
+	K:L^q \rightarrow (L^p)' \text{ mit } K(f)(g) := \int f\cdot g d\mu, f\in L^q, g \in L^p
+\end{align*}
+
+$K$ ist eine lineare Abbildung.
+
+\begin{theorem}[8.LP]
+	Für $\frac{1}{p} + \frac{1}{q} = 1$ ist die kanonische Abbildung $K$ eine Isometrie, also $||K(f)||'_p = ||f||_q$
+\end{theorem}
+
+\begin{proof}
+	$K(f)$ ist aus dem Dualraum von $L^p$ mit der Norm (des Dualraums)
+	\begin{align*}
+		||K(f)||'_p := \sup \{\underbrace{|K(f)(g)|}_{|\int fg| \leq \int |fg| \leq ||f||_q ||g||_p = ||f||_q} : ||g||_p=1, g \in L^p\}
+	\end{align*}
+	mit $f \in L^q$.
+	
+	Daher gilt $||K(f)||'_p \leq ||f||_q$
+	
+	Für die umgekehrte Ungleichung betrachte
+	\begin{align*}
+		||K(f)||'_p \geq |\int f \cdot \frac{g}{||g||_p} d\mu| \forall g \in L^p\\
+		\implies ||K(f)||'_p ||g||_p \geq |\int fgd\mu|
+	\end{align*}
+	Ersetze $g$ durch $\tilde{g}:= |g|\cdot sign(f)$, dann ist $|\tilde{g}| \leq |g|$ (wo $f=0$, ist $\tilde{g}=0$) und auch $||\tilde{g}||_p \leq ||g||_p$
+	\begin{align*}
+		\implies ||K(f)||'_p ||g||_p \geq ||K(f)||'_p \cdot ||\tilde{g}||_p \geq |\underbrace{\int f\cdot \tilde{g}}_{\geq 0}| = \int |fg| d\mu = ||fg||_1
+	\end{align*}
+	
+	Fallunterscheidung
+	\begin{enumerate}
+		\item $q=1$, d.h. $f\in L^1$, wähle $g=1\in \mathcal{L}_\infty$. $\implies ||K(f)||'_p \geq ||f||_1$
+		\item $q\in(1,\infty)$ wähle $g=|f|^{q-1} = |f|^{\frac{q}{p}}$ da $\int g^p = \int |f|^q < \infty$, $f\in L^q \implies g\in L^p$
+		\begin{align*}
+			||K(f)||'_p ||g||_p \geq ||fg||_1 = || |f|^q ||_1 = ||f||_q^q = ||f||_q \cdot \underbrace{||f||_q^{q-1}}_{(\int |f|^q)^{\frac{q-1}{q}}} = ||f||_q \cdot (\int g^p)^{\frac{1}{p}} = ||f||_q ||g||_p\\
+			\implies ||K(f)||'_p \geq ||f||_q
+		\end{align*}
+		\item $q=\infty$ also $||f||_\infty < \infty$
+		
+		Für jedes $\epsilon > 0$ ist $\{|f| > (1-\epsilon) ||f||_\infty\}=:A_\epsilon$ keine Nullmenge. $0 < \mu(A_\epsilon) < \infty$.
+		
+		Wähle $g=\frac{1}{\mu(A_\epsilon)}1_{A_\epsilon}$ ist aus $L_1$, $||g||_1=1$
+		\begin{align*}
+			\implies ||K(f)||'_p \geq ||fg||_1 = \int |fg| d\mu = \int |f| |g| d\mu = \int \underbrace{|f| 1_{A_\epsilon}}_{>(1-\epsilon)||f||_\infty \int 1_{A_\epsilon} \frac{1}{\mu(A_\epsilon)} d\mu} \frac{1}{\mu(A_\epsilon)} d\mu
+		\end{align*}
+		für alle $\epsilon > 0$, d.h. $||K(f)||'_p \geq ||f||_\infty$
+	\end{enumerate}
+	In allen Fällen folgt mit oben $||K(f)||'_p = ||f||_q$.
+
+\end{proof}
+
+Die kanonische Abbildung liefert eine Isometrie und ist daher injektiv.
+
+Angenommen $f,g \in L^q$ und $f\neq g$ in $L^q$, d.h. $||f-g||_q \neq 0$.
+\begin{align*}
+	||K(f)-K(g)||'_p = ||K(f-g)||'_p = ||f-g||_q \neq 0\\
+	\implies ||K(f)-K(g)||'_p \neq 0 \text{ und } K(f) \neq K(g)
+\end{align*}
+$K(.)$ ist auch surjektiv, daher gilt:
+
+\begin{theorem}[9.LP]
+	$1\leq p < \infty$ mit $\frac{1}{p} + \frac{1}{q} = 1$.
+	
+	Dann ist $L^q$ isomorph zu $(L^p)'$, dem Dualraum von $L^p$. Man kann dann $(L^p)' \simeq L^q$ also $(L^p)'$ mit $L^q$ identifizieren.
+\end{theorem}
+
+ohne Beweis. Für den Nachweis der Surjektivität sei auf die Literatur (Buch der VO) verwiesen.
+
+\begin{example}
+	Wenn $\Omega = \mathbb{N}$ und $\mathcal{A}=2^\mathbb{N}, \mu = \zeta$ (Zählmaß), dann ist $L^p$ ein Folgenraum mit der Bezeichnung $l^p$. $(a_n)\in l^p$, wenn $\sum_{n=1}^{\infty}|a_n|^p < \infty$.
+	
+	Die kanonische Abbildung für $a \in L^q, b \in L^p, a=(a_n)_{n\in \mathbb{N}}, b = (b_n)_{n\in \mathbb{N}}$ ist
+	\begin{align*}
+		K(a)(b) = \sum_{i=1}^{\infty} a_i - b_i
+	\end{align*}
+	und entsprechend dem letzten Satz gilt auch $(l^p)' \simeq l^q$.
+	
+	Für endliches $\Omega$, etwa $\Omega = \{1,...,m\}$ und $a=(a_1,...,a_m)$ und $b=(b_1,...,b_m)$ ist auch $(L^\infty)' \simeq L^1$.
+	
+	Wenn $a\in l^\infty$ (endliche Folge ist immer beschränkt) und $b \in l^1$ (endliche Folge immer summierbar) existiert für jedes $b \in l^1$ auch ein $a\in l^\infty$ mit $K(a) \simeq b$.
+	
+	Im Allgemeinen gilt Satz 9.LP für $p = \infty$ nicht.
+\end{example}
+
+\begin{example}
+	$(\mathbb{N}, 2^\mathbb{N}, \zeta)$ und $l^p$ sei der Folgenraum. Die Teilmenge $(\hat{l}_\infty)$ der beschränkten Folgen $l_\infty$ (Spur) sei die Menge der konvergenten Folgen. Definiere für $(a_n) \in \hat{l}_\infty$
+	\begin{align*}
+		F((a_n)) = \lim\limits_{n\rightarrow\infty} a_n
+	\end{align*}
+	$F$ ist linear. $F$ ist auch stetig:
+	$a_{n_k} \rightarrow b_n, k\rightarrow\infty$, d.h. $\lim\sup_{k\rightarrow\infty} |a_{n_k}-b_n| = 0$. $(b_n)$ konvergent gegen $b_0$.
+	\begin{align*}
+		|a_{n_k} - b_0| \leq |a_{n_k} - b_n| + |b_n - b_0|\\
+		\lim\sup_k |a_{n_k} - b_0| \leq \lim\sup_k \underbrace{|a_{n_k} - b_n|}_{\rightarrow0} + \lim \underbrace{|b_n - b_0|}_{\rightarrow 0}\\
+		\lim_k F((a_{n_k})) = F((b_n))
+	\end{align*}
+
+	$F$ ist nur auf der Teilmenge definiert, kann bei Beibehaltung der Eigenschaften (linear, stetig) auf $l_\infty$ erweitert werden. Ein $(b_n) \in l_1$ kann es nicht geben, sodass $\sum a_n b_n = \lim a_n$ für $a_n \in l_1 \cap l_\infty$.
+\end{example}
+
+\subsection{Gleichmäßige Integrierbarkeit}
+Für die Konvergenz im $L_p$ werden zur punktweisen Konvergenz noch weitere strukturelle Eigenschaften der Familie von Funktionen aus $L_p$ benötigt. Ein Fall, wo aus $f_n \rightarrow f$ $\mu$-f.ü. doch $L_p$-Konvergenz folgt, ist gegeben, falls die Integrale $||f_n||_p$ konvergieren.
+
+\begin{theorem}[10.LP]
+	Für $1\leq p < \infty$ und die Folge $f_n \in L_p$ gelte $f_n \rightarrow f$ $\mu$-f.ü. und $||f_n||_p \rightarrow ||f||_p$ dann ist $f_n$ $L_p$-konvergent, $\lim\limits_{n\rightarrow\infty} ||f_n - f||_p = 0$
+\end{theorem}
+
+\begin{proof}
+	Da $|f+f_n|^p \leq (2\cdot \max(|f|, |f_n|))^p \leq 2^p (|f_n|^p + |f|^p)$ gilt
+	\begin{align*}
+		2^p (\int |f|^p + \int |f|^p) = \int \liminf \left((2^p(|f|^p+|f_n|^p))- |f-f_n|^p\right) d\mu \text{ da } \lim |f-f_n|^p = 0
+	\end{align*}
+	wegen Fatou ist weiter
+	\begin{align*}
+		\leq \liminf\left(2^p \int|f|^p + 2^p \int |f_n|^p - \int |f-f_n|^p\right) = 2^p \int |f|^p + 2^p \lim \int |f_n|^p + \liminf (-\int |f-f_n|^p)
+	\end{align*}
+	Insgesamt ist
+	\begin{align*}
+		2^p(\int|f|^p + \int|f|^p) \leq 2^p(\int|f|^p + \int |f|^p) - \limsup \int |f-f_n|^p
+	\end{align*}
+	das ist nur möglich, wenn $\limsup \int |f-f_n|^p=0$ also $||f_n-f||_p\rightarrow0$.
+\end{proof}
+
+Für $p = \infty$ gilt obige Aussage auch für sigma-endliche Maße i.A. nicht.
+
+\begin{example}
+	$(\mathbb{N}, 2^\mathbb{N}, \zeta)$ mit dem (auf $\mathbb{N}$) sigma-endlichen Zählmaß $\zeta$. Sei $f_n = 1_{\{1,...,n\}}$, dann gilt $||f_n||_\infty = 1$ und $f_n \rightarrow f = 1$ auf $\mathbb{N}$ mit $||f||_\infty = 1$, aber $|f_n - f| = 1_{\{n+1,...\}}$ mit $||f_n - f||_\infty = 1 \nrightarrow 0$.
+\end{example}
+
+Dass für $p \in [1, \infty)$ die Umkehrung nicht ohne weiteres gilt, wurde im Beispiel A (LP 4) demonstriert. Dort war $||f_n - 0||_p \rightarrow 0$ für jedes $p$, aber $f_n$ konvergiert nicht punktweise.
+
+Die Umkehrung gelingt, wenn punktweise Konvergenz durch die (schwächere) Konvergenz im Maß ersetzt wird. Im Beispiel A (LP 4) gilt
+\begin{align*}
+	\lambda(|f_n - f| > \epsilon) = \lambda([a_n, b_n]) = \frac{1}{2 \lfloor n \rfloor - 1} \rightarrow 0.
+\end{align*}
+
+\begin{theorem}[11.LP]
+	Für $1 \leq p < \infty$ konvergiert die Folge $f_n$ im p-ten Mittel, $||f_n - f||_p \rightarrow 0$ genau dann, wenn $f_n \rightarrow^\mu f$ im Maß mit $f \in L_p$ und $||f_n||_p \rightarrow ||f||_p$
+\end{theorem}
+
+\begin{proof}
+	$\implies$ Aus $||f_n-f||_p$ folgt Konvergenz im Maß (Satz 1.LP) und wegen der Vollständigkeit ist $f \in L_p$. Die Konvergenz der Integrale ergibt sich aus der (umgekehrten) Dreiecksungleichung. $||f||_p \leq ||f-f_n||_p + ||f_n||_p$ und $||f_n||_p \leq ||f-f_n||_p + ||f||_p$
+	\begin{align*}
+		| ||f||_p - ||f_n||_p | \leq ||f-f_n||_p \rightarrow 0 \implies ||f_n||_p \rightarrow ||f||_p
+	\end{align*}
+	Wenn $f_n\rightarrow f$ im Maß, dann betrachtet man wieder eine Teilfolge $f_{n_k}$ mit $f_{n_k}\rightarrow f \mu$-f.ü. (sogar $\mu$-fast gleichmäßig). Nach dem vorigen Satz folgt daraus auch $||f_{n_k}-f||_p \rightarrow 0$.
+	
+	Angenommen $f_n$ konvergiert nicht in $L_p$, dann existiert eine Teilfolge $f_m$, die $||f-f_{m_j}||_p \geq \epsilon \forall j$ aber $f_{m_j} \rightarrow f$ im Maß, dann gibt es wieder eine Teilfolge $f_{m_{j_k}}$ mit $||f-f_{m_{j_k}}||_p \rightarrow 0, k\rightarrow \infty$, wie oben. Das ist ein Widerspruch, und $||f_n-f||_p \rightarrow 0$.
+\end{proof}
+
+Aus der Konvergenz im Maß wird eine Konvergenzart von Maßen abgeleitet.
+
+Wenn für alle $A \in \mathcal{A} \mu_n(A) \rightarrow \mu(A)$ für Maße $\mu$ und $\mu_n$ auf $(\Omega, \mathcal{A})$ konvergiert $\mu_n$ schwach gegen $\mu$ (bzw. in Totalvariation), d.h.
+\begin{align*}
+	\lim\limits_{n\rightarrow\infty} \sup |\mu_n(A) - \mu(A)| = 0.
+\end{align*}
+
+Bei LS-Maßen mit Verteilungsfunktionen $F_n,F$ bedeutet das für $A=(-\infty, x]$
+\begin{align*}
+	\lim\limits_{n\rightarrow\infty}F_n(x) = F(x)
+\end{align*}
+wenn die Maße endlich sind. Es gibt gute Gründe hier die Konvergenz nur für die Stetigkeitspunkte $C_F$ von $F(.)$ zu fordern, $x \in C_F : \lim\limits_{n\rightarrow\infty}F_n(x)=F(x)$.
+
+Allgemein kann die Konvergenz auch auf die Dichten (falls vorhanden) zurückgeführt werden.
+
+\begin{theorem}[12.LP, Satz von Scheffe]
+	$\nu_n, \nu$ sind endliche Maße mit $\nu_n(\Omega) = \nu(\Omega)$. $\mu$ sei sigma-endlich und $\nu_n \ll \mu, \nu \ll \mu$.
+	
+	Dann gilt
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} \frac{d\nu_n}{d\mu} = \frac{d\nu}{d\mu} \implies \sup_{A\in \mathcal{A}} |\nu_n(A)-\nu(A)| \rightarrow 0
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	Die punktweise Konvergenz der RN-Dichten und Konvergenz der Integrale bringt nach Satz 10.LP
+	\begin{align*}
+		\left|\int_A \frac{d\nu_n}{d\mu} - \int_A \frac{d\nu}{d\mu}\right| \leq \int_A \left|\frac{d\nu_n}{d\mu} - \frac{d\nu}{d\mu}\right| d\mu \leq \int \left|\frac{d\nu_n}{d\mu} - \frac{d\nu}{d\mu}\right| d\mu = ||\frac{d\nu_n}{d\mu} - \frac{d\nu}{d\mu}||
+	\end{align*}
+	Da $||\frac{d\nu_n}{d\mu}|| = \nu_n(\Omega) \rightarrow \nu(\Omega) = ||\frac{d\nu}{d\mu}||$ nach Voraussetzung liefert der vorige Satz die Aussage.
+\end{proof}
+
+Der Satz gilt auch (wie im Beweis), wenn $\nu(\Omega)\rightarrow\nu(\Omega)$. Meist wird aber die Verteilungskonvergenz von W-Maßen mit Dichten untersucht.
+
+Diskrete Verteilung: $(\mathbb{N}, 2^\mathbb{N})$ mit Zählmaß als dominierendes Maß. Es genügt die Konvergenz der Punktwahrscheinlichkeiten für Verteilungskonvergenz $P_n \rightarrow P$.
+
+\begin{example}
+	$P_n \sim H_{N,M,k}$ Hypergeometrische Verteilung wobei für $n, N_n, M_n, \in \mathbb{N}$ Folgen mit $N_n \rightarrow \infty$ und $\frac{M_n}{N_n} \rightarrow p, n\rightarrow\infty$ für $0 < p < 1$.
+	
+	Somit $P_n(\{i\}) = \frac{\binom{M_n}{i}\binom{N_n-M_n}{k-i}}{\binom{N_n}{k}}, i\in \mathbb{N}$
+	
+	Asymptotisch gilt für den Binomialkoeffizienten $\binom{n}{x} \sim \frac{n^x}{x!}, n\rightarrow\infty$ da $\binom{n}{x} = \frac{n^x}{x!} \frac{n(n-1)\cdots(n-x+1)}{n^x} \rightarrow \frac{n^x}{x!}, n\rightarrow\infty$.
+	
+	Daher
+	\begin{align*}
+		P_n(\{i\}) \sim \frac{\frac{M_n^i}{i!}\frac{(N_n-M_n)^{k-i}}{(k-i)!}}{\frac{N_n^k}{k!}} = \binom{k}{i} \left(\frac{M_n}{N_n}\right)^i \left(1-\frac{M_n}{N_n}\right)^{k-i}\\
+		\lim\limits_{n\rightarrow\infty} P_n(\{i\}) = \binom{k}{i} p^i (1-p)^{k-i}
+	\end{align*}
+	Binomial $B_{k,p}$. Die Hypergeometrische Verteilung wird durch die Binomialverteilung approximiert, $N\rightarrow\infty H_{N,M,k}\sim B_{k,p=M/N}$. (Ziehung mit (Binomial) und ohne (Hypergeom.) Zurücklegen.) Erwartungswert $k\frac{M}{N} \rightarrow kp$
+	
+\end{example}
+
+\begin{example}
+	$P_n \sim B_{n,p_n}$ Binomialv.; es gelte $n\rightarrow \infty$ und $p_n\rightarrow 0$ mit $np_n\rightarrow \theta$.
+	\begin{align*}
+		P_n(\{k\}) = \binom{n}{k} p_n^k (1-p_n)^{n-k}\\
+		\implies P_n(\{k\}) \sim \frac{n^k}{k!}\underbrace{p_n^k}_{\rightarrow\theta^k} (1-p_n)^{n}\underbrace{(1-p_n)^{-k}}_{\rightarrow1}
+	\end{align*}
+	Für jede Nullfolge $p_n\rightarrow0$ gilt $\lim\limits_{p_n\nearrow 0}(1-p_n)^{\frac{1}{p_n}}\rightarrow e^{-1}$ und wegen $np_n\rightarrow \theta$ folgt
+	\begin{align*}
+		P_n(\{k\})\sim \frac{n^k}{k!} e^{-\theta} \text{ Poisson mit Rate }\theta && B_{n,p_n} \sim Poi_\theta
+	\end{align*}
+	Die Erwartungswerte für $X_n\sim B_{n,p_n}$, $X\sim Poi_\theta$ konvergieren $\mathbb{E}X_n = np_n \rightarrow \theta = \mathbb{E}X$.
+\end{example}
+
+Auch bei stetigen Verteilungen werden Verteilungskonvergenzen über die Konvergenz der Dichten untersucht.
+
+\begin{example}
+	$(\mathbb{R}, \mathcal{B}, \lambda)$, $X_n\sim\gamma(n,1)$ mit Dichte
+	\begin{align*}
+		\frac{dP^{X_n}}{d\lambda}(x) = \frac{x^{n-1}}{(n-1)!} e^{-x}, x\geq 0
+	\end{align*}
+	Gamma-Verteilung mit $\mathbb{E}X_n = n$
+	
+	Sei $Y_n := \frac{X_n - n}{\sqrt{n}} = \frac{X_n}{\sqrt{n}} - \sqrt{n}$ mit der Dichte nach dem Transformationssatz für Dichten
+	\begin{align*}
+		f_n := \frac{dP^{Y_n}}{d\lambda}(y) = \frac{(\sqrt{n}y+n)^{n-1}e^{-\sqrt{n}y}e^{-n}}{(n-1)!}\sqrt{n}
+	\end{align*}
+	Die Sirling'sche Formel
+	\begin{align*}
+		n! \sim \sqrt{2\pi} \sqrt{n} n^n e^{-n}
+	\end{align*}
+	ergibt
+	\begin{align*}
+		f_n(y) \sim \frac{1}{\sqrt{2\pi}} \frac{(\sqrt{n}y+n)^{n-1}}{n^{n-1}} e^{-\sqrt{n}y}
+	\end{align*}
+	Wegen
+	\begin{align*}
+		n\log(1+\frac{x}{\sqrt{n}}) - x\sqrt{n} \rightarrow -\frac{x^2}{2}
+	\end{align*}
+	für $n\rightarrow\infty$, gilt
+	\begin{align*}
+		f_n(y) \sim \frac{1}{\sqrt{2\pi}}(1+\frac{y}{\sqrt{n}})^n e^{-\sqrt{n}y} \text{ und}\\
+		\lim\limits_{n\rightarrow\infty} f_n(y) = \frac{1}{\sqrt{2\pi}} e^{-\frac{y^2}{2}}
+	\end{align*}
+	Die Grenzverteilung ist die Standardnormalverteilung $P^{Y_n}\rightarrow N(0,1)$ und $\mathbb{E}Y_n = \frac{n}{\sqrt{n}} - \sqrt{n} = 0$.
+	
+	Die Verteilung im letzten Beispiel entsteht als standardisierte Summe unabhängiger Exponentialverteilungen $EX_1, Z_i \sim EX_1$ u.a. $Y_n = \frac{\sum Z_i - \sum \mathbb{E}Z_i}{\sqrt{\sum Var(Z_i)}}\rightarrow N(0,1)$ diese Summen konvergieren allgemein.
+\end{example}
+
+Ein großer Vorteil für eine Familie von Funktionen ist gegeben, wenn die Integrale der Funktionen "gleichgradig" sind, also sich einheitlich verhalten. Das wäre der Fall, wenn eine integrierbare Funktion $g \in \mathcal{L}_1$ existiert, sodass $|f_i| \leq g$.
+
+Eine Funktion $f$ ist genau dann integrierbar, wenn ein $g\in \mathcal{L}_1$ existiert, sodass
+\begin{align*}
+	\int_{|f|>g} |f| d\mu = 0
+\end{align*}
+
+Eine andere Konsequenz der Integrierbarkeit gibt das folgende Lemma.
+
+\begin{lemma}
+	$f\in\mathcal{L}_1$ auf $(\Omega, \mathcal{A}, \mu)$, dann existiert für jedes $\epsilon > 0$ ein $c_\epsilon > 0 $ und ein $A_\epsilon$ mit $\mu(A_\epsilon) < \infty$ mit
+	\begin{align*}
+		\int_{|f|>c_\epsilon} |f| d\mu < \epsilon \text{ und } \int_{A^c_\epsilon} |f| d\mu < \epsilon
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	Da $f\in L_1$ muss $\mu([f=\infty])=0$ sein. Für die Folge $f_n:=|f|1_{[|f|>n]}$ gilt $f_n$ fallend, $f_n\rightarrow |f|1_{[|f|=\infty]}$ und $f_n\rightarrow0 \mu$-f.ü.
+	
+	$f_n \leq |f|$ und mit dominierter Konvergenz
+	\begin{align*}
+		\lim_n \int f_n d\mu = \lim \int_{[|f|>n} |f| d\mu = 0
+	\end{align*}
+	Genauso für $A_n := [|f|\geq \frac{1}{n}]$ und $A^c_n = [|f|<\frac{1}{n}]$, $A_n^c \searrow [|f|=0]$
+	\begin{align*}
+		\lim_{n\rightarrow\infty} \int_{A_n^c} |f| d\mu = \int \lim\limits_{n\rightarrow\infty} |f| 1_{A_n^c} = 0
+	\end{align*}
+	Da $\int|f| \geq \int |f| 1_{[|f|>\frac{1}{n}]} \geq \frac{1}{n} \int 1_{[|f|>\frac{1}{n}]}$ ist $\mu(A_n) < \infty$ und $\mu(A_n^c) \rightarrow 0$.
+\end{proof}
+
+Die Erweiterung obiger Eigenschaften auf eine Familie integrierbarer Funktionen ist folgende Definition.
+
+\begin{definition}[gleichmäßig integrierbar]
+	Die Familie ${f_i, i \in I}$ auf $(\Omega, \mathcal{A}, \mu)$ heißt gleichmäßig integrierbar oder gleichgradig integrierbar wenn für jedes $\epsilon > 0 $ ein $c_\epsilon > 0 $ und ein $A_\epsilon  \in \mathcal{A}$ mit $\mu(A_\epsilon) < \infty$ existieren, sodass
+	\begin{align*}
+		\sup_{i\in I} \int_{|f_i| > c_\epsilon} |f_i| d\mu < \epsilon \text{ und } \sup_{i\in I}\int_{A^c_\epsilon} |f_i| d\mu < \epsilon
+	\end{align*}
+\end{definition}
+
+\begin{theorem}[13.LP, Charakterisierungen der gmI]
+	Für eine Familie $\mathcal{F}=\{f_i, i\in I\}$ messbarer Funktionen auf $(\Omega, \mathcal{A}, \mu)$ sind folgende Bedingungen äquivalent:
+	\begin{enumerate}
+		\item $\mathcal{F}$ ist gleichmäßig integrierbar
+		\item $\forall \epsilon > 0 \exists g_\epsilon \geq 0, g_\epsilon \in L_1$ mit $\sup_{i\in I} \int_{|f_i| > g_\epsilon} |f_i| d\mu < \epsilon$
+		\item $\forall \epsilon > 0 \exists g_\epsilon \geq 0, g_\epsilon \in L_1$ mit $\sup_{i\in I} \int (|f_i| - g_\epsilon)^+ d\mu < \epsilon$
+		\item $\sup \int |f_i| d\mu < \infty$ und $\forall \epsilon > 0 \exists g_\epsilon \geq 0, g_\epsilon \in L_1$ und $\delta > 0$ mit $\int_A g_\epsilon d\mu < \delta \implies \sup_{i\in I} \int_A |f_i| d\mu < \epsilon$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	i) $\implies$ ii): Nach Voraussetzung existiert $c_\epsilon$ und $A_\epsilon^c$ wie in der Definition, so ist $g_\epsilon:= c_\epsilon 1_{A_\epsilon}$ ein Kandidat für ii)
+	\begin{align*}
+		\int g_\epsilon d\mu = c_\epsilon \mu(A_\epsilon) < \infty \implies g_\epsilon \in \mathcal{L}_1\\
+		\int_{[|f_i|>g_\epsilon]} |f_i| d\mu = \int_{[]\cap A_\epsilon} |f_i| + \int_{[]\cap A_\epsilon^c} |f_i| \leq \int_{\underbrace{[|f_i|>c_\epsilon] \cap A_\epsilon}_{[|f_i|>c_\epsilon 1_{A_\epsilon}]}} |f_i| + \int_{A_\epsilon^c} |f_i| \leq \int_{|f_i|>c_\epsilon} |f_i| + \epsilon \leq 2\epsilon
+	\end{align*}
+	
+	ii) $\implies$ iii): $|f_i|1_{[|f_i|>g_\epsilon]} \geq (|f_i|-g_\epsilon)^+$ also gilt auch
+	\begin{align*}
+		\int_{|f_i|>g_\epsilon} |f_i| d\mu \geq \int (|f_i| - g_\epsilon)^+ d\mu
+	\end{align*}
+	und iii) gilt, nach Anwendung von $\sup_{i\in I}$.
+	
+	iii) $\implies$ iv) Es gelte $\sup_i \int (|f_i|-g_\epsilon)^+ < \epsilon$.
+	\begin{align*}
+		\int |f_i| = \int_{|f_i|>g_\epsilon} |f_i| - g_\epsilon + \int_{|f_i| > g_\epsilon} g_\epsilon + \int_{|f_i|\leq g_\epsilon}|f_i| \leq \int(|f_i|-g_\epsilon)^+ + \int_{|f_i|>g_\epsilon} g_\epsilon + \int_{|f_i|\leq g_\epsilon} g_\epsilon \leq\\
+		\epsilon + \int g_\epsilon < \infty \text{ da } g_\epsilon \in \mathcal{L}_1\\
+	\end{align*}
+	$\implies c:=\sup_i \int|f_i| < \infty$, somit gilt a).
+	
+	Für b) sei $A \in \mathcal{A}$ mit $\int_A g\epsilon < \delta = \frac{\epsilon}{2}$.
+	\begin{align*}
+		\int_A |f_i| = \int_{A\cap[|f_i|>g_\epsilon]}(|f_i|-g_\epsilon) + \int_{A\cap[|f_i|>g_\epsilon]}g_\epsilon + \int_{A\cap[|f_i|\leq g_\epsilon]}|f_i| \leq \\
+		\int (|f_i| - g_\epsilon)^+ + \int_{A\cap[|f_i|>g_\epsilon]} g_\epsilon + \int_{A\cap[|f_i| \leq g_\epsilon]} g_\epsilon \leq \delta + \int_A g_\epsilon \leq \epsilon + \delta
+	\end{align*}
+	daher ist auch $\sup_i \int_A |f_i| < 2 \epsilon$
+	
+	iv) $\implies$ i) Sei $C=\sup \int |f_i| < \infty$ und $a > \frac{C}{\delta}$ dann gilt
+	\begin{align*}
+		\int_{|f_i|>a g_\epsilon} g_\epsilon \leq \int_{|f_i|>a g_\epsilon} |f_i| \leq \int |f_i| \leq C\\
+		\implies \int_{|f_i| > a g_\epsilon} g_\epsilon \leq \frac{C}{a} \leq \delta
+	\end{align*}
+	und nach Voraussetzung für iv) folgt daraus $\sup_i \int_{|f_i| > a g_\epsilon} |f_i| \leq \epsilon$.
+	
+	Mit $g_\epsilon \in \mathcal{L}_1$ ist auch $h:=ag_\epsilon \in \mathcal{L}_1$. Damit wurde ein $A_\epsilon := [|f_i| \leq a g_\epsilon]$ mit endlichem Maß $\mu(A_\epsilon) <\infty$ gefunden, sodass $\sup_i \int_{A_\epsilon^c} |f_i| < \epsilon$.
+	
+	Für den Nachweis einer Konstanten $c_\epsilon$ dient das vorige Lemma:
+	
+	Wenn $h=a\cdot g_\epsilon \in \mathcal{L}_1$, dann existiert ein $c_\epsilon$ und ein $A_\epsilon$ sodass $\int_{|h|>c_\epsilon}|h|<\epsilon$ und $\int_{A_\epsilon^c}|h|<\epsilon$.
+	
+	Dann ist
+	\begin{align*}
+		\int_{|f_i| > c_\epsilon}|f_i| = \int_{[h\geq |f_i|>c_\epsilon]} |f_i| + \int_{\underbrace{[h<|f_i|]\cap[|f_i|>c_\epsilon]}_{\max(h,c_\epsilon)<|f_i| \implies |f_i|>h}} |f_i| \leq \int_{[h\geq |f_i|>c_\epsilon]} h + \int_{|f_i| > h} |f_i| \leq \int_{[h>c_\epsilon]} + \epsilon \leq 2\epsilon.
+	\end{align*}
+	damit auch $\sup_i \int_{[|f_i|>c_\epsilon}|f_i| < \epsilon$, die erste Bedingung für gmI.
+	
+	Auch die zweite Bedingung für gmI folgt aus dem Lemma für Integrierbarkeit.
+	\begin{align*}
+		\int_{A^c_\epsilon}|f_i| = \int_{[h\geq |f_i|]\cap A^c_\epsilon} + \int_{[|f_i|>h]\cap A^c_\epsilon} \leq \int_{[h\geq |f_i|]\cap A^c_\epsilon} +\int_{|f_i|>h} |f_i| \leq \int_{A^c_\epsilon} h + \epsilon < 2\epsilon
+	\end{align*}
+	nach dem Lemma bzw wegen der Voraussetzung für iv).
+	
+	Daher gilt auch $\sup_i \int_{A^c_\epsilon}|f_i| < \epsilon \forall \epsilon > 0$ und auch die zweite Bedingung für gmI ist erfüllt.
+\end{proof}
+Es ergeben sich unmittelbar viele Situationen (Familien), wo gmI gilt.
+
+\begin{itemize}
+	\item Ist die Familie $\mathcal{F}$ durch $g\in \mathcal{L}_1$ dominiert, d.h. $|f_i| \leq g \forall i$, dann ist $\mathcal{F}$ gmI, wegen 3.
+	\begin{align*}
+		0 = \sup \int (|f_i| - g)^+ < \epsilon
+	\end{align*}
+
+	\item Eine endliche Familie integrierbarer Funktionen $\mathcal{F}$ ist immer gmI.
+	
+	\item Wird die Familie $\mathcal{F}$ durch die Familie $\mathcal{G}$ dominiert, also zu jedem $f\in \mathcal{F}$ existiert ein $g \in \mathcal{G}$ mit $|f|\leq |g|$, dann ist auch $\mathcal{F}$ gmI, vorausgesetzt $\mathcal{G}$ ist gmI.
+	
+	\item Die Summe $\mathcal{F} + \mathcal{G} = \{f+g|f\in \mathcal{F}, g \in \mathcal{G}\}$ ist auch gmI, wenn $\mathcal{F}$ und $\mathcal{G}$ gmI sind.
+	
+	\item Die Integrale sind gleichmäßig über $\mathcal{F}$ (gmI) beschränkt, da $C = \sup_{f\in\mathcal{F}} \int |f| d\mu < \infty$ eine Folgerung aus gmI ist.
+\end{itemize}
+
+Damit ist etwa $\mathcal{F}:= \{f(x)=\frac{1}{x^{1+\epsilon}} 1_{(1,\infty)(x)} | \epsilon > 0\}$ auf $(\mathbb{R}, \mathcal{B}, \lambda)$ keine gmI Familie, obwohl jedes $f \in \mathcal{F}$ integrierbar ist und $\sup_{f\in\mathcal{F}} ||f||_\infty = 1 < \infty$.
+
+Das wäre anders, wenn statt $\lambda$ ein endliches Maß $\mu$ vorliegen würde.
+
+Ist $\mu$ endlich und $\sup_{f\in\mathcal{F}} ||f||_\infty < K$ ist wegen 3. sofort auch $\mathcal{F}$ gmI mit $g_\epsilon = K$.
+
+\begin{itemize}
+	\item Jede Familie $\mathcal{F}$, die gmI ist wegen $\sup_{f\in\mathcal{F}} \int |f| < \infty$ Teilmenge von $\mathcal{L}_1$, $\mathcal{F} \subseteq \mathcal{L}_1$ für $(\Omega, \mathcal{A}, \mu)$.
+\end{itemize}
+
+Für endliche Maße (also alle W-Maße) wird der Nachweis der gmI wesentlich einfacher.
+
+\begin{theorem}[14.LP]
+	Die Familie $\mathcal{F}$ messbarer Funktionen auf dem endlichen Maßraum $(\Omega, \mathcal{A}, \mu)$ ist genau dann gmI, wenn
+	\begin{align*}
+		C=\sup_{i\in I} \int |f_i| < \infty \text{ oder } \lim\limits_{c\rightarrow\infty} \sup_i \mu(|f_i| \geq c) = 0 \\
+		\text{ und } \forall \epsilon > 0 \exists \delta > 0 \text{ mit } \mu(A) < \delta \implies \sup_i \int_A |f_i| < \epsilon
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	$\implies$: $C=\sup\int |f_i| < \infty$ folgt aus gmI, dann gilt auch $\mu(|f_i| > c)\leq \frac{1}{c} \int |f_i| \leq \frac{C}{c} \rightarrow 0$ für $c\rightarrow\infty$ somit $\lim\limits_{c\rightarrow\infty} \sup_i \mu(|f_i| \geq c) = 0$.
+	
+	Das $\epsilon$-$\delta$-Kriterium b) gilt ebenfalls, zu $\epsilon > 0$ existiert wegen gmI ein $c_\epsilon > 0$ mit $\sup_i \int_{|f_i|>c_\epsilon} |f_i| < \frac{\epsilon}{2}$ und daher gilt wenn $\mu(A)\leq \delta := \frac{\epsilon}{2 c_\epsilon}$:
+	\begin{align*}
+		\int_A |f_i| = \int_{A\cap[|f_i|\leq c_\epsilon]} |f_i| + \int_{A\cap[|f_i|> c_\epsilon]} |f_i| \leq c_\epsilon \mu(A) + \frac{\epsilon}{2} < \epsilon
+	\end{align*}
+
+	$\impliedby$: Es gelte $\sup_i \mu(|f_i| \geq c)\rightarrow 0$, es existiert ein $c_\delta$ mit $\mu(|f_i| \geq c_\delta) < \delta$, da auch das $\epsilon$-$\delta$-Kriterium gilt, folgt für $A_{\epsilon,i}:=[|f_i|>c_\delta]$
+	\begin{align*}
+		\sup_j \int_{A_{\epsilon, i}} |f_j| d\mu < \epsilon
+	\end{align*}
+	daher auch $\sup_i\sup_j \int_{A_{\epsilon, i}} |f_j| d\mu < \epsilon$ und $\int_{|f_i| > c_\delta} |f_i| d\mu < \epsilon$, die zweite Bedingung für gmI.
+\end{proof}
+
+Wenn die Funktionen $f_i$ als Dichten verstanden werden von $\nu_i(A) := \int_A |f_i| d\mu$.
+
+Diese (endliche) Maße $\nu_i$ sind daher gleichmäßig absolut stetig bezüglich dem endlichen Maß $\mu$.
+
+Für den Nachweis der gmI einer Familie $\mathcal{F}$ messbarer Funktionen auf dem endlichen Maßraum $(\Omega, \mathcal{A}, \mu)$ genügt es, eine (stärker als $x\rightarrow x$ wachsende) Funktion zu finden, die gleichmäßig über $\mathcal{F}$ integrierbar ist. Dieses Kriterium ist oft einfacher zu prüfen.
+
+\begin{lemma}
+	$\mathcal{F} \subseteq \mathcal{L}_1$ auf dem endlichen Maßraum $(\Omega, \mathcal{A}, \mu)$ ist genau dann gmI, wenn eine Funktion $H:[0, \infty) \rightarrow [0, \infty)$ mit
+	\begin{align*}
+		\lim_{x\rightarrow\infty} \frac{H(x)}{x} = \infty \text{ und } \sup_{f\in\mathcal{F}} \int H(|f|) d\mu < \infty
+	\end{align*}
+	existiert.
+	
+	Die Funktion $H$ ist als monoton wachsend und konvex wählbar.
+\end{lemma}
+
+Für SG $X$ bzw. eine Familie SGn $\mathcal{F}$ reduziert sich die Bedingung für gmI auf 
+\begin{align*}
+	\sup_{X\in\mathcal{F}} \mathbb{E}[|X| 1_{[|X|>K]}] < \epsilon
+\end{align*}
+wobei zu $\epsilon > 0 $ ein $K \geq 0$ mit obiger Bedingung existiert.
+
+\begin{lemma}
+	Folge $X_n$ SGn mit $\mathbb{E}|X_n| < \infty$ ist gmI, genau wenn
+	\begin{align*}
+		\lim\limits_{x\rightarrow\infty} (\sup_{n\geq 1} \mathbb{E}[|X_n| 1_{[|X_n|>x]}]) = 0
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	$\implies$: $X_n$ sei gmI, da $\sup_n \mathbb{E}|X_n| < \infty$ gilt mit der Markoff-Ungleichung für jedes $x>0$
+	\begin{align*}
+		x P(|X_n| > x) \leq \mathbb{E}|X_n| \forall n
+	\end{align*}
+	Für $\delta > 0$ und ausreichend großes $x$ gilt
+	\begin{align*}
+		\sup_n P(\underbrace{|X_n| > x}_{A_{\epsilon, n}}) \leq \frac{1}{x} \sup_{n\geq 1} \mathbb{E}|X_n| < \delta
+	\end{align*}
+	gilt $\mathbb{E}|X_n| 1_{A_{\epsilon, n}} \leq \epsilon$ und daher auch
+	\begin{align*}
+		\limsup_{x\rightarrow\infty} \sup_n \mathbb{E}[|X_n|1_{[|X_n|>x]}] < \epsilon.
+	\end{align*}
+
+	$\impliedby$: Es gelte $\lim\limits_{x\rightarrow\infty}(\sup \mathbb{E}[|X_n| 1_{|X_n|>x}]) = 0$.
+	
+	Für $x$ groß genug gilt
+	\begin{align*}
+		\sup_n \mathbb{E}|X_n| \leq \sup_n \{\mathbb{E}|X_n| 1_{|X_n| > x} + x\} < \infty
+	\end{align*}
+	
+	Für die zweite Bedingung der gmI wird für $\epsilon > 0$ ein $x$ gewählt, sodass $\sup_n \mathbb{E}[|X_n| 1_{|X_n|>x}] < \frac{\epsilon}{2}$.
+	
+	Für $\delta < \frac{\epsilon}{2x}$ und $A\in\mathcal{A}$ mit $P(A)<\delta$ folgt
+	\begin{align*}
+		\mathbb{E}|X_n|1_A = \mathbb{E}|X_n| 1_{A\cap[|X_n|>x]} + \mathbb{E}|X_n|1_{A_\cap[|X_n| \leq x]} \leq \underbrace{\mathbb{E}|X_n|1_{|X_n|>x}}_{<\frac{\epsilon}{2}} + \mathbb{E}x\underbrace{1_{A\cap[|X_n|\leq x]}}_{\leq 1_A} \leq \epsilon.
+	\end{align*}
+	$(\delta x < \frac{\epsilon}{2})$
+\end{proof}
+
+\begin{example}
+	Die Familie SGn $\mathcal{F}=\{X_i|i\in I\}$ enthalte quadratisch integrierbare Funktionen, $\mathcal{F}\supseteq \mathcal{L}_2$ auf $(\Omega, \mathcal{A}, P)$. Wenn die 2.Momente beschränkt sind, etwa $\sup_i Var(X_i) < \infty$ dann ist $\mathcal{F}$ gmI. Aus $(\mathbb{E}|X_i|)^2 \leq \mathbb{E}X_i^2$ (wegen der Jensen Ungl.) ist auch $\sup \mathbb{E}|X_i| < \infty$.
+	
+	Weiters gilt
+	\begin{align*}
+		\sup_i \int |X_i|^2 d\mu = \sup_i \left((\mathbb{E}|X_i|)^2 + Var(X_i)\right) < \infty
+	\end{align*}
+	Mit $H(x)=x^2$ sind die Bedingungen der letzten Proposition erfüllt. Eigentlich würde die Aussage auch für $H(x)=x^{1+a} \forall a > 0$ gelten.
+\end{example}
+
+Wie es aus den vorigen Aussagen vermuten lässt, ist die Äquivalenz von $L_p$-Konvergenz und Konvergenz im Maß, wenn die Familie (Folge) auch gmI ist.
+
+Als Vorbereitung dienen die folgenden Hilfssätze.
+
+\begin{lemma}
+	$f_n$ ist eine gmI-Folge auf $(\Omega, \mathcal{A}, \mu)$ dann gilt das Lemma von Fatou in der Form
+	\begin{align*}
+		\int \liminf_n f_n \leq \liminf_n \int f_n \leq \limsup_n \int f_n \leq \int \limsup_n f_n
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	Für die Anwendung des Lemmas von Fatou müssen integrierbare Funktionen mit $f_n \geq g_1$ bzw. $f_n \leq g_2$ existieren.
+	
+	Da die $f_n$ gmI sind, existiert zu $\epsilon > 0$ ein $g \geq 0$, $g \in \mathcal{L}_1$ und $\sup_n \int_{|f_n|>g} |f_n| d\mu < \epsilon$ und
+	\begin{align*}
+		\int f_n = \int_{f_n > -g} f_n + \int_{f_n\leq -g}f_n \geq \int_{f_n>-g}f_n - \epsilon\\
+		\text{Da } \int_{f_n\leq-g} f_n = -\int_{f_n \leq -g} |f_n| \geq - \int_{|f_n|>g} |f_n| \geq - \epsilon
+	\end{align*}
+	Betrachte $\tilde{f}_n:=f_n1_{[f_n>-g]}\geq -g$. $\tilde{f}_n$ erfüllt die Voraussetzungen des Lemmas von Fatou.
+	\begin{align*}
+		\int \liminf_n \tilde{f}_n \leq \liminf_n \int \tilde{f}_n = \liminf_n \underbrace{\int f_n 1_{f_n>-g}}_{\leq \sup \int |f_n| < \infty}
+	\end{align*}
+
+	Da $f_n \leq \tilde{f}_n \implies \liminf f_n \leq \liminf \tilde{f}_n$ somit $\int \liminf f_n \leq \int \liminf \tilde{f}_n \leq \liminf \int \tilde{f}_n$.
+	
+	Nach oben gilt $\int \tilde{f}_n \leq \int f_n + \epsilon$ also ist der letzte Term $\leq \liminf \int f_n + \epsilon$.
+	
+	Die Ungleichung für $\limsup$ wird analog wegen $\limsup f_n = - \liminf(-f_n)$ geführt.
+\end{proof}
+
+\begin{lemma}
+	$f_n$ sei gmI Folge. Aus der Konvergenz im Maß $f_n \xrightarrow{\mu} f$ folgt $f \in \mathcal{L}_1$, $\lim \int f_n = f$ und $\lim_n ||f_n - f|| = 0$.
+	
+	Die Folgerungen treffen auch für $f_n \rightarrow f \mu$-f.ü. zu.
+\end{lemma}
+
+\begin{proof}
+	Es gelte $f_n\rightarrow f \mu$-f.ü. und daher auch $|f_n|\rightarrow|f|$. Nach dem vorigen Lemma (von Fatou) ist
+	\begin{align*}
+		\int \lim |f_n| \leq \underbrace{\liminf\int |f_n|}_{=\lim \int |f_n| \leq C=\sup \int |f_n|} \leq \limsup \int |f_n| \leq \int \lim |f_n|
+	\end{align*}
+
+	Also ist $f\in \mathcal{L}_1$. Da $||f_n||_1 \rightarrow ||f||_1$ und $f_n\rightarrow f \mu$-f.ü. gilt nach Satz 10.LP auch $||f_n-f||_1\rightarrow 0$.
+	
+	Gilt $f_n\rightarrow f$ im Maß, dann existiert wieder eine Teilfolge $f_{n,k}, f_{n,k}\rightarrow f \mu$-f.ü. für diese Teilfolge gilt $||f_{n,k}-f||_1\rightarrow 0$ nach vorigem Argument.
+	
+	Angenommen $||f_n - f||\nrightarrow 0$ müsste es eine andere Teilfolge geben, die $||f_{m,j}-f||_1>\epsilon$ erfüllt für alle $j\geq 1$. $f_{m,j}\rightarrow f$ im Maß gilt trotzdem. So müsste $f_{m,j}$ wieder eine Teilfolge $f_{m,j,l}$ besitzen, die wiederum $||f_{m,j,l}-f||_1 \rightarrow 0$ erfüllt. Das ist ein Widerspruch.
+\end{proof}
+
+Die letzten Aussagen über gmI Folgen werden zum wesentlichen Kriterium für $L_p$-Konvergenz zusammengefügt.
+
+\begin{theorem}[15.LP, Vitali-Kriterium]
+	Die Folge $f_n \in \mathcal{L}_p, 1 \leq p < \infty$ konvergiert in $L_p$ $||f_n - f||_p \rightarrow 0 \iff f_n \xrightarrow{\mu} f$ und $|f_n|^p$ ist gmI.
+\end{theorem}
+
+\begin{proof}
+	$\implies$: Aus $||f_n - f||_p \rightarrow 0$ folgt nach Satz 11.LP $f_n \xrightarrow{\mu}f$ und $||f_n||_p \rightarrow ||f||_p$ mit $f \in \mathcal{L}_p$.
+	
+	Daher ist $C = \sup \int |f_n|^p < \infty$.
+	
+	Für die zweite Bedingung der gmI sei $\epsilon > 0$ und $\delta := \frac{\epsilon^{1/p}}{2}$ sowie $g:= |f|^p + \sup_{i=1}^{n_\epsilon} |f_i|^p$ wobei $n_\epsilon$ so bestimmt wird, dass $\underbrace{||f_n - f||_p}_{\rightarrow\int |f_n - f|^p < \epsilon/2} < \delta \forall n \geq n_\epsilon$.
+	
+	Damit gilt für ein $A \in \mathcal{A}$
+	\begin{align*}
+		\int_A g d\mu < \delta \implies \int_A |f_n|^p d\mu < \epsilon
+	\end{align*}
+	für $n \leq n_\epsilon$ nach Definition von $g$.
+	
+	Wenn $n > n_\epsilon$ betrachte
+	\begin{align*}
+		||f_n 1_A||_p \leq \underbrace{||(f_n-f)1_A||_p}_{<\frac{\epsilon}{2}} + \underbrace{||f1_A||_p}_{<\frac{\epsilon}{2} \text{ wenn } \int_A g < \delta}
+	\end{align*}
+	Auch in diesem Fall folgt aus $\int_A g d\mu < \delta \implies \int_A |f_n|^p d\mu < \epsilon$
+	
+	$\impliedby$: $|f_n|^p$ sei gmI und Maß-konvergent. Es gibt wieder eine Teilfolge $f_{n,k}$ mit $f_{n,k}\rightarrow f \mu$-f.ü. $\implies |f_{n,k}|^p\rightarrow|f|^p \mu$-f.ü. $|f_{n,k}|^p$ ist gmI, nach vorigem Lemma muss $||f_{n,k}||_p \rightarrow ||f||_p$ und $||f||_p < \infty$.
+	
+	Nach Satz 10.LP ist dann auch $||f_{n,k}-f||_p \rightarrow 0$. Würde $||f_n-f||_p \nrightarrow 0$ müsste eine Teilfolge $f_{m,j}$ mit $||f_{m,j}-f||_p > \epsilon$ die aber wieder $f_{m,j}\rightarrow f$ im Maß erfüllt. Davon müsste eine nächste Teilfolge $f_{m,j,k}$ mit $||f_{m,j,k}-f||_p \rightarrow 0$ geben, was ein Widerspruch ist.
+\end{proof}
+
+Die Sätze 11.LP und 15.LP zusammengefasst
+\begin{align*}
+	||f_n - f||_p \rightarrow 0 \iff f_n \xrightarrow{\mu} f \land f\in L_p \land ||f_n||_p \rightarrow ||f||_p \iff f_n \xrightarrow{\mu} f \land |f_n|^p \text{ ist gmI}
+\end{align*}
+kann als Kriterium für gmI verwendet werden:
+
+Für eine im Maß konvergente Folge $f_n \xrightarrow{\mu}f$ sind $|f_n|^p$ gmI $\iff f \in L_p \land ||f_n||_p \rightarrow ||f||_p, ||f||_p < \infty$.
+
+Wie die $L_p$-Konvergenz von einer Metrik (sogar einer Norm), lässt sich auch die Konvergenz im Maß (für sigma-endliches Maß) aus einer Metrik erzeugen.
+
+\begin{lemma}
+	$\mu$ sei ein sigma-endliches Maß mit $A_n \nearrow \Omega, \mu(A_n) < \infty$. Zu messbaren Funktionen $f,g : \Omega \rightarrow \mathbb{R}$ sei
+	\begin{align*}
+		d(f,g) = \sum_{n=1}^{\infty} \frac{2^{-n}}{1+\mu(A_n)} \int_{A_n} \min (1, |f-g|) d\mu
+	\end{align*}
+
+	Dann ist $d$ eine Metrik, sodass für die Folge $f_n, f$ gilt $f_n \xrightarrow{\mu} f \iff d(f_n, f) \rightarrow 0$.
+\end{lemma}
+
+Eine weitere Bedingung für f.ü. Konvergenz aus $L_p$-Konvergenz abzuleiten ist die schnelle Konvergenz.
+
+\begin{theorem}[15.LP, Schnelle Konvergenz]
+	$f_n$ und $f$ aus $L_p$ für ein $1 \leq p < \infty$. Dann folgt aus
+	\begin{enumerate}
+		\item $\sum_{n\geq 1} ||f_n - f||_p < \infty$ oder
+		\item Für $A \in \mathcal{A}$ mit $\mu(A) < \infty$ und jedes $\epsilon > 0$ gilt $\sum_{n\geq 1} \mu(A \cap [|f_n-f| > \epsilon]) < \infty$
+	\end{enumerate}
+	dass $f_n \rightarrow f \mu$-f.ü.
+\end{theorem}
+
+\begin{proof}
+	Aus 1. folgt wegen
+	\begin{align*}
+		\mu(A \cap [|f_n - f| > \epsilon]) \leq \mu([|f_n - f| > \epsilon]) \leq \frac{1}{\epsilon^p} ||f_n - f||^p_p
+	\end{align*}
+	sofort 2. Für 2. wird ein messbares $A \in \mathcal{A}$ mit $\mu(A) < \infty$ angenommen, o.B.d.A sei $A = \Omega$. Mit $D_n := [|f_n - f| > \epsilon]$ und $D_\epsilon := \limsup_{n}D_{n\rightarrow\infty}$ folgt nach dem Lemma von Borel-Cantelli
+	\begin{align*}
+		\mu(D_\epsilon) = \mu(\bigcap_{n=1}^{\infty} \bigcup_{k=n}^{\infty}[|f_k - f| > \epsilon]) = 0
+	\end{align*}
+	Sei $N = \bigcup_{m=1}^\infty D_{1/m}$, daher $\mu(N) = 0$ und $f_n \rightarrow f$ auf $N^c$.
+\end{proof}
+
+\subsection{Konvergenzarten schematisch}
+TODO LP Seite 54
+
+\section{Bedingte Erwartung und Verteilung}
+Bedingte Wahrscheinlichkeit soll von einem Ereignis $A$ mit $P(A)>0$ verallgemeinert werden. Für festes $A\in\mathcal{A}$ gilt $P(M|A):=\frac{P(M\cap A)}{P(A)}$.
+\begin{definition*}[elementarer bedingter Erwartungswert]
+	Diese Verteilung führt für eine messbare Funktion $X\in\mathcal{L}^1(P)$ auf einen elementaren bedingten Erwartungswert $\mathbb{E}[X|A]=\int X(\omega) dP(\omega|A) = \frac{1}{P(A)}\mathbb{E}(1_A X)$
+\end{definition*}
+
+\begin{proof}[Wohldefiniertheit elementarer bedingter Erwartungswert]
+	TODO
+\end{proof}
+
+Zusammensetzung eines Erwartungswerts auf disjunkte Teilmengen $B_i$ mit $\bigcup_i B_i = \Omega$: $\mathbb{E}X = \mathbb{E}(X|B_1)P(B_1) + \mathbb{E}(X|B_2)P(B_2)+\cdots$.
+
+Bedingte Wahrscheinlichkeit $P(A|B)=\mathbb{E}(1_A|B)$.
+
+
+
+\begin{definition*}[bedingte Erwartung unter $\mathcal{F}$]
+	$(B_i)$ sei eine Zerlegung (höchstens abzählbar). Es sei $\mathcal{F}:=\sigma((B_i)_i)$ von der Zerlegung erzeugt (Wenn es eine endliche Zerlegung ist, dann besteht $\mathcal{F}$ nur aus allen Vereinigungen von $B_i$).
+	
+	Definiere als bedingte Erwartung unter $\mathcal{F}$ eine messbare Funktion $Y=\mathbb{E}[X|\mathcal{F}]$ mit $Y:\Omega\rightarrow\mathbb{R}$, $Y(\omega)=\mathbb{E}[X|B_i](\omega) \iff w \in B_i$ also $Y=\sum_{i=1}^{\infty} \mathbb{E}[X|B_i]1_{B_i}(\omega)$.
+\end{definition*}
+
+\begin{lemma}
+	\begin{itemize}
+		\item $Y$ ist $\mathcal{F}$ messbar
+		\item $Y$ ist $\mathcal{L}^1(P)$, hat endliche Erwartung und für jedes $A\in \mathcal{F}$ gilt $\int_A Y dP = \int_A X dP$.
+	\end{itemize}
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{lemma}[vollständige Wahrscheinlichkeit]
+	Für bedingte Wahrscheinlichkeit, also $X=1_B$ mit $B\in\mathcal{A}$ ergibt sich der Satz der vollständigen Wahrscheinlichkeit
+	\begin{align*}
+		P(B) = \sum_{j\in J'} \underbrace{P(B|B_j)P(B_j)}_{P(B\cap B_j)}
+	\end{align*}
+\end{lemma}
+
+Diesen bedingten Erwartungswert kann man als Erwartung einer bedingten Verteilung auffassen.
+
+\begin{example}
+	TODO
+\end{example}
+
+Eine Verallgemeinerung (motiviert durch den obigen diskreten Zugang) sollte auch Nullmengen für $B_i$ vorsehen, etwa von stetigen SG erzeugt.
+
+\begin{definition}[bedingte Erwartung]
+	$(\Omega, \mathcal{A}, P)$... Wahrscheinlichkeitsraum, $\mathcal{F}\subseteq \mathcal{A}$, $\mathcal{F}$ beliebige Teil Sigmaalgebra. Die SG heißt bedingte Erwartung $X_0 = \mathbb{E}[X|\mathcal{F}]$ von $X\in \mathcal{L}^1(\Omega, \mathcal{A}, P)$ wenn
+	\begin{enumerate}
+		\item $X_0$ $\mathcal{F}$ messbar ist
+		\item $\forall A \in \mathcal{F}$ gilt $\mathbb{E}[X 1_A] = \int_A X dP = \int_A X_0 dP = \mathbb{E}[X_0 1_A]$
+	\end{enumerate}
+	Die bedingte Wahrscheinlichkeit ist $P(A|\mathcal{F})=\mathbb{E}[1_A|\mathcal{F}], A\in \mathcal{A}$.
+	
+	Wenn $\mathcal{F}=\sigma(Y)$ von einer SG erzeugt wird, bezeichnet $\mathbb{E}[X|Y]=\mathbb{E}[X|\mathcal{F}]$ bedingte Erwartung von X unter Y.
+\end{definition}
+
+\begin{lemma}[Existenz und Eindeutigkeit]
+	$X_0=\mathbb{E}[X|\mathcal{F}]$ existiert und ist eindeutig, $[P|_\mathcal{F}]$ f.s.
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Die Aussage der Eindeutigkeit (wie alle Aussagen über $\mathbb{E}(X|\mathcal{F})$) ist auf $[P]$-f.s. bzw. $[P|_\mathcal{F}]$-f.s zu betrachten, man bezeichnet daher $\mathbb{E}[X|\mathcal{F}]$ als eine Version der bedingten Erwartung.
+
+$\mathbb{E}[X|\mathcal{F}]$ besitzt die wichtigen Eigenschaften des Integrals, also des Erwartungswerts.
+
+\begin{theorem}[Eigenschaften bedingter Erwartungswert]
+	Es sei $\mathcal{G} \subset \mathcal{F} \subset \mathcal{A}$ Teil Sigma-Algebren, $X,Y \in \mathcal{L}^1(\Omega, \mathcal{A}, P)$ dann gilt:
+	\begin{enumerate}
+		\item Monotonie: $X \geq Y \implies X_0=\mathbb{E}[X|\mathcal{F}] \geq \mathbb{E}[Y|\mathcal{F}]=Y_0$
+		\item Linearität: $\mathbb{E}[aX+Y|\mathcal{F}] = a \mathbb{E}[X|\mathcal{F}] + \mathbb{E}[Y|\mathcal{F}]$
+		\item Dreiecksungleichung: $\mathbb{E}[|X| |\mathcal{F}] \geq \left|\mathbb{E}[X |\mathcal{F}]\right|$
+		\item Totale Erwartung: $\mathbb{E}[X_0] = \mathbb{E}[\mathbb{E}[X|\mathcal{F}]] = \mathbb{E}X$
+		\item Turmeigenschaft: $\mathcal{G} \subset \mathcal{F} \subset \mathcal{A}$, $\mathcal{G}$ ist gröber als $\mathcal{F}$, $\implies \mathbb{E}[\mathbb{E}[X|\mathcal{F}] | \mathcal{G}] = \mathbb{E}[\mathbb{E}[X|\mathcal{G}] | \mathcal{F}] = \mathbb{E}[X|\mathcal{G}]$
+		\item Faktorisierung $X\cdot Y \in \mathcal{L}^1(P)$, $Y$ sei messbar bez. $\mathcal{F}$, $X$ messbar bez. $\mathcal{F} \implies \mathbb{E}[X|\mathcal{F}]=X$. $\mathbb{E}[XY|\mathcal{F}]=Y\cdot \mathbb{E}[X|\mathcal{F}]$.
+		\item Monotone Konvergenz: $X_n \nearrow X$, $X_n \in \mathcal{L}^1 \implies \mathbb{E}[X_n|\mathcal{F}] \nearrow \mathbb{E}[X|\mathcal{F}]$
+		\item Majorisierte Konvergenz: $X_n$ Folge mit $|X_n| \leq Y$ und $X_n \rightarrow X$ f.s. und $Y \in \mathcal{L}^1$ integrierbar, dann gilt $\lim\limits_{n\rightarrow\infty}\mathbb{E}[X_n|\mathcal{F}] = \mathbb{E}[X|\mathcal{F}]$
+		\item Unabhängigkeit: $X$ sei unabhängig von $\mathcal{F}$, $\sigma(X)$ u.a. $\mathcal{F} \implies \mathbb{E}[X|\mathcal{F}] = $ const. $= \mathbb{E}[X]$
+		\item Trivialitätseigenschaft: Wenn $\mathcal{F}$ aus $P$-trivialen Ereignissen besteht, also für $F\in\mathbb{F}$, ist $P(F) = 0$ oder $1$, dann gilt $\mathbb{E}[X|\mathcal{F}]=\mathbb{E}X = $const.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{lemma}[Lemma von Fatou]
+	$X_n$ Folge SGn auf $(\Omega, \mathcal{A}, P)$. Es gibt ein messbares $U \leq X_n$ und $\mathbb{E}U^- < \infty$. Für $\mathcal{A}' \subseteq \mathcal{A}$, Teil Sigma-Algebra gilt
+	\begin{align*}
+		\mathbb{E}[\liminf_n X_n | \mathcal{A}'] \leq \liminf_n \mathbb{E}[X_n|\mathcal{A}'] P\text{-f.s.}
+	\end{align*}
+	Entsprechend gilt für $X_n \leq U'$, $\mathbb{E}U'^+ < \infty$
+	\begin{align*}
+		\limsup_n \mathbb{E}[X_n | \mathcal{A}'] \leq \mathbb{E}[\limsup_n X_n|\mathcal{A}'] P\text{-f.s.}
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[Dominierte Konvergenz für bedingte Erwartung]
+	$X_n$ ist $P$-f.s. konvergente Folge auf $(\Omega, \mathcal{A}, P)$ mit $|X_n| \leq Y \forall n$ und $Y$ ist integrierbar. Für die Teilsigma-Algebra $\mathcal{A}' \subseteq \mathcal{A}$ gilt $P$-f.s: $\mathbb{E}(\lim X_n | \mathcal{A}') = \lim_n \mathbb{E}(X_n|\mathcal{A}')$
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Wie der Grenzwert von $X_n$ im Satz der dominierten Konvergenz (ohne bedingte Erwartung) ist auch hier $\mathbb{E}[X|\mathcal{A}'] < \infty P$-f.s.
+
+\begin{theorem}[1.BE]
+	Es sei $X\cdot Y \in \mathcal{L}^1$, $Y$ messbar bezgl. $\mathcal{F}$ dann gilt $\mathbb{E}[X\cdot Y | \mathcal{F}]= Y \mathbb{E}[X|\mathcal{F}]$.
+\end{theorem}
+
+\begin{remark}
+	Diese Aussage gilt auch unter geringeren Voraussetzungen als $\mathbb{E}|XY| <\infty$, etwa $X,Y \geq 0$, mit allerdings spezielleren Bedingungen.
+\end{remark}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+BE Seite 12
+
+\begin{remark}
+	Die Unabhängigkeitseigenschaft zweier SGn $X, Y$ überträgt sich nicht (unkorreliert auch nicht):
+	
+	$X$ u.a. $Y$ bez. $P$, dann gilt $\mathbb{E}[XY]=\mathbb{E}X\mathbb{E}Y$ aber nicht unbedingt $\mathbb{E}[XY|\mathcal{F}]=\mathbb{E}[X|\mathcal{F}]\mathbb{E}[Y|\mathcal{F}]$. (Nur wenn $\sigma(X), \sigma(Y)$ und $\mathcal{F}$ unabhängig sind).
+\end{remark}
+
+Unabhängige SGn von $Y$ tragen keine Information i.d.S. $\mathbb{E}[X|Y]=\mathbb{E}X$, $X$ u.a. $Y$.
+
+Wenn mehrere u.a. SGn von $X$ existieren, müssen die aber auch gemeinsam unabhängig sein. Wenn $Y$ oder $Z$ u.a. von $X$ sind, dann muss $(Y,Z)$ nicht informationslos sein, also i.a. $\mathbb{E}[X|Y,Z]\neq \mathbb{E}[X]$.
+
+\begin{theorem}[2.BE]
+	$X$ SG ($\mathbb{E}X$ existiert) auf $(\Omega, \mathcal{A}, P)$, $\mathcal{A}'$ ist Sub-Sigmaalgebra wie $\mathcal{C}$ auch, $\mathcal{A}', \mathcal{C} \subseteq \mathcal{A}$. Wenn $\sigma(\sigma(X)\cup \mathcal{A}')$ unabhängig von $\mathcal{C}$ ist, gilt
+	\begin{align*}
+		\mathbb{E}[X|\sigma(\mathcal{C}\cup \mathcal{A}')] = \mathbb{E}[X|\mathcal{A}']
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Die Forderung für den bedingten Erwartungswert, dass für alle $A\in \mathcal{A}', \mathcal{A}'\subseteq\mathcal{A}$
+\begin{align*}
+	\int_A X dP = \int_A \mathbb{E}[X|\mathcal{A}'] dP
+\end{align*}
+kann auf die Erzeugermengen $A\in \mathcal{E}$ mit $\mathcal{A}' = \sigma(\mathcal{E})$ reduziert werden, wenn $\mathcal{E}$ ein Halbring mit $\Omega \in \mathcal{E}$ ist. (Semi-Algebra)
+
+\begin{theorem}[3.BE]
+	$X$ sei integrierbar auf $(\Omega, \mathcal{A}, P)$ und Teil-Sigmaalgebra $\mathcal{A}' = \sigma(\mathcal{E})$, wobei $\mathcal{E}$ ein Halbring ist und $\Omega \in \mathcal{E}$. Wenn $Y$ $\mathcal{A}'$-messbar ist und $\forall M \in \mathcal{E}: \int_M X dP = \int_M Y dP$, dann gilt $Y=\mathbb{E}[X|\mathcal{A}']$ $P$-f.s.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[4.BE]
+	$X$ sei SG auf $(\Omega, \mathcal{A}, P)$ und $\mathcal{A}' \subseteq \mathcal{A}$ ist Teil-Sigmaalgebra. $X_0$ sei $\mathcal{A}'$ messbar.
+	\begin{enumerate}
+		\item Sei $X\geq 0$, dann ist $X_0$ genau dann eine Version von $\mathbb{E}[X|\mathcal{A}'] = X_0$ $P$-f.s., wenn für alle $\mathcal{A}'$-messbaren $Z\geq 0$: $\int ZX_0 dP = \int ZX dP$.
+		\item Sei $X$ integrierbar, dann ist $X_0$ genau dann eine Version von $\mathbb{E}[X|\mathcal{A}']=X_0$ wenn für alle beschränkten und $\mathcal{A}'$ messbaren $Z$: $\int ZX_0 dP = \int ZX dP$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Wenn im vorigen Satz $X \in \mathcal{L}^p$ (statt $\mathcal{L}^1$), dann gilt $\mathbb{E}XZ = \mathbb{E}X_= Z$ für alle $Z\in \mathcal{L}^q$ mit $\frac{1}{p} + \frac{1}{q} = 1$, (und $\mathcal{A}'$-messbar) also $X_0 \in \mathcal{L}^p(\Omega, \mathcal{A}', P)$ erfüllt
+\begin{align*}
+	X_0 = \mathbb{E}(X|\mathcal{A}') \iff \int X_0 Z dP = \int XZ dP
+\end{align*}
+für alle $Z \in \mathcal{L}^q(\Omega, \mathcal{A}', P)$.
+
+Beweis in Übung.
+
+\begin{theorem}[Jensen-Ungleichung für bedingte Erwartung]
+	$X$ ist integrierbare SG auf $(\Omega, \mathcal{A}, P)$ mit $X:\Omega\rightarrow(a,b)$. Sei $\phi:(a,b)\rightarrow\mathbb{R}$ konvex. Dann gilt für $\mathcal{A}' \subseteq \mathcal{A}$, Sub-Sigmaalgebra
+	\begin{align*}
+		\phi(\mathbb{E}(X|\mathcal{A}')) \leq \mathbb{E}(\phi(X)|\mathcal{A}') P\text{-f.s.}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Hier wurde das Beweisprinzip der unbedingten Jensen-Ungleichung übernommen und für den bedingten Erwartungswert adaptiert. Genauso lassen sich weitere Ungleichungen auf bedingte Erwartungswerte anwenden.
+
+\begin{theorem}[Markoff-Ungleichung für bedingte Erwartung]
+	$\eta:\mathbb{R}^+\rightarrow\mathbb{R}^+$ und monoton wachsend. Für $c>0$ und $\mathcal{A}' \subseteq \mathcal{A}$ (Sub-Sigmaalgebra) gilt $P$-f.s.
+	\begin{align*}
+		P(|X|>c|\mathcal{A}') \leq \frac{\mathbb{E}(\eta(|X|)|\mathcal{A}')}{\eta(c)}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Eine sofortige Folgerung aus der bedingten Markoff-Ungleichung ist wieder die bedingte Tschebyscheff-Ungleichung.
+
+\begin{lemma}[Tschebyscheff-Ungleichung]
+	$\phi:[0,\infty)\rightarrow[0,\infty)$ und monoton steigend, $\phi(x)>0$ für $x>0$. Bei $c>0$ gilt
+	\begin{align*}
+		P[|X|>c|\mathcal{A}'] \leq \frac{\mathbb{E}[\phi(|X|)|\mathcal{A}']}{\phi(c)}
+	\end{align*}
+\end{lemma}
+
+Da $\phi$ monoton wächst, gilt $[|X|>c]\geq[\phi(|X|)\geq \phi(c)]$ und die vorige Markoff-Ungleichung für $\phi_0|X|$ das Resultat.
+
+Die ''klassische Tschebyscheff-Ungleichung'' wird für $\phi(x)=x^2$ auf $[0,\infty)$ formuliert,
+\begin{align*}
+	P[|X-\mathbb{E}X|>c |\mathcal{A}'] \leq \frac{\mathbb{V}(X|\mathcal{A}')}{c^2}.
+\end{align*}
+
+Das lässt sich für andere Momente auch aufschreiben
+\begin{align*}
+	P[|X-\mathbb{E}X|>c |\mathcal{A}'] \leq \frac{\mathbb{E}(|X-\mathbb{E}X|^k |\mathcal{A}')}{c^k}.
+\end{align*}
+
+Aus der Jensen-Ungleichung für bedingte Erwartung erhält man auch für (bedingte) $p$-fache Integrale ($p\geq1$) und $X\in \mathcal{L}^p(\Omega, \mathcal{A}, P)$
+\begin{align*}
+	|\mathbb{E}(X|\mathcal{A}')|^p \leq \mathbb{E}(|X|^p | \mathcal{A}') P\text{-f.s. und } \mathbb{E}(|\mathbb{E}(X|\mathcal{A}')|^p) \leq \mathbb{E}|X|^p
+\end{align*}
+damit ist $\mathbb{E}(X|\mathcal{A}')$ auch in $\mathcal{L}^p(\Omega, \mathcal{A}', P)$.
+
+Auch für weitere für $\mathcal{L}^p$-Räume essentielle Ungleichungen werden die Beweisprinzipien auf die bedingte Erwartung übertragen.
+
+\begin{lemma}[Hölder-Ungleichung für bedingte Erwartung]
+	Es seien $X$ und $Y$ SGn auf $(\Omega, \mathcal{A}, P)$ mit der Sub-Sigmaalgebra $\mathcal{A}'\subseteq \mathcal{A}$. Dann gilt die Hölder-Ungleichung für bedingte Erwartung:
+	
+	$\mathbb{E}|X|^p <\infty$, $\mathbb{E}|Y|^q < \infty$, $1\leq p,q \leq \infty$ und $\frac{1}{p} + \frac{1}{q} = 1$, dann gilt $P$-f.s.
+	\begin{align*}
+		|\mathbb{E}(XY|\mathcal{A}')| \leq \mathbb{E}(|XY| | \mathcal{A}') \leq (\mathbb{E}(|X|^p|\mathcal{A}'))^{\frac{1}{p}} (\mathbb{E}(|Y|^q|\mathcal{A}'))^{\frac{1}{q}} < \infty
+	\end{align*}
+\end{lemma}
+
+\begin{lemma}[Cauchy-Schwarz Ungleichung (Hölder, $p=q=2$)]
+	\begin{align*}
+		|\mathbb{E}(XY|\mathcal{A}')| \leq \sqrt{\mathbb{E}(|X|^2|\mathcal{A}')} \sqrt{\mathbb{E}(|Y|^2|\mathcal{A}')} \text{ oder}\\
+		|\mathbb{C}ov(X,Y|\mathcal{A}')| \leq \sqrt{\mathbb{V}(X|\mathcal{A}')} \sqrt{\mathbb{V}(Y|\mathcal{A}')}
+	\end{align*}
+\end{lemma}
+
+\begin{lemma}[Minkowski-Ungleichung]
+	$\mathbb{E}|X|^p <\infty$, $\mathbb{E}|Y|^p < \infty$ dann gilt die Dreiecksungleichung $P$-f.s.
+	\begin{align*}
+		(\mathbb{E}(|X+Y|^p |\mathcal{A}'))^{\frac{1}{p}} \leq (\mathbb{E}(|X|^p |\mathcal{A}'))^{\frac{1}{p}} + (\mathbb{E}(|Y|^p |\mathcal{A}'))^{\frac{1}{p}} < \infty
+	\end{align*}
+	auch für bedingte Erwartung.
+\end{lemma}
+
+Beweise als Übung.
+
+\begin{lemma}[Austauschbarkeitseigenschaften]
+	Wenn $X,Y\in \mathbb{R}^k$ SGn mit identischen Verteilungen sind, i.Z. $X\sim Y$, dann gilt auch $g(X) \sim g(Y)$ für messbare $g(.)$.
+\end{lemma}
+\begin{align*}
+	P[g(X)\in A] = P^X[g^{-1}(A)] = P^Y[g^{-1}(A)] = P[g(Y)\in A]
+\end{align*}
+
+\begin{lemma}
+	$X,Y$ SGn mit identischer Verteilung. Wenn $(X,Z)\sim (Y,Z)$ für SG $Z$, dann gilt $\mathbb{E}[g(X)|Z] = \mathbb{E}[g(Y)|Z] P$-f.s.
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{example}
+	TODO
+\end{example}
+
+Für den bedingten Erwartungswert bestimmt nur die Sigmaalgebra $\mathcal{A}$ $\mathbb{E}(X|\mathcal{A})$, nicht die konkrete SG. Wenn $\sigma(Y_1)=\sigma(Y_2)$ (etwa bei $Y_1, Y_2$ iid) ist $P$-f.s. $\mathbb{E}(X|Y_1)=\mathbb{E}(X|Y_2)$.
+
+Die Information in der Bedingung ist in der Sigma-Algebra enthalten, die konkrete SG (bei $Y_1 \sim Y_2$) ist nicht wesentlich.
+
+Im Fall einer diskret verteilten SG $Y$ für $\mathbb{E}(X|Y)$ (der für die Motivation des bedingten Erwartungswerts erklärt wurde) ist $\mathbb{E}(X|Y=y)=h(y)$ eine Funktion von $Y$.
+
+Das bleibt im allgemeinen Fall erhalten. Sei $\mathcal{A}' = \sigma(T)$ und 
+TODO Grafik
+
+Nach dem Faktorisierungslemma ist eine $\mathcal{A}'$-messbare Funktion eine Funktion von $T$. $\exists h$, sodass $\mathbb{E}[X|T]= h\circ T$ mit $\mathbb{E}[X|T=t] = h(t) P$-f.s. Die bedingte Wahrscheinlichkeit führt für jedes $A\in \mathcal{A}$ auf eine messbare Funktion $h_A(.)$ mit $P(A|T=t)=\mathbb{E}[1_A |T=t]=h_A(t)$.
+
+Wir werden (erfolgreich) versuchen $P(.|T=.)$ als Wahrscheinlichkeitsmaß für die Bestimmung von $\mathbb{E}(X|T)$ als Erwartungswert bezüglich $P(.|T)$ zu verwenden.
+
+Das ursprüngliche Maß $P(.)$ wird durch das ''bedingte Wahrscheinlichkeitsmaß'' $P(.|T)$ ersetzt und damit das von $X$ induzierte W-Maß $P(X\in . | T)$ und Erwartungswerte $\mathbb{E}(g(X)|T)$ etc. ermittelt. Damit ist eine konstruktive Bestimmung von $\mathbb{E}(X|T)$ möglich.
+
+Das folgende einfache Beispiel gibt ein Prinzip für die Bestimmung von $\mathbb{E}(.|\mathcal{A}')$ bei endlichem $\mathcal{A}'$.
+
+\begin{example}
+	TODO
+\end{example}
+
+\subsubsection{Geometrische Interpretation}
+Für einen Hilbertraum $(H, <.,.>)$ mit Skalarprodukt $<x,y>\in \mathbb{R}$ ist $x_0$ die Projektion von $X$ auf einen abgeschlossenen Unterraum $(H_0, <.,.>)$ mit $H_0\subseteq H$ definiert.
+
+$x_0$ ist die einzige Lösung von $||x-x_0|| = \inf_{z\in H_0} ||x-z||$ und $x_0\in H_0$. Die Projektion erfüllt $x-x_0 \perp x_0$, d.h. $<x-x_0, x_0>=0$ für alle $x\in H$.
+
+Zu $H=L_2(\Omega, \mathcal{A}, P)$ mit $<X,Y>=\mathbb{E}XY$ ist $H_0:=L_2(\Omega, \mathcal{A}_0, P|_{\mathcal{A}_0})$ bei $\mathcal{A}_0 \subseteq \mathcal{A}$ ein abgeschlossener Unterraum. Die Projektion von $X\in L_2(\Omega, \mathcal{A}, P)$ auf $L_2(\Omega, \mathcal{A}_0, P)$ ist $X_0$ eine $\mathcal{A}_0$-messbare Funktion, die auch $\mathbb{E}(X_0(X-X_0)) = \mathbb{E}(X_0X - X_0^2) = 0$ erfüllt. $X_0 =\mathbb{E}(X|\mathcal{A}_0)$ ist $\mathcal{A}_0$-messbar und
+\begin{align*}
+	\mathbb{E}(X_0(X-X_0)) = \mathbb{E}(X_0X) - \mathbb{E}(\underbrace{X_0\mathbb{E}(X|\mathcal{A}_0)}_{\mathbb{E}(X_0X|\mathcal{A}_0)}) = \mathbb{E}(X_0X) - \underbrace{\mathbb{E}[\mathbb{E}(X_0X|\mathcal{A}_0)]}_{\mathbb{E}X_0X \text{ (totale Erwartung)}} = 0
+\end{align*}
+
+Das tatsächlich $X_0 = \mathbb{E}(X|\mathcal{A}_0)$ die Projektion von $X\in L_2$ auf $L_2(\Omega, \mathcal{A}_0, P)$ ist, zeigt der nächste Satz.
+
+\subsubsection{Bedingte Erwartung als Projektion}
+\begin{theorem}[5.BE]
+	$X\in \mathcal{L}^2(P)$. Für jedes $Y\in \mathcal{L}^2(\Omega, \mathcal{F}, P)$ gilt:
+	\begin{align*}
+		||X-Y||_2^2 \geq ||X-\mathbb{E}(X|\mathcal{F})||_2^2
+	\end{align*}
+	Gleichheit für $Y=\mathbb{E}(X|\mathcal{F}) P$-f.s.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+In einem Hilbertraum ist die Projektion auf einen Unterraum, das Element mit kleinstem Abstand (Norm) aus dem Unterraum.
+
+\begin{corollary}[Prognose, Residuum]
+	$X,Y$ SG aus $\mathcal{L}^2$, dann ist die SG $\mathbb{E}(X|Y)=H(Y)$ die Prognose von $X$ mit kleinster Varianz, wenn $Y$ beobachtet wurde $\hat{X}=\mathbb{E}[X|Y]$
+	
+	Residuum ist die SG des Restes oder Fehler $X-\hat{X} = X - \mathbb{E}[X|Y] = R$.
+	
+	$R$ und $\hat{X}$ sind unkorreliert
+	\begin{align*}
+		\mathbb{E}R = \mathbb{E}[X - \mathbb{E}[X|Y]] = \mathbb{E}X - \underbrace{\mathbb{E}[\mathbb{E}(X|Y)]}_{\mathbb{E}X} = 0\\
+		\mathbb{E}\hat{X} = \mathbb{E}[\mathbb{E}[X|Y]] = \mathbb{E}X = \mu\\
+		\mathbb{C}ov(\hat{X}, R) = \mathbb{E}[\underbrace{(X-\mathbb{E}(X|Y))}_{R} (\underbrace{\mathbb{E}(X|Y)}_{\hat{X}}-\mu)] = \underbrace{\mathbb{E}[X\mathbb{E}(X|Y)]}_{\mathbb{E}[\mathbb{E}[X\mathbb{E}(X|Y)|Y]]} - \mathbb{E}(\mathbb{E}(X|Y)^2) - \mu \underbrace{\mathbb{E}X}_\mu + \mu \underbrace{\mathbb{E}\mathbb{E}[X|Y]}_\mu = 0
+	\end{align*}
+\end{corollary}
+
+\begin{example}
+	TODO
+\end{example}
+
+\subsubsection{Reguläre bedingte Wahrscheinlichkeit}
+Bei diskreten SGn $X$ bzw. $Y$ ist $P(X=i|Y=k)$ tatsächlich eine Wahrscheinlichkeitsverteilung für jedes $k$. Mit dieser bedingten Verteilung ist dann
+\begin{align*}
+	\mathbb{E}[X|Y=k] = \sum_m m P[X=m|Y=k]
+\end{align*}
+der Erwartungswert dieser bedingten Verteilung.
+
+Bei stetigen Verteilungen von $X, Y$ mit Dichten $\frac{dP^X}{d\lambda}=f_X$, $\frac{dP^Y}{d\lambda}=f_Y$, $\frac{dP^{(X,Y)}}{d\lambda}=f_{X,Y}$ wurde die bedingte Dichte bereits durch
+\begin{align*}
+	f(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}
+\end{align*}
+für $f_Y(y)>0 P^Y$-f.s. Für die Funktion $H: Y \rightarrow \mathbb{E}[X|Y=g] := \int x f(x|y) d\lambda(x)$ gilt, dass $H$ messbar bezüglich $\sigma(Y)$ ist.
+
+Der Schnitt $\left(\frac{f_{X,Y}(x,y)}{f_Y(y)}\right)_y$ ist messbar und integrierbar, daher ist $f(x|y)$ messbar und wegen $\mathbb{E}X < \infty$ auch $H$ messbar bezüglich $\sigma(Y)$.
+
+Für $B$ mit $Y^{-1}(B) \in \mathcal{B}$:
+\begin{align*}
+	\int_B H(y) dP^Y = \int_B \int_\mathbb{R} x f(x|y) d\lambda(x) dP^Y = \int_B \int_\mathbb{R} x f(x|y) d\lambda(x) f_Y(y) d\lambda(y) = \\
+	\int_{B\times\mathbb{R}} x \underbrace{f(x|y)f_Y(y)}_{f(x,y)} d\lambda\times\lambda = \int_B x \underbrace{\int f(x,y) d\lambda(y)}_{f_X(x)} d\lambda(x) = \int_B x dP^X
+\end{align*}
+
+Transformiert gilt
+\begin{align*}
+	\int_{Y^{-1}(B)} H dP = \int_{Y^{-1}(B)} X dP \text{ also ist}\\
+	\mathbb{E}(X|Y) = \mathbb{E}(X|\sigma(Y)) = \int xf(x|Y) d\lambda(x)
+\end{align*}
+
+Bei Verteilungen mit Dichten bezüglich $\lambda$ auf $(\mathbb{R}, \mathcal{B})$ existiert eine bedingte Wahrscheinlichkeit, deren Erwartung tatsächlich dem bedingten Erwartungswert entspricht.
+
+In wie weit kann $P(A|\mathcal{A}_0):=\mathbb{E}[1_A|\mathcal{A}_0]$ immer als bedingte Wahrscheinlichkeitsverteilung verstanden werden?
+
+Für die Subalgebra $\mathcal{A}_0 \subseteq \mathcal{A}$ sei $P(A|\mathcal{A}_0)$ eine Version von $\mathbb{E}(1_A|\mathcal{A}_0)$ für $A\in \mathcal{A}$.
+
+Die Bedingungen für eine Wahrscheinlichkeitsverteilung sind:
+\begin{enumerate}
+	\item $P(\Omega|\mathcal{A}_0) = 1 P$-f.s.
+	
+	Das ist wegen $1_\Omega = 1$ und der Definition des bedingten Erwartungswerts. Genauso
+	\item $P(\emptyset|\mathcal{A}_0) = 0 P$-f.s.
+	
+	Da $0\leq 1_A \leq 1$ gilt auch
+	\item $0 \leq P(A|\mathcal{A}_0) \leq 1 P$-f.s
+	
+	Bleibt die sigma-Additivität, $A_i$ disjunkte Folge aus $\mathcal{A}$
+	\item $P(\bigcup_{i=1}^\infty A_i |\mathcal{A}_0) = \sum_{i=1}^{\infty} P(A_i|\mathcal{A}_0)$
+	
+	Mit $B_n:= \bigcup_{i=1}^n A_i$ gilt $\mathbb{E}(1_{B_n}|\mathcal{A}_0)$ und der monotonen Konvergenz $1_{B_n}\nearrow 1_{\cup A_i}$ für bedingte Erwartung folgt
+	\begin{align*}
+		P(\bigcup_{i=1}^\infty A_i | \mathcal{A}_0) = \mathbb{E}[\lim 1_{B_n} | \mathcal{A}_0] = \sum_{i=1}^\infty \mathbb{E}(1_{A_i}|\mathcal{A}_0) = \sum P(A_i | \mathcal{A}_0) P\text{-f.s.}
+	\end{align*}
+\end{enumerate}
+
+Die Suche nach einer (einheitlichen) bedingten Wahrscheinlichkeit, die hinter dem bedingten Erwartungswert steht, scheint erfolgreich. Das Problem liegt aber bei 4. daran, dass die Nullmenge, für die 4) nicht gilt, also nicht Sigma-Additivität gilt, von der Folge $A_i$ abhängt. Es gibt insgesamt überabzählbar viele Nullmengen, für die 4) nicht gilt bzw. eventuell nicht gilt.
+
+Zur Klärung dieses Sachverhalts betrachten wir Übergangswahrscheinlichkeiten bzw. Markov-Kerne.
+
+\begin{definition}[Übergangskern / Markov-Kern]
+	$(\Omega_1, \mathcal{A}_1), (\Omega_2, \mathcal{A}_2)$ ... Messräume
+	
+	$K:\Omega_1 \times \mathcal{A}_2 \rightarrow [0, \infty]$ heißt (sigma-endlicher) Übergangskern / Markov-Kern von $\Omega_1$ auf $\Omega_2$, wenn
+	\begin{enumerate}
+		\item $\omega_1\mapsto K(\omega_1, A_2)$ ist eine messbare Abbildung ($\mathcal{A}_1$ messbar) für jedes $A_2 \in \mathcal{A}_2$
+		\item $A_2 \mapsto K(\omega_1, A_2)$ ist für jedes $\omega_1 \in \Omega_1$, ein sigma-endliches Maß.
+	\end{enumerate}
+
+	Ist das Maß $K(\omega_1, .)$ für jedes $\omega_1 \in \Omega_1$ ein W-Maß, dann heißt $K(.,.)$ auch Übergangswahrscheinlichkeit.
+\end{definition}
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{lemma}[Zusammensetzung von Kernen]
+	$K_i \in K(\Omega_i, \Omega_{i+1}), i=1,2$
+	
+	$K(x_1, A_3) = K_1 \circ K_2(x_1, A_3) = \int_{\Omega_2} K_2(x_2, A_3) K_1(x_1, dx_2)$ ist Übergangskern von $\Omega_1$ in $\Omega_3$.
+\end{lemma}
+
+Bedeutung: TODO Grafik
+
+Aussagen:
+\begin{itemize}
+	\item $K$ ist Markov-Kern (stochastisch)
+	\item Wenn $h\geq 0$ messbar bezüglich $(\Omega_2, \mathcal{A}_2)$, dann ist $x_1 \rightarrow \int_{\Omega_2} h(x_2) K(x_1, dx_2)$ messbar bez. $\mathcal{A}_1$.
+\end{itemize}
+
+\begin{example}
+	TODO
+\end{example}
+
+Wie im Beispiel mit Markov-Ketten, lassen sich Kerne zu gemeinsamen (Produkt-)Maßen zusammensetzten:
+
+Es sei $(\Omega_1, \mathcal{A}_1, \mu)$ ein endlicher Maßraum und $K$ ein endlicher Übergangskern $(\Omega_1 \mapsto \Omega_2, \mathcal{A}_2)$. Es existiert ein eindeutiges, sigma-endliches Maß auf $(\Omega_1 \times \Omega_2, \mathcal{A}_1 \times \mathcal{A}_2)$ mit der Bezeichnung $\mu \times K := \mu\times K(A_1 \times A_2) = \int_{A_1} K(\omega_1, A_2) \mu(d\omega_1)$.
+
+Produkt von $\mu\times K$
+TODO BE Seite 36
+
+\begin{definition}[Reguläre bedingte Wahrscheinlichkeit]
+	$(\Omega, \mathcal{A}, P), \mathcal{F}\subset \mathcal{A}$ Sigma-Unteralgebra.
+	\begin{itemize}
+		\item Eine Version von $\mathbb{E}(1_A|\mathcal{F})= P(A|\mathcal{F})(x)$ für alle $A\in \mathcal{A}$ die durch einen stochastischen Kern $(x,A)\mapsto K(x,A)=P(A|\mathcal{F})(x)$ definiert werden kann, heißt reguläre bedingte Wahrscheinlichkeit.
+		\item $Y:\Omega\rightarrow (E, \mathcal{E})$ messbare SG. Ein stochastischer Kern $K:(\Omega, \mathcal{F})\rightarrow E$ mit $K(\omega, B) = P[Y\in B | \mathcal{F}](\omega) [P]$ heißt reguläre bedingte Verteilung von $Y|\mathcal{F}$.
+		\item Wird $\mathcal{F}=\sigma(X)$ von $X$ erzeugt mit $X:\Omega\mapsto(E', \mathcal{E}')$. Ein stochastischer Kern $K(x,A)=P[Y\in A | X=x], x\in E', A\in \mathcal{E}$ von $(E'x\mathcal{E})$ heißt reguläre bedingte Verteilung von $Y$ gegeben $X$.
+	\end{itemize}
+\end{definition}
+
+Im allgemeinen muss eine solche Version nicht existieren.
+
+Wenn der Bildraum der messbaren Funktion $X$ ein polnischer Raum ist (vollständig, separabler metrischer topologischer Raum), dann existiert eine reguläre bedingte Wahrscheinlichkeit. SGn $X:(\Omega, \mathcal{A})\rightarrow(\mathbb{R}^k, \mathcal{B}_k)$ erfüllen die Bedingungen.
+
+\begin{theorem}[6.BE]
+	$X:(\Omega, \mathcal{A})\rightarrow(\Gamma, \mathcal{B})$ ($\Gamma$ polnischer Raum mit Borel-Algebra). Dann existiert ein Markovkern $K$ von $(\Omega, \mathcal{A}_0)\rightarrow(\Gamma, \mathcal{B})$ für die Teil-Sigmaalgebra $\mathcal{A}_0\subseteq \mathcal{A}$ der Gestalt $K(\omega, A)=P[X^{-1}(A)|\mathcal{A}_0](\omega) P$-f.s. für jedes $A\in\mathcal{B}$.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Eine Borel-Äquivalenz wie oben existiert etwa für $(\Gamma=\mathbb{R}^\infty, \mathcal{B}=\mathcal{B}_\infty)$, reguläre bedingte Wahrscheinlichkeiten für Folgen SGn.
+
+Damit ist $\mathbb{E}[X|\mathcal{A}_0](\omega)$ eine Version der Erwartung der regulären bedingten Wahrscheinlichkeit (wie bei Dichten bereits bestätigt).
+
+\begin{theorem}[7.BE]
+	Unter den Voraussetzungen des vorigen Satzes ist $P$-f.s.
+	\begin{align*}
+		\mathbb{E}[X|\mathcal{A}_0](\omega) = \int X(\omega')K(\omega, d\omega') = \int X(\omega) P[d\omega'|\mathcal{A}_0]
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Im regulären Fall gilt das (bequeme) Einsetzungsprinzip.
+
+\begin{theorem}[8.BE]
+	Bei Gültigkeit der Bedingungen wie im letzten Satz, d.h. für SG $X_1, X_2$ existiert eine reguläre bedingte Verteilung $P^{X_2|X_1}$. Dann gilt für $g\in L_1, g:\Omega_1\times\Omega_2 \rightarrow\mathbb{R}$
+	\begin{align*}
+		\mathbb{E}[g(X_1,X_2)|X_1=x_1] = \int g(x_1,x_2) P(dx_2|X=x_1) \forall x \in \Omega_1 \text{ und}\\
+		\mathbb{E}[g(X_1, X_2)|X_1=x_1] = \mathbb{E}[g(x_1,X_2)]
+	\end{align*}
+\end{theorem}
+
+Der Wert von $X_1=x_1$ wird in den bedingten Erwartungswert eingesetzt.
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{example}
+	TODO
+\end{example}
+
+\section{Gesetz der großen Zahlen}
+Ausgehend von einem wiederholbaren Experiment soll eine Methode zur Bestimmung der Wahrscheinlichkeitsverteilung, die dem Prozess zugrunde liegt, entwickelt werden. Eigenschaften und Charakteristika von $P$ sollen auch aus der Beobachtung abgeleitet werden.
+
+Oft genügt es, Momente zu bestimmen, um Aussagen über Wahrscheinlichkeiten zu erhalten.
+
+Obwohl alle Begriffe längst definiert wurden (besonders in den Kapitel EI, WR, LP, UN) un auch mannigfaltig verwendet wurden, sei zunächst eine Wiederholung zu Momenten vorangestellt.
+
+\begin{itemize}
+	\item zentrales Moment: $\mathbb{E}(X-\mathbb{E}X)^n$
+	\item $n=2$ Varianz: $\mathbb{V}(X)=\mathbb{E}(X-\mathbb{E}X)^2$
+	
+	Eigenschaften: $\mathbb{V}(aX+b)=a^2\mathbb{V}(X)$
+	
+	\item Kovarianz $Cov(X,Y)=\mathbb{E}(XY)-\mathbb{E}X\mathbb{E}Y$ oder $<X,Y>=Cov(X,Y)=\mathbb{E}(X-\mathbb{E}X)(Y-\mathbb{E}Y)$
+	
+	\item Standardisierte SG: $X_0=\frac{(X-\mathbb{E}X)}{\sqrt{\mathbb{V}(X)}}$
+	
+	\item Streuung oder Standardabweichung $\sqrt{\mathbb{V}(X)}$
+	
+	\item Korrelation ist die Kovarianz der standardisierten SGn $Cor(X,Y)=\frac{\mathbb{E}(X-\mathbb{E}X)(Y-\mathbb{E}Y)}{\sqrt{\mathbb{V}(X)}\sqrt{\mathbb{V}(Y)}} = \frac{\mathbb{E}(XY)-\mathbb{E}X\mathbb{E}Y}{\sqrt{\mathbb{V}(X)}\sqrt{\mathbb{V}(Y)}}$
+	
+	$\mathbb{V}(X+Y)=\mathbb{V}(X) + \mathbb{V}(Y) + 2Cov(X,Y)$
+	
+	$X,Y$ u.a. $\implies Cov(X,Y)=0$ unkorreliert
+	
+	$\mathbb{V}(\sum_{i=1}^{n}X_i) = \sum_{i=1}^{n}\mathbb{V}(X_i) + \sum_{i\neq j}Cov(X_i, X_j) = \sum\mathbb{V}(X_i) + 2 \sum_{i<j}Cov(X_i, X_j)$
+	
+	$Cov(aX+b, cY+d) = ac Cov(X,Y)$, $|Cor(aX+b, cY+d)| = |Cor(X,Y)|$
+	
+	Wegen der Cauchy-Schwarz-Ungleichung gilt $-1\leq Cor(X,Y) \leq 1$ und $|Cor(X,Y)|=1 \implies X=aY+b$ für ein $a,b\in\mathbb{R}$
+		
+	$|Cov(X,Y)| = \sqrt{\mathbb{V}(X)}\sqrt{\mathbb{V}(Y)}Cov(X,Y)$
+	
+	\item Spezielle höhere Momente: $\sigma_X=\sqrt{\mathbb{V}(X)}$
+	\item Schiefe $\mathbb{E}\left(\frac{X-\mathbb{E}X}{\sigma_X}\right)^3$ ($0$ bei $N(\mu, \sigma^2)$)
+	\item Kurtosis $\mathbb{E}\left(\frac{X-\mathbb{E}X}{\sigma_X}\right)^4$ ($3$ bei $N(\mu, \sigma^2)$)
+	
+	Daher wird meistens $\mathbb{E}\left(\frac{X-\mathbb{E}X}{\sigma_X}\right)^4 - 3$ als Kurtosis (Vergleich zu N) definiert.
+\end{itemize}
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{example}
+	TODO
+\end{example}
+
+Als Gesetz der großen Zahlen ist eigentlich eine Konvergenz von Mittelwerten $\bar{X}_n$ gegen den Erwartungswert gemeint.
+
+\begin{theorem}[1.GZ Schwaches Gesetz der großen Zahlen]
+	$(X_n)_{n\in \mathbb{N}}$ ist ein unkorrelierte Folge SGn mit $\sup_n \mathbb{V}(X_n) < \infty$. Dann gilt für $\epsilon > 0$
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} P\left(\left|\frac{1}{n} \sum_{i=1}^{n} (X_i - \mathbb{E}X_i)\right| > \epsilon\right) = 0
+	\end{align*}
+	Ist $X_n$ schwach stationär, also $\mathbb{E}X_i = \mathbb{E}X$, dann gilt
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} P\left(\left|\bar{X}_n - \mathbb{E}X\right| > \epsilon \right) = 0
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Die Existenz der Varianz ist (wie wir später sehen werden) für die Aussage nicht erforderlich, macht aber die Anwendungen sehr praktisch.
+
+Wenn beispielsweise $X_n$ eine iid. Folge ist, und die Erwartung bis auf $\pm\epsilon$ angenähert werden soll, dann kann die Anzahl $n$ an Beobachtungen abgeschätzt werden.
+\begin{align*}
+	P(|\bar{X}_n - \mathbb{E}X| > \epsilon) \leq \frac{\mathbb{V}X}{n\epsilon^2} = \alpha
+\end{align*}
+mit ''Unsicherheit'' $\alpha$, dann liefert $n \geq \frac{\mathbb{V}X}{\alpha\epsilon^2}$ eine Mindestprobenanzahl. $\alpha = 0.05$ ist üblich.
+
+Auch allgemeine Momente der iid. Folge konvergieren in Wahrscheinlichkeit,
+\begin{align*}
+	P\left(\left|\frac{1}{n} \sum_{i=1}^{n} (X_i^k - \mathbb{E}X_i^k)\right| > \epsilon \right) \rightarrow 0, n\rightarrow\infty
+\end{align*}
+wofür $\mathbb{E}X^{2k}<\infty$ gefordert wird.
+
+Eine wichtige Auswirkung des GGZ ist die Schätzbarkeit der Verteilungsfunktion.
+
+$X_i$ ist iid Folge, $Y_i:=1_{(X_i \leq t)}$ für festes $t$, $Y_i$ ist alternativverteilt mit $p=P(X_i \leq t) = F(t), \mathbb{V}(Y_i)=p(1-p)$. Da $\sum_{i=1}^{n}Y_i \sim B_{n,p}$ ist $\mathbb{V}(\sum Y_i) = np(1-p)$ und $P(|\bar{Y}_n - p| > \epsilon) \leq \frac{p(1-p)}{n\epsilon^2} \rightarrow 0$.
+
+$\bar{Y}_n = \frac{\#\{X_i|X_i \leq t\}}{n}$ ist die relative Häufigkeit der Werte unter $t$. Die Genauigkeit hängt von $\mathbb{V}(\sum Y_i)$ ab, d.h. wenn $t=med(x)$, der Median der Verteilung, dann ist die Genauigkeit minimal, da für $p=\frac{1}{2}$ $p(1-p)$ maximal wird.
+
+Allgemein formuliert ist das eine Variante des
+\begin{theorem}[Empirischen Gesetz der großen Zahlen]
+	Relative Häufigkeiten konvergieren gegen die entsprechenden Wahrscheinlichkeiten.
+	
+	$F_n^*(t)=\frac{1}{n}\sum_{i=1}^{n}1_{(-\infty,t]}(X_i)$ heißt empirische Verteilungsfunktion und für eine iid. Folge $X_n$ gilt demnach $\lim\limits_{n\rightarrow\infty}F_n^*(t)=F(t) \forall t$.
+	
+	Konvergenz gilt nicht nur in der Wahrscheinlichkeit auch $P$-f.s. und sogar gleichmäßig:
+	\begin{align*}
+		P(\lim\limits_{n\rightarrow\infty}\sup_t |F_n^*(t)-F(t)|=0) = 1
+	\end{align*}
+	(Satz von Glivenko-Cantelli - Fundamentalsatz der Statistik)
+\end{theorem}
+
+\begin{example}
+	TODO
+\end{example}
+
+Aus der Theorie der Martingale haben wir bereits die Kolmogoroff-Ungleichung (MA 18) hergeleitet. $S_n := \sum_{i=1}^{n}(Z_i - \mathbb{E}Z_i)$ für unabhängige $Z_i$ ist ein Martingal. Dabei hätte auch genügt, dass die Summen unkorrelierte Zuwächse (statt unabhängiger) haben.
+
+\begin{theorem}[2.GZ, Kolomogoroff-Ungleichung]
+	$X_i \in \mathcal{L}_2$ und für $S_n := \sum_{i=1}^{n}(X_i - \mathbb{E}X_i)$ gelte $\int_C S_i(S_n - S_i) dP = 0$ für alle $C \in \sigma(X_1, ..., X_n)$. Dann gilt für alle $\epsilon > 0$
+	\begin{align*}
+		P[\max_{1\leq k \leq n} |S_k| \geq \epsilon] \leq \frac{1}{\epsilon^2} \sum_{i=1}^{n} \mathbb{V}(X_i)
+	\end{align*}
+\end{theorem}
+
+Für unabhängige $X_i$ sind die Summen $\sum_{i=1}^{k}(X_i - \mathbb{E}X_i)$ und $\sum_{i=k+1}^{n}(X_i - \mathbb{E}X_i)$ auch unabhängig und die Bedingung oben ist natürlich erfüllt.
+
+Mit der Kolomogoroff-Ungleichung lässt sich folgende allgemein nützliche Konvergenzaussage zeigen.
+
+\begin{theorem}[3.GZ]
+	Die stochastische Folge $X_i$ sei unabhängig und aus $L_2$. Wenn $\sum_{i=1}^{\infty}\mathbb{V}(X_i) < \infty$, dann ist $\sum_{i=1}^{n}(X_i - \mathbb{E}X_i) = S_n P$-f.s. konvergent gegen $S_\infty = \sum_{i=1}^{\infty}(X_i - \mathbb{E}X_i) \in L_2$.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Die folgenden Lemmata werden für das starke Gesetz der großen Zahlen benötigt.
+\begin{lemma}
+	\begin{enumerate}
+		\item $\sum_{i=k}^{\infty} \frac{1}{n^2} \leq \frac{2}{k}$
+		\item $a_n \in \mathbb{R}, a_n\rightarrow a$ dann gilt $\lim\limits_{n}\frac{1}{n}\sum_{i=1}^{n}a_i = a$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Dieses Lemma ist ein Sonderfall des
+\begin{lemma}[Kronecker]
+	$b_n > 0$ und $b_n\nearrow\infty$, dann gilt für eine summierbare Folge $a_i \in \mathbb{R}$
+	\begin{align*}
+		\sum_{i=1}^{\infty}a_i \in \mathbb{R} \implies \lim_n \frac{1}{b_n} \sum_{i=1}^{n} a_i b_i = 0
+	\end{align*}
+\end{lemma}
+
+Mit dem Kronecker-Lemma und Satz 3.GZ erhält man:
+\begin{theorem}[4.GZ, 1. Gesetz der großen Zahlen]
+	$X_i$ sei eine FOlge unabhängiger SGn, $X_i\in L_2$ und $\sum_{i=1}^{\infty} \frac{\mathbb{V}(X_n)}{n^2} < \infty$, so gilt
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} \frac{1}{n} \sum_{i=1}^{n}(X_i - \mathbb{E}X_i) = 0 P\text{-f.s.}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Bilden die $X_i$ eine u.a. Folge mit identischem Erwartungswert $\mathbb{E}X_i = \mathbb{E}X$ gilt demnach $\bar{X}_n\rightarrow\mathbb{E}X P$-f.s.
+
+Für die Gültigkeit des letzten GGZ ist die Existenz der Varianz nicht erforderlich:
+\begin{theorem}[5.GZ, 2. Gesetz der großen Zahlen]
+	Die Folge $X_i, i\geq 1$ SGn sei eine iid. Folge mit Erwartungswert $\mathbb{E}X_i = \mathbb{E}X$, $\mathbb{E}X$ existierte. Dann gilt
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty}\frac{1}{n} \sum_{i=1}^{n}X_i = \lim\limits_{n\rightarrow\infty} \bar{X}_n = \mathbb{E}X P\text{-f.s.}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{example}
+	TODO
+\end{example}
+
+Die für das schwache Gesetz gebrachten Beispiele gilt auch das starke Gesetz.
+
+Wenn etwa $\mathbb{E}X^k < \infty$ für eine iid. Folge $X_n\sim X$, dann gilt $\frac{1}{n}\sum X_i^k \rightarrow \mathbb{E}X^k P$-f.s. ($\mathbb{E}X^{2k} < \infty$ ist nach dem 2.GGZ nicht erforderlich).
+
+Auch das empirische Gesetz der großen Zahlen gilt in der Version mit f.s.- Konvergenz.
+
+Wenn $h_n(A)$ die relative Häufigkeit des Ereignisses $A$ von $n$ unabhängigen Versuchen bezeichnet, dann gilt $P$-f.s. $h_n(A)=\frac{1}{n}\sum_{i=1}^{n}1_{A}\rightarrow\mathbb{E}(1_A) = P(A)$ die Konvergenz gegen die Wahrscheinlichkeit.
+
+Auch die empirische Verteilungsfunktion $F_n^*$ für eine iid. Folge $X_n$ konvergiert $P$-f.s. gegen die Verteilungsfunktion $F(.)$ von $X$.
+\begin{align*}
+	P\text{-f.s. } \lim_n F_n^*(t) = \lim_n \frac{1}{n}\sum_{i=1}^{n} 1_{(-\infty,t]}(X_i) = F(t)
+\end{align*}
+
+Auch bei Anwendungen, wie der Monte-Carlo-Integration, gilt das starke GGZ, da $\int_{a}^{b} f(t) dt = I < \infty$ und $Y_i=f(U_i), U_i \sim U_{a,b}$
+
+Auf ähnliche Art lassen sich verschiedene Sätze, beispielsweise Approximationssätze zeigen.
+
+\begin{theorem}[Approximationssatz von Weierstraß]
+	$f:[0,1]\rightarrow\mathbb{R}$ ist eine stetige Funktion. Dann existiert zu jedem $\epsilon > 0$ ein Polynom $p$ mit $||f-p||_\infty = \max_{x\in[0,1]}|f(x)-p(x)| \leq \epsilon$
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Für das starke Gesetz der großen Zahlen gibt es eine Umkehrung.
+\begin{theorem}[6.GZ]
+	$X_n$ sei eine iid. Folge. Wenn das Stichprobenmittel gegen einen Grenzwert $m$ konvergiert $\bar{X}_n\rightarrow m P$-f.s., dann sind die $X_n$ integrierbar und $\mathbb{E}X_n = m$.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Diese Umkehrung liefert ein zusätzliches Argument für die Bedeutung des empirischen GGZ, die asymptotisch festgelegte Wahrscheinlichkeit ist eindeutig.
+
+Für abhängige Folgen gibt es Ergodensätze für die Konvergenz des Stichprobenmittels.
+
+\section{Schwache Konvergenz und zentraler Grenzverteilungssatz}
+Hier wird die Konvergenz von Wahrscheinlichkeitsmaßen und Verteilungen behandelt. Es scheint naheliegend, einfach für eine Folge von Wahrscheinlichkeitsmaßen $P_n$ und einen Grenzwert (Grenzmaß) $P$ $P_n(A)\rightarrow P(A)$ für alle $A\in \mathcal{A}$ zu fordern. Tatsächlich ist diese Forderung zu stark, die Eindeutigkeit des Grenzwerts und die Übertragbarkeit auf von stochastischen Folgen $X_n$ induzierten Wahrscheinlichkeitsmaßen $P^{X_n}$, bereiten so Schwierigkeiten. Es wird sich herausstellen, dass $P_n(A)\rightarrow P(A)$ nur für $A$ mit $P(\partial A) = 0$ ($\partial A = \bar{A}\setminus\mathring{A}$, der Rand von $A$) gefordert wird.
+
+Dazu eine klärende Darstellung der Äquivalenz von Wahrscheinlichkeitsmaßen auf Borelräumen. Es sei jetzt immer $(\Omega, \mathcal{B}(\Omega))$ ein Messraum mit einer Metrik $d$ auf $\Omega$ und der Borel-Sigmaalgebra, also etwa $(\mathbb{R}, \mathcal{B})$ oder $(\mathbb{R}^k, \mathcal{B}_k)$.
+
+\begin{lemma}
+	Die W-Maße $P_1, P_2$ auf $(\Omega, \mathcal{A}=\mathcal{B}(\Omega))$ sind genau dann äquivalent $P_1 = P_2$, wenn für alle $f\in C_b$ (beschränkt und stetig) $\int f dP_1 = \int f dP_2$.
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{definition}[schwach konvergent]
+	$P_n$ sei eine Folge von W-Maßen auf $(\Omega, \mathcal{B}(\Omega))$ wie auch $P$, dann heißt $P_n$ schwach konvergent gegen $P$, wenn für alle $f\in C_b(\Omega)$ (stetig und beschränkt) gilt
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} \int f dP_n = \int f dP
+	\end{align*}
+	$P_n\xrightarrow{w} P$ weak convergence.
+\end{definition}
+
+Mit dieser Definition ist die Konvergenz der W-Maße auf die Stetigkeit eines Funktionals auf dem Raum $C_b$ zurückgeführt.
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{definition}[Stetigkeitsmenge]
+	Für das W-Maß $P$ auf $(\Omega, \mathcal{A})$ heißt $s\in\mathcal{A} = \mathcal{B}(\Omega)$ eine Stetigkeitsmenge wenn $P(\partial S) = P(\bar{S}\setminus\mathring{S}) = 0$, also $P(\bar{S}) = P(\mathring{S})$. ($\mathring{S}$ bezeichnet das Innere von $S$).
+\end{definition}
+
+\begin{theorem}[1.KG, Portemanteau-Theorem]
+	$P, P_n$ eine Folge von W-Maßen auf $(\Omega, \mathcal{A}=\mathcal{B}(\Omega))$. Dann sind äquivalent:
+	\begin{enumerate}
+		\item $P_n \xrightarrow{w}P$
+		\item Für jedes offene $U$ gilt $\liminf_n P_n(U) \geq P(U)$
+		\item Für jedes abgeschlossene $G$ gilt $\limsup_n P_n(G) \leq P(G)$
+		\item Für jede $P$-Stetigkeitsmenge $S$ gilt $\lim\limits_{n\rightarrow\infty} P_n(S) = P(S)$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Mit der Bezeichnung ''Portemanteau'' oder auch ''Portmanteau'' wird hier nicht Bezug auf eine Person genommen, der der Satz zuzuordnen ist. Es bedeutet ''Handkoffer'' und gemeint ist, dass es die wesentlichen Werkzeuge für ''Konstruktionen'' von Aussagen zur schwachen Konvergenz enthält.
+
+Dafür ist folgende äquivalente Definition für schwache Konvergenz ein gutes Beispiel
+\begin{definition}[schwach konvergent]
+	$F_n$ sei eine Folge von Verteilungsfunktionen. $F_n$ heißt schwach konvergent gegen die VF $F$, wenn für jede Stetigkeitsstelle $x\in\mathbb{R}$ von $F$ $\lim\limits_{n\rightarrow\infty} F_n(x) = F(x)$. Notation: $F_n \implies F$.
+\end{definition}
+
+Dass diese Definition von schwacher Konvergenz äquivalent zur ersten Definition ist, zeigt der folgende Satz.
+\begin{theorem}[2.KG]
+	$F_n$ ist eine Folge von VFn, die zu W-Maßen $P_n$ gehören, wie auch $F$ zu $P$ gehört. Dann ist äquivalent:
+	\begin{enumerate}
+		\item $P_n \xrightarrow{w} P$
+		\item $F_n \implies F$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{definition}[Verteilungskonvergent]
+	Werden die Verteilungsfunktionen $F_n$ SGn $X_n$ zugeordnet $F_n = F_{X_n}$ und $F=F_X$ dann heißt $X_n$ verteilungskonvergent oder konvergent in Verteilung. In Zeichen $X_n \xrightarrow{\mathcal{D}} X$, wenn $F_{X_n}\implies F_X$, schwache Konvergenz der VFn bzw. $P^{X_n} \xrightarrow{w} P^X$ schwache Konvergenz der induzierten W-Maße.
+\end{definition}
+
+Alle drei Konvergenzen entsprechen der selben Art einer stochastischen Konvergenz. Die Konvergenz ist wohldefiniert, aus der Darstellung (Lemma, 1KG) folgt die Eindeutigkeit von $P$, wenn $P_n\xrightarrow{w}P$. Auch in der Version über die Verteiliungsfunktionen ist die Grenzverteilung eindeutig: $F_n\implies F$ und $F_n \implies G$, dann gilt $F=G$.
+
+$F$ und $G$ haben insgesamt nur höchstens abzählbar viele Unstetigkeitsstellen. Für jedes $x\in \mathbb{R}$ existiert eine Folge $x_n$ von gemeinsamen Stetigkeitspunkten mit $x_n \searrow x$. Wegen der Rechtsstetigkeit von $F$ und $G$ gilt
+\begin{align*}
+	F(x) = \lim_k F(x_k) = \lim_k \lim\limits_{n\rightarrow\infty} F_n(x_k) = \lim_k G(x_k) = G(x)
+\end{align*}
+
+Die Verteilungskonvergenz auch für Unstetigkeitsstellen zu verlangen, führt aus dem Raum der Verteilungen eventuell heraus.
+
+\begin{example}
+	TODO
+\end{example}
+
+Für diskrete Verteilungen gilt die schwache Konvergenz, wenn die Punktwahrscheinlichkeiten konvergieren $P(X_n = k) \rightarrow P(X=k)$. (Übung)
+
+Wenn $P_n, P$ durch ein sigma-endliches Maß $\mu$ dominiert wird, $P_n \ll \mu, P \ll \mu$, dann folgt aus der Konvergenz der Dichten $\frac{dP_n}{d\mu} := f_n \rightarrow f = \frac{dP}{d\mu} \mu$-f.ü. die Konvergenz $P_n\xrightarrow{w} P$. Das folgt sofort aus dem Satz von Scheffe (Satz 12.LP):
+\begin{align*}
+	\lim\limits_{n\rightarrow\infty}f_n = f \mu\text{-f.ü. } \implies \lim_n \sup_{A\in \mathcal{A}} |P_n(A) - P(A)| = 0
+\end{align*}
+das heißt die Totalvariation konvergiert gegen $0$.
+
+Totalvariation von W-Maßen $P,Q$
+\begin{align*}
+	d_{TV}(P,Q) = \sup_{A\in \mathcal{A}} |P(A) - Q(A)|
+\end{align*}
+
+Da $d_{TV}(P_n,P)\rightarrow 0 \implies P_n\xrightarrow{w} P$ (Konvergenz nur für Stetigkeitsmengen) ist die Konvergenz der Dichten stärker als die schwache Konvergenz.
+
+Bisher war unter den Konvergenzarten die Konvergenz in der Wahrscheinlichkeit die ''schwächste'', folgte also aus den anderen Konvergenzen. Die Bezeichnung ''schwache'' Konvergenz wird dadurch gerechtfertigt, dass Konvergenz in W. stärker als die schwache Konvergenz ist. Dazu ein vorbereitendes Lemma:
+
+\begin{lemma}
+	$X,Y$ SGn. Dann gilt für alle $x,y\in\mathbb{R}$
+	\begin{align*}
+		P(Y\leq y) \leq P(X \leq x) + P(|X-Y| > x-y)
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[3.KG]
+	Die Folge $X_n$ konvergiere in Wahrscheinlichkeit gegen $X$, $X_n\xrightarrow{W}X$. Dann gilt auch $F_{X_n}\implies F_X$ die schwache Konvergenz.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Die Umkehrung kann i.a. nicht gelten. Etwa wenn $X_0, X_1, X_2, ...$ eine iid Folge mit $\mathbb{V}(X_0) \neq 0, F_n=F_0$ für die VFn $F_n=F_{X_n}$ aber $X_n \not\rightarrow X_0$ in irgendeiner anderen Konvergenzart.
+
+Auch bei einer abhängigen Folge, etwa $P(X_0=k)=\frac{1}{2}$ für $k=-1 \lor 1$ und $X_n=(-1)^nX_0$. $F_{X_n}=F_{X_0}$, also $F_{X_n}\implies F_{X_0}$ aber $P(|X_{2n+1} - X_0|>1)=1 \not\rightarrow 0$.
+
+Eine spezielle Ausnahme ist die Konvergenz gegen ein Dirac-Maß, also gegen eine Konstante.
+
+\begin{theorem}[4.KG]
+	Stochastische Folge $X_n$ und $c\in \mathbb{R}$. Dann sind äquivalent
+	\begin{enumerate}
+		\item $X_n$ konvergiert in Wahrscheinlichkeit gegen $c$
+		\item $X_n$ ist Verteilungs-konvergent gegen $c$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Aus den vorigen Beispielen ist zu erkennen, dass die Konvergenz in Verteilung keine Konvergenz zugehöriger SGn, wie etwa $X_n \rightarrow X_0 P$-f.s., ergeben kann. Es lassen sich aber (in einem anderen W-Raum) SGn $X_n$ und $X$ mit identischer Verteilung zu $F_n, F$ mit $X_n \rightarrow X P$-f.s. konstruieren.
+
+Die Grundlage dafür ist die verallgemeinerte Inverse eine VF $F^{-1}(y):= \inf\{x| F(x) \geq y\}$, die wir schon zur Konstruktion von Zufallszahlen einer Verteilung mit VF $F$ betrachtet haben. Wenn $F$ eine VF ist, dann ist $F^{-1}$ linksstetig und es gilt $0 < y < 1$ $y \leq F(x) \iff F^{-1}(y) \leq x$.
+
+Aus diesen Eigenschaften wird folgendes Lemma abgeleitet.
+\begin{lemma}
+	$F_n\implies F$, wobei $F_n, F$ VFn sind. Dann gilt für die verallgemeinerte Inversen $F_n^{-1}$ und $F^{-1}$, dass $F_n^{-1}(x)\rightarrow F^{-1}(x)$ für alle Stetigkeitspunkte $x$ von $F^{-1}$.
+\end{lemma}
+
+ohne Beweis.
+
+\begin{theorem}[5.KG, Darstellungssatz von Skorochod]
+	$F, F_n$ seien VFn und $F_n\implies F$. Dann existiert ein W-Raum $(\Omega, \mathcal{A}, P)$ und SGn $X_n$ und $X$ auf $(\Omega, \mathcal{A}, P)$ mit $X_n\sim F_n$ und $X\sim F$ mit $\lim\limits_{n\rightarrow\infty}X_n = X P$-f.s.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Für die oben konstruierte Folge $X_n$ aus Satz 5.KG gilt natürlich auch $X_n\xrightarrow{P}X$ die Konvergenz in Wahrscheinlichkeit. Trotzdem können wir uns damit nicht Satz 3.KG ersparen, da dort $X_n$ die VF $F_n$ besitzt, hier (bei Satz 5.KG) nur eine Folge von SGn mit identischer Verteilung aber auf einem andren Raum sind.
+
+Für die weitere Diskussion der schwachen Konvergenz ist die Fourier-Transformation wesentlich.
+
+\subsection{Charakteristische Funktion}
+Zu einer SG $X$ mit W-Maß $P^X$ wurde bereits die Momenterzeugende Funktion $M(t)=\mathbb{E}e^{tX}, t\in \mathbb{R}$ und für $X\geq 0$ auch die Laplace-Transformierte $\mathcal{L}(t)=\mathbb{E}e^{-tX}, t \geq 0$ eingeführt. Diese Maß-Transformationen erleichtern die Analyse des Verhaltens der W-Maße und charakterisieren diese auch. Beide Transformationen sind nicht für alle SGn brauchbar, $M(.)$ muss nicht existieren (außer $t=0$) und $\mathcal{L}(.)$ verlangt $X\geq 0$. Die komplexwertige Version von $M(.)$ hat diese Nachteile nicht.
+
+\begin{definition}[Fouriertransformierte, charakteristische Funktion]
+	$\mu$ sei ein endliches Maß auf $(\mathbb{R}, \mathcal{B})$, dann heißt $\phi(t):=\int e^{itx} d\mu(x)$ die Fouriertransformierte von $\mu$.
+	
+	Ist $\mu=P^X$ von einer SG $X$ so ist $\phi(t)=\mathbb{E}e^{itX}$ die charakteristische Funktion von $X$.
+\end{definition}
+
+Die Integration komplexwertiger Funktionen unterliegt folgenden Eigenschaften $\int f d\mu = \int R(f) d\mu + i \int I(f) d\mu$ (Realteil $R(.)$, Imaginärteil $I(.)$) und $f$ ist integrierbar, genau dann, wenn $R(f)$ und $I(f)$ integrierbar ist, damit auch $|f|=\sqrt{f\cdot\bar{f}}$, ($\bar{f}$ konjugierte von $f$) weil $\max(R(f), I(f)) \leq |f| \leq R(f) + I(f)$.
+
+Es gilt auch die Dreiecks-Ungleichung $|\int f d\mu | \leq \int |f| d\mu$ und $\int \bar{f} d\mu = \overline{\int f d\mu}$.
+
+Elementare Eigenschaften der CF (charakteristischen Funktion) von SGn sin:
+\begin{enumerate}
+	\item $\phi_X$ sei CF von $X$, $Y:=aX+b, a,b\in\mathbb{R}$ dann ist $\phi_Y(t)=e^{itb}\phi_X(at)$
+	
+	TODO
+	
+	\item Ist $X$ symmetrisch um 0 verteilt, also $X \sim -X \sim P^X$, dann ist $\phi_X$ reellwertig, da TODO
+	
+	\item $X$ u.a. $Y$, $S=X+Y$ dann ist die CF von $S$ $\phi_S(t)=\phi_X(t)\phi_Y(t)$
+	
+	TODO
+	
+	\item Die Fouriertransformierte eines W-Maßes existiert für alle $t\in\mathbb{R}$, ist beschränkt $|\phi(t)|\leq 1$ und ist gleichmäßig stetig.
+	
+	TODO
+	
+	\item Die Momente von $X$ werden mit der Ableitung von $\phi_X$ berechnet.
+	
+	TODO
+\end{enumerate}
+
+Der Name ''charakteristische Funktion'' rechtfertigt, dass zu jedem W-Maß $P$ genau eine CF $\phi$ existiert. Dafür zunächst:
+\begin{theorem}[6.KG, Umkehrsatz]
+	Zum W-Maß $P$ auf $(\mathbb{R}, \mathcal{B})$ sei $F$ die VF und $\phi$ die charakteristische Funktion.
+	
+	Für Stetigkeitspunkte $a<b$ von $F$ gilt
+	\begin{align*}
+		F(b)-F(a) = \lim\limits_{c\rightarrow\infty} \frac{1}{2\pi} \int_{-c}^{c} \frac{e^{-ita}-e^{-itb}}{it} \phi(t) dt
+	\end{align*}
+\end{theorem}
+
+ohne Beweis.
+
+\begin{theorem}[7.KG, Eindeutigkeitssatz]
+	Die Verteilungsfunktion $F$ auf $\mathbb{R}$ eines W-Maßes wird durch die CF $\phi$ eindeutig festgelegt.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Wenn Dichten für die W-Maße existieren, kann aus der CF auch die Dichte bestimmt werden.
+
+\begin{theorem}[8.KG]
+	Die CF $\phi$ des W-Maßes $P$ auf $(\mathbb{R}, \mathcal{B})$ sei integrierbar. Dann ist $P\ll\lambda$ und die Dichte ist
+	\begin{align*}
+		\frac{dP}{d\lambda}(x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{-itx} \phi(t) \lambda(dt)
+	\end{align*}
+
+	Die Dichte $\frac{dP}{d\lambda}$ ist gleichmäßig stetig und beschränkt.
+\end{theorem}
+
+ohne Beweis.
+
+\begin{example}
+	TODO
+\end{example}
+
+Für den Zusammenhang von charakteristischen Funktionen und schwacher Konvergenz ist eine Form der ''Kompaktheit'' von W-Maßen verantwortlich.
+
+\begin{definition}[straff]
+	Auf $(\Omega, \mathcal{B}(\Omega))$ heißt eine Familie von W-Maßen $\mathcal{P}$ straff, wenn es eine kompakte Menge $K \in 2^\Omega$ zu jedem $\epsilon > 0$ gibt, sodass für alle $P\in \mathcal{P}$: $P[K]\geq 1-\epsilon$
+\end{definition}
+
+Die W-Maße in $\mathcal{P}$ haben gleichmäßig einen gemeinsamen kompakten Träger bis auf $\epsilon$. Bei Zahlen gibt es in einer kompakten Menge eine konvergente Teilfolge jeder Folge.
+
+\begin{example}
+	TODO
+\end{example}
+
+Entsprechend wird auch die Straffheit einer Familie von VFn $\{F_i | F_i \text{ ist VF, } i\in I\}$ durch $|F_i(M)-F_i(-M)| > 1-\epsilon$ für alle $i\in I$ für $K=[-M, M], M < \infty$ definiert und die Familie ${X_t}$ von SGn heißt straff, wenn $\{P^{X_t}\}$ bzw. $\{F_{X_t}\}$ straff sind.
+
+Im allgemeinen sind Familien von Verteilungen nicht straff.
+
+\begin{example}
+	TODO
+\end{example}
+
+Die Erwartungswerte der Verteilungen von $|X|$ im letzten Beispiel waren unbeschränkt.
+
+\begin{theorem}[9.KG]
+	Die Familie $X_t, t\in I$ von SGn ist straff, wenn $C:=\sup\{\mathbb{E}|X_t| | t\in I\} < \infty$.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[10.KG]
+	Jede schwach konvergente Folge von Verteilungen, $P_n\xrightarrow{w}P$, ist eine straffe Folge.
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Das Teilfolgeprinzip für schwach konvergente Folgen charakterisiert die Straffheit.
+
+\begin{theorem}[11.KG, Satz von Helly]
+	Für die Folge $P_n$ von W-Verteilungen sind äquivalent:
+	\begin{enumerate}
+		\item $P_n$ ist eine straffe Folge von Verteilungen
+		\item Jede Teilfolge von $P_n$ besitzt eine schwach konvergente Teilfolge.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[12.KG, Teilfolgenprinzip]
+	$P_n, P$ seien W-Verteilungen. Dann sind äquivalent:
+	\begin{enumerate}
+		\item $P_n\xrightarrow{w}P$
+		\item Jede Teilfolge von $P_n$ besitzt eine Teilfolge, die schwach gegen $P$ konvergiert.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Nun kann man den Zusammenhang von schwacher Konvergenz und der punktweisen Konvergenz der charakteristischen Funktion belegen:
+
+\begin{theorem}[13.KG]
+	Sei $P_n$ eine Folge von W-Verteilungen und $\phi_n$ bezeichne die zugehörigen charakteristischen Funktionen. Wenn $P_n$ straff ist und $\phi_n$ punktweise konvergiert $\phi_n(t)\rightarrow \phi(t)$, mit $\phi:\mathbb{R}\rightarrow\mathbb{C}$, dann gilt:
+	\begin{itemize}
+		\item $\phi$ ist die charakteristische Funktion einer Verteilung $P$.
+		\item Die Folge $P_n \xrightarrow{w}P$ konvergiert schwach gegen $P$.
+	\end{itemize}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{theorem}[14.KG, Stetigkeitssatz von Levy]
+	Die Folge $P_n$ von Verteilungen besitze die CFn $\phi_n$ und die CF $\phi$ gehöre zu $P$. Dann sind äquivalent:
+	\begin{enumerate}
+		\item $P_n\xrightarrow{w} P$
+		\item $\phi_n \rightarrow \phi$ konvergiert punktweise.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{example}
+	TODO
+\end{example}
+
+Die schwache Konvergenz bleibt unter gewissen Transformationen erhalten. Es ist zu erwarten, dass stetige Transformationen stochastischer Großen die Verteilungskonvergenz erhält, da stetige Funktionen Grenzwerte erhalten.
+
+\begin{theorem}[15.KG, Continuous Mapping Theorem]
+	$X, X_i, i\geq 1$ sind SGn auf $(\Omega, \mathcal{A}, P)$ und die Funktion $f:\mathbb{R}^d \rightarrow \mathbb{R}^m$ ist $P$-f.s. stetig. Dann gilt:
+	\begin{enumerate}
+		\item $X_n \xrightarrow{\mathcal{D}} X$ (Verteilungskonvergenz) $\implies f(X_n)\xrightarrow{\mathcal{D}} f(X)$
+		\item $X_n \xrightarrow{P} X$ (Konvergenz in W.) $\implies f(X_n)\xrightarrow{P} f(X)$
+		\item $X_n \rightarrow X P$-f.s. $\implies f(X_n) \rightarrow f(X) P$-f.s.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{corollary}
+	Aus $(X_n, Y_n)\xrightarrow{\mathcal{D}} (X,Y)$ folgt $X_n+Y_n\xrightarrow{\mathcal{D}} X+Y$, $X_nY_n \rightarrow XY$ etc.
+\end{corollary}
+
+\begin{remark}
+	Aus $X_n \xrightarrow{\mathcal{D}} X$ und $Y_n \xrightarrow{\mathcal{D}} Y$ folgt nicht automatisch $X_n + Y_n \rightarrow X+Y$.
+\end{remark}
+
+\begin{example}
+	TODO
+\end{example}
+
+\begin{theorem}[16.KG, Slutsky-Theorem]
+	$X_n, Y_n, X, n\geq 1$ sind SGn auf $(\Omega, \mathcal{A}, P)$. Es gilt
+	\begin{enumerate}
+		\item $X_n \xrightarrow{\mathcal{D}} X$ und $(X_n - Y_n)\xrightarrow{P} 0 \implies Y_n\xrightarrow{\mathcal{D}}X$
+		\item $X_n \xrightarrow{P} X$ und $(X_n - Y_n)\xrightarrow{P} 0 \implies Y_n\xrightarrow{P}X$
+		\item $X_n \rightarrow X P$-f.s. und $(X_n - Y_n)\rightarrow 0 P$-f.s. $\implies Y_n\rightarrow X P$-f.s.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+Oft werden die Folgerungen aus dem letzten Satz als Slutsky-Theorem bezeichnet.
+
+Die folgenden Aussagen folgen aus den beiden letzten Sätzen (15.KG und 16.KG)
+
+\begin{itemize}
+	\item $X_n \xrightarrow{\mathcal{D}} X$, $Y_n \xrightarrow{\mathcal{D}} c$ (oder auch $Y_n\xrightarrow{P} c$) $\implies (X_n, Y_n) \xrightarrow{\mathcal{D}} (X,c)$
+	\item $X_n \xrightarrow{P} X$, $Y_n \xrightarrow{P} c \implies (X_n, Y_n) \xrightarrow{P} (X,c)$
+	\item $X_n \rightarrow X P$-f.s., $Y_n \rightarrow c P$-f.s. $\implies (X_n, Y_n)\rightarrow (X, c) P$-f.s.
+	\item $X_n \xrightarrow{\mathcal{D}} X$, $Y_n \xrightarrow{\mathcal{D}} c \implies (X_n, Y_n)\xrightarrow{\mathcal{D}} (X,c)$ und für stetiges $f$: $f(X_n, Y_n) \xrightarrow{\mathcal{D}} (f(X,c))$
+	\item $X_n \xrightarrow{\mathcal{D}} X$, $Y_n \xrightarrow{P} c$, dann gilt $X_n Y_n \xrightarrow{\mathcal{D}} Xc$, $X_n + Y_n \xrightarrow{\mathcal{D}} X+c$, $c\neq 0: \frac{X_n}{Y_n} \rightarrow \frac{X}{c}$
+\end{itemize}
+
+Das Verteilungsverhalten von standardisierten Summen führt auf ein allgemeines empirisches Gesetz.
+
+\begin{example}
+	TODO
+\end{example}
+
+Das war die erste Version des zentralen Grenzwertsatzes von Abraham de Moivre (1730). Pierre Simon-Laplace verallgemeinerte die Konvergenzaussage für beliebiges $p\in(0,1)$, formuliert als Satz von Moivre-Laplace im Jahr 1812.
+
+Die Verallgemeinerung ist der Gauß zugeschriebene aber eigentlich erst von Lyapunov so formulierte
+\begin{theorem}[17.KG, Zentraler Grenzverteilungssatz]
+	$X_n \in \mathcal{L}_2$ ist eine iid. Folge auf $(\Omega, \mathcal{A}, P)$, $\mathbb{E}X_n = \mu$, $\mathbb{V}X = \sigma^2 < \infty$. Dann gilt
+	\begin{align*}
+		\sum \frac{X_i - \mu}{\sqrt{n} \sigma} \xrightarrow{\mathcal{D}} Z \sim N(0,1).
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{remark}
+	Für eine iid Folge $X_n$mit $\mathbb{E}X = \mu$ und $\mathbb{V}X = \sigma^2 < \infty$ folgt mit obigem Konzept auch sofort das (schwache) Gesetz der großen Zahlen. Sei jetzt $S_n = \frac{1}{n} \sum_{i=1}^{n}X_i$ und
+	\begin{align*}
+		\phi_{S_n}(t) = (\phi_X(\frac{t}{n}))^n = (\underbrace{1- \frac{\tilde{t}^2}{2n^2} + o(\frac{1}{n})}_{\rightarrow 1})^n
+	\end{align*}
+	d.h. $\lim \phi_{S_n}(t)=1 \forall t \in \mathbb{R}$.
+	
+	Die Dirac-Verteilung in 0 hat CF $e^{it0} = 1$ und für $\mu\neq 0$ ist $\phi_{S_n}(t)=e^{it\mu}$ entspricht $\delta_\mu$.
+	
+	Aus Verteilungskonvergenz folgt hier auch Konvergenz in Wahrscheinlichkeit.
+\end{remark}
+
+Eine allgemeine Version des ZGVS unter schwächeren Bedingungen wurde von J. Lindeberg (und Levy) formuliert.
+
+\begin{definition}[Lindeberg-Bedingung]
+	Die Folge $X_n$ unabhängiger SGn auf $(\Omega, \mathcal{A}, P)$ mit endlichen Varianzen $\mathbb{V}X_n = \sigma_n^2 \neq 0$ und $S_n^2 = \sum_{i=1}^{n} \sigma_k^2$ erfüllt die Lindeberg-Bedingung, wenn $\forall \epsilon > 0$
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} \frac{1}{S_n^2} \sum_{k=1}^{n} \int_{|X_k - \mathbb{E}X_k| > \epsilon S_n} (X_k - \mathbb{E}X_k)^2 dP = 0
+	\end{align*}
+\end{definition}
+
+Eine iid. Folge erfüllt diese Bedingung.
+
+\begin{theorem}[18.KG, ZGVS von Lindeberg]
+	Die unabhängige Folge $X_k$ auf $(\Omega, \mathcal{A}, P)$ erfüllte die Lindeberg-Bedingung mit $S_n^2 = \sum_{k=1}^{n}\mathbb{E}(X_k - \mathbb{E}X_k)^2$, dann gilt
+	\begin{align*}
+		\sum_{k=1}^{n} \frac{X_k - \mathbb{E}X_k}{S_n} \xrightarrow{\mathcal{D}} Z \sim N(0,1)
+	\end{align*}
+\end{theorem}
+
+ohne Beweis.
+
+Aus der Lindeberg-Bedingung folgt
+\begin{align*}
+	\lim\limits_{n\rightarrow\infty} \max_{1\leq k \leq n} P\left(\left|\frac{X_k - \mathbb{E}X_k}{S_n}\right| \geq \epsilon\right) = 0
+\end{align*}
+(Die Folge $X_n$ ist dann ''asymptotisch vernachlässigbar'').
+
+Unter dieser Bedingung ist die Lindeberg-Bedingung sogar notwendig:
+
+Ist die Folge $X_n$ asymptotisch vernachlässigbar und git der ZGVS
+\begin{align*}
+	\sum_{k=1}^{n} \frac{X_k - \mathbb{E}X_k}{S_n} \xrightarrow{\mathcal{D}} Z \sim N(0,1)
+\end{align*}
+dann erfüllt die Folge $X_n$ die Lindeberg-Bedingung.
+
+\end{document}

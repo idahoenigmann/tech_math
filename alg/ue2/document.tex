@@ -1,0 +1,332 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=2.5cm]{geometry}
+
+%opening
+\title{Algebra Übungsblatt 2}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\newpage
+\section{68}
+
+\texttt{*}, \texttt{+} ... 2-stellig
+\texttt{cos}, \texttt{sin} ... 1-stellig
+\texttt{i} ... 0-stellig
+\texttt{a}, \texttt{b}, \texttt{c} ... Variablen 
+
+\begin{verbatim}
+	
+(i)       (ii)       (iii)         (iv)
+    *         sin          +             +
+   / \         |          / \           / \
+ sin  c        +        sin  b         *  cos
+  |           / \        |            / \  |
+  +          a   b       a           sin i a
+ / \                                  |
+a   b                                 b
+\end{verbatim}
+
+
+\begin{tabular}{r|ccc}
+		  & Präfix               & Infix                    & Postfix              \\\hline
+	(i)   & \texttt{*sin+abc}    & \texttt{sin(a+b)*c}      & \texttt{ab+sinc*}    \\
+	(ii)  & \texttt{sin+ab}      & \texttt{sin(a+b)}        & \texttt{ab+sin}      \\
+	(iii) & \texttt{+sinab}      & \texttt{sin(a)+b}        & \texttt{asinb+}      \\
+	(iv)  & \texttt{+*sinbicosa} & \texttt{sin(b)*i+cos(a)} & \texttt{acosibsin*+} \\
+\end{tabular}
+
+
+\newpage
+
+\section{72}
+\textbf{Definition}
+
+\begin{align*}
+	C \text{ heißt Klon auf } A :\iff & (i) \forall n \in \mathbb{N}\setminus\{0\} \forall i \in \{1, ..., n\}: \pi_i^{(n)} \in C \\
+	& (ii) f_1,f_2,...,f_k:A^n\rightarrow A, g:A^k \rightarrow A \in C \\
+	& \implies g\circ_{n,k}(f_1,...,f_k) = g(f_1(a_1,...,a_n),...,f_k(a_1,...,a_n)) \in C
+\end{align*}
+
+\noindent
+\textbf{gesucht:} 3 Klone $C$ auf $A:=\{1, ..., k\}$ mit $A^A\subseteq C$, wobei $k\geq 3$.
+
+\begin{itemize}
+	\item 
+	
+\begin{align*}
+	C_a := \bigcup_{n\in\mathbb{N}\setminus\{0\}} \{f:A^n\rightarrow A \vert \exists i \in \{1, ..., n\}\exists \tilde{f}\in A^A : f(x_1, ..., x_n) = \tilde{f}(x_i)\}
+\end{align*}
+
+\begin{itemize}
+	\item Sei $\pi_i^{(n)}$ eine beliebige Projektion. $\pi_i^{(n)} \in C_a$, da für $\tilde{f} = id$ gilt $f(x_1, ..., x_n) = x_i$.
+	
+	\item Sei $f_1,...,f_k,g \in C_c$ (mit Stelligkeiten wie oben beschrieben) beliebig. Nennen wir $h:=g\circ_{n,k}(f_1,...,f_k)$.
+	
+	\begin{align*}
+		g(x_1, ..., x_k) &= \tilde{g}(x_i)\\
+		f_1(x_1, ..., x_n) &= \tilde{f}_1(x_j)\\
+		&\vdots\\
+		f_k(x_1, ..., x_n) &= \tilde{f}_k(x_l)\\
+		\implies h(x_1, ..., x_n) &= \tilde{g}(\tilde{f}_i(x_l)) \in C_a
+	\end{align*}
+
+	\item Für $n=1$ ist $f:A\rightarrow A$ mit $f=\tilde{f}$ beliebig in $C_a$.
+\end{itemize}
+	
+	\item 
+	
+\begin{align*}
+	C_b := \bigcup_{n\in\mathbb{N}\setminus\{0\}} \{f: A^n \rightarrow A\}
+\end{align*}
+
+\begin{itemize}
+	\item Alle Projektionen $\pi_i^{(n)}$ liegen in der Menge aller Funktionen von $A^n$ nach $A$.
+	
+	\item Alle beliebigen Verknüpfungen von Funktionen liegen in der Menge alller Funktionen von $A^n$ nach $A\text{ Widerspruch!}$.
+	
+	\item Alle $A^A$ liegen in der Menge aller Funktionen von $A^1$ nach $A$.
+\end{itemize}
+	
+	\item
+	
+\begin{align*}
+	C_c := C_a \cup \bigcup_{n\in\mathbb{N}\setminus\{0\}} \{f: A^n \rightarrow A \vert f \text{ ist nicht surjektiv}\}
+\end{align*}
+
+\begin{itemize}
+	\item Wir haben schon gezeigt, dass alle Projektionen $\pi_i^{(n)} \in C_a$. Gemeinsam mit $C_a \subseteq C_c$ ergibt das $\pi_i^{(n)} \in C_c$.
+	
+	\item Sei $f_1,...,f_k,g \in C_c$ (mit Stelligkeiten wie oben beschrieben) beliebig. Nennen wir $h:=g\circ_{n,k}(f_1,...,f_k)$.
+	
+	Falls $g$ eine nicht surjektive Funktion ist, ist klarerweise auch $h$ nicht surjektiv und somit $h \in C_c$.
+	
+	Sonst gilt $g \in C_a$ und somit $\exists \tilde{g}:A\rightarrow A \exists i\in \{1, ..., k\} \vert g(x_1,...,x_k) = \tilde{g}(x_i)$. $\implies h=\tilde{g}(f_i(x_1, ..., x_n))$. Falls auch $f_i \in C_a$ so haben wir bereits gezeigt, dass $h \in C_a$. Anderenfalls ist $h$ nicht surjektiv, da $f_i$ nicht surjektiv ist.
+	
+	\item Wir haben schon gezeigt, dass $A^A \subseteq C_a \subseteq C_c$.
+\end{itemize}
+	
+\end{itemize}
+
+Nun müssen wir zeigen, dass es sich um drei unterschiedliche Klone handelt.
+
+\begin{align*}
+	f:A^2 &\rightarrow A\\
+	(a, b) &\mapsto ((a+b)mod |A|) + 1
+\end{align*}
+
+$f$ liegt (klarerweise) in $C_b$. Angenommen $f$ liegt in $C_a \implies f(a,b)=\tilde{f}(a) \lor f(a,b)=\tilde{f}(b)$. o.B.d.A $f(a,b)=\tilde{f}(a)$.
+
+\begin{align*}
+	f(1, 1) = 3 &\implies \tilde{f}(1) = 3\\
+	f(1, 2) = 1 \text{ falls } |A| = 3 \text{ und } 4 \text{ falls } |A| > 3 &\implies \tilde{f}(1) \neq 3 \text{ Widerspruch!}
+\end{align*}
+
+Also $C_a \neq C_b$.
+
+$f$ ist surjektiv, da man mit $\{(1, l): l \in \{1, ..., k\}\}$ alle Elemente in $A$ erreichen kann. Also $f \notin C_c$ und somit $C_b \neq C_c$.
+
+
+\begin{align*}
+	g:A^2 &\rightarrow A\\
+	(a, b) &\mapsto 1 \text{ falls } a=b \text{ und } 2 \text{ sonst}
+\end{align*}
+
+Die Funktion $g$ ist offensichtlich nicht surjektiv ($3 \notin g(A)$) also $g \in C_c$.
+
+Angenommen $g$ liegt in $C_a \implies g(a,b)=\tilde{g}(a) \lor g(a,b)=\tilde{g}(b)$. o.B.d.A $g(a,b)=\tilde{g}(a)$.
+
+\begin{align*}
+	g(1, 1) = 1 &\implies \tilde{g}(1) = 1\\
+	g(1, 2) = 2 &\implies \tilde{g}(1) = 2 \text{ Widerspruch!}
+\end{align*}
+
+Also $C_a \neq C_b$.
+\newpage
+
+\section{77}
+$A$ ... Menge, $\mathcal{O}_A$ ... Menge aller Klone auf $A$
+
+\noindent
+\textbf{zu zeigen: } $(\mathcal{O}_A, \subseteq)$ bildet einen vollständigen Verband
+
+Sei $P \subseteq \mathcal{O}_A$ beliebig.
+
+Für $P = \emptyset$ ist
+
+\begin{align*}
+	inf(P) &= \bigcup_{n\in\mathbb{N}\setminus\{0\}}\{f:A^n\rightarrow A\} \\
+	sup(P) &= \bigcup_{n\in\mathbb{N}\setminus\{0\}}\{\pi_i^{(n)}: i\in \{1, ..., n\}\}.
+\end{align*}
+ 
+Was auch mit den unteren Definitionen übereinstimmt, wenn man die Vereinigung und den Schnitt über die leere Menge entsprechend definiert.
+ 
+Wir wollen zeigen $\exists C \in \mathcal{O}_A: C = inf(P)$ also
+
+\begin{align*}
+	\forall D \in P: C \subseteq D & \text{ und}\\
+	\forall \tilde{C} \in \mathcal{O}_A:(\forall D \in P: \tilde{C} \subseteq D) \implies \tilde{C} \subseteq C.
+\end{align*}
+
+\begin{align*}
+	C:= \bigcap_{D\in P}D
+\end{align*}
+
+\begin{itemize}
+	\item \textbf{zz: } $C$ ist ein Klon auf $A$
+	
+	Sei $\pi_i^{(n)}$ eine beliebige Projektion auf $A$. $\forall D \in P: \pi_i^{(n)} \in D$, da $D \in \mathcal{O}_A$. Das bedeutet aber, dass $\pi_i^{(n)} \in \bigcap_{D\in P}D = C$.
+	
+	Sei $f_1, ..., f_k : A^n \rightarrow A, g:A^k\rightarrow A$ aus $C$ beliebig. $\implies \forall D \in P: f_1, ..., f_k, g \in D$ und daher auch $\forall D \in P: h := g\circ_{n,k}(f_1, ..., f_k) \in D$. Das bedeutet aber, $h \in C$.
+	
+	Also ist $C \in \mathcal{O}_A$.
+	
+	\item \textbf{zz: } $\forall D \in P: C \subseteq D$
+	
+	gilt nach Definition von $C$.
+	
+	\item \textbf{zz: } $\forall \tilde{C} \in \mathcal{O}_A:(\forall D \in P: \tilde{C} \subseteq D) \implies \tilde{C} \subseteq C$
+	
+	Sei $\tilde{C} \in \mathcal{O}_A$ mit $\forall D \in P: \tilde{C} \subseteq D$ beliebig. Angenommen $C \subsetneq \tilde{C}$. Das bedeutet $\exists f \in \tilde{C}\setminus C$.
+	
+	Da $f \notin C$ gilt $\exists D \in P: f \notin D$ und somit $\neq (\tilde{C} \subseteq D)$ was ein Widerspruch ist. Also muss gelten $\tilde{C} \subseteq C$.
+\end{itemize}
+
+Insgesamt ist also $C = inf(P)$.
+
+Da $(\mathcal{O}_A, \subseteq)$ eine Halbordnung ist und jede Teilmenge ein Infimum besitzt gilt nach Aufgabe 52 von letzer Woche, dass auch jede Teilmenge ein Supremum besitzt.
+
+Alternativer Beweis des Supremums:
+
+Zu zeigen: $\exists C \in \mathcal{O}_A: C = sup(P)$ also
+
+\begin{align*}
+	\forall D \in P: D \subseteq C & \text{ und}\\
+	\forall \tilde{C} \in \mathcal{O}_A:(\forall D \in P: D \subseteq \tilde{C}) \implies C \subseteq \tilde{C}.
+\end{align*}
+
+\begin{align*}
+	C:= \left[\bigcup_{D\in P}D\right] & \text{ wobei } [M] \text{ den Abschluss unter allen } \circ_{n,k} \text{ bezeichnet}
+\end{align*}
+
+\begin{itemize}
+	\item \textbf{zz: } $C$ ist ein Klon auf $A$
+	
+	Sei $\pi_i^{(n)}$ eine beliebige Projektion auf $A$. $\forall D \in P: \pi_i^{(n)} \in D$, da $D \in \mathcal{O}_A$. Das bedeutet aber, dass $\pi_i^{(n)} \in \bigcup_{D\in P}D = C$.
+	
+	Die Abgeschlossenheit bezüglich aller $\circ_{n,k}$ gilt nach Definition.
+	
+	Also ist $C \in \mathcal{O}_A$.
+	
+	\item \textbf{zz: } $\forall D \in P: D \subseteq C$
+	
+	gilt nach Definition von $C$.
+	
+	\item \textbf{zz: } $\forall \tilde{C} \in \mathcal{O}_A:(\forall D \in P: D \subseteq \tilde{C}) \implies C \subseteq \tilde{C}$
+	
+	Sei $\tilde{C} \in \mathcal{O}_A$ mit $\forall D \in P: D \subseteq \tilde{C}$ beliebig. Angenommen $\tilde{C} \subsetneq C$. Das bedeutet $\exists f \in C \setminus \tilde{C}$.
+	
+	Da $f \in C$ gilt entweder $\exists D \in P: f \in D$ was aber ein Widerspruch zu $D \subseteq \tilde{C}$ ist, da $f \notin \tilde{C}$ oder
+	$f$ entsteht durch $\circ_{n,k}$ auf $\bigcup_{D\in P}D$. Da $\forall D \in P: D \subseteq \tilde{C} \implies \bigcup_{D\in P}D \subseteq \tilde{C}$ kann $\tilde{C}$ kein Klon sein, da $f \notin \tilde{C}$ und somit $\tilde{C}$ nicht unter allen $\circ_{n,k}$ abgeschlossen ist.
+\end{itemize}
+
+Insgesamt also $C = sup(P)$.
+
+
+\newpage
+
+\section{102}
+\begin{enumerate}
+	\item $E := \{\{0\}, \{0, 1\}, \{0, 2\}, \{0, 3\}, \{0, 2, 3\}, \{0, 1, 2, 3\}\}$
+	
+	\textbf{gesucht: } Algebra $\mathcal{A}$ auf $A:=\{0, 1, 2, 3\}$, sodass $\forall M \in E: M$ ist Unteralgebra von $A$
+	
+	\begin{align*}
+		\mathcal{A} = (A, w_1, w_2, w_3) \text{ (Typ (0,2,2))}
+	\end{align*}
+	\begin{align*}
+			w_1:A^0 &\rightarrow A && w_2:A^3 &\rightarrow A && w_3:A^3 &\rightarrow A\\
+			()&\mapsto 0 && (a,b,c) &\mapsto
+			\begin{cases}
+				2 & \text{, falls } \{a,b,c\} = \{0,1,3\}\\
+				a & \text{, sonst}
+			\end{cases} &&
+			(a,b,c) &\mapsto
+			\begin{cases}
+				3 & \text{, falls } \{a,b,c\} = \{0,1,2\}\\
+				a & \text{, sonst}
+			\end{cases}
+	\end{align*}
+
+	\begin{align*}
+		\mathcal{P}(A) = \{&&\emptyset, &&w_1! &&\{0\}, && &&\{1\}, &&w_1! &&\{2\}, &&w_1! && \\
+		                   &&\{3\}, &&w_1! &&\{0, 1\}, && &&\{0, 2\}, && &&\{0, 3\}, && && \\
+		                   &&\{1, 2\}, &&w_1! &&\{1, 3\}, &&w_1! &&\{2, 3\}, &&w_1! &&\{0, 1, 2\}, &&w_3! && \\
+		                   &&\{0, 1, 3\}, &&w_2! &&\{0, 2, 3\}, && &&\{1, 2, 3\}, &&w_1! &&\{0, 1, 2, 3\} && &&\}
+	\end{align*}
+	Wobei $w_i!$ bedeutet, dass die Menge nicht unter $w_i$ abgeschlossen ist.
+
+	\item Ist 1. für beliebiges $E \subseteq \mathcal{P}(A)$ lösbar?
+	
+	Nein, z.B. für $E = \emptyset$ gibt es keine Algebra $\mathcal{A}=(A,(w_i)_{i\in I})$ ohne Unteralgebren, da $A$ immer eine Unteralgebra von sich selbst ist!
+
+	\item \textbf{gesucht: } Kriterium / Algorithmus um entscheiden zu können ob für gegebenes, endliches $A$ und $E \subseteq \mathcal{P}(A)$ eine Algebra $\mathcal{A} = (A,w_1,w_2,...)$ existiert mit $Sub(\mathcal{A}) = E$.
+
+\end{enumerate}
+
+	\begin{alignat*}{1}
+		& \texttt{Algorithmus (A ... Menge, E ... gewünschte Unteralgebren)}\\
+		(1) \hspace{0.5cm} &\texttt{for (} P \in \mathcal{P}(A) \setminus E \texttt{) \{}\\
+		(2) \hspace{0.5cm} &\hspace{1cm} C := \bigcap_{B \in E, P\subseteq B}B\texttt{;}\\
+		(3) \hspace{0.5cm} &\hspace{1cm} \texttt{if (}C\setminus P = \emptyset \texttt{) \{}\\
+		(4) \hspace{0.5cm} &\hspace{2cm} \texttt{raise Error("nicht lösbar");}\\
+		(5) \hspace{0.5cm} &\hspace{1cm} \texttt{\} else \{}\\
+		(6) \hspace{0.5cm} &\hspace{2cm} w_P : A^{|P|} \rightarrow A, (x_1, ..., x_{|P|})\mapsto \begin{cases}
+			y \in C \setminus P & \texttt{, falls } \{x_1, ..., x_{|P|}\} = P\\
+			x_1 & \texttt{, sonst}
+		\end{cases} \\
+		(7) \hspace{0.5cm} &\hspace{2cm} \texttt{füge } w_P \texttt{ zur Algebra hinzu;}\\
+		(8) \hspace{0.5cm} &\hspace{1cm} \texttt{\}}\\
+		(9) \hspace{0.5cm} &\texttt{\}}\\
+	\end{alignat*}
+
+	Jede Operation $w$ erreicht (für unsere Zwecke), dass wenn $x_1, ..., x_n$ in einer Unteralgbra $U$ liegen, dass dann auch $y = w(x_1, ..., x_n) \in U$ sein muss.
+	
+	Damit ein $P \in \mathcal{P}(A)\setminus E$ nicht in $Sub(\mathcal{A})$ liegt muss also ein $w_P$ garantieren, dass wenn $P \subseteq U \implies \exists y \notin P: y \in U$. Natürlich muss das $y$ so gewählt werden, dass $\forall B \in E: P\subset B \implies y \in B$, da sonst $B \notin Sub(\mathcal{A})$. $\implies y \in \left(\bigcap_{B \in E, P\subseteq B}B\right)$.
+	
+	Falls aber $\left(\bigcap_{B \in E, P\subseteq B}B\right) = \emptyset$ kann nach der Überlegung von oben keine Lösung existieren. Sonst garantiert die Operation wie in (6) beschrieben, dass $P \notin Sub(\mathcal{A})$ für alle $P \notin E$ (wegen der Schleife in (1)).
+	
+	Für $Q \in E$ hat keine der Funktionen $(w_P)_{P\in \mathcal{P}(A)\setminus E}$ einen Effekt, da immer entweder gilt
+	
+	\begin{itemize}
+		\item $P \subseteq Q$ und somit
+		
+		\begin{align*}
+			\forall q_1, ..., q_{|P|} \in Q: w_P(q_1, ..., q_{|P|}) = \begin{cases}
+				y & \text{, falls } \{q_1, ..., q_{|P|}\} = P\\
+				q_1 & \text{, sonst}
+			\end{cases}
+		\end{align*}
+	
+		Da $Q \in E$ und $P \subseteq Q$ gilt nach Konstruktion, dass $y \in Q$ und $q_1 \in Q$ sowieso.
+		
+		\item $P\setminus Q \neq \emptyset$ und somit $\exists p \in P\setminus Q$ damit kann nicht der Fall $\{q1, ..., q_{|P|}\} = P$ eintreten. Also gilt
+		
+		\begin{align*}
+			\forall q_1, ..., q_{|P|} \in Q: w_P(q_1, ..., q_{|P|}) = q_1 \in Q.
+		\end{align*}
+	\end{itemize}
+
+	In beiden Fällen gilt also, dass $Q$ bezüglich allen $(w_P)_{P\in \mathcal{P}(A)\setminus E}$ abgeschlossen ist.
+
+\end{document}

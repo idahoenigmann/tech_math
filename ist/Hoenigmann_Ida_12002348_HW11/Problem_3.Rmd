@@ -1,0 +1,38 @@
+---
+title: "Problem_3"
+author: "Ida Hönigmann"
+date: '2022-06-17'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Simulation of test-power
+
+```{r}
+alpha <- 0.05
+n_s <- 1000
+d_seq <- seq(-5, 5, by=0.5)
+
+foo <- function(n, std_dev) {
+  sapply(d_seq, function(d) {
+    rejected <- sapply(seq(n_s), function(s) {
+      X <- rnorm(n, mean = 0, sd = std_dev)
+      Y <- rnorm(n, mean = d, sd = std_dev)
+      return(t.test(X, Y)$p.value < alpha)
+    })
+    return(sum(rejected)/n_s)
+  })
+}
+
+x1 <- foo(10, 3)
+x2 <- foo(20, 3)
+x3 <- foo(20, 1)
+
+plot(d_seq, x1)
+plot(d_seq, x2)
+plot(d_seq, x3)
+```
+

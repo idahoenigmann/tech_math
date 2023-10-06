@@ -1,0 +1,20 @@
+---
+title: "Problem_5"
+author: "Ida Hönigmann"
+date: '2022-05-25'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Boxplot and quantiles
+
+```{r cars}
+setwd("/home/ida/technische_mathematik/tech_math_angaben/ist/")
+load("algorithms.Rdata")
+boxplot(runningtimes, main="Runtime of Algorithms", ylab="Time", col=c("coral1", "cadetblue2"))
+```

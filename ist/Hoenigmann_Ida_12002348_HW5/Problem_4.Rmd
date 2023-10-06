@@ -1,0 +1,25 @@
+---
+title: "Problem4"
+author: "Ida Hönigmann"
+date: '2022-04-25'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## a replicate
+
+```{r}
+data = replicate(10000, sum(rexp(10, 0.2)))
+hist(data)
+```
+looks similar to binomial distribution
+
+## b coin toss
+
+```{r}
+data = replicate(10000, max(rle(rbinom(50, 1, 0.5))$lengths))
+mean(data)
+```

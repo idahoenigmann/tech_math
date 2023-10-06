@@ -1,0 +1,12 @@
+% 1 * x = x
+fof(left_identity, axiom,
+    ! [X] : mult(e,X) = X).
+% x^-1 * x = 1
+fof(left_inverse, axiom,
+    ! [X] : mult(inverse(X), X) = e).
+% (x * y) * z = x * (y * z)
+fof(associativity, axiom,
+    ! [X,Y,Z] : mult(mult(X,Y),Z) = mult(X,mult(Y,Z))).
+% (y * x = 1 ^ z * x = 1) -> (y = z)
+fof(unique_left_inverse, conjecture,
+    ! [X,Y,Z] : mult(Y,X) = e & mult(Z,X) = e => Y = Z).

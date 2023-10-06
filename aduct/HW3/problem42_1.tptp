@@ -1,0 +1,9 @@
+% f(a,a) = g(a)
+fof(third, hypothesis,
+    f(a,a) = g(a)).
+% f(a,b) != g(x) v f(x,y) = g(a)
+fof(first, axiom,
+    ! [X,Y] : f(a,b) != g(X) | f(X,Y) = g(a)).
+% f(y,b) = g(y) v f(x,a) = g(x) v f(y,y) = g(z)
+fof(second, conjecture,
+    ! [X,Y,Z] : f(Y,b) = g(Y) | f(X,a) = g(X) | f(Y,Y) = g(Z)).

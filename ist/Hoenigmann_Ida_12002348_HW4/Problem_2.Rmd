@@ -1,0 +1,59 @@
+---
+title: "Problem_2"
+author: "Ida Hönigmann"
+date: '2022-04-06'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Real roots
+
+Let A, B and C be independent random variables, uniformly distributed on (0, 1).
+
+## Calculating the probability
+
+What is the probability that the quadratic equation $Ax^2 + Bx + C = 0$ has real roots?
+
+Using the formula
+$$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
+we get that $a, b, c$ must satisfy
+$$ b^2 - 4ac > 0 \text{ or equivalently } b^2 > 4ac. $$
+
+If we have that $a < \frac{b^2}{4}$ it follows that for all $c \in (0, 1)$ it holds that $ac < \frac{b^2}{4} \iff b^2 > 4ac$.
+
+If $a \geq \frac{b^2}{4}$ we have to have $c < \frac{b^2}{4a}$ in order to satisfy $b^2 > 4ac$.
+
+Using this we can use these limits of integration to get
+
+$$ \mathbb{P}(B^2 > 4AC) =
+\int_{0}^{1} (\mathbb{P}(b^2 > 4AC)) db =
+\int_{0}^{1} (\int_{0}^{\frac{b^2}{4}}(\mathbb{P}(b^2 > 4aC)) da + \int_{\frac{b^2}{4}}^{1}(\mathbb{P}(b^2 > 4aC)) da) db
+$$
+$$
+= \int_{0}^{1} (\int_{0}^{\frac{b^2}{4}}(1) da + \int_{\frac{b^2}{4}}^{1}(\int_{0}^{\frac{b^2}{4a}}(\mathbb{P}(b^2 > 4ac)) dc) da) db
+= \int_{0}^{1} (\frac{b^2}{4} + \int_{\frac{b^2}{4}}^{1}(\int_{0}^{\frac{b^2}{4a}}(1) dc) da) db
+$$
+$$
+= \int_{0}^{1} (\frac{b^2}{4} + \int_{\frac{b^2}{4}}^{1}(\frac{b^2}{4a}) da) db
+= \int_{0}^{1} (\frac{b^2}{4} + \frac{b^2}{4} \log(\frac{4}{b^2})) db
+= \frac{1}{36}(3\log(4) + 5) \approx 0.2544134
+$$
+
+```{r calculation}
+1/36 * (3*log(4) + 5)
+```
+
+## Estimating the probability
+
+We generate 10000 instances of this problem and check what percentage satisfies the inequality. This gives us an estimate of the probability that $ax^2+bc+c=0$ has real roots.
+
+```{r estimation}
+n=10000
+a=runif(n)
+b=runif(n)
+c=runif(n)
+sum(b^2>4*a*c)/n
+```
