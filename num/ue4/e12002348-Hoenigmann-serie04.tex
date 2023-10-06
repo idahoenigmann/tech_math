@@ -1,0 +1,146 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage[margin=3cm]{geometry}
+
+%opening
+\title{NUM UE4}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Aufgabe 14:}
+Wir zeigen $V_nA = DV_n$ indem wir auf jeder Seite den Wert in der j-ten Zeile und k-ten Spalte berechnen.
+
+Wir wissen, dass
+
+\[
+(V_n)_{jk} = w_n^{j*k}.
+\]
+
+Durch die Diagonalstruktur der Matrix $D$ wird bei einer Multiplikation mit $D$ von links jede Zeile mit dem entsprechenden Wert aus $D$ skaliert, d.h.
+
+\[
+(DV_n)_{jk} = p(w_n^j)*w_n^{j*k} = (\sum_{l=0}^{n-1}a_l*w_n^{j*l}) * w_n^{j*k} = \sum_{l=0}^{n-1}a_l*w_n^{j(l+k)}.
+\]
+
+Um $(V_nA)_{jk}$ auszurechnen wollen wir uns zunächst die entsprechende Zeile von $V_n$ und Spalte von $A$ ansehen:
+
+\begin{align*}
+(V_nA)_{jk} &= (w_n^{j*0}, w_n^{j*1}, ..., w_n^{j*(n-1)}) * (a_{n-k}, a_{n-k+1}, ..., a_{n-1}, a_0, a_1, ..., a_{n-k-1})^T \\
+ &= \sum_{l=0}^{k-1} (w_n^{j*l} * a_{n-k+l}) + \sum_{l=0}^{n-k-1} (w_n^{j*(l+k)}*a_l) \\
+ &= \sum_{l=n-k}^{k-1+n-k} (w_n^{j*(l-n+k)} * a_{n-k+l-n+k}) + \sum_{l=0}^{n-k-1} (w_n^{j*(l+k)}*a_l) \\
+  &= \sum_{l=n-k}^{n-1} (w_n^{j*(l+k-n)} * a_{l}) + \sum_{l=0}^{n-k-1} (w_n^{j*(l+k)}*a_l)
+\end{align*}
+
+Da $w_n$ die n-te Einheitswurzel ist gilt $(w_n)^n = 1$ und somit
+
+\[
+w_n^{j(l+k-n)} = \frac{w_n^{j(l+k)}}{w_n^{j*n}} = \frac{w_n^{j(l+k)}}{((w_n)^{n})^{j}} = \frac{w_n^{j(l+k)}}{1} = w_n^{j(l+k)}.
+\]
+
+Insgesamt ergibt das
+
+\[
+(V_nA)_{jk} = \sum_{l=n-k}^{n-1} (w_n^{j*(l+k)} * a_{l}) + \sum_{l=0}^{n-k-1} (w_n^{j*(l+k)}*a_l) = \sum_{l=0}^{n-1} (w_n^{j*(l+k)} * a_{l}) = (DV_n)_{jk}.
+\]
+
+Somit ist gezeigt, dass $V_nAV_n^{-1} = D$.
+
+\section{Aufgabe 15:}
+Nach Aufgabe 14 gilt $V_nAV_n^{-1} = D$, was uns $A = V_n^{-1}DV_n$ und weiter $A^{-1}=V_n^{-1}D^{-1}V_n$ liefert. Die Inverse von $A$ existiert wegen der Regularität.
+
+Von $V_n$ wissen wir, dass $V_n^{-1} = \frac{1}{n} \overline{V_n}$ und durch die Diagonalform von $D$ gilt $D^{-1}=\overline{D}$.
+
+Um $Ax=b$ zu lösen können wir einfach $x = A^{-1}b = \frac{1}{n} \overline{V_n} \bar{D}V_nb$ berechnen.
+
+Schauen wir uns zuerst die Berechnung von $D$ an.
+
+Es sei $a$ der Vektor aus dem die zirkulante Matrix $A$ aufgebaut ist und $v_1$ die erste Spalte von $V_n$. Für $v_1$ gilt $v_1 = (1)_{j=0}^{n-1}$. Es gilt $V_nA = DV_n$ und somit auch für die erste Spalte $V_na = Dv_1 = D*(1, 1, ..., 1)^T = (p(1), p(w_n), ..., p(w_n^{n-1}))$, was den Diagonaleinträgen von $D$ entspricht.
+
+Wir können die Multiplikation von $\overline{D}$ mit dem Ergebnis von $w:=V_nb$ durch die komponentenweise Multiplikation der Vektoren $\bar{d}:=(\overline{p(1)}, \overline{p(w_n)}, ..., \overline{p(w_n^{n-1})})$ mit $w$ vereinfachen, da $\overline{D}$ Diagonalgestalt hat. 
+
+Wenn wir nun $\frac{1}{n} \overline{V_n} \bar{D}V_nb$ von rechts nach links ausrechnen erhalten wir folgenden Algorithmus zur Berechnung einer Lösung von $Ax=b$: 
+
+\begin{enumerate}
+	\item[] Input: Vektor $a$ aus dem die zirkulante Matrix $A$ aufgebaut ist, Vektor $b$
+	\item Berechnen von $d:=V_na$ mittels FFT
+	\item Berechnen von $\bar{d}$ komponentenweise
+	\item Berechnen von $w:=V_nb$ mittels FFT
+	\item Berechnen von $y:=\bar{d}*w$ komponentenweise
+	\item Berechnen von $\bar{y}$ komponentenweise
+	\item Berechnen von $z:=V_n\bar{y}$ mittels FFT
+	\item Berechnen von $\bar{z}$ komponentenweise
+	\item Berechnen von $x:=\frac{1}{n}\bar{z}$ komponentenweise
+	\item[] Ergebnis: Vektor $x$ löst nun $Ax=b$
+\end{enumerate}
+
+Der Aufwand beträgt 3 FFTs und 5 komponentenweisen Berechnungen, also $3*(n log_2 n) + 5n$ bzw. $O(n log n)$.
+
+\section{Aufgabe 16:}
+Wenn $A \in \mathbb{K}^{n\times n}$ eine Toeplitz-Matrix ist, können wir sie wie folgt in eine zirkulante Matrix $B \in \mathbb{K}^{2n\times 2n}$ einbetten:
+
+\[
+B := 
+\begin{pmatrix}
+	\begin{matrix}
+		a_{-n+1} & a_{n-1}  & \cdots & a_{1}   \\
+		a_{-n+2} & a_{-n+1} & \cdots & a_{2}   \\
+		\vdots   & \vdots   & \ddots & \vdots  \\
+		a_{-1}   & a_{-2}   & \cdots & a_{n-1} 
+	\end{matrix} &
+	\begin{matrix}
+		a_{0}   & \cdots & a_{-n+2} \\
+		a_{1}   & \cdots & a_{-n+3} \\
+		\vdots  & \ddots & \vdots   \\
+		a_{n-2} & \cdots & a_{0} 
+	\end{matrix} \\
+
+	\underbrace{
+		\begin{bmatrix}
+			a_{0}   & a_{-1}  & \cdots & a_{-n+1}  \\
+			a_{1}   & a_{0}   & \cdots & a_{-n+2}  \\
+			a_{2}   & a_{1}   & \cdots & a_{-n+3}  \\
+			\vdots  & \vdots  & \ddots & \vdots    \\
+			a_{n-1} & a_{n-2} & \cdots & a_{0} 
+		\end{bmatrix}
+	}_{=A}
+	 &
+	\begin{matrix}
+		a_{n-1}  & \cdots & a_{1}    \\
+		a_{-n+1} & \cdots & a_{2}    \\
+		a_{-n+2} & \cdots & a_{3}    \\
+		\vdots   & \ddots & \vdots   \\
+		a_{-1}   & \cdots & a_{-n+1} 
+	\end{matrix}
+\end{pmatrix}
+\]
+
+Nennen wir $a:=(a_{-n+1}, ..., a_0, ..., a_{n-1})$ den Vektor aus dem die Toeplitz-Matrix $A$ aufgebaut ist. Dann gilt für $b$, also den Vektor aus dem die zirkulante Matrix $B$ aufgebaut ist $b=a$.
+
+Wenn wir $y:=(x_1, x_2, ..., x_n, 0, .., 0)^T \in \mathbb{K}^{2n}$ (als ''Erweiterung'' von x) setzten. Erhalten wir $z:=A*x = (z_1, z_2, ..., z_n)^T \in \mathbb{K}^n$ indem wir uns die letzen n Werte von $B*y=(?, ?, ..., ?, z_1, z_2, ..., z_n)^T$ ansehen.
+
+Nun können wir mit der zirkulanten Matrix $B$ arbeiten, von der wir aus Beispiel 14 wissen, dass $B=V_n^{-1}DV_n=\frac{1}{n}\overline{V_n}DV_n$ gilt.
+
+Um nun $B*y=\frac{1}{n}\overline{V_n}DV_ny$ und somit $A*x$ zu berechnen können wir mit den gleichen Tricks aus dem vorherigen Beispiel folgendem Algorithmus folgen:
+
+\begin{enumerate}
+	\item[] Input: Vektor $a=b$ aus dem die Matrizen aufgebaut sind, Vektor $x$
+	\item Erweitern von $x$ zu $y:=(x_1, ..., x_n, 0, ..., 0) \in \mathbb{K}^{2n}$
+	\item Berechnen von $d:=V_nb$ mittels FFT
+	\item Berechnen von $f:=V_ny$ mittels FFT
+	\item Berechnen von $g:=d*f$ komponentenweise
+	\item Berechnen von $\bar{g}$ komponentenweise
+	\item Berechnen von $h:= V_n\bar{g}$ mittels FFT
+	\item Berechnen von $\bar{h}$ komponentenweise
+	\item Berechnen von $m:= \frac{1}{n} \bar{h}$ komponentenweise
+	\item Abschneiden der letzten n Werte von $m$ zu $z:=(m_n, m_{n+1}, ..., m_{2n})$
+	\item[] Ergebnis: $z=Ax$ 
+\end{enumerate}
+
+Der Aufwand des Algorithmus beträgt 3 Mal den Aufwand einer FFT ($2n * log_2 (2n)$) und 4 komponentenweise Rechnungen (Aufwand von $2n$), also $O(n log n)$.
+
+\end{document}

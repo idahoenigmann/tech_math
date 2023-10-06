@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/serie12_2.dir/Account/main.cpp.o CMakeFiles/serie12_2.dir/Account/Account.cpp.o CMakeFiles/serie12_2.dir/Account/Bank.cpp.o  -o serie12_2 

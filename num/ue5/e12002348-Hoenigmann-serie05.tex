@@ -1,0 +1,124 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage[margin=3cm]{geometry}
+
+%opening
+\title{NUM UE5}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Aufgabe 17:}
+
+Wir wollen zeigen, dass genau ein
+
+\[
+p(x):=\sum_{k=-n}^{n} c_k exp(ikx) \text{ mit } c_{-n}, ..., c_n \in \mathbb{C}
+\]
+
+existiert, dass $\forall k=-n, ..., n: p(x_k)=y_k$ erfüllt.
+
+Sei $P:=\{p(x)=\sum_{-n}^{n}c_k exp(ikx) : c_{-n}, ..., c_n \in \mathbb{C}\}$. Offensichtlich ist $P$ ein Vektorraum der Dimension $2n+1$.
+
+Sei $A:P\rightarrow \mathbb{C}^{2n+1}, p \mapsto (p(x_{-n}), ..., p(x_n))^T$ der lineare Auswertungsoperator.
+
+Wir wollen die Bijektivität von $A$ zeigen, da diese impliziert, dass auch $A^{-1}$ linear und bijektiv ist und somit für $2n+1$ bestimmte Stützwerte genau ein $p \in P$ mit der geforderten Eigenschaft existiert.
+
+Um die Bijektivität von $A$ zu zeigen, reicht es Injektivität zu zeigen, da $dim P = 2n+1 = dim \mathbb{C}^{2n+1}$ und dadurch injektiv surjektiv impliziert.
+
+Zeigen wir nun die Injektivität durch $A(p)=(0, ..., 0)^T \implies p = 0$:
+
+$A(p) = (0, ..., 0)^T \implies \forall k=-n, .., n: p(x_k) = 0$
+
+Wenn wir 
+\[f(z):=\sum_{k=0}^{2n}c_{k-n}z^k \in \mathbb{P}_{2n}\]
+setzen gilt
+
+\begin{align*}
+	exp(-inz) f(exp(iz)) &= exp(-inz) \sum_{k=0}^{2n}c_{k-n}exp(iz)^k = \sum_{k=-n}^{n}c_k exp(-inz) exp(iz)^{k+n} \\ &= \sum_{-n}^{n}c_k exp(iz(-n+k+n)) = p(z).
+\end{align*}
+
+Also gilt
+
+\[
+p(z) = \underbrace{exp(-inz)}_{\neq 0} \underbrace{f(exp(iz))}_{\in \mathbb{P}_{2n}}.
+\]
+
+Da $p$ laut Annahme $2n+1$ Nullstellen besitzt ($x_n, .., x_n$), aber nur vom Grad $2n$ ist folgt $p=0$.
+
+\newpage
+
+\section{Aufgabe 18:}
+(i) $zz: \forall k \geq 2: B_k(0) = B_k(1)$
+
+\begin{align*}
+\forall k \geq 2: 0 = \int_{0}^{1} B_{k-1}(t) dt = \int_{0}^{1} B_{k}'(t) dt = 	B_k(1) - B_k(0) \\
+\implies B_K(1) = B_K(0)
+\end{align*}
+
+\noindent
+(ii) $zz: \forall t \in \mathbb{R}: B_k(t) = (-1)^k B_k(1-t)$
+
+Für $k=0$ gilt: $B_0(t) = 1 = (-1)^0 B_0(1-t)$.
+
+Sei nun $k>0$. Wir zeigen
+
+\[
+A_k(t):=(-1)^k B_k(1-t)
+\]
+
+erfüllt $A_k'(t)=A_{k-1}(t)$ und $\int_{0}^{1}A_k(t)dt = 0$, sowie die Eindeutigkeit der Bernoulli-Polynome. Insgesamt ergibt das $A_k=B_k$.
+
+\begin{align*}
+	A_k'(t)=((-1)^k B_k(1-t))' = (-1)^k B_k'(1-t) (1-t)' = (-1)^{k-1} B_{k-1}(1-t) = A_{k-1}(t)
+\end{align*}
+
+\begin{align*}
+	\int_{0}^{1}A_k(t)dt &= \int_{0}^{1}(-1)^kB_k(1-t)dt = (-1)^k \int_{0}^{1}B_{k+1}'(1-t)dt \\
+	&= (-1)^k (B_{k+1}(1-1) - B_{k+1}(1-0)) = (-1)^k (B_{k+1}(0) - B_{k+1}(1)) = 0
+\end{align*}
+
+Um die Eindeutigkeit der Bernoulli-Polynome zu zeigen machen wir vollständige Induktion nach $k$:
+
+Induktionsanfang: $k=0$: $B_0(t)=1$ und daher eindeutig
+
+Induktionsvorraussetzung: $B_k(t)=b_k t^k + ... + b_1 t + b_0$ mit eindeutigen $b_k, ..., b_0$. 
+
+Induktionsschritt:
+
+\[
+B_{k+1} = \int B_k = \frac{b_k}{k+1}t^{k+1} + ... + \frac{b_1}{2}t^2+b_0t+c
+\]
+
+\begin{align*}
+	\int_{0}^{1}B_{k+1}(t) \,dt = 0 \\
+	\implies \frac{b_k}{(k+1)(k+2)}t^{k+2} + ... + \frac{b_1}{6}t^3 + \frac{b_0}{2}t^2 + ct \Big|_{0}^{1} = 0 \\
+	\implies \frac{b_k}{(k+1)(k+2)} + ... + \frac{b_1}{6} + \frac{b_0}{2} + c - 0 = 0
+\end{align*}
+
+Also ist $c$ eindeutig bestimmt.
+
+\vspace{0.5cm}
+(iii) $zz: \forall k \geq 1: B_{2k+1}(0) = B_{2k+1}(\frac{1}{2})=B_{2k+1}(1)=0$
+
+Aus (ii) folgt
+
+$B_{2k+1}(\frac{1}{2})=(-1)^{2k+1}B_{2k+1}(1-\frac{1}{2})=-B_{2k+1}(\frac{1}{2})$ sowie
+
+$B_{2k+1}(1)=(-1)^{2k+1}B_{2k+1}(1-1)=-B_{2k+1}(0)$.
+
+Aus (i) folgt zusätzlich $B_{2k+1}(0) = B_{2k+1}(1)$.
+
+Insgesamt ergibt das
+
+\begin{align*}
+	B_{2k+1}(0) = B_{2k+1}(1) \land - B_{2k+1}(0) = B_{2k+1}(1) &\implies B_{2k+1}(0) = 0 = B_{2k+1}(1) \\
+	B_{2k+1}(\frac{1}{2}) = -B_{2k+1}(\frac{1}{2}) &\implies B_{2k+1}(\frac{1}{2}) = 0
+\end{align*}
+
+
+\end{document}

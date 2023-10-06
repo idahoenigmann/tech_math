@@ -1,0 +1,2 @@
+bei 6.4.3 nicht durch Vektoren dividieren, sondern anders umformen
+bei 5.2.1 ist unklar (Gold* will das bisschen anders) wie die Angabe zu verstehen ist. (Also bei der Rückrichtung ist der Automorphismus vorgegeben, zu dem ist dann die semi-lineare Abbildung zu finden.)

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/serie12_1.dir/Person/main.cpp.o CMakeFiles/serie12_1.dir/Person/Person.cpp.o  -o serie12_1 

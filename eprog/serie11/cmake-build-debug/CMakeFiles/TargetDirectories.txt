@@ -1,0 +1,3 @@
+/home/ida/technische_mathematik/eprog/serie11/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/ida/technische_mathematik/eprog/serie11/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ida/technische_mathematik/eprog/serie11/cmake-build-debug/CMakeFiles/serie11.dir

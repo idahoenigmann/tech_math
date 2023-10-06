@@ -1,0 +1,243 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage[margin=3cm]{geometry}
+\usepackage{enumitem}
+\usepackage{amsthm}
+
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+\newcommand{\normx}[1]{\norm{#1}_X}
+\newcommand{\Azero}{(0)_{i,j \in \{1,...,n\}}}
+\newcommand{\supn}{\sup_{x \in \mathbb{K}^n\setminus\{0\}}}
+\newcommand{\supo}{\sup_{\normx{x}=1}}
+\newcommand{\supl}{\sup_{\normx{x}\leq1}}
+
+%opening
+\title{NUM UE8}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Aufgabe 29:}
+
+\begin{proof}
+	\begin{enumerate}[label=\alph*)]
+		\item 
+		
+		Sei $x_0 \in [a,b]$ eine Nullstelle von $f$.
+		
+		\begin{align*}
+			X := \{(a_k, b_k): k \in \mathbb{N}\} \cup \{(x_0, x_0)\} && x^* := (x_0, x_0) && \Phi &: X \rightarrow X \\
+			&& && (x, y) &\mapsto \begin{cases}
+				(x, c), &\quad\text{falls} f(x)f(c)\le 0 \\
+				(c, y), &\quad\text{sonst}
+			\end{cases}
+		\end{align*}
+		
+		wobei $c:=\frac{x+y}{2}$. Dann ist $(X, \Phi, x^*)$ ein abstraktes Iterationsverfahren, dass das Bisektionsverfahren abbildet.
+		
+		\item
+		
+		\begin{align*}
+			d &:X^2\rightarrow\mathbb{R} \\
+			((a,b),(x,y))&\mapsto ||a - b| - |x - y||
+		\end{align*}
+		
+		\begin{align*}
+			\forall (a,b), (x,y) \in X: d((a,b),(x,y))\geq 0\\
+			\forall (a,b) \in X: d((a,b),(a,b)) = ||a - b| - |a - b|| = 0\\
+			\forall (a_k,b_k), (a_l,b_l) \in X: d((a_k,b_k),(a_l,b_l))=0 \implies (a_k,b_k) = (a_l,b_l) \text{ da }|a_k-b_k|=|a_l-b_l| \implies k=l\\
+			\forall (a,b), (x,y) \in X: d((a,b),(x,y)) = ||a - b| - |x - y|| = ||x - y| - |a - b|| = d((x,y),(a,b))\\
+			\forall (a,b), (x,y), (c,d) \in X: d((a,b),(x,y)) + d((x,y), (c,d)) = ||a - b| - |x - y|| + ||x - y| - |c - d|| \\
+			\geq ||a - b| - |x - y| + |x - y| - |c - d|| = ||a - b| - |c - d|| = d((a,b), (c,d))
+		\end{align*}
+		
+		Somit ist $d$ eine Metrik auf $X$.
+		
+		Sei $(a,b), (x,y) \in X$ beliebig.
+		
+		\begin{align*}
+			d(\Phi(a,b), \Phi(x,y))=
+			\begin{cases}
+				d_2((a, \frac{a+b}{2}), (x,\frac{x+y}{2})) =
+				\left|\left|a - \frac{a+b}{2}\right| - \left|x - \frac{x+y}{2}\right|\right| =
+				\left|\left|\frac{a+b}{2} - a\right| - \left|\frac{x+y}{2} - x\right|\right| \\
+				d_2((a, \frac{a+b}{2}), (\frac{x+y}{2},y))  =
+				\left|\left|a - \frac{a+b}{2}\right| - \left|\frac{x+y}{2} - y\right|\right| =
+				\left|\left|\frac{a+b}{2} - a\right| - \left|\frac{x+y}{2} - y\right|\right| \\
+				d_2((\frac{a+b}{2}, b), (x,\frac{x+y}{2}))  =
+				\left|\left|\frac{a+b}{2} - b\right| - \left|x - \frac{x+y}{2}\right|\right| =
+				\left|\left|\frac{a+b}{2} - b\right| - \left|\frac{x+y}{2} - x\right|\right| \\
+				d_2((\frac{a+b}{2}, b), (\frac{x+y}{2},y))  =
+				\left|\left|\frac{a+b}{2} - b\right| - \left|\frac{x+y}{2} - y\right|\right| =
+				\left|\left|\frac{a+b}{2} - b\right| - \left|\frac{x+y}{2} - y\right|\right|
+			\end{cases}\\
+			= \left|\left|\frac{a-b}{2}\right|-\left|\frac{x-y}{2}\right|\right|=\frac{1}{2}||a-b|-|x-y||
+		\end{align*}
+		
+		\begin{align*}
+			d((a,b),(x,y)) = ||a-b|-|x-y||
+		\end{align*}
+		
+		Also $\forall (a,b), (x,y) \in X: d(\Phi(a,b), \Phi(x,y)) \le q d_2((a,b),(x,y))$ mit $q:=\frac{1}{2}$. Somit gilt nach Banach'schem Fixpunktsatz, dass $(X, \Phi, x^*)$ für alle Startwerte aus $X$ global und linear mit $q=\frac{1}{2}$ gegen $x^*$ konvergiert.
+		
+		\vspace{3cm}
+		
+		Noch einmal nachgerechnet:
+		
+		\begin{itemize}
+			\item Globale Konvergenz: Wir wollen zeigen, dass $(a_k, b_k)_{k \in \mathbb{N}}$ eine Cauchy-Folge ist und somit konvergiert.	
+			Da wie oben gezeigt gilt, dass $\forall k \in \mathbb{N}: |a_{k+1} - b_{k+1}| = \frac{1}{2}|a_k - b_k|$ folgt durch vollständige Induktion, dass
+			
+			\begin{align*}
+				\forall k \in \mathbb{N}: |a_k - b_k| = \frac{1}{2^{1}}|a_{k-1} - b_{k-1}| = \frac{1}{2^{2}}|a_{k-2} - b_{k-2}| = ... = \frac{1}{2^{k}}|a_0 - b_0|.
+			\end{align*}
+			
+			Sei $\epsilon > 0$ beliebig. Sei $k, l \in \mathbb{N}$ beliebig.
+			
+			\begin{align*}
+				d((a_k, b_k), (a_l, b_l)) = ||a_k - b_k| - |a_l - b_l|| = \left|\frac{1}{2^{k}}|a_0 - b_0| - \frac{1}{2^{l}}|a_0 - b_0|\right| = \left|\frac{1}{2^{k}}-\frac{1}{2^{l}}\right||a_0 - b_0| < \epsilon
+			\end{align*}
+			
+			für groß genug gewählte $k$ und $l$. Also handelt es sich um eine Cauchy-Folge und sie ist somit konvergent gegen $x^*$ (laut VO gilt $\exists \lim\limits_{k\rightarrow\infty}x_k$, so gilt $\lim\limits_{x\rightarrow\infty}x_k = x^*$ da es sich um den einzigen Fixpunkt handelt).
+			
+			\item Lineare Konvergenz: Sei $\epsilon >0$, $(a_0, b_0) \in U_\epsilon(x^*)$ und $k \in \mathbb{N}$ beliebig.
+			
+			\begin{align*}
+				d((a_{k+1}, b_{k+1}), (x_0, x_0)) = ||a_{k+1} - b_{k+1}| - |x_0 - x_0|| = \frac{1}{2}|a_{k} - b_{k}| = \frac{1}{2} d((a_k, b_k), (x_0, x_0))
+			\end{align*}
+			
+			Also ist $(X, \Phi, x^*)$ linear mit $q=\frac{1}{2}$ konvergent.
+		\end{itemize}
+		
+	\end{enumerate}
+	
+\end{proof}
+
+\newpage
+
+\section{Aufgabe 32:}
+\begin{proof}
+	Nenn wir der Lesbarkeit halber die Norm auf $\mathbb{K}^n$ $\normx{.}$ und die Operator-Norm $\norm{.}$.
+	
+	\begin{enumerate}[label=\alph*)]
+		\item zz: $\norm{.}$ ist eine Norm
+		\begin{enumerate}[label=(N\arabic*)]
+			\item zz: $\forall A \in \mathbb{K}^{n \times n}: \norm{A}\geq 0 \land \norm{A}=0 \iff A=\Azero$
+			
+			Sei $A \in \mathbb{K}^{n \times n}$ beliebig. Da $\normx{.}$ eine Norm ist gilt $\forall x \in \mathbb{K}^n: \normx{Ax} \geq 0 \land \normx{x} \geq 0$. Also folgt
+			
+			\begin{align*}
+				\norm{A}=\supn\frac{\normx{Ax}}{\normx{A}}\geq 0.
+			\end{align*}
+		
+			Für $A=\Azero$ gilt $\forall x \in \mathbb{K}^n\setminus\{0\}: \normx{Ax} = \normx{(0)_{i\in\{1,...,n\}}} = 0$ und somit $\norm{A}=\supn\frac{\normx{Ax}}{\normx{x}}=0$.
+			
+			Damit $\norm{A}=\supn\frac{\normx{Ax}}{\normx{x}}=0$ muss $\forall x \in \mathbb{K}^n\setminus\{0\}: \normx{Ax} = 0 \implies A = \Azero$.
+			
+			\item zz: $\forall A \in \mathbb{K}^{n\times n} \forall \lambda \in \mathbb{K}: \norm{\lambda A} = |\lambda|\cdot\norm{A}$.
+			
+			Sei $A \in \mathbb{K}^{n \times n}$ und $\lambda \in \mathbb{K}$  beliebig.
+			
+			\begin{align*}
+				\norm{\lambda A} = \supn\frac{\normx{\lambda Ax}}{\normx{x}} = \supn\frac{|\lambda|\cdot\normx{Ax}}{\normx{x}} = |\lambda| \supn\frac{\cdot\normx{Ax}}{\normx{x}} = |\lambda|\cdot \norm{A}
+			\end{align*}
+		
+			\item zz: $\forall A, B \in \mathbb{K}^{n \times n}: \norm{A+B}\leq \norm{A}+\norm{B}$
+			
+			Sei $A, B \in \mathbb{K}^{n \times n}$ beliebig.
+			
+			\begin{align*}
+				\norm{A+B} &= \supn\frac{\normx{(A+B)x}}{\normx{x}} = \supn\frac{\normx{Ax+Bx}}{\normx{x}} \leq \supn\frac{\normx{Ax}+\normx{Bx}}{\normx{x}}\\
+				&= \supn\frac{\normx{Ax}}{\normx{x}} + \supn\frac{\normx{Bx}}{\normx{x}} = \norm{A} + \norm{B}
+			\end{align*}
+		\end{enumerate}
+	
+		\item zz: $\norm{A}=\supo\normx{Ax}=\supl\normx{Ax}=\inf\{C>0: \normx{Ax}\leq C\normx{x} \forall x \in \mathbb{K}^n\}$
+		
+		Wir zeigen zuerst die Gleichheit $\norm{A}=\inf\{C>0: \normx{Ax}\leq C\normx{x} \forall x \in \mathbb{K}^n\}$.
+		
+		Da $\norm{A}$ existiert ist die Menge $\{\frac{\normx{Ax}}{\normx{x}}:x\in\mathbb{K}^n\setminus\{0\}\}$ beschränkt, d.h. $\exists C>0 \forall x\in\mathbb{K}^n\setminus\{0\} : C \geq \frac{\normx{Ax}}{\normx{x}}$. Für solche $C$ gilt nach Umformen $\normx{Ax}\leq C\normx{x}$.
+		
+		Die Menge $\{C>0:\normx{Ax}\leq C\normx{x} \forall x \in \mathbb{K}^n\}$ hat $\norm{A}$ als obere Schranke. Alle Werte kleiner als $\norm{A}$ können keine oberen Schranken mehr sein, da sonst $\norm{A}$ nicht das Supremum von $\{\frac{\normx{Ax}}{\normx{x}}:x\in\mathbb{K}^n\setminus\{0\}\}$ wäre.
+		
+		\begin{align*}
+			\implies \norm{A} = \inf\{C>0: \normx{Ax}\leq C\normx{x} \forall x \in \mathbb{K}^n\}
+		\end{align*}
+	
+		Um die Gleichheit $\norm{A}=\supo\normx{Ax}=\supl\normx{Ax}$ zu zeigen schauen wir uns die folgende Mengengleichheit an:
+	
+		\begin{align*}
+			\left\{\frac{\normx{Ax}}{\normx{x}}:x\in\mathbb{K}^n\setminus\{0\}\right\} &= \left\{\normx{\frac{1}{\normx{x}}Ax}:x\in\mathbb{K}^n\setminus\{0\}\right\} = \left\{\normx{A\frac{x}{\normx{x}}}:x\in\mathbb{K}^n\setminus\{0\}\right\} \\
+			&= \left\{\normx{Ay}:\normx{y}=1\right\} \subseteq \left\{\normx{Ay}:\normx{y}\leq1\right\}
+		\end{align*}
+	
+		\begin{align*}
+			\implies \norm{A}=\supo\normx{Ax}\leq\supl\normx{Ax}
+		\end{align*}
+	
+		Da $\forall x \in \mathbb{K}^n, \normx{x}\leq 1: \normx{Ax} \leq \frac{\normx{Ax}}{\normx{x}} \leq \norm{A}$ folgt $\supl\normx{Ax}\leq \norm{A}$.
+		
+		\begin{align*}
+			\implies \norm{A} = \supo\normx{Ax} = \supl\normx{Ax}
+		\end{align*}
+	
+		Da das Matrix-Vektor-Produkt eine stetige Funktion ist folgt aus der Kompaktheit von $\{x\in\mathbb{K}^n: \normx{x}=1\}$ und $\{x\in\mathbb{K}^n: \normx{x}\leq 1\}$ auch die Kompaktheit von $\{\normx{Ax}: \normx{x}=1\} = \{\normx{Ax}/\normx{x}: x \in \mathbb{K}^n\setminus\{0\}\}$ und $\{\normx{Ax}: \normx{x} \leq 1\}$. Aus der Analysis wissen wir nun, dass Infimum und Supremum auf der Menge angenommen werden.
+	
+		\item zz: $\norm{I} = 1$ und $\forall A \in \mathbb{K}^{n\times n} \text{regulär}: \norm{A^{-1}}=\left(\inf_{\normx{x}=1}\normx{Ax}\right)^{-1}$
+		
+		\begin{align*}
+			\norm{I}=\supo\normx{Ix}=\supo\normx{x}=1
+		\end{align*}
+	
+		Sei $A \in \mathbb{K}^{n\times n}$ regulär beliebig. Wir können $A$ als bijektive Abbildung von $\mathbb{K}^n$ nach $\mathbb{K}^n$ auffassen.
+		
+		\begin{align*}
+			\norm{A^{-1}} &= \sup\left\{\frac{\normx{A^{-1}x}}{\normx{x}}:x\in\mathbb{K}^n\setminus\{0\}\right\} = \sup\left\{\frac{\normx{A^{-1}Ay}}{\normx{Ay}}:y\in\mathbb{K}^n\setminus\{0\}\right\} \\
+			&= \sup\left\{\frac{\normx{y}}{\normx{Ay}}:y\in\mathbb{K}^n\setminus\{0\}\right\} = \left(\inf\left\{\frac{\normx{Ay}}{\normx{y}}:y\in\mathbb{K}^n\setminus\{0\}\right\}\right)^{-1} \\
+			&= \left(\inf\left\{\normx{A\frac{y}{\normx{y}}}:y\in\mathbb{K}^n\setminus\{0\}\right\}\right)^{-1} = \left(\inf_{\normx{x}=1}\normx{Ax}\right)^{-1}
+		\end{align*}
+	
+		\item zz: $\forall A,B \in \mathbb{K}^{n\times n}: \norm{AB}\leq \norm{A}\cdot\norm{B}$. Gilt das auch für andere Normen?
+		
+		Wir zeigen zuerst $\forall A \in \mathbb{K}^{n\times n} \forall x \in \mathbb{K}^n: \normx{Ax} \leq \norm{A} \cdot \normx{x}$.
+		
+		\begin{align*}
+			\norm{A}\cdot\normx{x} &= \normx{x} \sup\left\{\frac{\normx{Ay}}{\normx{y}}:y\in\mathbb{K}^n\setminus\{0\}\right\} = \sup\left\{\normx{A\frac{y}{\normx{y}}\normx{x}}:y\in\mathbb{K}^n\setminus\{0\}\right\} \\
+			&= \sup\left\{\normx{Az}:\normx{z}=\normx{x}\right\} \geq \normx{Ax}
+		\end{align*}
+		
+		Sei $\forall A,B \in \mathbb{K}^{n\times n}$ beliebig.
+		
+		\begin{align*}
+			\norm{AB}&=\supo\normx{(AB)x}=\supo||A\underbrace{(Bx)}_{\in\mathbb{K}^n}||_X \leq \supo\norm{A}\cdot\normx{Bx} \\
+			&= \norm{A}\supo\normx{Bx}=\norm{A}\cdot\norm{B}
+		\end{align*}
+	
+		Nein, $\norm{AB} \leq \norm{A}\cdot \norm{B}$ gilt nicht für alle Normen.
+		
+		Gegenbeispiel:
+		
+		\begin{align*}
+			\norm{A}_\infty := \max_{i,j\in\{1,...,n\}}|A_{i,j}| &&
+			A:= \begin{pmatrix}
+				2 & 2\\
+				2 & 2
+			\end{pmatrix} && \implies A\cdot A = \begin{pmatrix}
+				8 & 8\\
+				8 & 8
+			\end{pmatrix}
+		\end{align*}
+	
+		\begin{align*}
+			\norm{A\cdot A}_\infty = 8 > 4 = 2 \cdot 2 = \norm{A}_\infty \cdot \norm{A}_\infty
+		\end{align*}
+		
+	\end{enumerate}
+\end{proof}
+
+
+\end{document}

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/serie09_123.dir/main.cpp.o CMakeFiles/serie09_123.dir/IntVector.cpp.o CMakeFiles/serie09_123.dir/Factorization.cpp.o  -o serie09_123 

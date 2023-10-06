@@ -1,0 +1,110 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage[margin=3cm]{geometry}
+
+%opening
+\title{NUM UE3}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Aufgabe 1:}
+
+Für $x=x_j$ für ein $j \in \{0, ..., n\}$ ist die Aussage trivial.
+
+Nehmen wir nun an $x\neq x_j \forall j \in \{0, ..., n\}$. Definieren wir das Polynom
+
+\[w(y)=\prod_{j=0}^{n}(y-x_j)^{n_j+1} \in \mathbb{P}_{N+1}\]
+
+und die Funktion
+
+\[F:[a,b]\to \mathbb{R}, F(y) = (f(x)-p(x))*w(y) - (f(y)-p(y))*w(x) \in C^{N+1}[a, b].\]
+
+Die $k$-te Ableitung berechnet sich durch
+
+\[F^{(k)}(y)=(f(x)-p(x))w^{(k)}(y)-(f^{(k)}(y)-p^{(k)}(y))w(x).\]
+
+Aus den zwei Rechnungen
+
+\[\forall j \in \{0, ..., n\}: F(x_j) = (f(x)-p(x))*w(x_j)-(f(x_j)-p(x_j))*w(x) = (f(x)-p(x))*\prod_{j=0}^{n}(y-x_j)^{n_j+1}\]
+
+und
+
+\[F(x)=(f(x)-p(x))w(x)-(f(x)-p(x))w(x)=0\]
+
+folgt, dass $F$ die Nullstellen $x$ und $\forall j\in \{0, ..., n\} x_j$ mit Vielfachheit $n_j$ besitzt, also insgesamt $n+2$ viele.
+
+Demnach hat $F'$ zumindest $n+1$ Nullstellen, wobei auch $\{x_j:n_j\geq 1\}$ Nullstellen mit jeweils Vielfachheit $n_j - 1$ dazukommen. Daraus folgt, dass die Summe der Vielfachheiten von F gleich $n+1+\sum_{j=0}^{n}(n_j)+1 = \sum_{j=0}^{n}(1)-1+1+\sum_{j=0}^{n}(n_j)+1=\sum_{j=0}^{n}(n_j+1)+1=N+2$ ist.
+
+Das bedeutet, dass $F^{(N+1)}$ eine Nullstelle $\xi \in [a,b]$ besitzt.
+
+\[0=F^{(N+1)}(\xi)=(f(x)-p(x))w^{(N+1)}(\xi)-(f^{(N+1)}(\xi)-p^{(N+1)}(\xi))w(x)\]
+
+$w^{(N+1)}(\xi) = (N+1)!$ nach der Definition von $w$ und $p^{(N+1)}(\xi)=0$ da $p \in \mathbb{P}_N$.
+
+\begin{align*}
+	0 &= (f(x)-p(x))(N+1)!-f^{(N+1)}(\xi)w(x) \\
+	(f(x)-p(x))(N+1)! &= f^{(N+1)}(\xi)w(x) \\
+	f(x)-p(x) &= \frac{f^{(N+1)}(\xi)}{(N+1)!} \prod_{j=0}^{n}(x-x_j)^{n_j+1}\\
+\end{align*}
+
+Um die Fehlerabschätzung zu erhalten bilden wir auf beiden Seiten der Gleichung den Betrag.
+
+\begin{align*}
+	|f(x)-p(x)| &= \left| \frac{f^{(N+1)}(\xi)}{(N+1)!} \prod_{j=0}^{n}(x-x_j)^{n_j+1}\right| \\
+	& \leq \frac{\|f^{(N+1)}\|_{L_\infty}}{(N+1)!} \prod_{j=0}^{n}|x-x_j|^{n_j+1} \\
+\end{align*}
+
+Für komplexwertige Funktionen teilen wir $f(x)-p(x)$ in Real- und Imaginärteil auf und schätzen beide mit der Fehlerabschätzung für reellwertige Funktionen ab. Dann gilt
+
+\begin{align*}
+	|f(x)-p(x)| &= \sqrt{Im(f(x)-p(x))^2 + Re(f(x)-p(x))^2} \\
+	 & \leq \sqrt{2*\left(\frac{\|f^{(N+1)}\|_{L_\infty}}{(N+1)!} \prod_{j=0}^{n}|x-x_j|^{n_j+1}\right)^2} \\
+	 &= \sqrt{2} * \left(\frac{\|f^{(N+1)}\|_{L_\infty}}{(N+1)!} \prod_{j=0}^{n}|x-x_j|^{n_j+1}\right). \\
+\end{align*}
+
+\section{Aufgabe 4:}
+Wir wollen strikt diagonaldominant $\implies$ regulär zeigen und zeigen dazu $\neg$ regulär $\implies \neg$ strikt diagonaldominant.
+
+Nicht regulär zu sein ist äquivalent zu
+
+\[\exists x_1, ..., x_n: \sum_{k=1}^{n}x_k (a_{1k} a_{2k} \cdots a_{nk})^T = 0\]
+
+Wobei zumindest ein $x_k$ ungleich $0$ sein muss. Da die Operationen komponentenweise zu verstehen sind können wir folgende Umformulierung finden
+
+\[\forall j=1, ..., n : \sum_{k=1}^{n}x_ka_{jk} = 0.\]
+
+Definieren wir nun $m$ als den Index mit maximalem $x_m$. Dann gilt
+
+\[\sum_{k=1, k\neq m}^{n}x_ka_{jk} = -x_ma_{jm}\]
+
+und durch Betrag bilden und Abschätzen erhalten wir
+
+\[|x_m| \sum_{k=1, k\neq m}^{n}|a_{jk}| = \sum_{k=1, k\neq m}^{n}|x_m| |a_{jk}| \geq \sum_{k=1, k\neq m}^{n}|x_k| |a_{jk}| \geq \left| \sum_{k=1, k\neq m}^{n}x_ka_{jk} \right| = |x_ma_{jm}| = |x_m| |a_{jm}|\]
+
+Da die Gleichung für alle $j=1, ..., n$ gilt, haben wir nun durch
+
+\[\sum_{k=1, k\neq m}^{n}|a_{mk}| \geq |a_{mm}|\]
+
+gezeigt, dass die Matrix nicht strikt diagonaldominant ist.
+
+\[
+A :=
+\begin{pmatrix}
+	2(h_1+h_2) & h_2          &         &         \\
+	h_2        & 2(h_2 + h_3) & \ddots  &         \\
+	           & \ddots       & \ddots  & h_{n-1} \\
+	           &              & h_{n-1} & 2(h_{n-1}+h_n)\\
+\end{pmatrix}\]
+
+Nach dem eben gezeigten reicht es zu zeigen, dass die Matrix $A$ strikt diagonaldominant ist, da das die Regularität und somit die eindeutige Lösbarkeit des Gleichungssystems zeigt.
+
+\[\sum_{k=1, k\neq m}^{n}|a_{jk}| = |h_j| + |h_{j+1}| = |h_j + h_{j+1}| < 2|h_j + h_{j+1}| = |a_{jj}|\]
+
+Da $h_j > 0$ für alle $j$.
+
+\end{document}

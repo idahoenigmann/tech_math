@@ -1,0 +1,234 @@
+\documentclass[]{article}
+
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage[margin=3cm]{geometry}
+\usepackage{enumitem}
+\usepackage{amsthm}
+
+\newcommand{\norm}[1]{\left|\left|#1\right|\right|}
+\newcommand{\norminf}[1]{\norm{#1}_\infty}
+\newcommand{\normone}[1]{\norm{#1}_1}
+\newcommand{\supinf}{\sup_{\norminf{x}=1}}
+\newcommand{\supone}{\sup_{\normone{x}=1}}
+\newcommand{\maxz}[2]{\max_{#1=1,...,#2}}
+
+%opening
+\title{NUM UE9}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+
+\section{Aufgabe 33:}
+
+\begin{proof}
+	
+	\begin{enumerate}[label=\alph*)]
+		\item Wie letzte Woche gezeigt gilt $\norminf{A}=\supinf\norminf{Ax}$.
+		
+		Sei $x \in \mathbb{K}^n$ mit $\norminf{x}=1$ beliebig. Also gilt $\maxz{j}{n}|x_j|=1$.
+		
+		\begin{align*}
+			\norminf{Ax}=\maxz{j}{m}|(Ax)_j|=\maxz{j}{m}\left|\sum_{k=1}^{n}a_{jk}x_k\right|
+			\leq \maxz{j}{m}\sum_{k=1}^{n}|a_{jk}|\cdot|x_k| \leq \maxz{j}{m} \sum_{k=1}^{n}|a_{jk}|
+		\end{align*}
+		
+		Sei $j \in \{1, ..., m\}$ mit $\sum_{k=1}^{n}|a_{jk}|$ maximal. Falls $\sum_{k=1}^{n}|a_{jk}|=0$ folgt $\forall k=1,...,n \forall j=1,...,m: a_{jk}=0$ und somit ist die Aussage klar. Sonst gilt für
+		
+		\begin{align*}
+			x=\begin{pmatrix}
+				sgn(a_{j1})\\
+				sgn(a_{j2})\\
+				\cdots\\
+				sgn(a_{jn})\\
+			\end{pmatrix}
+			\in \mathbb{K}^n &&
+			\norminf{x}=1
+		\end{align*}
+		
+		\begin{align*}
+			\norminf{Ax}=\maxz{l}{m}\left|\sum_{k=1}^{n}a_{lk}x_k\right|=\maxz{l}{m}\left|\sum_{k=1}^{n}a_{lk}\cdot sgn(a_{jk})\right| = \left|\sum_{k=1}^{n}|a_{jk}|\right| = \sum_{k=1}^{n}|a_{jk}| = \maxz{j}{m}\sum_{k=1}^{n}|a_{jk}|
+		\end{align*}
+		
+		Also folgt $\norminf{A}=\maxz{j}{m}\sum_{k=1}^{n}|a_{jk}|$.
+		
+		\item 
+		Um $\normone{A}=\maxz{k}{n}\sum_{j=1}^{m}|a_{jk}|$ zu zeigen schauen wir uns zunächst folgendes an:
+		
+		Sei $x\in\mathbb{K}^n$ mit $\normone{x}=1$ beliebig. Also gilt $\sum_{j=1}^{n}|x_j|=1$.
+		
+		\begin{align*}
+			|(Ax)_j| &= \left|\sum_{k=1}^{n}a_{jk}x_k\right| \leq \left|\sum_{k=1}^{n}\maxz{l}{n}|a_{jl}|x_k\right| = \maxz{l}{n}|a_{jl}|\left|\sum_{k=1}^{n}x_k\right| \\  &\leq\maxz{l}{n}|a_{jl}|\sum_{k=1}^{n}|x_k| = \maxz{l}{n}|a_{jl}| \cdot \normone{x}
+			= \maxz{l}{n}|a_{jl}| \\
+			\implies \normone{Ax} &= \sum_{j=1}^{m}|(Ax)_j| \leq \sum_{j=1}^{m}\maxz{k}{n}|a_{jk}| = \maxz{k}{n}\sum_{j=1}^{m}|a_{jk}|
+		\end{align*}
+		
+		Wähle $j\in\{1, ..., n\}$ so, dass $\sum_{k=1}^{m}|a_{kj}|$ maximal ist. Sei $x\in\mathbb{K}^n$ mit $x_j=1$ und $\forall l\neq j: x_l=0$.
+		
+		Dann gilt
+		
+		\begin{align*}
+			|(Ax)_l| = \left|\sum_{k=1}^{n}a_{lk}x_k\right| = |a_{lj}| \\
+			\normone{Ax} = \sum_{k=1}^{m}|(Ax)_k| = \sum_{k=1}^{m}|a_{kj}| = \maxz{j}{n} \sum_{k=1}^{m}|a_{kj}|
+		\end{align*}
+		
+		Also folgt $\normone{A} = \maxz{k}{n}\sum_{j=1}^{m}|a_{jk}|$.
+	\end{enumerate}
+	
+\end{proof}
+
+\newpage
+
+\section{Aufgabe 34:}
+
+\begin{proof}
+	Sei $A\in\mathbb{K}^{n\times n}$ ... irreduzibel und diagonaldominant beliebig.
+	
+	zz: $A$ ist regulär
+	
+	Angenommen $A$ wäre nicht regulär, also $\exists x\in\mathbb{K}^n\setminus\{0\}: Ax=0$. Dann folgt
+	
+	\begin{align*}
+		0 = (Ax)_j = \sum_{l=1}^{n}a_{jl}x_l\\
+		\implies -a_{jj}x_j = \sum_{l=1,l\neq j}^{n}a_{jl} x_l\\
+		\implies |a_{jj}|\cdot |x_j| = |a_{jj}x_j| = \left|\sum_{l=1,l\neq j}^{n}a_{jl} x_l\right| \leq \sum_{l=1,l\neq j}^{n}|a_{jl}| \cdot |x_l|.
+	\end{align*}
+
+	Definieren wir nun $J:=\{j\in\{1,...,n\}: |x_j| = \norminf{x}\}$ und $K:=\{k\in\{1,...,n\}: |x_k| < \norminf{x}\}$. Offensichtlich gilt $J \cup K = \{1, ..., n\}$ und $J \cap K = \emptyset$.
+
+	Fallunterscheidung:
+	
+	\begin{enumerate}[label=\arabic*. Fall: ]
+		\item $K = \emptyset$
+		
+		Also gilt $|x_1| = |x_2| = ... = |x_n|$.
+		
+		\begin{align*}
+			|a_{jj}|\cdot |x_j| \leq \sum_{l=1,l\neq j}^{n}|a_{jl}| \cdot |x_l| \\
+			\implies |a_{jj}| \leq \sum_{l=1,l\neq j}^{n}|a_{jl}|
+		\end{align*}
+	
+		Was ein Widerspruch zu $\forall j \in \{1,...,n\}: |a_{jj}| \geq \sum_{l=1, l\neq j}^{n}|a_{jl}| \land \exists j\in\{1,...,n\}: |a_{jj}| > \sum_{l=1, l\neq j}^{n}|a_{jl}|$ ist.
+		
+		\item $K \neq \emptyset$
+		
+		Da $A$ irreduzibel ist $\exists k\in K \exists j \in J: a_{jk} \neq 0$
+		
+		\begin{align*}
+			|a_{jj}| \leq \sum_{l=1,l\neq j}^{n}|a_{jl}|\frac{|x_l|}{|x_j|} = \sum_{l=1,l\neq j}^{n}|a_{jl}|\underbrace{\frac{|x_l|}{\norminf{x}}}_{\leq 1 \land \exists l: < 1} < \sum_{l=1,l\neq j}^{n}|a_{jl}|
+		\end{align*}
+	
+		Was ein Widerspruch zu $\forall j \in \{1,...,n\}: |a_{jj}| \geq \sum_{l=1, l\neq j}^{n}|a_{jl}|$ ist.
+	\end{enumerate}
+
+	In beiden Fällen folgt aus dem Widerspruch, dass $A$ regulär ist.
+	
+	zz: $\forall j=1, ..., n: a_{jj}\neq 0$
+	
+	Angenommen $\exists j\in \{1, ..., n\}: a_{jj} = 0$. Da $A$ diagonaldominant ist folgt
+	
+	\begin{align*}
+		\sum_{k=1,k\neq j}^{n}|a_{jk}| \leq |a_{jj}| = 0\\
+		\implies \forall k\in\{1, ..., n\}: |a_{jk}| = 0
+	\end{align*}
+
+	Was im Widerspruch zur Regularität von $A$ steht.
+	
+	Also folgt, dass $A$ regulär und $\forall j\in\{1,...,n\}:a_{jj}\neq 0$.
+\end{proof}
+\newpage
+
+\section{Aufgabe 35:}
+\begin{proof}
+	Sei $A\in\mathbb{K}^{n\times n}$ irreduzibel und diagonaldominant beliebig.
+	
+	\begin{enumerate}
+		\item Jacobi-Verfahren:
+		
+		\begin{align*}
+			M:=-D^{-1}(A-D) \text{ mit } D:=\begin{pmatrix}
+				a_{11} & & \\
+				& \ddots & \\
+				& & a_{nn}
+			\end{pmatrix}
+		\end{align*}
+	
+		Nach 34 gilt $\forall j\in\{1.,,,.n\}: a_{jj}\neq 0$ also gilt $D$ ist regulär und somit existiert $D^{-1}$.
+		
+		Sei $\lambda\in\mathbb{K}$ beliebig mit $|\lambda|\geq 1$.
+		
+		Da wir bei der Irreduzibarkeit nur Werte $m_{ij}$ mit $i\neq j$ beachten gilt
+		
+		\begin{align*}
+			M-\lambda I \text{ ist irreduzibel} \iff M = -D^{-1}(A-D) \text{ ist irreduzibel}
+		\end{align*}
+	
+		Da eine Multiplikation mit $-D^{-1}$ nur die Zeilen skaliert gilt
+		
+		\begin{align*}
+			-D^{-1}(A-D) \text{ ist irreduzibel} \iff A-D \text{ ist irreduzibel} \\ \iff A \text{ ist irreduzibel (aus dem gleichen Grund wie oben)}
+		\end{align*}
+	
+		Also folgt, dass $M-\lambda I$ irreduzibel ist.
+		
+		Wir beobachten folgendes:
+		
+		\begin{align*}
+			\forall i\neq j: M_{ij} = (-D^{-1}(A-D))_{ij} = (-D^{-1}A)_{ij} = -\frac{a_{ij}}{d_{ii}} = -\frac{a_{ij}}{a_{ii}} \\
+			\forall i: M_{ii} = (-D^{-1}\underbrace{(A-D)}_{(A-D)_{ii}=0})_{ii} = 0
+		\end{align*}
+	
+		Nun folgt
+		
+		\begin{align*}
+			\sum_{k=1,k\neq j}^{n}|(M-\lambda I)_{jk}| = \sum_{k=1,k\neq j}^{n}|M_{jk}| = \sum_{k=1,k\neq j}^{n}\left|-\frac{a_{jk}}{a_{jj}}\right| = \sum_{k=1,k\neq j}^{n} \frac{|a_{jk}|}{|a_{jj}|}
+		\end{align*}
+	
+		Da $A$ diagonaldominant ist folgt 
+		
+		\begin{align*}
+			\sum_{k=1,k\neq j}^{n}|a_{jk}| \leq |a_{jj}| \implies \sum_{k=1,k\neq j}^{n}\frac{|a_{jk}|}{|a_{jj}|} \leq 1 \leq |\lambda|
+		\end{align*}
+	
+		Da $|(M-\lambda I)_{jj}| = |\lambda|$ folgt, dass $\sum_{k=1,k\neq j}^{n}|(M-\lambda I)_{jk}| \leq |(M-\lambda I)_{jj}|$. Für ein $j$ gilt sogar $\sum_{k=1,k\neq j}^{n}\frac{|a_{jk}|}{|a_{jj}|} < 1$ also existiert ein $j$ mit $\sum_{k=1,k\neq j}^{n}|(M-\lambda I)_{jk}| < |(M-\lambda I)_{jj}|$. Somit ist $M-\lambda I$ diagonaldominant.
+		
+		Insgesamt können wir folgern, dass $M-\lambda I$ für alle $\lambda$ mit $|\lambda|\geq 1$ regulär ist. Also ist $\lambda$ kein Eigenwert von $M$. Daraus folgt $\rho (M) < 1$ und aus dem Satz über globale Konvergenz, dass das Jacobi-Verfahren konvergiert.
+		
+		\item Gauss-Seidel-Verfahren:
+		
+		\begin{align*}
+			M:=-L^{-1}U && \text{mit} && L_{jk}=\begin{cases}
+				A_{jk} & \text{ für } j\geq k\\
+				0 & \text{ sonst}
+			\end{cases}
+			&& \text{und} && U_{jk}=\begin{cases}
+				A_{jk} & \text{ für } j < k\\
+				0 & \text{ sonst}
+			\end{cases}
+		\end{align*}
+	
+	Es gilt $L+U=A$ und $L$ ist regulär, da $\forall i\in\{1,...,n\}:A_{ii}\neq 0$. Also existiert $L^{-1}$.
+	
+	Sei $\lambda\in\mathbb{K}$ mit $|\lambda|\geq 1$ beliebig.
+	
+	$M-\lambda I = -L^{-1}U-\lambda I$ ist regulär genau dann wenn $(-L)(-L^{-1}U-\lambda I) = U+\lambda L$ regulär ist.
+	
+	Da $A=L+U$ irreduzibel ist folgt, dass auch $\lambda L + U$ irreduzibel ist (folgt aus der Definition von irreduzibel).
+	
+	Weiters gilt unter anderem wegen der Diagonaldominantheit von $A$, dass
+	
+	\begin{align*}
+		\sum_{k=1,k\neq j}^{n} |(\lambda L + U)_{jk}| \leq |\lambda| \sum_{k=1,k\neq j}^{n} |A_{jk}| \leq |\lambda|\cdot |a_{jj}| = |(\lambda L + U)_{jj}|
+	\end{align*}
+
+	Wobei ein $j$ existiert für dass sogar $|\lambda| \sum_{k=1,k\neq j}^{n} |A_{jk}| < |\lambda|\cdot |a_{jj}|$. Also ist $\lambda L + U$ diagonaldominant und somit regulär. Das impliziert die Regularität von $M-\lambda I$ was gleich wie beim Jacobi-Verfahren die Konvergenz impliziert.
+	
+	
+	
+	\end{enumerate}
+\end{proof}
+
+
+\end{document}

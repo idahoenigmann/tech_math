@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{imakeidx}
+
+\makeindex
+
+%opening
+\title{Series 12}
+\author{Ida Hönigmann}
+
+\newtheorem{theorem}{Theorem}
+\newenvironment{proof}{\textit{\textbf{Proof}}}{\hfill$\blacksquare$}
+
+\newcommand{\norm}[1]{||{#1}||_2}
+\newcommand{\dist}[2]{\textrm{dist}({#1}, {#2})}
+
+%\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\baselinestretch}{1.5}
+
+\newenvironment{myitemize}{%
+	\begin{itemize}[label=$\spadesuit$]
+		\let\olditem\item
+		\renewcommand\item{\olditem}
+	}{
+	\end{itemize}
+}  
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Problem 1}
+\begin{theorem}
+	Let $n \in \mathbb{N}$ and $A, B \subset \mathbb{R}^n$ open subsets with compact closure $\bar{A}, \bar{B}$ and $A \cap B = \emptyset$.
+	We define the boundary of the sets as $\partial A := \bar{A} \setminus A$ and $\partial B := \bar{B} \setminus B$.
+	Then, there holds for the distances of the two sets that $\dist{A}{B} = \dist{\partial A}{\partial B}$, where we define for arbitrary sets $C, D \subset \mathbb{R}^n$
+	
+	\begin{align}
+		\dist{C}{D} := \inf \{\norm{x - y} : x \in C, y \in D\}
+	\end{align}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\section{Problem 2}
+\begin{align*}
+	A = \left(
+	\begin{array}{ccccc}
+		\beta_0   & -\gamma_1 & 0         & \cdots    & 0        \\
+		-\gamma_1 & \beta_1   & -\gamma_2 & \ddots    & \vdots   \\
+		0         & -\gamma_2 & \ddots    & \ddots    & 0        \\
+		\vdots    & \ddots    & \ddots    & \ddots    & -\gamma_n\\
+		0         & \cdots    & 0         & -\gamma_n & \beta_n  \\
+	\end{array}
+	\right) \in \mathbb{R}^{(n+1)\times (n+1)}_{\textrm{sym}}
+\end{align*}
+
+\section{Problem 3}
+The .toc file stores information regarding the table of contents. It is created at the end of the latex compile process, which means one has to compile multiple times before the toc shows up in the document correctly.
+
+\href{https://tex.stackexchange.com/questions/186674/why-is-the-toc-file-created-at-end-document}{Why is the .toc file created at end document?}
+
+\section{Problem 4}
+\begin{theorem}
+	If $A \in \mathbb{R}^{n \times n}$ is a matrix with $\sum_{j,k=1}^{n}x_j A_{jk} x_k > 0$ for all $x \in \mathbb{R}^n \setminus \{0\}$ then $A$ is regular.
+\end{theorem}
+
+\begin{proof}
+	Let $A \in \mathbb{R}^{n\times n}$ be an arbitrary matrix with $\sum_{j,k=1}^{n}x_j A_{jk} x_k > 0$ for all $x \in \mathbb{R}^n \setminus \{0\}$. Let $x \in \mathbb{R}^n \setminus \{0\}$ be an arbitrary vector.
+	
+	\begin{align*}
+		0 < \sum_{j,k=1}^{n}x_j A_{jk} x_k &= \sum_{j,k=1}^{n}x_j (e_j^T A e_k) x_k \\
+		&= \sum_{j,k=1}^{n}(x_j e_j^T) A (e_k x_k) \\
+		&= \left(\sum_{j=1}^{n}(x_j e_j^T)\right) A \left(\sum_{k=1}^{n}(x_k e_k)\right) \\
+		&= x^T A x
+	\end{align*}
+
+	Therefore $A$ is positive definite, which implies that $\mathrm{det}A > 0$. So $A$ must be regular.
+\end{proof}
+
+\section{Problem 5}
+\begin{myitemize}
+	\item A
+	\item B
+	\item C
+\end{myitemize}
+
+\section{Problem 6}
+\subsection{Subsection 1}
+Lorem\index{Loream} ipsum\index{ipsum} dolor sit amet, consectetuer
+adipiscing elit. Ut purus elit, vestibulum ut, placerat ac,
+adipiscing vitae, felis. Curabitur dictum gravida mauris. Nam arcu
+libero, nonummy eget, consectetuer id, vulputate a, magna. Donec
+vehicula augue eu neque. Pellentesque\index{Pellentesque} habitant morbi tristique
+senectus et netus et malesuada\index{malesuada} fames ac turpis egestas. Mauris ut
+leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna
+fringilla ultrices.  Phasellus eu tellus sit amet tortor gravida
+placerat. Integer sapien est, iaculis in, pretium quis, viverra ac,
+nunc. Praesent eget sem vel leo ultrices bibendum. Aenean faucibus.
+Morbi dolor nulla, malesuada\index{malesuada} eu, pulvinar at, mollis ac, nulla.
+Curabitur auctor semper nulla. Donec varius orci eget risus. Duis
+nibh mi, congue eu, accumsan eleifend, sagittis quis, diam. Duis
+eget orci sit amet orci dignissim rutrum.
+\newpage
+
+\subsection{Subsection 2}
+Nam dui ligula, fringilla a, euismod sodales\index{sodales},
+sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus
+libero, pretium at, lobortis vitae, ultricies et, tellus. Donec
+aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
+vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit
+mollis. Suspendisse\index{Suspendisse} ut massa. Cras nec ante. Pellentesque\index{Pellentesque} a nulla.
+Cum sociis natoque penatibus et magnis dis parturient montes,
+nascetur ridiculus mus. Aliquam tincidunt urna. Nulla ullamcorper
+vestibulum turpis. Pellentesque cursus\index{cursus} luctus mauris.
+
+\section{Problem 7}
+\begin{align*}
+	\int_{-1}^{1}\sqrt{1-x^2}dx &= \left[x\sqrt{1-x^2} \right]_{x=-1}^{1} - \int_{-1}^{1}\frac{x(-2x)}{2\sqrt{1-x^2}}dx \\
+	&= \left[x\sqrt{1-x^2} \right]_{x=-1}^{1} + \int_{-1}^{1}\frac{dx}{\sqrt{1-x^2}} - \int_{-1}^{1}\frac{1-x^2}{\sqrt{1-x^2}}dx \\
+	&= \left[x\sqrt{1-x^2} + \arcsin x \right]_{x=-1}^{1} - \int_{-1}^{1}\sqrt{1-x^2}dx \\
+\end{align*}
+
+\section{Problem 8}
+\begin{theorem}
+	Let $I$ be a nonempty open interval. Then it holds for $f, g \in C^\infty(I)$ and $n \in \mathbb{N}$ that
+	
+	\begin{align*}
+		(fg)^{(n)} = \sum_{k=0}^{n}\binom{n}{k} f^{(k)}g^{(n-k)}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	TODO
+\end{proof}
+
+\printindex
+
+\end{document}

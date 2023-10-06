@@ -1,0 +1,1 @@
+5. integrate 1 = t -> überall 2*pi statt 1 -> integrale ergeben pi nicht 1/4!

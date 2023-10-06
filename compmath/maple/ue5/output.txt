@@ -1,0 +1,622 @@
+    |\^/|     Maple 2020 (X86 64 LINUX)
+._|\|   |/|_. Copyright (c) Maplesoft, a division of Waterloo Maple Inc. 2020
+ \  MAPLE  /  All rights reserved. Maple is a trademark of
+ <____ ____>  Waterloo Maple Inc.
+      |       Type ? for help.
+
+> restart; # clear workspace
+> ;
+> Digits:=20: # use 20 decimal digits in floating point computations
+> ;
+> interface(displayprecision=10): # display 10 decimal digits of float objects by default
+> ;
+
+> with(ListTools):
+
+> printStack := proc(A, name:="");        # access to stack elements (besides to one) ist cumbersome...
+>     local cpy, lst;
+
+>     cpy := copy(A);
+>     lst := [];
+>     
+>     while not stack[empty](cpy) do
+>         lst := [op(lst), stack[pop](cpy)];
+>     end do;
+
+>     print(name = Reverse(lst));
+
+> end proc:
+
+
+> ToH := proc(A, B, C, n, name_A:="A", name_B:="B", name_C:="C");
+
+>     if n = 0 then
+>         return;
+>     end if;
+
+>     ToH(A, C, B, n-1, "A", "C", "B");
+>     stack[push](stack[pop](A), C);
+
+>     print("moving disk...");
+>     printStack(A, name_A);
+>     printStack(B, name_B);
+>     printStack(C, name_C);
+
+>     ToH(B, A, C, n-1, "B", "A", "C");
+
+> end proc:
+> NULL;
+> n := 6:
+
+> A := stack[new]():
+> B := stack[new]():
+> C := stack[new]():
+
+> for i from n by -1 to 1 do
+>     stack[push](i, A);
+> end do:
+
+> printStack(A, "A");
+                            "A" = [6, 5, 4, 3, 2, 1]
+
+
+> ToH(A,B,C,n);
+                                "moving disk..."
+
+                             "A" = [6, 5, 4, 3, 2]
+
+                                    "C" = []
+
+                                   "B" = [1]
+
+                                "moving disk..."
+
+                               "A" = [6, 5, 4, 3]
+
+                                   "C" = [1]
+
+                                   "B" = [2]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                               "A" = [6, 5, 4, 3]
+
+                                  "C" = [2, 1]
+
+                                "moving disk..."
+
+                                "A" = [6, 5, 4]
+
+                                  "C" = [2, 1]
+
+                                   "B" = [3]
+
+                                "moving disk..."
+
+                                   "A" = [2]
+
+                                   "C" = [3]
+
+                               "B" = [6, 5, 4, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                               "A" = [6, 5, 4, 1]
+
+                                  "C" = [3, 2]
+
+                                "moving disk..."
+
+                                "B" = [6, 5, 4]
+
+                                    "A" = []
+
+                                "C" = [3, 2, 1]
+
+                                "moving disk..."
+
+                                  "A" = [6, 5]
+
+                                "C" = [3, 2, 1]
+
+                                   "B" = [4]
+
+                                "moving disk..."
+
+                                  "A" = [3, 2]
+
+                                  "C" = [6, 5]
+
+                                  "B" = [4, 1]
+
+                                "moving disk..."
+
+                                   "A" = [3]
+
+                                  "C" = [4, 1]
+
+                                "B" = [6, 5, 2]
+
+                                "moving disk..."
+
+                                   "B" = [4]
+
+                                   "A" = [3]
+
+                               "C" = [6, 5, 2, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                               "A" = [6, 5, 2, 1]
+
+                                  "C" = [4, 3]
+
+                                "moving disk..."
+
+                                "A" = [6, 5, 2]
+
+                                  "C" = [4, 3]
+
+                                   "B" = [1]
+
+                                "moving disk..."
+
+                                  "B" = [6, 5]
+
+                                   "A" = [1]
+
+                                "C" = [4, 3, 2]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                  "A" = [6, 5]
+
+                               "C" = [4, 3, 2, 1]
+
+                                "moving disk..."
+
+                                   "A" = [6]
+
+                               "C" = [4, 3, 2, 1]
+
+                                   "B" = [5]
+
+                                "moving disk..."
+
+                                "A" = [4, 3, 2]
+
+                                   "C" = [5]
+
+                                  "B" = [6, 1]
+
+                                "moving disk..."
+
+                                  "A" = [4, 3]
+
+                                  "C" = [6, 1]
+
+                                  "B" = [5, 2]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                  "A" = [4, 3]
+
+                                "C" = [5, 2, 1]
+
+                                "moving disk..."
+
+                                   "A" = [4]
+
+                                "C" = [5, 2, 1]
+
+                                  "B" = [6, 3]
+
+                                "moving disk..."
+
+                                  "A" = [5, 2]
+
+                                  "C" = [6, 3]
+
+                                  "B" = [4, 1]
+
+                                "moving disk..."
+
+                                   "B" = [5]
+
+                                  "A" = [4, 1]
+
+                                "C" = [6, 3, 2]
+
+                                "moving disk..."
+
+                                   "B" = [4]
+
+                                   "A" = [5]
+
+                               "C" = [6, 3, 2, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                               "A" = [6, 3, 2, 1]
+
+                                  "C" = [5, 4]
+
+                                "moving disk..."
+
+                                "A" = [6, 3, 2]
+
+                                    "C" = []
+
+                                "B" = [5, 4, 1]
+
+                                "moving disk..."
+
+                                  "A" = [6, 3]
+
+                                "C" = [5, 4, 1]
+
+                                   "B" = [2]
+
+                                "moving disk..."
+
+                                  "B" = [5, 4]
+
+                                  "A" = [6, 3]
+
+                                  "C" = [2, 1]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                  "A" = [2, 1]
+
+                                "C" = [5, 4, 3]
+
+                                "moving disk..."
+
+                                   "A" = [2]
+
+                                "C" = [5, 4, 3]
+
+                                  "B" = [6, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                  "A" = [6, 1]
+
+                               "C" = [5, 4, 3, 2]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                    "A" = []
+
+                             "C" = [5, 4, 3, 2, 1]
+
+                                "moving disk..."
+
+                                    "A" = []
+
+                             "B" = [5, 4, 3, 2, 1]
+
+                                   "C" = [6]
+
+                                "moving disk..."
+
+                               "A" = [5, 4, 3, 2]
+
+                                    "C" = []
+
+                                  "B" = [6, 1]
+
+                                "moving disk..."
+
+                                "A" = [5, 4, 3]
+
+                                  "C" = [6, 1]
+
+                                   "B" = [2]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                "A" = [5, 4, 3]
+
+                                  "C" = [2, 1]
+
+                                "moving disk..."
+
+                                  "A" = [5, 4]
+
+                                  "C" = [2, 1]
+
+                                  "B" = [6, 3]
+
+                                "moving disk..."
+
+                                   "A" = [2]
+
+                                  "C" = [6, 3]
+
+                                "B" = [5, 4, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                "A" = [5, 4, 1]
+
+                                "C" = [6, 3, 2]
+
+                                "moving disk..."
+
+                                  "B" = [5, 4]
+
+                                    "A" = []
+
+                               "C" = [6, 3, 2, 1]
+
+                                "moving disk..."
+
+                                   "A" = [5]
+
+                               "C" = [6, 3, 2, 1]
+
+                                   "B" = [4]
+
+                                "moving disk..."
+
+                                "A" = [6, 3, 2]
+
+                                   "C" = [5]
+
+                                  "B" = [4, 1]
+
+                                "moving disk..."
+
+                                  "A" = [6, 3]
+
+                                  "C" = [4, 1]
+
+                                  "B" = [5, 2]
+
+                                "moving disk..."
+
+                                   "B" = [4]
+
+                                  "A" = [6, 3]
+
+                                "C" = [5, 2, 1]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                "A" = [5, 2, 1]
+
+                                  "C" = [4, 3]
+
+                                "moving disk..."
+
+                                  "A" = [5, 2]
+
+                                  "C" = [4, 3]
+
+                                  "B" = [6, 1]
+
+                                "moving disk..."
+
+                                   "B" = [5]
+
+                                  "A" = [6, 1]
+
+                                "C" = [4, 3, 2]
+
+                                "moving disk..."
+
+                                   "B" = [6]
+
+                                   "A" = [5]
+
+                               "C" = [4, 3, 2, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                               "A" = [4, 3, 2, 1]
+
+                                  "C" = [6, 5]
+
+                                "moving disk..."
+
+                                "A" = [4, 3, 2]
+
+                                  "C" = [6, 5]
+
+                                   "B" = [1]
+
+                                "moving disk..."
+
+                                  "A" = [4, 3]
+
+                                   "C" = [1]
+
+                                "B" = [6, 5, 2]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                  "A" = [4, 3]
+
+                               "C" = [6, 5, 2, 1]
+
+                                "moving disk..."
+
+                                   "A" = [4]
+
+                               "C" = [6, 5, 2, 1]
+
+                                   "B" = [3]
+
+                                "moving disk..."
+
+                                "A" = [6, 5, 2]
+
+                                   "C" = [3]
+
+                                  "B" = [4, 1]
+
+                                "moving disk..."
+
+                                  "B" = [6, 5]
+
+                                  "A" = [4, 1]
+
+                                  "C" = [3, 2]
+
+                                "moving disk..."
+
+                                   "B" = [4]
+
+                                  "A" = [6, 5]
+
+                                "C" = [3, 2, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                "A" = [3, 2, 1]
+
+                                "C" = [6, 5, 4]
+
+                                "moving disk..."
+
+                                  "A" = [3, 2]
+
+                                    "C" = []
+
+                               "B" = [6, 5, 4, 1]
+
+                                "moving disk..."
+
+                                   "A" = [3]
+
+                               "C" = [6, 5, 4, 1]
+
+                                   "B" = [2]
+
+                                "moving disk..."
+
+                                "B" = [6, 5, 4]
+
+                                   "A" = [3]
+
+                                  "C" = [2, 1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                  "A" = [2, 1]
+
+                               "C" = [6, 5, 4, 3]
+
+                                "moving disk..."
+
+                                   "A" = [2]
+
+                               "C" = [6, 5, 4, 3]
+
+                                   "B" = [1]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                   "A" = [1]
+
+                             "C" = [6, 5, 4, 3, 2]
+
+                                "moving disk..."
+
+                                    "B" = []
+
+                                    "A" = []
+
+                            "C" = [6, 5, 4, 3, 2, 1]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> quit
+memory used=3.7MB, alloc=8.3MB, time=0.06

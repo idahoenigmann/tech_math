@@ -1,0 +1,2 @@
+bei bsp 5. zur surjektivität: man kann g so auf [0, 1] fortsetzen dass g in Cb[0,1] liegt. z.B. durch g(x)=f(0) für x zwischen 0 und 1/3; g(x)=f(3x-1) für x zwischen 1/3 und 2/3 und durch g(x)=f(1) für x zwischen 2/3 und 1
+

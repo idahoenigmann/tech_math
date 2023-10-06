@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ida/technische_mathematik/eprog/serie12/ReducedMatrix/ReducedMatrix.h
+stdexcept
+-
+iostream
+-
+math.h
+-
+
+/home/ida/technische_mathematik/eprog/serie12/ReducedMatrix/main.cpp
+iostream
+-
+ReducedMatrix.h
+/home/ida/technische_mathematik/eprog/serie12/ReducedMatrix/ReducedMatrix.h
+

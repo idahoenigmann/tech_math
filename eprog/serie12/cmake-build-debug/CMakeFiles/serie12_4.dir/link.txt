@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/serie12_4.dir/ReducedMatrix/ReducedMatrix.cpp.o CMakeFiles/serie12_4.dir/ReducedMatrix/main.cpp.o  -o serie12_4 

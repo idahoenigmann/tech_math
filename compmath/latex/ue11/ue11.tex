@@ -1,0 +1,217 @@
+\documentclass[]{article}
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+
+%opening
+\title{Homework 1}
+\author{Ida Hönigmann}
+
+\newtheorem{theorem}{Theorem}
+\newenvironment{proof}{\textit{\textbf{Proof}}}{\hfill$\blacksquare$}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+
+\begin{align*}
+	p(t)=\textrm{det}(A-t \cdot \textrm{Id}) =
+	\begin{array}{|cccc|}
+		a_{11}-t & a_{12} & \cdots & a_{1n} \\
+		a_{21} & a_{22} - t & \cdots & a_{2n} \\
+		\vdots & \vdots & & \vdots \\
+		a_{n1}-t & a_{n2} & \cdots & a_{nn} - t \\
+	\end{array}
+\end{align*}
+
+
+\section*{Problem 2}
+
+The Gamma function is defined as
+
+\begin{align*}
+	\Gamma (x) := \lim\limits_{n \to \infty} \frac{n! n^x}{x(x+1)\cdots (x+n)}
+\end{align*}
+
+\noindent
+There holds the Weierstraß product representation
+
+\begin{align*}
+	\frac{1}{\Gamma (x)} = x \cdot e^{Cx} \cdot \prod_{k=1}^{\infty} (1 + \frac{x}{k}) e^{-k/k} && \textrm{with} && C := \lim\limits_{n \to \infty} (\sum_{k=1}^{n} \frac{1}{k} - \ln n)
+\end{align*}
+
+
+\section*{Problem 3}
+
+Let $f,g : \mathbb{R} \to \mathbb{R}$ be given functions given by
+
+\begin{align*}
+	f(x) := \left\{
+	\begin{array}{ll}
+		-1 & \textrm{if}\ x < - \frac{\pi}{2}, \\
+		\sin (x) & \textrm{if}\ - \frac{\pi}{2} \leq x \leq \frac{\pi}{2}, \\
+		1 & \textrm{if}\ x > \frac{\pi}{2}. \\
+	\end{array}
+	\right. & \textrm{and} & 
+	g(x) := \left\{
+	\begin{array}{ll}
+		1 & \textrm{if}\ x \in \mathbb{Q}, \\
+		0 & \textrm{if}\ x \in \mathbb{R} \setminus \mathbb{Q}. \\
+	\end{array}
+	\right.
+\end{align*}
+
+\newpage
+\section*{Problem 4}
+
+For $q \in \mathbb{R}$, it holds that
+
+\begin{align*}
+	\lim\limits_{n \to \infty} q^n = 
+	\left\{
+	\begin{array}{ll}
+		+\infty & \textrm{if}\ q > 1, \\
+		1 & \textrm{if}\ q = 1, \\
+		0 & \textrm{if}\ -1 < q < 1, \\
+		\nexists & \textrm{if}\ q \leq -1. \\
+	\end{array}
+	\right.
+\end{align*}
+
+
+\section*{Problem 5}
+
+\begin{align*}
+	A := \left(
+	\begin{array}{ccccc}
+		\alpha & 2\alpha & 3\alpha & \cdots & n\alpha \\
+		0      & \alpha  & 2\alpha & \ddots & \vdots  \\
+		0      & 0       & \ddots  & \ddots & 3\alpha \\
+		\vdots & \ddots  & \ddots  & \ddots & 2\alpha \\
+		0      & \cdots  & 0       & 0      & \alpha  \\
+	\end{array}
+	\right) \in \mathbb{R}^{n \times n}_{\textrm{tria}}
+\end{align*}
+
+
+\section*{Problem 6}
+
+\begin{align*}
+	\textrm{det}(V) =
+	\begin{array}{|cccc|}
+		1 & a & a^2 & a^3 \\
+		1 & b & b^2 & b^3 \\
+		1 & c & c^2 & c^3 \\
+		1 & d & d^2 & d^3 \\
+	\end{array}
+	\\ = a^{3} b^{2} c - a^{3} b^{2} d - a^{3} b c^{2} + a^{3} b d^{2} \\ + a^{3} c^{2} d - a^{3} c d^{2} - a^{2} b^{3} c + a^{2} b^{3} d \\ + a^{2} b c^{3} - a^{2} b d^{3} - a^{2} c^{3} d + a^{2} c d^{3} \\ + a b^{3} c^{2} - a b^{3} d^{2} - a b^{2} c^{3} + a b^{2} d^{3} \\ + a c^{3} d^{2} - a c^{2} d^{3} - b^{3} c^{2} d + b^{3} c d^{2} \\ + b^{2} c^{3} d - b^{2} c d^{3} - b c^{3} d^{2} + b c^{2} d^{3}
+	\\ = \left(a - b\right) \left(a - c\right) \left(a - d\right) \left(b - c\right) \left(b - d\right) \left(c - d\right)
+\end{align*}
+
+\section*{Problem 7}
+
+\begin{theorem}
+	For $a,b \in \mathbb{R}$ and a continuous function $f : (a, b) \to \mathbb{R}$, the following two assertions are equivalent:
+	
+	\begin{enumerate}[(i)]
+		\item $f$ is uniformly continuous.
+		\item $f$ has a continuous extension onto the compact interval $[a,b]$, i.e., there exists a function $\hat{f} : [a, b] \to \mathbb{R}$ with $\hat{f}=f(x)$ for all $x \in (a, b)$.
+	\end{enumerate}
+
+	In this case the continuous extension $\hat{f}$ is even unique.
+\end{theorem}
+
+\begin{proof}
+	\textit{(i)} $\implies$ \textit{(ii)}	
+	Uniform continuity of $f$ is defined as
+	
+	\[\exists \delta\ \forall \epsilon\ \forall x, y \in (a, b) : |x - y| < \delta \implies |f(x) - f(y)| < \epsilon \]
+	
+	Let $(x_n)_{n \in \mathbb{N}}$ be a sequence in $(a, b)$ which converges to $a$. Since every convergent sequence is a Cauchy-sequence it holds that
+	
+	\[\forall \delta\ \exists N \in \mathbb{N}\: \forall n, m > N : |x_n - x_m| < \delta\]
+	
+	The uniform continuity now gives us
+	
+	\[\forall n, m > N : |f(x_n) - f(x_m)| < \epsilon\]
+	
+	which indicates, that $(f(x_n))_{n \in \mathbb{N}}$ is a Cauchy-Series in $\mathbb{R}$. Now we define $\hat{f}(a):=\lim\limits_{n \to \infty}f(x_n)$.
+	
+	The same can be done for $(x_n)_{n \in \mathbb{N}}$ converging towards $b$.
+	\newline
+	
+	\noindent
+	\textit{(ii)} $\implies$ \textit{(i)} Proof by contradiction. Suppose $\hat{f}$ and therefore $f$ is not uniformly continuous on $(a, b)$. Then there exist sequences $(x_n)_{n \in \mathbb{N}}$, $(y_n)_{n \in \mathbb{N}}$ in $(a, b)$ with
+	
+	\begin{equation}
+		\label{equ:not_uniform_continous}
+		\begin{array}{cccc}
+			\lim\limits_{n \to \infty} |x_n - y_n| = 0 &
+			\textrm{and} &
+			|\hat{f}(x_n)-\hat{f}(y_n)|>\epsilon &
+			\forall n \in \mathbb{N}
+		\end{array}
+	\end{equation}
+	
+	Since $[a, b]$ is compact a subsequence $(x_{n(k)})_{k \in \mathbb{N}}$ with
+	
+	\[\lim\limits_{k \to \infty}x_{n(k)} = x\]
+	
+	exists. The subsequence $(y_{n(k)})$ also converges to $x$, since $(y_n - x_n) \to 0$ and
+	
+	\[\lim\limits_{k \to \infty}y_{n(k)} = \lim\limits_{k \to \infty}(y_{n(k)} - (y_{n(k)} - x_{n(k)})) = \lim\limits_{k \to \infty}x_{n(k)} = x\]
+	
+	Since $\hat{f}$ is continuous
+	
+	\[\lim\limits_{k \to \infty}|\hat{f}(x_{n(k)}) - \hat{f}(y_{n(k)})| = |\lim\limits_{k \to \infty} \hat{f}(x_{n(k)}) - \lim\limits_{k \to \infty} \hat{f}(y_{n(k)})| = |\hat{f}(x) - \hat{f}(x)| = 0\]
+	
+	which contradicts (\ref{equ:not_uniform_continous}).
+	
+\end{proof}
+
+\section*{Problem 8}
+
+\begin{theorem}
+	For real numbers $x, y \in \mathbb{R}$ and $n \in \mathbb{N}$ we have
+	
+	\begin{align*}
+		(x+y)^n = \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k.
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	Let $x, y \in \mathbb{R}$ be arbitrary. Proof by induction:
+	
+	\noindent$n = 0:$
+	
+	\[(x+y)^0 = 1 = \binom{0}{0} x^0 y^0\]
+	
+	\noindent$n+1:$
+	
+	\begin{align*}
+		(x+y)^{n+1} &= (x+y)^n \cdot (x+y) \\
+		&= \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k \right) (x+y) \\
+		&= \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k \right)x +
+		   \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k \right)y \\
+		&= \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k+1} y^k \right) +
+		   \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^{k+1} \right) \\
+		&= \left( \sum_{k=0}^{n} \binom{n}{k} x^{n-k+1} y^k \right) +
+		   \left( \sum_{k=1}^{n+1} \binom{n}{k-1} x^{n-(k-1)} y^{k} \right) \\
+		&= \left( \sum_{k=1}^{n} \binom{n}{k} x^{n-k+1} y^{k} \right) +
+		   \left( \sum_{k=1}^{n} \binom{n}{k-1} x^{n-(k-1)} y^{k} \right) \\
+		   &\ \quad + \binom{n}{0} x^{n-0+1} y^0 - \binom{n}{(n+1)-1} x^{n-(n+1)+1)} y^{n+1} \\
+		&= \left( \sum_{k=1}^{n} \binom{n}{k} x^{n-k+1} y^{k} \right) +
+		   \left( \sum_{k=1}^{n} \binom{n}{k-1} x^{n-k+1} y^{k} \right) \\
+		   &\ \quad + \binom{n}{0} x^{n+1} y^0 - \binom{n}{n} x^{0} y^{n+1} \\
+		&= \left( \sum_{k=1}^{n} \left(\binom{n}{k} + \binom{n}{k-1}\right) x^{n-k+1} y^{k} \right) + \binom{n}{0} x^{n+1} y^0 - \binom{n}{n} x^{0} y^{n+1} \\
+		&= \left( \sum_{k=1}^{n} \binom{n+1}{k} x^{n-k+1} y^{k} \right) + \binom{n+1}{0} x^{n+1} y^0 - \binom{n+1}{n+1} x^{0} y^{n+1} \\
+		&= \left( \sum_{k=0}^{n+1} \binom{n+1}{k} x^{(n+1)-k} y^{k} \right) \\
+	\end{align*} 
+
+\end{proof}
+
+\end{document}

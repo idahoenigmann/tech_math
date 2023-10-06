@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/Factorization.cpp
+Factorization.h
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/Factorization.h
+
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/Factorization.h
+IntVector.h
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/IntVector.h
+
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/IntVector.h
+stdexcept
+-
+iostream
+-
+
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/main.cpp
+iostream
+-
+IntVector.h
+/home/ida/technische_mathematik/eprog/serie09/serie09_123/IntVector.h
+

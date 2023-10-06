@@ -1,0 +1,3 @@
+zu 3. und 4. tatsächlich sind die abgeleiteten Funktionen nicht differenzierbar, da nicht stetig (am jeweiligen Grenzpunkt).
+
+zu 5. bei sinh und cosh ist die ableitung eine andere.
