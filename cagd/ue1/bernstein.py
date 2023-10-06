@@ -1,7 +1,6 @@
 from scipy.special import binom
 import matplotlib
 import matplotlib.pyplot as plt
-import random
 
 
 def bernstein(t, i, j):
