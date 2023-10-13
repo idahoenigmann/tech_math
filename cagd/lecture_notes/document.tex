@@ -206,6 +206,13 @@ Kreuzerlübung.
 	$\dot{b}(t) := \frac{d}{dt} b(t) = n \sum_{i=0}^{n-1} B_i^{n-1}(t)(b_{i+1} - b_i) = n (b_1^{n-1}(t) - b_0^{n-1}(t))$
 \end{theorem}
 
+\begin{proof}
+	\begin{align*}
+		\dot{b}(t) = \frac{d}{dt} \left(\sum_{i=0}^{n} B_i^n(t) b_i\right) = \sum_{i=0}^{n} \frac{d}{dt} B_i^n(t) b_i = \sum_{i=0}^{n} n(B_{i-1}^{n-1}(t) - B_i^{n-1}(t)) b_i = n \left(\sum_{i=0}^{n} B_{i-1}^{n-1}(t) b_i - \sum_{i=0}^{n} B_i^{n-1}(t) b_i\right) =\\
+		n \left(\sum_{i=1}^{n} B_{i-1}^{n-1}(t) b_i - \sum_{i=0}^{n} B_i^{n-1}(t) b_i\right) = n\left(\underbrace{\sum_{i=0}^{n-1} B_i^{n-1}(t) b_{i+1}}_{=b_1^{n-1}(t)} - \underbrace{\sum_{i=0}^{n-1} B_i^{n-1}(t) b_i}_{=b_0^{n-1}(t)}\right) = n \left(\sum_{i=0}^{n-1} B_i^{n-1}(t)(b_{i+1} - b_i)\right)
+	\end{align*}
+\end{proof}
+
 \begin{corollary}
 	\begin{itemize}
 		\item $\dot{b}(0) = n (b_1 - b_0)$
@@ -215,8 +222,132 @@ Kreuzerlübung.
 	\end{itemize}
 \end{corollary}
 
+\begin{corollary}
+	$\ddot{b}(t) = n (n-1) \sum_{i=0}^{n-2} B_i^{n-2}(t) (b_{i+2} - 2 b_{i+1} + b_i)$
+	
+	$\ddot{b}(0) = n(n-1)(b_2 - 2b_1 + b_0)$, $\ddot{b}(1) = n(n-1)(b_n - 2b_{n-1} + b_{n-2})$
+\end{corollary}
+
+\begin{corollary}
+	The curvature of a bezier curve in the point $b(0)$ depends only on $b_0, b_1, b_2$.
+	
+	The curvature of a bezier curve in the point $b(1)$ depends only on $b_{n-2}, b_{n-1}, b_n$.
+\end{corollary}
+
+\begin{example}
+	Quadratic Bezier curve
+	\begin{align*}
+		b(t) = \sum_{i=0}^{2} B_i^2(t) b_i = \binom{2}{0} t^0 (1-t)^2 b_0 + \binom{2}{1} t^1 (1-t)^1 b_1 + \binom{2}{2} t^2 (1-t)^0 b_2 = t^2(b_2-2b_1+b_0) + t(2b_1 - 2b_0) + b_0
+	\end{align*}
+	which is an affine transformation of a parabel and therefore a parabel.
+	
+	Quadratic bezier curves are parabolas.
+\end{example}
+
+\begin{remark}
+	Line at infinity (Ferngerade) is the collection of points where parallel lines intersect.
+	
+	TODO fig
+\end{remark}
+
 \begin{remark}
 	Different applications using these curves are Rhino, OpenSCAD, Autocad, Geogebra, ...
 \end{remark}
+
+\newpage
+
+\begin{definition}
+	$c:I\subseteq \mathbb{R} \rightarrow \mathbb{R}^3$ is called a parameterized curve.
+	
+	TODO figure
+	
+	$\dot{c}(t) := \frac{d}{dt} c(t)$ is called the tangential vector. For $\mathbb{R}^3$ we have $\dot{c}(t) = (\dot{c_1}(t), \dot{c_2}(t), \dot{c_3}(t))$.
+
+	The velocity is defined as $|| \dot{c}(t) ||$.
+	
+	A point $c(t)$ is called regular, if $\dot{c}(t) \not= 0$ and is called singular, if $\dot{c}(t) = 0$.
+\end{definition}
+
+\begin{example}
+	A helix (Schraublinie) is defined by $c(t) = (\cos(t), \sin(t), t)^T$.
+	
+	TODO figure
+	
+	\begin{align*}
+		\dot{c}(t) = (-\sin(t), \cos(t), 1)^T && ||\dot{c}(t)|| = \sqrt{\sin^2(t) + \cos^2(t) + 1} = \sqrt{2}
+	\end{align*}
+	
+	We see that the helix is passed through with constant velocity. Furthermore all points are regular.
+\end{example}
+
+\begin{example}
+	$c:\mathbb{R} \rightarrow \mathbb{R}^3, t \mapsto (t^2, t^3, t^4)$, $\dot{c}(t) = (2t, 3t^2, 4t^3)$. We see that $0$ is singular as $\dot{c}(0) = (0, 0, 0)$. Everywhere else the curve is regular.
+\end{example}
+
+\begin{remark}
+	A point being regular or singular depends on the parameterization of the curve.
+	
+	For example $c(t) = (t,t)$ produces a regular curve, while $c(t) = (t^3, t^3)$ produces a curve where $0$ is singular.
+	
+	TODO figure
+	
+	There are curves and points where no parameterization exists such that the point is regular.	
+\end{remark}
+
+\begin{definition}
+	$c: I \rightarrow \mathbb{R}^2 \in C^2(I, \mathbb{R}^2)$
+	
+	The curvature of the curve in the point $c(t)$ is defined as $\kappa(t) = \frac{\det(\dot{c}(t), \ddot{c}(t))}{||\dot{c}(t)||^3}$
+\end{definition}
+
+\begin{example}
+	TODO figure
+	
+	The circle of curvature has a radius of $\frac{1}{\kappa(t)}$. $m(t)$ is called the center of curvature.
+	
+	$m(t) = c(t) + \frac{1}{\kappa(t)}n(t)$ where $n(t) = \frac{(-\dot{c_2}(t), \dot{c_1}(t))}{||\dot{c}(t)||}$.
+\end{example}
+
+\begin{remark}
+	Exercise: compare this definition of curvature with the school version concerning graphs.
+\end{remark}
+
+\begin{example}
+	For a circle we have $c(t) = (r\cos(t), r\sin(t))^T$, $\dot{c}(t) = (-r\sin(t), r\cos(t))^T$, $\ddot{c}(t) = (-r\cos(t), -r\sin(t))^T$
+	
+	\begin{align*}
+		\kappa(t) = \frac{\det \left(\begin{matrix}
+				-r \sin(t) & -r \cos(t) \\
+				r \cos(t) & -r \sin(t)
+		\end{matrix}\right) }{r^3} = \frac{r^2\sin^2(t) + r^2\cos^2(t)}{r^3} = \frac{r^2}{r^3} = \frac{1}{r}\\
+		n(t) = \frac{(-r \cos(t), -r \sin(t))}{r} = (-\cos(t), -\sin(t))
+	\end{align*}
+	
+	TODO fig
+\end{example}
+
+\begin{definition}
+	A point $c(t)$ with $\dot{\kappa}(t) = 0$ is called a vertex.
+\end{definition}
+
+\begin{example}
+	An ellipse has four vertices. TODO fig
+	
+	$(t, \exp t)$ has no vertex.
+	
+	Klothoids are curves with $\kappa(t) = t$. They are used in road construction and have no vertex.
+\end{example}
+
+\begin{definition}
+	$c:I \rightarrow \mathbb{R}^3$
+	
+	$\kappa(t) = \frac{||\dot{c}(t) \times \ddot{c}(t)||}{||\dot{c}(t)||^3}$ is called the curvature of a space curve.
+	
+	$\tau(t) = \frac{\det (\dot{c}(t), \ddot{c}(t), \dddot{c}(t))}{||\dot{c}(t) \times \ddot{c}(t)||^2}$ is called torsion of a space curve.
+\end{definition}
+
+\begin{example}
+	For the helix $t \mapsto (\cos(t), \sin(t), pt)$ the torsion depends on $p$.	
+\end{example}
 
 \end{document}
