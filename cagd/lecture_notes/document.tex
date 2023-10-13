@@ -8,6 +8,8 @@
 \usepackage[many]{tcolorbox}
 \usepackage{listings}
 \usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{subfigure}
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
@@ -59,13 +61,17 @@ Kreuzerlübung.
 \section{Bezier curves}
 
 \begin{example}
+	\begin{figure}[h!]
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/linear_combination_example}} 
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/affine_combination_example}} 
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/convex_combination_example}} 
+		\caption{Linear combination, affine combination and convex combination}
+		\label{fig:combinationexample}
+	\end{figure}
+	
 	\textbf{Linear combination} $\lambda a + \mu b$
-	
-	TODO image
-	
+
 	\textbf{Affine combination} $\lambda a + \mu b$ and $\lambda + \mu = 1$
-	
-	TODO image
 	
 	What is $\mu$ so that $\lambda a + \mu B$ is on the line?
 	\begin{align*}
@@ -74,8 +80,6 @@ Kreuzerlübung.
 	If $a,b$ are linearly independent $\implies \mu = t \land \lambda + \mu = 1$
 
 	\textbf{Convex combination} $\lambda a + \mu b$ and $\lambda + \mu = 1$ and $\lambda,\mu \geq 0$
-	
-	TODO image
 	
 	Line is $a + t(b-a)$ with $t\in[0,1]$ $\implies \mu,\lambda \in [0,1]$
 \end{example}
@@ -101,7 +105,13 @@ Kreuzerlübung.
 \end{remark}
 
 \begin{example}
-	TODO images
+	\begin{figure}[h!]
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/decasteljou_example_1}} 
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/decasteljou_example_2}} 
+		\subfigure{\includegraphics[width=0.3\linewidth]{figures/decasteljou_example_3}} 
+		\caption{Examples of the de casteljou algorithm}
+		\label{fig:decasteljouexample}
+\end{figure}
 \end{example}
 
 \begin{remark}
@@ -247,19 +257,31 @@ Kreuzerlübung.
 \begin{remark}
 	Line at infinity (Ferngerade) is the collection of points where parallel lines intersect.
 	
-	TODO fig
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/line_at_infinity}
+		\caption{Categorization of Parabolas, Hyperbolas and Ellipsis as intersection points with the line at infinity.}
+		\label{fig:lineatinfinity}
+	\end{figure}
+	
 \end{remark}
 
 \begin{remark}
 	Different applications using these curves are Rhino, OpenSCAD, Autocad, Geogebra, ...
 \end{remark}
 
-\newpage
+\section{Parameterized curves}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/parameterized_curve}
+	\caption{parameterized curve $c(t)$}
+	\label{fig:parameterizedcurve}
+\end{figure}
 
 \begin{definition}
 	$c:I\subseteq \mathbb{R} \rightarrow \mathbb{R}^3$ is called a parameterized curve.
-	
-	TODO figure
+	 
 	
 	$\dot{c}(t) := \frac{d}{dt} c(t)$ is called the tangential vector. For $\mathbb{R}^3$ we have $\dot{c}(t) = (\dot{c_1}(t), \dot{c_2}(t), \dot{c_3}(t))$.
 
@@ -271,7 +293,12 @@ Kreuzerlübung.
 \begin{example}
 	A helix (Schraublinie) is defined by $c(t) = (\cos(t), \sin(t), t)^T$.
 	
-	TODO figure
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/helix}
+		\caption{Helix with tangential vector}
+		\label{fig:helix}
+	\end{figure}
 	
 	\begin{align*}
 		\dot{c}(t) = (-\sin(t), \cos(t), 1)^T && ||\dot{c}(t)|| = \sqrt{\sin^2(t) + \cos^2(t) + 1} = \sqrt{2}
@@ -289,7 +316,14 @@ Kreuzerlübung.
 	
 	For example $c(t) = (t,t)$ produces a regular curve, while $c(t) = (t^3, t^3)$ produces a curve where $0$ is singular.
 	
-	TODO figure
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/identity_line}
+		\caption{identity line can be parameterized such that $(0, 0)$ is singular.}
+		\label{fig:identityline}
+	\end{figure}
+	
 	
 	There are curves and points where no parameterization exists such that the point is regular.	
 \end{remark}
@@ -301,7 +335,12 @@ Kreuzerlübung.
 \end{definition}
 
 \begin{example}
-	TODO figure
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/circle_of_curvature}
+		\caption{Circle of curvature}
+		\label{fig:circleofcurvature}
+	\end{figure}
 	
 	The circle of curvature has a radius of $\frac{1}{\kappa(t)}$. $m(t)$ is called the center of curvature.
 	
@@ -323,7 +362,13 @@ Kreuzerlübung.
 		n(t) = \frac{(-r \cos(t), -r \sin(t))}{r} = (-\cos(t), -\sin(t))
 	\end{align*}
 	
-	TODO fig
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/circle_with_normal_vector}
+		\caption{Circle with normal vector}
+		\label{fig:circlewithnormalvector}
+	\end{figure}
+	
 \end{example}
 
 \begin{definition}
@@ -331,7 +376,15 @@ Kreuzerlübung.
 \end{definition}
 
 \begin{example}
-	An ellipse has four vertices. TODO fig
+	An ellipse has four vertices.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/ellipse}
+		\caption{Ellipse and the four vertices.}
+		\label{fig:ellipse}
+	\end{figure}
+	
 	
 	$(t, \exp t)$ has no vertex.
 	
