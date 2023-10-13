@@ -1,0 +1,136 @@
+\documentclass[]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[many]{tcolorbox}
+\usepackage{listings}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{recap}{Recap}
+
+\tcolorboxenvironment{lemma}{
+	colback=yellow!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
+\tcolorboxenvironment{definition}{
+	colback=green!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+\begin{document}
+	
+	\title{Computer Aided Geometric Design Compendium WS2023}
+	\author{Ida Hönigmann}
+	
+	\maketitle
+
+\section*{Orginazation}
+Lecture each Thursday 12:00 to 14:00 (full 2 hours).
+\\
+Oral exam. Write email to fix date and time.
+\\
+Problem session each Thursday 14:00 to 16:00. Mandatory attendance!
+\\
+Kreuzerlübung.
+
+\section{Bezier curves}
+
+\begin{example}
+	\textbf{Linear combination} $\lambda a + \mu b$
+	
+	TODO image
+	
+	\textbf{Affine combination} $\lambda a + \mu b$ and $\lambda + \mu = 1$
+	
+	TODO image
+	
+	What is $\mu$ so that $\lambda a + \mu B$ is on the line?
+	\begin{align*}
+		\lambda a + \mu b = a + t(b-a) \implies a (\underbrace{\lambda - 1 + t}_{=0}) + b (\underbrace{\mu - t}_{=0}) = 0
+	\end{align*}
+	If $a,b$ are linearly independent $\implies \mu = t \land \lambda + \mu = 1$
+
+	\textbf{Convex combination} $\lambda a + \mu b$ and $\lambda + \mu = 1$ and $\lambda,\mu \geq 0$
+	
+	TODO image
+	
+	Line is $a + t(b-a)$ with $t\in[0,1]$ $\implies \mu,\lambda \in [0,1]$
+\end{example}
+
+\begin{definition}[combinations]
+	linear combination $\sum_{i=1}^{n} \lambda_i v_i$ with $v_1,...,v_n \in \mathbb{R}^d, \lambda_1,...,\lambda_n \in \mathbb{R}$
+	
+	affine combination $\sum_{i=1}^{n} \lambda_i v_i$ with $\sum_{i=1}^{n} \lambda_i = 1$
+	
+	convex combination $\sum_{i=1}^{n} \lambda_i v_i$ with $\sum_{i=1}^{n} \lambda_i = 1$ and $\forall i: \lambda_i \geq 0$
+\end{definition}
+
+\begin{algorithm}[of de Casteljou, Bezier curve]
+	Given: $b_0,...,b_n \in \mathbb{R}^d$ (called control points / Kontrollpunkte), $t \in \mathbb{R}$
+	\\Recursion: $b_i^0(t) := b_i$
+	\\$b_i^j(t) := (1-t)b_i^{j-1}(t) + tb_{i+1}^{j-1}(t)$ for $j=1,...,n$ and $i=0,...,n-j$
+	\\Result: $b(t):=b_0^n(t)$ (called Bezier curve)
+	
+\end{algorithm}
+
+\begin{remark}
+	In the algorithm above often we choose $t\in[0,1]$.
+\end{remark}
+
+\begin{example}
+	TODO images
+\end{example}
+
+\begin{remark}
+	In this course $\mathbb{N}=\{1,2,3,...\}$ and $\mathbb{N}_0=\{0,1,2,3,...\}$
+\end{remark}
+
+\begin{recap}
+	$0! := 1, n! := n(n-1)(n-2) \cdots 1$ for $n \geq 1$.
+	
+	\begin{align*}
+		\binom{n}{k} := \begin{cases}
+			\frac{n!}{k!(n-k)!}&, n\geq k \geq 0\\
+			0&, k > n
+		\end{cases} \text{ for } n,k \in \mathbb{N}_0
+	\end{align*}
+\end{recap}
+
+\begin{definition}[Bernstein polynomials]
+	For $n,i \in \mathbb{N}_0$ we define $B_i^n(t) := \binom{n}{i} t^i (1-t)^{n-i} \in \mathbb{R}[t]$
+\end{definition}
+
+\begin{remark}
+	Special cases of Bernstein polynomials
+	
+	\begin{align*}
+		i > n \implies B_i^n(t) = 0 && B_i^n(0) = \begin{cases}0, i\not= 0\\ 1, i=0 \end{cases} \\
+		B_i^n(1) = \begin{cases}0, i\not= n\\ 1, i=n \end{cases} && B_0^0(t) = 1
+	\end{align*}
+\end{remark}
+
+\begin{theorem}
+	$b_i^j(t) = \sum_{l=0}^{j} B_l^j(t) b_{i+l}$
+\end{theorem}
+
+\end{document}
