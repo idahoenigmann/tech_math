@@ -1,5 +1,5 @@
 \documentclass[]{article}
-\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage[a4paper, margin=2cm]{geometry}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -7,6 +7,7 @@
 \usepackage{amsthm}
 \usepackage[many]{tcolorbox}
 \usepackage{listings}
+\usepackage{cancel}
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
@@ -15,6 +16,8 @@
 \newtheorem{example}{Example}
 \newtheorem{remark}{Remark}
 \newtheorem{recap}{Recap}
+\newtheorem{corollary}{Corollary}
+
 
 \tcolorboxenvironment{lemma}{
 	colback=yellow!5!white,
@@ -132,5 +135,88 @@ Kreuzerlübung.
 \begin{theorem}
 	$b_i^j(t) = \sum_{l=0}^{j} B_l^j(t) b_{i+l}$
 \end{theorem}
+
+\begin{proof}
+	Induction over $j$: $j=0$:
+	\begin{align*}
+		j=0: && b_i^0(t):= b_i = 1 \cdot b_i = B_0^0(t) \cdot b_i \hspace{1cm} \checkmark\\
+		j-1 \rightarrow j: && b_i^j(t) := (1-t)b_i^{j-1}(t) + t b_{i+1}^{j-1}(t) \overset{\mathrm{IA}}{=}
+		(1-t) \sum_{l=0}^{j-1} B_l^{j-1}(t) b_{i+l} + t \sum_{l=0}^{j-1} B_l^{j-1}(t) b_{i+1+l} =\\
+		&& (1-t) \sum_{l=0}^{\overset{j}{\cancel{j-1}}} B_l^{j-1}(t) b_{i+l} + t \sum_{l=\underset{0}{\cancel{1}}}^{j} B_{l-1}^{j-1}(t) b_{i+l} =
+		\sum_{l=0}^{j} (\underbrace{(1-t) B_l^{j-1}(t) + t B_{l-1}^{j-1}(t)}_{=B_l^j(t) \text{ using the following lemma}}) b_{i+l} =\\
+		&& \sum_{l=0}^{j} B_l^j(t) b_{i+l} \hspace{1cm} \checkmark
+	\end{align*}
+\end{proof}
+
+\begin{corollary}
+	The Bezier curve equals $b(t) = b_0^n(t) = \sum_{l=0}^{n} B_l^j(t) b_{i+l}$, which is called the Bernstein representation of the Bezier curve.
+\end{corollary}
+
+\begin{remark}
+	As $b(t) = \sum_{l=0}^{n} B_l^n(t) b_l \in C^\infty$ it is a polynomial curve of degree $n$, which is in $C^\infty$ and therefore ''very smooth''.
+\end{remark}
+
+\begin{lemma}
+	$B_l^j(t) = (1-t)B_l^{j-1}(t) + t B_{l-1}^{j-1}(t)$
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		(1-t)B_l^{j-1}(t) + t B_{l-1}^{j-1}(t) = (1-t) \binom{j-1}{l} t^l (1-t)^{j-1-l} + t \binom{j-1}{l-1} t^{l-1} (1-t)^{j-1-l+1} =\\
+		\binom{j-1}{l} t^l (1-t)^{j-l} + \binom{j-1}{l-1} t^{l} (1-t)^{j-l} = \left(\binom{j-1}{l} + \binom{j-1}{l-1}\right) t^l (1-t)^{j-l} = \binom{j}{l} t^l (1-t)^{j-l} = B_l^j(t)
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	What is $b(0)$? \hspace{1cm} $b(0)=\sum_{i=0}^{n} B_i^n(0) b_i = b_0 + 0 + 0 + \cdots + 0 = b_0$\\
+	What is $b(1)$? \hspace{1cm} $b(1)=\sum_{i=0}^{n} B_i^n(1) b_i = 0 + \cdots + 0 + b_n = b_n$
+\end{remark}
+
+\begin{definition}[end-point-interpolating]
+	Curves which pass through the first and last point are called end-point-interpolating (Endpunktinterpolierend).
+\end{definition}
+
+\begin{remark}
+	Bezier curves are end-point-interpolating.
+\end{remark}
+
+\begin{remark}
+	How many intersection points are there between a planar (i.e. in $\mathbb{R}^2$) Bezier curve and a straight line?
+	\begin{align*}
+		\text{Straight line: } p + t(q-p) && \text{ Bezier curve: } b(t) = \sum_{i=0}^{n} B_i^n(t) \underbrace{b_i}_{\in \mathbb{R}^2}
+	\end{align*}
+	
+	Solving $p+t(q-p) = \sum_{i=0}^{n} B_i^n(t) b_i$ results in at most $n$ solutions.
+\end{remark}
+
+\begin{lemma}
+	$\frac{d}{dt}B_i^n(t) = n(B_{i-1}^{n-1}(t) - B_i^{n-1}(t))$
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		\frac{d}{dt}B_i^n(t) = \frac{d}{dt} \binom{n}{i} t^i (1-t)^{n-i} = \binom{n}{i} i t^{i-1} (1-t)^{n-i} - \binom{n}{i} t^i (n-i) (1-t)^{n-i-1} =\\
+		\frac{n!}{\underset{(i-1)!}{\cancel{i!}}(n-i)!} \cancel{i} t^{i-1} (1-t)^{n-i} - \frac{n!}{i!\underset{(n-i-1)!}{\cancel{(n-i)!}}}\cancel{(n-i)}t^i (1-t)^{n-i-1} =\\
+		n \left(\frac{(n-1)!}{(i-1)!(n-i)!}t^{i-1}(1-t)^{n-i} - \frac{(n-1)!}{i!(n-i-1)!} t^i (1-t)^{n-i-1}\right) =\\
+		n \left(\binom{n-1}{i-1}t^{i-1}(1-t)^{n-i} - \binom{n-1}{i} t^i (1-t)^{n-i-1}\right) = n(B_{i-1}^{n-1}(t) - B_i^{n-1}(t))
+	\end{align*}
+\end{proof}
+
+\begin{theorem}
+	$\dot{b}(t) := \frac{d}{dt} b(t) = n \sum_{i=0}^{n-1} B_i^{n-1}(t)(b_{i+1} - b_i) = n (b_1^{n-1}(t) - b_0^{n-1}(t))$
+\end{theorem}
+
+\begin{corollary}
+	\begin{itemize}
+		\item $\dot{b}(0) = n (b_1 - b_0)$
+		\item $\dot{b}(1) = n (b_n - b_{n-1})$
+		\item The last segment in the algorithm of de Casteljou is the tangent of the Bezier curve in $b(t)$.
+		\item The derivative of a bezier curve of degree $n$ is a bezier curve of degree $n-1$ with control points $(b_1,b_0), (b_2 - b_1), \cdots, (b_n - b_{n-1})$.
+	\end{itemize}
+\end{corollary}
+
+\begin{remark}
+	Different applications using these curves are Rhino, OpenSCAD, Autocad, Geogebra, ...
+\end{remark}
 
 \end{document}
