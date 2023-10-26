@@ -1,0 +1,276 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{enumitem}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage[margin=3cm]{geometry}
+
+% This command is used at the end of a day to start a new protocol page
+\newcommand*\sepstars{%
+  \begin{center}
+    $\star\star\star$
+  \end{center}
+  \newpage
+}
+
+% For creating a summary of the day,
+% containing applied points, category and total duration
+\newcommand{\daySummary}[3]{
+    \begin{itemize}[label={}]
+        \item \textbf{Points:} #1, \textbf{Category:} #2
+        \item \textbf{Total Duration:} #3 minutes
+    \end{itemize}
+    \medskip
+}
+
+% For creating one meditation entry.
+% The first argument is selecting the meditation category.
+% The second is the name of the meditation.
+% The third is when the meditation started.
+% The fourth is how long the meditation took.
+% The sixth is optional. It is for special incidents.
+% Example: \meditationEntry{1}{Om}{08:00}{4}{alone}{}
+% -> Category 1(Short meditation), Om meditation, start at 8 o'clock, took 4 minutes, performed alone, no incidents
+\newcommand{\meditationEntry}[6]{
+    \ifcase#1
+        \or \paragraph{I Short Meditation}% Argument is 1
+        \or \paragraph{II Meditation}% Argument is 2
+        \or \paragraph{III Attended Meeting}% Argument is 3
+        \or \paragraph{IV Attended Meeting with prior morning meditation}% Argument is 4
+        \or \paragraph{V Meditation Day}% Argument is 5
+        \or \paragraph{VI You Organized a meditation}% Argument is 6
+        \else Invalid Argument% Argument is not 1, 2, 3, 4, 5 or 6
+    \fi
+    \begin{itemize}[label={}]
+        \item Name: #2
+        \item Time: #3
+        \item Duration: #4 minutes
+        \item Group: #5
+        \ifx&#6&% Check if the sixth argument is empty
+        \else
+            \item Incidents: #6
+        \fi
+    \end{itemize}
+    \smallskip
+}
+
+% For writing about the self study
+% The first argument is the score, the second is just general text.
+\newcommand{\selfStudy}[3]{
+\paragraph{Self-study}
+    \begin{itemize}[label={}]
+        \item Headache before meditation: #1
+        \item Headache after meditation: #2
+        \item #3
+    \end{itemize}
+    \medskip
+}
+
+\begin{document}
+\title{Meditation Protocol H1 \\}
+\author{Ida Hönigmann \\ 12002348}
+\date{04.10.2023 - TODO}
+\maketitle
+
+\paragraph{Total Points Applied For:\\ 4 (H0) + 28 (from this protocol) = 32 (total) TODO update}
+\paragraph{Total Time Spent on Meditations: 7 hours and 16 minutes}
+\paragraph{Total Number of Meditation Days: 19}
+
+\begin{itemize}
+    \item Category I: 16 TODO update this
+    \item Category II: 0
+    \item Category III: 1
+    \item Category IV: 2
+    \item Category V: 0
+    \item Category VI: 0
+\end{itemize}
+
+\paragraph{Questions:}
+\begin{itemize}
+    \item What is a good way to keep track of time? Should I set a timer or do a meditation for aslong as I don't get distracted or bored?
+\end{itemize}
+
+\paragraph{Self-study:}
+\begin{itemize}
+    \item Summary of results: TODO
+    \item Question: How bad is my headache before and after meditation?
+    \item Scale: 0-10 (0 = No headache, 10 = Extremly bad)
+\end{itemize}
+
+\vspace*{\fill}
+
+\begin{tabular}{@{}p{.5in}p{4in}@{}}
+    Signature: & \hrulefill , \today{} \\
+\end{tabular}
+
+%%%%%%%%%%%% BEGIN OF THE PROTOCOL %%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\section*{Day 19: 22. 10. 2023}
+\daySummary{1}{I}{3}
+
+\meditationEntry{1}{Lovingly look at an object}{21:36 - 21:39}{3}{alone}{none}
+\selfStudy{1}{1}{Woke up in the morning with a headache. Did physical work today. Notived the figure I used for this meditation in class and therefore decided to do this meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 18: 21. 10. 2023}
+\daySummary{1}{I}{10}
+
+\meditationEntry{1}{Observe Breath}{23:08 - 23:18}{10}{with buddy}{none}
+\selfStudy{0}{0}{There is a party going on outside the window. It was very relaxing nonetheless.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 17: 20. 10. 2023}
+\daySummary{1}{I}{9}
+
+\meditationEntry{1}{Observe Breath}{22:50 - 22:55}{5}{with buddy}{none}
+\selfStudy{0}{0}{Before going to sleep. I am tired.}
+
+\meditationEntry{1}{Observe Breath}{07:06 - 07:10}{4}{alone}{none}
+\selfStudy{0}{0}{Woke up at 07:00, did some streching and then this meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 16: 19. 10. 2023}
+\daySummary{1}{I}{9}
+
+\meditationEntry{1}{Observe Breath}{21:21 - 21:30}{9}{alone}{none}
+\selfStudy{0}{0}{Shortly felt like I had my mind in control (not the other way round) but lost it after some time again. Felt good!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 15: 18. 10. 2023}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Gibberish, connecet with earth, various}{08:00 - 10:00}{120}{morning meditation in class}{none}
+\selfStudy{2}{1}{Opted for the lay on stomach option. Felt cold afterwards, but the dancing warmed me up again.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 14: 17. 10. 2023}
+\daySummary{1}{I}{8}
+
+\meditationEntry{1}{Observe Breath}{21:08 - 21:13}{5}{with buddy}{none}
+\selfStudy{7}{6}{Going to sleep to wake up early tomorrow.}
+
+\meditationEntry{1}{Wait for a thought}{07:13 - 07:16}{3}{alone}{none}
+\selfStudy{1}{2}{Woke up early. I wanted to try a meditation shortly after waking up, as it was recommended in the lecture.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 13: 16. 10. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{21:50 - 22:02}{12}{with buddy}{~1min before end TV started in next room}
+\selfStudy{1,5}{1}{We both enjoy this meditation technique.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 12: 15. 10. 2023}
+\daySummary{1}{I}{10}
+
+\meditationEntry{1}{Observe Breath}{19:52 - 20:02}{10}{with buddy}{none}
+\selfStudy{2}{2}{My back started to hurt from sitting upright. We switched to a more pleasant timer sound. Definetly an upgrade!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 11: 14. 10. 2023}
+\daySummary{1}{I}{3}
+
+\meditationEntry{1}{Gently Sway}{23:29 - 23:32}{3}{with buddy}{none}
+\selfStudy{3}{3}{Feeling frustrated, had difficulties starting to meditate as someone constantly was disturbing me.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 10: 13. 10. 2023}
+\daySummary{1}{I}{5}
+
+\meditationEntry{1}{Feel existence flowing in you}{18:54 - 18:59}{5}{alone}{none}
+\selfStudy{0}{0}{Suddenly remembered that I did not yet meditate today, so I sat down and decided on this meditation as I am slightly tired but want to stay up longer.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 9: 12. 10. 2023}
+\daySummary{1}{I}{7}
+
+\meditationEntry{1}{Observe Breath}{20:42 - 20:49}{7}{alone}{none}
+\selfStudy{0}{1}{Before going to bed. Maybe the headache does not get worse but I am more attentive toward how I feel after meditating.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 8: 11. 10. 2023}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Nadabrahma and various in class}{08:00 - 10:00}{120}{morning meditation before class}{none}
+\selfStudy{2}{3}{First long meditation!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 7: 10. 10. 2023}
+\daySummary{1}{I}{10}
+
+\meditationEntry{1}{Gently Sway}{21:30 - 21:40}{10}{with buddy}{none}
+\selfStudy{3}{2}{Before going to bed. Today was a long day. Excited for the morning meditation tomorrow!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 6: 9. 10. 2023}
+\daySummary{1}{I}{15}
+
+\meditationEntry{1}{Gently Sway}{21:58 - 22:08}{10}{with buddy}{loud TV in next room}
+\selfStudy{2}{3}{The TV was very distracting. :-(}
+
+\meditationEntry{1}{Feel existence flowing in you}{15:48 - 15:53}{5}{alone}{none}
+\selfStudy{2}{2}{Have been working since the morning and started to loose concentration. Therefore decided to do a short meditation and test out a new one.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 5: 8. 10. 2023}
+\daySummary{1}{I}{9}
+
+\meditationEntry{1}{Observe Breath}{20:24 - 20:33}{9}{alone}{none}
+\selfStudy{1}{1}{Did not have a timer so I aimed for 5 min and look at a analog clock before and after.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 4: 7. 10. 2023}
+\daySummary{1}{I}{5}
+
+\meditationEntry{1}{Touch your eyes lightly}{21:55 - 22:00}{5}{with buddy}{none}
+\selfStudy{2}{2}{Would not recommend this meditation after arm workout. My buddy had doubts about this meditation so we only did 5 min.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 3: 6. 10. 2023}
+\daySummary{1}{I}{10}
+
+\meditationEntry{1}{Observe Breath}{22:15 - 22:25}{10}{with buddy}{none}
+\selfStudy{1}{1}{First meditation with my buddy! Clocks in this room are quite loud. Next time we will move to a different room.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 2: 5. 10. 2023}
+\daySummary{1}{I}{8}
+
+\meditationEntry{1}{Lovingly tell your body to relax}{19:07 - 19:09}{3}{alone}{none}
+\selfStudy{-}{1}{Day was more stressfull than anticipated. To relax I took a shower and afterwards did this meditation. Now the headache is better.\\
+Note: I did not yet keep track of my headache before meditation.}
+
+\meditationEntry{1}{Gently Sway}{08:58 - 09:03}{5}{alone}{none}
+\selfStudy{-}{1,5}{Between reviewing for a math class and going to uni. Headache started during reviewing.\\
+Note: I did not yet keep track of my headache before meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 1: 4. 10. 2023}
+\daySummary{2}{III}{63}
+
+\meditationEntry{3}{various}{09:00 - 10:00}{60}{in class}{none}
+
+\meditationEntry{1}{Wait for a thought}{21:11 - 21:14}{3}{alone}{people started talking in the room next to me}
+\selfStudy{-}{-}{Meditating felt different than the one in class (more thoughts, shorter intervalls between thoughts).\\ Note: I did not yet keep track of my self study question.}
+
+
+\end{document}
