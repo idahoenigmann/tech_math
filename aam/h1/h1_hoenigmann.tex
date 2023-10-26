@@ -4,6 +4,12 @@
 \usepackage{lipsum}
 \usepackage{hyperref}
 \usepackage[margin=3cm]{geometry}
+\usepackage{pagecolor}
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\definecolor{orangy}{RGB}{253, 241, 183}
 
 % This command is used at the end of a day to start a new protocol page
 \newcommand*\sepstars{%
@@ -59,26 +65,28 @@
 \newcommand{\selfStudy}[3]{
 \paragraph{Self-study}
     \begin{itemize}[label={}]
-        \item Headache before meditation: #1
-        \item Headache after meditation: #2
+        \item Headache before meditation: #1/10
+        \item Headache after meditation: #2/10
         \item #3
     \end{itemize}
     \medskip
 }
 
 \begin{document}
-\title{Meditation Protocol H1 \\}
+
+\newpagecolor{orangy}\afterpage{\restorepagecolor}
+\title{\LARGE\bfseries Meditation Protocol H1}
 \author{Ida Hönigmann \\ 12002348}
 \date{04.10.2023 - TODO}
 \maketitle
 
-\paragraph{Total Points Applied For:\\ 4 (H0) + 28 (from this protocol) = 32 (total) TODO update}
-\paragraph{Total Time Spent on Meditations: 7 hours and 16 minutes}
-\paragraph{Total Number of Meditation Days: 19}
+\paragraph{Total Points Applied For: 36 TODO UPDATE}
+\paragraph{Total Time Spent on Meditations: 8 hours and 41 minutes TODO UPDATE}
+\paragraph{Total Number of Meditation Days: 22 TODO UPDATE}
 
 \begin{itemize}
-    \item Category I: 16 TODO update this
-    \item Category II: 0
+    \item Category I: 18 TODO UPDATE
+    \item Category II: 1
     \item Category III: 1
     \item Category IV: 2
     \item Category V: 0
@@ -87,7 +95,7 @@
 
 \paragraph{Questions:}
 \begin{itemize}
-    \item What is a good way to keep track of time? Should I set a timer or do a meditation for aslong as I don't get distracted or bored?
+    \item What is a good way to keep track of time during the short meditations? Should I set a timer or do the meditation for aslong as I don't get distracted?
 \end{itemize}
 
 \paragraph{Self-study:}
@@ -100,11 +108,36 @@
 \vspace*{\fill}
 
 \begin{tabular}{@{}p{.5in}p{4in}@{}}
+	%&\includegraphics[width=0.5\linewidth]{../../../../Desktop/signature}\\[-6ex]
     Signature: & \hrulefill , \today{} \\
 \end{tabular}
 
 %%%%%%%%%%%% BEGIN OF THE PROTOCOL %%%%%%%%%%%%%%%%%%%%%%%
 \newpage
+
+\section*{Day 22: 25. 10. 2023}
+\daySummary{2}{II}{60}
+
+\meditationEntry{2}{Mandala Meditation}{09:47 - 10:47}{60}{alone}{the recording stoped once at the start}
+\selfStudy{0}{2}{As there is no morning meditation and lecture today I did my first long meditation alone today. I feel sweaty from the running. The eye movement was strange in the beginning but then got better and better.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 21: 24. 10. 2023}
+\daySummary{1}{I}{15}
+
+\meditationEntry{1}{Gently Sway}{21:28 - 21:43}{15}{with buddy}{none}
+\selfStudy{5}{3,5}{It is raining outside, we opened the window before the meditation. 15 minutes felt shorter than usual. It takes time to get into the meditation anyhow. With swaying I notive that I have to do it consously for the first ~5 minutes before I get into the flow.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 20: 23. 10. 2023}
+\daySummary{1}{I}{10}
+
+\meditationEntry{1}{Observe Breath}{17:48 - 17:58}{10}{alone}{none}
+\selfStudy{0}{0}{I feel better after having done this meditation. Started working on the H1 handin today.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Day 19: 22. 10. 2023}
 \daySummary{1}{I}{3}
