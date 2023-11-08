@@ -4,11 +4,6 @@ import matplotlib.pyplot as plt
 
 
 def bernstein(t, i, j):
-    if i > j:
-        raise ValueError(f"{i} <= {j} (i <= j) does not hold")
-    if t < 0 or t > 1:
-        raise ValueError(f"{t} is not in [0,1] (t={t}) does not hold")
-
     return binom(j, i) * t**i * (1-t)**(j-i)
 
 

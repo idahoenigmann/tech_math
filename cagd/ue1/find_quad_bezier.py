@@ -27,10 +27,10 @@ if __name__ == '__main__':
 
     control_points = find_quad_bezier(0.2, p0, pt, p1)
 
-    t_values = [t * 0.01 for t in range(0, 100)]
+    t_values = np.arange(0, 1, 0.001)
     x_coord, y_coord = [bez(t, control_points)[0] for t in t_values], [bez(t, control_points)[1] for t in t_values]
 
-    ax.scatter(x_coord, y_coord, label="bezier curve", c="green")
+    ax.scatter(x_coord, y_coord, label="bezier curve", c="lightgrey")
     ax.scatter([p[0] for p in control_points], [p[1] for p in control_points], label="control points", c="blue")
     ax.scatter([pt[0]], [pt[1]], label="pt", c="red")
 
