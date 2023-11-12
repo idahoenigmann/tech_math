@@ -2,7 +2,9 @@
 
 %opening
 \title{Using PCA on EEG Data to Differentiate Sleep~Stages}
-\author{Ida Hönigmann}
+\author{\IEEEauthorblockN{Ida Hönigmann}
+	\IEEEauthorblockA{\\Technical University Vienna, Austria\\
+		Email: e12002348@student.tuwien.ac.at}}
 
 \begin{document}
 
@@ -15,15 +17,22 @@
 \section{Introduction}
 
 \section{Study of Literature}
-given paper \cite{Jolliffe2016}
+%The foundation of Pricipal Component Analysis (PCA) was layed by Pearson\cite{Pearson1901} and expanded on by Hotelling\cite{Hotelling1933}. Recent applications and variants of PCA are explored by Jolliffe et. al.\cite{Jolliffe2016}.
+
+%Limitations of PCA are given by data that is non-linearly dependant. One such example is mentioned by Shlens\cite{Shlens2014}. Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
+
 
 first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
 
-when does pca fail? \cite{Shlens2014}
+given paper \cite{Jolliffe2016}
+
+when does pca fail? \cite{Shlens2014} and \cite{Tenenbaum2000} (non-linear method)
 
 book containing sleep phases eeg \cite{Ganong1997}
 
-papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015}
+Review Paper on Sleep Stage Classification Methods \cite{Boostani2017}
+
+papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015} and \cite{Metzner2023}
 
 competition using similar data set \cite{Ghassemi2018}
 
@@ -36,6 +45,16 @@ winner of competition \cite{Howe2018}
 \section{Sleep Stages and EEG Data}
 
 \section{Data and Algorithm}
+\begin{enumerate}
+	\item subdivide eeg signals in the temporal domain
+	\item apply fft transforming into frequency domain
+	\item pca
+	\item achive dimensinality reduction
+	\item classification of sleep stages
+	\item visulisation
+\end{enumerate}
+
+
 
 \section{Results}
 
