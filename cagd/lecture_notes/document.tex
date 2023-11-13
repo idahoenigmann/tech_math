@@ -270,6 +270,8 @@ Kreuzerlübung.
 	Different applications using these curves are Rhino, OpenSCAD, Autocad, Geogebra, ...
 \end{remark}
 
+
+
 \section{Parameterized curves}
 
 \begin{figure}[h!]
@@ -401,6 +403,23 @@ Kreuzerlübung.
 
 \begin{example}
 	For the helix $t \mapsto (\cos(t), \sin(t), pt)$ the torsion depends on $p$.	
+\end{example}
+
+\section{Properties of Bezier curves}
+
+\begin{definition}
+	$\alpha: \mathbb{R}^n \rightarrow \mathbb{R}^m$ is called \textbf{affine} if $\exists l:\mathbb{R}^n \rightarrow \mathbb{R}^m$...linear $\exists v \in \mathbb{R}^m: \alpha(x) = l(x) + v$.
+	
+	$\alpha$ is called \textbf{affinity} if $\alpha$ is affine and bijective.
+\end{definition}
+
+\begin{example}
+	An example of an linear function is shear (Scherung).
+	\begin{align*}
+		l\left(\begin{matrix} x \\ y \end{matrix}\right) := \left(\begin{matrix} 1 & a \\ 0 & 1 \end{matrix}\right) \left(\begin{matrix} x\\ y \end{matrix}\right)
+	\end{align*}
+	
+	Area is preserved.
 \end{example}
 
 \end{document}
