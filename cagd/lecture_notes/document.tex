@@ -420,6 +420,179 @@ Kreuzerlübung.
 	\end{align*}
 	
 	Area is preserved.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/shear}
+		\caption{Shear preserves area}
+		\label{fig:shear}
+	\end{figure}
 \end{example}
+
+\begin{theorem}
+	Bezier curves are invariant under affine transformations. 
+\end{theorem}
+
+\begin{proof}
+	Let $b(t) = \sum_{i=0}^{n} B_i^n(t) b_i$ be a bezier curve and $\alpha(x) = l(x) + v$ where $b_i\in\mathbb{R}^d, l:\mathbb{R}^d\rightarrow\mathbb{R}^m, v \in \mathbb{R}^m$
+	\begin{align*}
+		\alpha(b(t)) = l(b(t)) + v = l\left(\sum_{i=0}^{n} B_i^n(t) b_i\right) + v = \sum_{i=0}^{n} B_i^n(t) l(b_i) + v =\\
+		\sum_{i=0}^{n}B_i^n(t) l(b_i) + \sum_{i=0}^{n}B_i^n(t)v = \sum_{i=0}^{n}B_i^n(t)(l(b_i) + v) = \sum_{i=0}^{n} B_i^n(t) \alpha(b_i)
+	\end{align*}
+\end{proof}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/affine_transformation_bezier}
+	\caption{Bezier curve is invariant under affine transformation}
+	\label{fig:affine_transformation_bezier}
+\end{figure}
+
+\begin{lemma}
+	$\sum_{i=0}^{n}B_i^n(t) = 1$
+\end{lemma}
+
+\begin{proof}
+	Binomial theorem: $(x+y)^n = \sum_{i=0}^{n} \binom{n}{i} x^i y^{n-i}$ for $x=t, y=1-t$ we get
+	\begin{align*}
+		1 = (t+(1-t))^n = \sum_{i=0}^{n} \binom{n}{i} t^i (1-t)^{n-i} = \sum_{i=0}^{n} B_i^n(t)
+	\end{align*}
+\end{proof}
+
+\begin{lemma}
+	For $t\in[0,1]$ it holds that $B_i^n(t) \geq 0$
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		B_i^n(t) = \underbrace{\binom{n}{i}}_{\geq 0} \underbrace{t^i}_{\geq 0} \underbrace{(1-t)^{n-i}}_{\geq 0} \geq 0
+	\end{align*}
+\end{proof}
+
+\begin{definition}
+	$M \subseteq \mathbb{R}^d$ then $conv(M) := \{\sum_{i=1}^{k} \lambda_i v_i : v_1, ..., v_k \in M, \lambda_1, ..., \lambda_k \geq 0, \sum_{i=1}^{k} \lambda_i = 1, k\in \mathbb{N}\}$ is called the convex hull of M.
+	
+	$M$ is called convex set, iff $\forall x,y \in M \forall t\in[0,1]: tx+(1-t)y \in M$.
+\end{definition}
+
+\begin{example}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/convex_non_convex}
+		\caption{example of convex and non-convex set}
+		\label{fig:convex_non_convex}
+	\end{figure}
+\end{example}
+
+\begin{remark}[Pick theorem]
+	For any polygon formed of points in $\mathbb{Z}\times\mathbb{Z}$ it holds that the area can be calculated by $I + R/2 - 1$ where $I$ is the number of points inside the polygon and $R$ is the number of points on the edges of the polygon.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/pick}
+		\caption{example picks theorem where $I=2, R=3$ and therefore $A=\frac{5}{2}$}
+		\label{fig:pick}
+	\end{figure}
+\end{remark}
+
+\begin{theorem}
+	$\forall t \in [0,1]: b(t) \in conv(\{b_0, b_1, ..., b_n\})$
+\end{theorem}
+
+\begin{proof}
+	$b(t) = \sum_{i=0}^{n} \underbrace{B_i^n(t)}_{\geq 0} b_i \forall t \in [0,1]$ and $\sum_{i=0}^{n}B_i^n(t) = 1 \forall t \in [0,1]$. Therefore $b(t) \in conv(\{b_0, ..., b_n\})$
+\end{proof}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/bezier_curve_in_convex_hull}
+	\caption{example of a bezier curve and its convex hull}
+	\label{fig:bezier_curve_in_convex_hull}
+\end{figure}
+
+\begin{remark}[Montecarlo method for calculating area]
+	random points, count how many fall within the area from the total amount of points, estimate volume from that.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/montecarlo}
+		\caption{montecarlo method for a quarter circle and some random shape}
+		\label{fig:montecarlo}
+	\end{figure}
+\end{remark}
+
+\begin{theorem}
+	Bezier curves are symmetric, meaning that if $b(t)$ is a bezier curves of $b_0, ..., b_n$ and $\tilde{b}(t)$ is a bezier curve of $b_n, ..., b_0$ then $b(t) = \tilde{b}(1-t)$
+\end{theorem}
+
+\begin{proof}
+	\begin{align*}
+		\tilde{b}(t) = \sum_{i=0}^{n} B_i^n(t) b_{n-i} = \sum_{i=0}^{n} \underbrace{B_i^n(1-t)(1-t)}_{B_i^n(t)}b_{n-i} = \sum_{i=0}^{n} B_{n-i}^n(1-t) b_i = \sum_{i=0}^{n} B_i^n(1-t) b_i = b(1-t)
+	\end{align*}
+\end{proof}
+
+\begin{lemma}
+	$\alpha \in \mathbb{R} \implies B_i^n(\alpha t) = \sum_{j=0}^{n} B_i^j(\alpha) B_j^n(t)$
+\end{lemma}
+
+\begin{proof}
+	can be done by induction, but is tedious
+\end{proof}
+
+\begin{theorem}[Sub-division-property (Unterteilungseigenschaft)]
+	Let $b(t)$ be a bezier curve to $b_0, ..., b_n$ and $\alpha \in \mathbb{R}$.
+	\begin{align*}
+		\tilde{b}(t) := b(\alpha t) & \hat{b}(t) := b((1-\alpha)t + \alpha)
+	\end{align*}
+	
+	Then $\tilde{b}$ is a bezier curve to $b_0^0(\alpha), b_0^1(\alpha), ..., b_0^n(\alpha)$; $\hat{b}$ is a bezier curve to $b_0^n(\alpha), b_1^{n-i}(\alpha), ..., b_n^0(\alpha)$ and ''glued together'' they result in the original bezier curve.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/sub_division}
+		\caption{bezier curve $b$ is divided at point $b(\alpha)$ into two bezier curves $\tilde{b}$ and $\hat{b}$}
+		\label{fig:sub_division}
+	\end{figure}
+\end{theorem}
+
+\begin{proof}
+	\begin{align*}
+		\tilde{b}(t) = b(\alpha t) = \sum_{i=0}^{n} B_i^n(\alpha t) b_i = \sum_{i=0}^{n} \left(\sum_{j=0}^{n}B_i^j(\alpha) B_j^n(t)\right) b_i = \sum_{j=0}^{n} \sum_{i=0}^{n} B_i^j(\alpha) B_j^n(t) b_i =\\
+		\sum_{j=0}^{n} B_j^n(t) \underbrace{\sum_{i=0}^{\cancel{n}^j} B_i^j(\alpha) b_i}_{b_0^j(\alpha)} = \sum_{j=0}^{n} B_j^n(t) b_0^j(\alpha)
+	\end{align*}
+	Where we used $b_i^j(t) = \sum_{l=0}^{j} B_l^j(t) b_{i+l}$, which we already showed.
+	
+	$\hat{b}$ is analogous.
+\end{proof}
+
+\begin{definition}
+	The polynomial ring is defined as $\Pi_n := \{f \in \mathbb{R}[t] : deg(f) \leq n\}$, which is a vector space.
+\end{definition}
+
+\begin{theorem}
+	$\{B_0^n(t), ..., B_n^n(t)\}$ is a basis of $\Pi_n$.
+\end{theorem}
+
+\begin{proof}
+	$\forall i: B_i^n(t) \in \Pi_n$ therefore $span(B_0^n(t), ..., B_n^n(t)) \subseteq \Pi_n$.
+	
+	We know that $dim(\Pi_n) = n+1$ as $\{1, t, t^2, ..., t^n\}$ is a basis.
+	
+	Let $k \leq n$.
+	
+	\begin{align*}
+		1 = \sum_{i=0}^{n-k} B_i^{n-k}(t) = \sum_{i=k}^{n} B_{i-k}^{n-k}(t) = \sum_{i=k}^{n} \binom{n-k}{i-k} t^{i-k} (1-t)^{n-i}\\
+		\implies \binom{n}{k} t^k = \sum_{i=k}^{n} \binom{n}{k} \binom{n-k}{i-k} t^i (1-t)^{n-i} = \sum_{i=k}^{n} \binom{n}{i} \binom{i}{k} t^i (1-t)^{n-i} = \sum_{i=k}^{n} \binom{i}{k} B_i^n(t)\\
+		\implies t^k \in span(B_0^n(t), ..., B_n^n(t)) \implies \Pi_n \subseteq span(B_0^n(t), ..., B_n^n(t))
+	\end{align*}
+\end{proof}
+
+\begin{corollary}
+	Every polynomial curve is a bezier curve.
+\end{corollary}
+
+\begin{remark}
+	Disadvantages of bezier curves are: unintuitive, local changes are not possible as every change in a control point changes the entire curve, points can be far away from the curve.
+\end{remark}
 
 \end{document}
