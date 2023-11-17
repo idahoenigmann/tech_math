@@ -17,11 +17,25 @@
 \section{Introduction}
 
 \section{Study of Literature}
-%The foundation of Pricipal Component Analysis (PCA) was layed by Pearson\cite{Pearson1901} and expanded on by Hotelling\cite{Hotelling1933}. Recent applications and variants of PCA are explored by Jolliffe et. al.\cite{Jolliffe2016}.
+\label{sec:study_of_literature}
+A substantial body of scientific research has been devoted to exploring Principal Component Analysis (PCA).
+The foundation of this method was laid by Pearson\cite{Pearson1901} and Hotelling\cite{Hotelling1933}.
 
-%Limitations of PCA are given by data that is non-linearly dependant. One such example is mentioned by Shlens\cite{Shlens2014}. Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
+An introduction to PCA as well as a good overview on how to derive the formula used to compute the Principal Components (PC) used in Section~\ref{sec:TODO} is given by Shlens\cite{Shlens2014}.
+Recent applications and variants of PCA are explored by Jolliffe et. al.\cite{Jolliffe2016}.
 
+A short discussion on the limitations of PCA as well as example in which PCA fails is given by Shlens\cite{Shlens2014}.
+One of the limitations mentioned is that the given data must be linearly dependent.
+Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
 
+Generally speaking the variables must not have third or higher order dependencies between them. In order to reduce a problem dealing with higher order dependencies to a second order one, where we can use PCA as described in this paper, we can transform the data beforehand. This method is called kernel PCA\cite{Shlens2014}.
+
+Another method for combating this problem is Independent Component Analysis (ICA) which is discussed by Naik~et.~al.\cite{Naik2011}.
+\\
+\\
+TODO
+\\
+\\
 first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
 
 given paper \cite{Jolliffe2016}
