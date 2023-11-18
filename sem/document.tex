@@ -38,24 +38,23 @@ winner of competition \cite{Howe2018}
 \\
 \\
 A substantial body of scientific research has been devoted to exploring Principal Component Analysis (PCA).
-The foundation of this method was laid by Pearson\cite{Pearson1901} and Hotelling\cite{Hotelling1933}.
+The foundation of this method was laid by Pearson~\cite{Pearson1901} and Hotelling~\cite{Hotelling1933}.
 
-An introduction to PCA as well as a good overview on how to derive the formula used to compute the Principal Components (PC) used in Section~\ref{sec:TODO} is given by Shlens\cite{Shlens2014}.
-Recent applications and variants of PCA are explored by Jolliffe et. al.\cite{Jolliffe2016}.
+An introduction to PCA, as well as a good overview on how to derive the formula used to compute the Principal Components (PC) is given by Shlens~\cite{Shlens2014}.
+Recent applications and variants of PCA are explored by Jolliffe et. al.~\cite{Jolliffe2016}.
 
-A short discussion on the limitations of PCA as well as example in which PCA fails is given by Shlens\cite{Shlens2014}.
-One of the limitations mentioned is that the given data must be linearly dependent.
+Shlens discusses the limitations of PCA, as well as examples in which PCA fails~\cite{Shlens2014}, such as the requirement of linearly dependent data.
 Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
 
-Generally speaking the variables must not have third or higher order dependencies between them. In order to reduce a problem dealing with higher order dependencies to a second order one, where we can use PCA as described in this paper, we can transform the data beforehand. This method is called kernel PCA\cite{Shlens2014}.
+Generally speaking the variables must not have third or higher order dependencies between them. In order to reduce a problem dealing with higher order dependencies to a second order one a non-linear transformation of the data can be done beforehand. This method is called kernel PCA\cite{Shlens2014}.
 
 Another method for combating this problem is Independent Component Analysis (ICA) which is discussed by Naik~et.~al.\cite{Naik2011}.
 \\
 \\
-In his book Ganong describes typical patterns observed in electroencephalogram (EEG) data of a sleeping person\cite{Ganong1997}. He explains the EEG patterns associated with rapid eye movement (REM) sleep and non-REM (NREM) sleep, which is further partitioned into Stage~1 up to Stage~4.
+In his book Ganong describes typical patterns observed in electroencephalogram (EEG) data of a sleeping person\cite{Ganong1997}. He explains the EEG patterns associated with rapid eye movement (REM) sleep and non-REM (NREM) sleep, which is further partitioned into four Stages.
 \\
 \\
-The given problem of distinguishing sleep stages given some EEG data has been investigated by use of PCA as well as neural networks. Some of these works are summarized here.
+The given problem of distinguishing sleep stages given some EEG data has been investigated by use of PCA, as well as neural networks. Some of these works are summarized below.
 
 A review of different methods in the preprocessing, feature extraction and classification is given by Boostani\cite{Boostani2017}.
 
@@ -68,7 +67,7 @@ Metzner et. al.\cite{Metzner2023} try a machine learning approach to try to redi
 The PhysioNet/Computing in Cardiology Challange 2018 was a competition using a similar data\cite{Ghassemi2018}. The goal was to identify arousal during sleep from EEG, EOG, EMG, ECG and SaO2 data given. The winning paper of this competition describes the use of a dense recurrent convolutional neural network (DRCNN) consisting of multiple dense convolutional layers, a bidirectional long-short term memory layer and a softmax output layer\cite{Howe2018}.
 \\
 \\
-There seems to be promising results showing that using PCA is a valid approach in distinguishing sleep stages.
+As shown in this section, the utilization of PCA to analyze EEG data has been used with good success.
 
 \section{Mathematical Basics}
 
