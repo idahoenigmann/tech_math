@@ -1,4 +1,8 @@
 \documentclass[a4paper]{IEEEtran}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
 
 %opening
 \title{Using PCA on EEG Data to Distinguish Sleep~Stages}
@@ -15,6 +19,20 @@
 \end{abstract}
 
 \section{Introduction}
+[TODO general introduction]
+
+Ganong~\cite{Ganong1997} describes typical patterns observed in electroencephalogram (EEG) data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep.
+
+NREM sleep is further partitioned into four [TODO or three] stages, termed Stage~1 (S1) to Stage~4 (S4). Example EEG data of these different sleep stages can be seen in Figure~\ref{pic:TODO} [TODO image]. The EEG data of these stages is characterized as follows:
+
+\begin{enumerate}[label={S\arabic*:}]
+\item low-amplitude, high-frequency
+\item appearance of sleep spindles (bursts of higher amplitude, lower frequency waves)
+\item increased amplitude, lower frequency
+\item maximal amplitude, minimal frequency
+\end{enumerate}
+
+In REM sleep the EEG data is that of high frequency and low amplitude patterns, resembling the data observed in alert humans.
 
 \section{Study of Literature}
 \label{sec:study_of_literature}
@@ -46,28 +64,25 @@ Recent applications and variants of PCA are explored by Jolliffe et. al.~\cite{J
 Shlens discusses the limitations of PCA, as well as examples in which PCA fails~\cite{Shlens2014}, such as the requirement of linearly dependent data.
 Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
 
-Generally speaking the variables must not have third or higher order dependencies between them. In order to reduce a problem dealing with higher order dependencies to a second order one a non-linear transformation of the data can be done beforehand. This method is called kernel PCA\cite{Shlens2014}.
+Generally speaking the variables must not have third or higher order dependencies\footnote{e.g. $\mathbb{E}[x_ix_jx_k] \neq 0$ for some $i, j, k$ assuming mean-free variables} between them. In some cases it is possible to reduce a problem with higher order dependencies to a second order one by applying a non-linear transformation beforehand. This method is called kernel PCA\cite{Shlens2014}.
 
 Another method for combating this problem is Independent Component Analysis (ICA) which is discussed by Naik~et.~al.\cite{Naik2011}.
 \\
 \\
-In his book Ganong describes typical patterns observed in electroencephalogram (EEG) data of a sleeping person\cite{Ganong1997}. He explains the EEG patterns associated with rapid eye movement (REM) sleep and non-REM (NREM) sleep, which is further partitioned into four Stages.
-\\
-\\
 The given problem of distinguishing sleep stages given some EEG data has been investigated by use of PCA, as well as neural networks. Some of these works are summarized below.
 
-A review of different methods in the preprocessing, feature extraction and classification is given by Boostani\cite{Boostani2017}.
+A review of different methods in the preprocessing, feature extraction and classification is given by Boostani et. al.\cite{Boostani2017}. They find that using a random forest classifier and entropy of wavelet coefficients as feature gives the best results.
 
 Tăuţan et. al.\cite{Tautan2021} compare different methods of dimensionality reduction on EEG data, such as PCA, factor analysis and autoencoders. They conclude that PCA and factor analysis improves the accuracy of the model.
 
-Putilov\cite{Putilov2015} used PCA to find boundaries between Stage~1, Stage~2 and Stage~3. Changes in the first two PC were related to changes between the Stage~1 and Stage~2, while changes in the fourth PC exhibited a change in sign at the boundary of Stage~2 and Stage~3.
+Putilov\cite{Putilov2015} used PCA to find boundaries between Stage~1, Stage~2 and Stage~3. Changes in the first two PC were related to changes between the Stage~1 and Stage~2, while changes in the fourth PC exhibited a change in sign at the boundary of Stage~2 and Stage~3. This suggests that changes between Stage~1 and Stage~2 are easier to detect that ones between Stage~2 and Stage~3.
 
-Metzner et. al.\cite{Metzner2023} try a machine learning approach to try to rediscover the different human-defined-stages. They find that using PCA on the results makes clusters apparent.
+Metzner et. al.\cite{Metzner2023} try a machine learning approach to try to rediscover the different human-defined-stages. They find that using PCA on the results makes clusters apparent. These clusters could then be used to redefine the different sleep stages.
 
 The PhysioNet/Computing in Cardiology Challange 2018 was a competition using a similar data\cite{Ghassemi2018}. The goal was to identify arousal during sleep from EEG, EOG, EMG, ECG and SaO2 data given. The winning paper of this competition describes the use of a dense recurrent convolutional neural network (DRCNN) consisting of multiple dense convolutional layers, a bidirectional long-short term memory layer and a softmax output layer\cite{Howe2018}.
 \\
 \\
-As shown in this section, the utilization of PCA to analyze EEG data has been used with good success.
+As shown in this section, the utilization of PCA to analyze EEG data has been used with success.
 
 \section{Mathematical Basics}
 
