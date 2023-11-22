@@ -4,6 +4,9 @@
 \usepackage{enumerate}
 \usepackage[shortlabels]{enumitem}
 
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+
 %opening
 \title{Using PCA on EEG Data to Distinguish Sleep~Stages}
 \author{\IEEEauthorblockN{Ida Hönigmann}
@@ -15,15 +18,19 @@
 \maketitle
 
 \begin{abstract}
-
+[TODO]
 \end{abstract}
 
 \section{Introduction}
+\label{sec:introduction}
+
 [TODO general introduction]
+
+\subsection{EEG Data and Sleep Stages}
 
 Ganong~\cite{Ganong1997} describes typical patterns observed in electroencephalogram (EEG) data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep.
 
-NREM sleep is further partitioned into four [TODO or three] stages, termed Stage~1 (S1) to Stage~4 (S4). Example EEG data of these different sleep stages can be seen in Figure~\ref{pic:TODO} [TODO image]. The EEG data of these stages is characterized as follows:
+NREM sleep is further partitioned into four (although some only use three) stages, termed Stage~1 (S1) to Stage~4 (S4). Example EEG data of these different sleep stages can be seen in Figure~\ref{pic:TODO} [TODO image]. The EEG data of these stages is characterized as follows:
 
 \begin{enumerate}[label={S\arabic*:}]
 \item low-amplitude, high-frequency
@@ -36,6 +43,8 @@ In REM sleep the EEG data is that of high frequency and low amplitude patterns, 
 
 \section{Study of Literature}
 \label{sec:study_of_literature}
+
+[Note:
 
 first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
 
@@ -51,7 +60,7 @@ papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015} 
 
 competition using similar data set \cite{Ghassemi2018}
 
-winner of competition \cite{Howe2018}
+winner of competition \cite{Howe2018}]
 \\
 \\
 \\
@@ -77,7 +86,7 @@ Tăuţan et. al.\cite{Tautan2021} compare different methods of dimensionality re
 
 Putilov\cite{Putilov2015} used PCA to find boundaries between Stage~1, Stage~2 and Stage~3. Changes in the first two PC were related to changes between the Stage~1 and Stage~2, while changes in the fourth PC exhibited a change in sign at the boundary of Stage~2 and Stage~3. This suggests that changes between Stage~1 and Stage~2 are easier to detect that ones between Stage~2 and Stage~3.
 
-Metzner et. al.\cite{Metzner2023} try a machine learning approach to try to rediscover the different human-defined-stages. They find that using PCA on the results makes clusters apparent. These clusters could then be used to redefine the different sleep stages.
+Metzner et. al.\cite{Metzner2023} try to rediscover the different human-defined sleep stages. They find that using PCA on the results makes clusters apparent. These clusters could then be used as a basis for a redefinition of sleep stages.
 
 The PhysioNet/Computing in Cardiology Challange 2018 was a competition using a similar data\cite{Ghassemi2018}. The goal was to identify arousal during sleep from EEG, EOG, EMG, ECG and SaO2 data given. The winning paper of this competition describes the use of a dense recurrent convolutional neural network (DRCNN) consisting of multiple dense convolutional layers, a bidirectional long-short term memory layer and a softmax output layer\cite{Howe2018}.
 \\
@@ -85,12 +94,57 @@ The PhysioNet/Computing in Cardiology Challange 2018 was a competition using a s
 As shown in this section, the utilization of PCA to analyze EEG data has been used with success.
 
 \section{Mathematical Basics}
+\label{sec:mathematical_basics}
+
+We define basic mathematical notation, which will be used in Section~\ref{sec:principal_component_analysis} to define the PCA.
+
+\subsection{Covariance}
+Assume we have two sets of $n$ observations of variables with mean 0. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
+
+\begin{definition}[covariance]
+Let us define the \textit{covariance} of $\mathbf{a}$ and $\mathbf{b}$ as
+\begin{align*}
+	\sigma_{\mathbf{ab}}^2 := \frac{1}{n} \sum_{i=1}^{n}a_ib_i = \frac{1}{n}\mathbf{a}\cdot\mathbf{b}^T.
+\end{align*}
+\end{definition}
+
+From the definition it is obvious that the covariance is symmetric, $\sigma_{\mathbf{ab}} = \sigma_{\mathbf{ba}}$.
+
+\begin{definition}[covariance matrix]
+Generalizing to $m$ variables $\mathbf{X} = [\mathbf{x_1}, ..., \mathbf{x_m}]$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
+
+\begin{align*}
+	\mathbf{C_X} := \left(\begin{matrix}
+		\sigma_{\mathbf{x_1x_1}}	& \cdots & \sigma_{\mathbf{x_1x_m}}	\\
+		\vdots						& \ddots & \vdots					\\
+		\sigma_{\mathbf{x_mx_1}}	& \cdots & \sigma_{\mathbf{x_mx_m}}	\\
+	\end{matrix}\right) = \frac{1}{n} \mathbf{X}\mathbf{X}^T
+\end{align*}
+\end{definition}
+
+The covariance matrix is a symmetric $m\times m$ matrix.
+
+\subsection{Diagonalizable Matrix}
+
+\begin{definition}[Diagonalizable Matrix]
+	A square matrix $\mathbf{A}$ is called \textit{diagonalizable}, if there exists a invertable matrix $\mathbf{P}$ and a diagonal matrix $\mathbf{D}$ such that $\mathbf{A} = \mathbf{P}\mathbf{D}\mathbf{P}^{-1}$.
+\end{definition}
+
+\begin{lemma}
+	Every symmetric matrix is diagonalizable.
+\end{lemma}
+
+[TODO]
 
 \section{Principal Component Analysis}
+\label{sec:principal_component_analysis}
 
 \section{Sleep Stages and EEG Data}
+\label{sec:sleep_stages_and_eeg_data}
 
 \section{Data and Algorithm}
+\label{sec:data_and_algorithm}
+
 \begin{enumerate}
 	\item subdivide eeg signals in the temporal domain
 	\item apply fft transforming into frequency domain
@@ -100,12 +154,11 @@ As shown in this section, the utilization of PCA to analyze EEG data has been us
 	\item visulisation
 \end{enumerate}
 
-
-
 \section{Results}
+\label{sec:results}
 
 \section{Conclusion}
-
+\label{sec:conclusion}
 
 \bibliographystyle{plain}
 \bibliography{document}
