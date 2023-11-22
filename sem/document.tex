@@ -44,26 +44,26 @@ In REM sleep the EEG data is that of high frequency and low amplitude patterns, 
 \section{Study of Literature}
 \label{sec:study_of_literature}
 
-[Note:
-
-first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
-
-given paper \cite{Jolliffe2016}
-
-when does pca fail? \cite{Shlens2014} and \cite{Tenenbaum2000} (non-linear method)
-
-book containing sleep phases eeg \cite{Ganong1997}
-
-Review Paper on Sleep Stage Classification Methods \cite{Boostani2017}
-
-papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015} and \cite{Metzner2023}
-
-competition using similar data set \cite{Ghassemi2018}
-
-winner of competition \cite{Howe2018}]
-\\
-\\
-\\
+%[Note:
+%
+%first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
+%
+%given paper \cite{Jolliffe2016}
+%
+%when does pca fail? \cite{Shlens2014} and \cite{Tenenbaum2000} (non-linear method)
+%
+%book containing sleep phases eeg \cite{Ganong1997}
+%
+%Review Paper on Sleep Stage Classification Methods \cite{Boostani2017}
+%
+%papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015} and \cite{Metzner2023}
+%
+%competition using similar data set \cite{Ghassemi2018}
+%
+%winner of competition \cite{Howe2018}]
+%\\
+%\\
+%\\
 A substantial body of scientific research has been devoted to exploring Principal Component Analysis (PCA).
 The foundation of this method was laid by Pearson~\cite{Pearson1901} and Hotelling~\cite{Hotelling1933}.
 
@@ -102,9 +102,9 @@ We define basic mathematical notation, which will be used in Section~\ref{sec:pr
 Assume we have two sets of $n$ observations of variables with mean 0. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
 
 \begin{definition}[covariance]
-Let us define the \textit{covariance} of $\mathbf{a}$ and $\mathbf{b}$ as
+Let us define the \textit{covariance} of $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$ as
 \begin{align*}
-	\sigma_{\mathbf{ab}}^2 := \frac{1}{n} \sum_{i=1}^{n}a_ib_i = \frac{1}{n}\mathbf{a}\cdot\mathbf{b}^T.
+	\sigma_{\mathbf{ab}} := \frac{1}{n} \sum_{i=1}^{n}a_ib_i = \frac{1}{n}\mathbf{a}\cdot\mathbf{b}^T.
 \end{align*}
 \end{definition}
 
