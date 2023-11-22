@@ -1,6 +1,7 @@
 \documentclass[a4paper]{IEEEtran}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{enumerate}
 \usepackage[shortlabels]{enumitem}
 
@@ -96,7 +97,7 @@ As shown in this section, the utilization of PCA to analyze EEG data has been us
 \section{Mathematical Basics}
 \label{sec:mathematical_basics}
 
-We define basic mathematical notation, which will be used in Section~\ref{sec:principal_component_analysis} to define the PCA.
+We define mathematical notation, which will be used in Section~\ref{sec:principal_component_analysis} to define the PCA.
 
 \subsection{Covariance}
 Assume we have two sets of $n$ observations of variables with mean 0. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
@@ -108,7 +109,7 @@ Let us define the \textit{covariance} of $\mathbf{a} \in \mathbb{R}^n$ and $\mat
 \end{align*}
 \end{definition}
 
-From the definition it is obvious that the covariance is symmetric, $\sigma_{\mathbf{ab}} = \sigma_{\mathbf{ba}}$.
+From the definition it is obvious that the covariance is symmetric, $\sigma_{\mathbf{ab}} = \sigma_{\mathbf{ba}}$. In the special case $\mathbf{a} = \mathbf{b}$ the covariance $\sigma_{\mathbf{aa}}$ is called \textit{variance} $\sigma_{\mathbf{a}}^2$.
 
 \begin{definition}[covariance matrix]
 Generalizing to $m$ variables $\mathbf{X} = [\mathbf{x_1}, ..., \mathbf{x_m}]$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
@@ -133,6 +134,28 @@ The covariance matrix is a symmetric $m\times m$ matrix.
 \begin{lemma}
 	Every symmetric matrix is diagonalizable.
 \end{lemma}
+
+\begin{definition}[Eigenvalues and Eigenvectors]
+	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbb{R}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbb{R}^m\setminus\{\mathbf{0}\}$ if
+	\begin{align}
+		\label{eq:def_eigenvalue}
+		\mathbf{Av} = \lambda \mathbf{v}.
+	\end{align}
+\end{definition}
+
+\begin{lemma}
+	Every square $m\times m$ matrix has $m$ eigenvalues.
+\end{lemma}
+
+\begin{proof}
+	We can rewrite equation~\ref{eq:def_eigenvalue} as
+	\begin{align*}
+		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}
+	\end{align*}
+	
+	As $\mathbf{v} \neq 0$ we are interested in values for $\lambda$ in which $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The left hand side is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbb{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
+	
+\end{proof}
 
 [TODO]
 
