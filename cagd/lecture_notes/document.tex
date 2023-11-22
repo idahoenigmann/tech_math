@@ -591,8 +591,167 @@ Kreuzerlübung.
 	Every polynomial curve is a bezier curve.
 \end{corollary}
 
+\begin{theorem}[corner-cutting (Eckenabschneiden)]
+	Define the sequence $P_n$ by this (recursive) definition $P_0 := (b_0^0, b_0^1, ..., b_0^n)$, $P_1 := (b_0^0, b_0^1, ..., b_0^n, b_1^{n-1}, b_2^{n-2}, ..., b_n^0)$, ..., $P_n$ consists of the points we get by sub-dividing the bezier curve (with $t=\frac{1}{2}$).
+	
+	Then this sequence ''converges'' to the bezier curve
+\end{theorem}
+
+\begin{proof}
+	$d := \max_{0 \leq i \leq n} || b_i - b_{i+1}$ ... maximum length of edges of control polygon
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/corner_cutting}
+		\caption{the new edges are at most $\frac{d}{2}$ long}
+		\label{fig:corner_cutting}
+	\end{figure}
+	
+	From the image we can deduce that the maximum length of the edges of the new control polygon is at most $\frac{d}{2}$. With induction we get that the control polygon of $P_n$ has the maximum edge length of $\frac{d}{2^n}$.
+	
+	How far are the points of the control polygon from the bezier curve $b$? $||P_k(i) - b|| \leq (n-1) \frac{d}{2^k} \rightarrow 0$ for $k \rightarrow \infty$.
+\end{proof}
+
+\begin{remark}
+	Not only does the sequence from the theorem converge pointwise, but it holds that $P_n \rightarrow b$.
+\end{remark}
+
 \begin{remark}
 	Disadvantages of bezier curves are: unintuitive, local changes are not possible as every change in a control point changes the entire curve, points can be far away from the curve.
+\end{remark}
+
+\section{B-Spline-Curves}
+
+\begin{remark}
+	B-Spline curves are compositions of bezier curves.
+\end{remark}
+
+\begin{example}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/continous_b_spline}
+		\caption{continuous, tangential continuous and curvature continuous composition}
+		\label{fig:continous_b_spline}
+	\end{figure}
+\end{example}
+
+\begin{definition}[B-Spline-Curves]
+	$m\in \mathbb{N}$ is the number of control points, $n \in \mathbb{N}$ is the degree of the b spline curve, $T=(t_0, t_1, ..., t_{m+n+1})$ where $t_i \in \mathbb{R}$, $t_i \leq t_{i+1}$ and $t_i < t_{i+n+1}$ is called knot vector (Knotenvektor).
+	
+	\begin{align*}
+		\alpha_i^r(t) := \begin{cases}
+								\frac{t - t_i}{t_{i+r} - t_i} & t_{i+r} - t_i \neq 0\\
+								0 & \text{else}
+							\end{cases}
+	\end{align*}
+	\begin{align*}
+		N_i^0(t) := \begin{cases}
+						1 & t \in [t_i, t_{i+1})\\
+						0 & \text{else}
+					\end{cases} &&
+		N_i^r(t) := \alpha_i^r(t) N_i^{r-1}(t) + (1-\alpha_{i+1}^r(t))N_{i+1}^{r-1}(t)
+	\end{align*}
+	
+	$N_i^r:\mathbb{R} \rightarrow \mathbb{R}$ are called b-spline basis functions (B-Spline-Basisfunktionen) and are piece-wise polynomial curves.
+\end{definition}
+
+\begin{theorem}
+	Every b-spline curve $s(t)$ can be expressed in the form $s(t) = \sum_{i=0}^{m} N_i^n(t) c_i$ where $c_0, ..., c_m \in \mathbb{R}^d$ are the control points and $n$ is the degree of the b-spline curve.
+\end{theorem}
+
+\begin{proof}
+	without proof
+\end{proof}
+
+\begin{example}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/quadratic_b_spline}
+		\caption{from this set of control points there are different possible quadratic b-spline curves (depending on the chosen knot vector).}
+		\label{fig:quadratic_b_spline}
+	\end{figure} 
+\end{example}
+
+\begin{remark}
+	Typically a knot vector of a similar form as $T = (0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 5, 5)$ is chosen. $0$ often repeated, then counting up, then as many numbers of the same value as $0$ in the start.
+\end{remark}
+
+\begin{example}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/cubic_b_spline}
+		\caption{cubic b-spline curve}
+		\label{fig:cubic_b_spline}
+	\end{figure} 
+	
+	Every line segment in the control polygon is cut into thirds.
+\end{example}
+
+\begin{example}
+	closed b-spline curves
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/closed_b_spline}
+		\caption{curvature continuous, closed b-spline curve.}
+		\label{fig:closed_b_spline}
+	\end{figure} 
+\end{example}
+
+\begin{remark}
+	B-spline curves of degree $n$ with $n+1$ control points ($\implies m=n$) are bezier curves.
+\end{remark}
+
+\section{NURBS-Curve}
+
+\begin{remark}
+	Non-Uniform-Rational-B-Spline-Curve
+\end{remark}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/nurbs_construction}
+	\caption{construction of a nurbs curve}
+	\label{fig:nurbs_construction}
+\end{figure}
+
+\begin{lemma}[Construction of a NURBS curve]
+	\begin{enumerate}
+		\item given are control points $c_0, ..., c_m \in \mathbb{R}^d$
+		\item $d_i := (1, c_i) \in \mathbb{R}^{d+1}$ (this is called transforming into homogeneous coordinates (homogenisieren))
+		\item choose weights $w_i > 0$. $e_i := w_i d_i \in \mathbb{R}^{d+1}$
+		\item calculate b-spline curve with control points $e_i$
+		\begin{align*}
+			s(t) := \sum_{i=0}^{m} N_i^n(t) e_i = \sum_{i=0}^{m} N_i^n(t) w_i (1,c_i) = \left(\sum_{i=0}^{m} N_i^n(t) w_i, \sum_{i=0}^{m} N_i^n(t) w_i c_i\right)
+		\end{align*}
+		\item project $s(t)$ back into the $(1 \times \mathbb{R}^d)$ plane
+		\begin{align*}
+			\tilde{x}(t) = pr(s(t)) = \left(1, \frac{\sum_{i=0}^{m} N_i^n(t) w_i c_i}{\sum_{i=0}^{m} N_i^n(t) w_i}\right)
+		\end{align*}
+		\item dehomogenate
+		\begin{align*}
+			x(t) := pr_{\mathbb{R}^d}(\tilde{x}) = \frac{\sum_{i=0}^{m} N_i^n(t) w_i c_i}{\sum_{i=0}^{m} N_i^n(t) w_i}
+		\end{align*}
+	\end{enumerate}
+	
+	$x(t)$ is called the NURBS curve with weights $w_0, .., w_m$
+\end{lemma}
+
+\begin{remark}
+	In the special case $w_i = w \in \mathbb{R}^+$ the NURBS curve is a B-spline curve.
+\end{remark}
+
+\begin{remark}
+	\begin{align*}
+		\sum_{i=0}^{m} N_i^n(t) = 1 && N_i^n(t) \geq 0
+	\end{align*}
+\end{remark}
+
+\begin{remark}
+	The bigger $w_i$ is the more the curve is attracted towards $c_i$.
+\end{remark}
+
+\begin{remark}
+	NURBS and B-splines are invariant under affine transformations.
 \end{remark}
 
 \end{document}
