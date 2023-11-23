@@ -137,10 +137,11 @@ The covariance matrix is a symmetric $m\times m$ matrix.
 \end{definition}
 
 \begin{theorem}
+	\label{th:symmetric_matrix_diagonalizable}
 	Every symmetric matrix is diagonalizable.
 \end{theorem}
 
-This theorem is difficult to prove.
+The proof of this theorem requires some preparation, which we will do now.
 
 \begin{definition}[Eigenvalues and Eigenvectors]
 	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbb{R}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbb{R}^m\setminus\{\mathbf{0}\}$ if
@@ -151,6 +152,7 @@ This theorem is difficult to prove.
 \end{definition}
 
 \begin{lemma}
+	\label{lem:existence_eigenvalues}
 	Every square $m\times m$ matrix has $m$ (not necessarily unique) eigenvalues.
 \end{lemma}
 
@@ -160,7 +162,7 @@ This theorem is difficult to prove.
 		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}
 	\end{align*}
 	
-	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbf{R}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know that this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbb{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
+	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbf{R}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know that this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbb{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
 \end{proof}
 
 \begin{lemma}
@@ -192,7 +194,8 @@ This theorem is difficult to prove.
 \end{proof}
 
 \begin{lemma}
-	The eigenvectors of a symmetric matrix are orthogonal.
+	\label{lem:symmetric_matrix_eigenvector_orthogonal}
+	The eigenvectors of a symmetric matrix with distinct eigenvalues are orthogonal.
 \end{lemma}
 
 \begin{proof}
@@ -206,7 +209,56 @@ This theorem is difficult to prove.
 	This shows that $(\lambda_1 - \lambda_2) \mathbf{v}_1 \cdot \mathbf{v}_2 = 0$ and as $\lambda_1$ and $\lambda_2$ are distinct, $\mathbf{v}_1$ and $\mathbf{v}_2$ must be orthogonal.
 \end{proof}
 
-[TODO]
+Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagonalizable}. 
+
+\begin{proof}[Proof of Theorem~\ref{th:symmetric_matrix_diagonalizable}]
+	Let $\mathbf{A} \in \mathbb{R}^{m\times m}$ be a symmetric matrix. From lemma~\ref{lem:existence_eigenvalues} we know that eigenvalues $\lambda_1, ..., \lambda_m$ with corresponding eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_m$ exist.
+	
+	Define the following matrices
+	\begin{align*}
+		\mathbf{D} := \left(\begin{matrix}
+			\lambda_1 & 0 & \cdots & 0\\
+			0 & \lambda_2 & \cdots & 0\\
+			\vdots & \vdots & \ddots & \vdots\\
+			0 & 0 & \cdots & \lambda_m
+		\end{matrix}\right) &&
+		\mathbf{E} := \left(\begin{matrix}
+			 & & &\\
+			\mathbf{v}_1 & \mathbf{v}_2 & \cdots & \mathbf{v}_m\\
+			 & & &\\
+		\end{matrix}\right)
+	\end{align*}
+	
+	In order to show that $\mathbf{A} = \mathbf{EDE}^{-1}$ we calculate
+	\begin{align*}
+		\mathbf{AE} = \left(\begin{matrix}
+			\mathbf{Av}_1 & \cdots & \mathbf{Av}_m
+		\end{matrix}\right) = \left(\begin{matrix}
+			\lambda_1\mathbf{v}_1 & \cdots & \lambda_m\mathbf{v}_m
+		\end{matrix}\right) = \mathbf{ED}.
+	\end{align*}
+	
+	From lemma~\ref{lem:symmetric_matrix_eigenvector_orthogonal} we know that the eigenvectors, and therefore the columns of $\mathbf{E}$, are orthogonal. From this it follows that $rank(\mathbf{E}) = m$ which gives us the existence of $\mathbf{E}^{-1}$.
+	
+	This shows that $\mathbf{A}$ is diagonalizable.
+\end{proof}
+
+\begin{lemma}
+	If the columns of a matrix $\mathbf{A}$ are orthogonal, then $\mathbf{A}^{-1} = \mathbf{A}^T$.
+\end{lemma}
+
+\begin{proof}
+	Let $(\mathbf{a}_i)_{i=1,...,m}$ be the columns of the matrix.
+	
+	\begin{align*}
+		\forall i,j: \mathbf{a}_i^T\mathbf{a}_j = \begin{cases}
+			1 & \text{if } i=j\\
+			0 & \text{otherwise}
+		\end{cases} \implies \mathbf{A}^T\mathbf{A} = \mathbf{I}
+	\end{align*}
+	
+	This shows $\mathbf{A}^{-1} = \mathbf{A}^T$.
+\end{proof}
 
 \section{Principal Component Analysis}
 \label{sec:principal_component_analysis}

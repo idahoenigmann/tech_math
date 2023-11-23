@@ -25,6 +25,15 @@ def calc_centre_of_mass(face):
     return centre_of_mass / total_mass
 
 
+def calc_geom_mean(face):
+    v = []
+    for f in face:
+        v.append(vertices[f - 1])
+
+    v = np.array(v)
+    return np.mean(v, axis=0)
+
+
 if __name__ == "__main__":
     vertices = []
     faces = []
@@ -42,4 +51,5 @@ if __name__ == "__main__":
 
     for face in faces:
         print(face)
-        print(calc_centre_of_mass(face), end="\n\n")
+        # print(calc_centre_of_mass(face), end="\n\n")
+        print(calc_geom_mean(face), end="\n\n")
