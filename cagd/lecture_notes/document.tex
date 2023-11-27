@@ -10,6 +10,7 @@
 \usepackage{cancel}
 \usepackage{graphicx}
 \usepackage{subfigure}
+\usepackage{hyperref}
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
@@ -752,6 +753,181 @@ Kreuzerlübung.
 
 \begin{remark}
 	NURBS and B-splines are invariant under affine transformations.
+\end{remark}
+
+\section{Subdivision algorithms}
+
+\subsection{Subdivision for curves}
+
+\begin{algorithm}[Chaikin]
+	given some polygon $p_i, p_{i+1}, ... \in \mathbb{R}^d$
+	
+	\begin{enumerate}
+		\item copy every vertex $p_i \rightarrow p_i^1$
+		\item calculate average of two neighboring $p_i^1$s $m_i^1 = \frac{1}{2}(p_i^1 + p_{i+1}^1)$
+		\item average the $m_i^1$s $p_i^2 = \frac{1}{2}(m_i^1 + m_{i+1}^1)$
+	\end{enumerate}
+	
+	The resulting polygon looks similar to the original one, but the corners are rounded. Continue by repeating the procedure with the new polygon as input.
+	
+	[TODO image]
+\end{algorithm}
+
+\begin{theorem}
+	The algorithm of Chaikin gives polygons that converge to a quadratic B-Spline curve.
+\end{theorem}
+
+\begin{remark}
+	Remember Chaikin as: copy once, average twice
+\end{remark}
+
+\begin{algorithm}[Lane-Riesenfeld]
+	same as Chaikin, but copy once, average $n$ times
+	
+	[TODO image]
+\end{algorithm}
+
+\begin{theorem}
+	The algorithm of Lane-Riesenfeld gives polygons that converge to a B-Spline curve of degree $n$.
+	
+	Lane-Riesenfeld is:
+	\begin{itemize}
+		\item a approximating scheme
+		\item is affine invariant.
+	\end{itemize}
+\end{theorem}
+
+\begin{remark}
+	Chaikin is the $n=2$ special case of Lane-Riesenfeld.
+\end{remark}
+
+\begin{algorithm}[Four-Point-Scheme]
+	\begin{align*}
+		p_i^1 := -\frac{1}{16} p_{i-1} + \frac{9}{16} p_i + \frac{9}{16} p_{i+1} - \frac{1}{16} p_{i+2}
+	\end{align*}
+	
+	this is an affine combination. Inductive $p_i^2, ...$.
+\end{algorithm}
+
+\begin{theorem}
+	The curve resulting from the four point scheme converge to a $C^1$ curve.
+	
+	Four Point Scheme is:
+	\begin{itemize}
+		\item a interpolating
+		\item is affine invariant.
+	\end{itemize}
+\end{theorem}
+
+\begin{remark}
+	The weights of the four point scheme can be chosen differently as well:
+	\begin{align*}
+		p_i^1 := -w p_{i-1} + (\frac{1}{2} + w) p_i + (\frac{1}{2} w) p_{i+1} - w p_{i+2}
+	\end{align*}
+	
+	Above we choose $w=\frac{1}{16}$. This is always interpolating, but only for $w \in (0, \frac{\sqrt{5} - 1}{8})$ the resulting curve will be $C^1$.
+\end{remark}
+
+\begin{remark}
+	All of the above schemes preserve sub spaces and therefore have the property of linear precision (llineare Präzesion). [TODO img]
+	
+	They do not have ''circular precision'', meaning that if all points lie on a sphere then the curve can leave the sphere. [TODO img]
+\end{remark}
+
+\subsection{Subdivision for meshes}
+
+\begin{definition}
+	The degree (Valenz) of a vertex is the number of edges connected to the vertex.
+\end{definition}
+
+\begin{algorithm}[Loop (triangle meshes)]
+	[TODO image]
+\end{algorithm}
+
+\begin{theorem}
+	Loop subdivision
+	\begin{itemize}
+		\item is approximating
+		\item converges to a $C^2$ surface for generic $n=6$ vertices and to a $C^1$ surface otherwise
+		\item is face splitting (faces are subdivided)
+	\end{itemize}
+\end{theorem}
+
+\begin{algorithm}[Modified-Butterfly-Scheme (triangle meshes)]
+	[TODO img]
+	
+	As in the image we generate new vertices from edges. For non-generic $k \not= 6$ we specify
+	\begin{align*}
+		s_j = \frac{1}{k} \left(\frac{1}{4} + \cos\left(\frac{2j\pi}{k}\right) + \frac{1}{2}\cos\left(\frac{4j\pi}{k}\right) \right)
+	\end{align*}
+\end{algorithm}
+
+\begin{theorem}
+	The Modified Butterfly Scheme:
+	\begin{itemize}
+		\item is interpolating
+		\item converges to a $C^1$ surface
+		\item is face-splitting
+	\end{itemize}
+\end{theorem}
+
+\begin{algorithm}[Catmull-Clark (square meshes)]
+	[TODO image]
+\end{algorithm}
+
+\begin{theorem}
+	Catmull Clark is:
+	\begin{itemize}
+		\item approximating
+		\item converges to a $C^2$ surface for generic vertices
+		\item is face-splitting
+	\end{itemize}
+\end{theorem}
+
+\begin{algorithm}[Doo-Sabin]
+	[TODO image]
+	
+	\begin{align*}
+		c_j = \frac{\left(3+2\cos\left(\frac{2\pi j}{k}\right)\right)}{4k}, j > 0 && c_0 = \frac{1}{4} + \frac{5}{4k}
+	\end{align*}
+\end{algorithm}
+
+\begin{theorem}
+	Doo-Sabin is:
+	\begin{itemize}
+		\item approximating
+		\item converges to $C^1$ surface
+		\item is vertex-splitting.
+	\end{itemize}
+\end{theorem}
+
+\begin{algorithm}[Kobbelt-Scheme (square meshes)]
+	[TODO image]
+	
+	Apply four-point-scheme for vertical and horizontal vertexes. Then apply four point scheme on resulting points. The ''horizontal'' result and the ''vertical'' result are the same.
+\end{algorithm}
+
+\begin{theorem}
+	The Kobbelt scheme is:
+	\begin{itemize}
+		\item interpolating
+		\item converges to a $C^1$ surface
+		\item is face-splitting.
+	\end{itemize}
+\end{theorem}
+
+\begin{algorithm}[Half-Edge-Data-Structure]
+	given: mesh, that represents a orientable surface.
+	
+	[TODO img]
+	
+	A mesh is a collection of lists. These lists include vertices $v_i$, edges $e_i$, faces $f_i$ and half-edges $h_i$.
+	
+	Every vertex $v$ is assigned a half-edge \texttt{v->h}. Every face, every edge is assigned a half-edge. Every half-edge is assigned the opposing (\texttt{flip}), next (\texttt{next}), previous (\texttt{prev}) half-edge, the corresponding face (\texttt{f}), vertex (\texttt{v}) and edge (\texttt{e}).
+\end{algorithm}
+
+\begin{remark}
+	In python use the package \texttt{geopy}. Find it via tiss/Lehrunterlagen. The documentation is at \url{www.geometrie.tuwien.ac.at/kilian/docs/geopy}.
 \end{remark}
 
 \end{document}
