@@ -193,6 +193,8 @@ The proof of this theorem requires some preparation, which we will do now.
 	We derive that $\lambda = \bar{\lambda}$ and thus $\lambda \in \mathbb{R}$.
 \end{proof}
 
+Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existence_eigenvalues} we know that the eigenvector $\mathbf{v}$ of eigenvalue $\lambda$ is from the $\ker(\mathbf{A} - \lambda\mathbf{I})$. Both the matrix $\mathbf{A}$ and $\lambda$ are real, so $\mathbf{v}$ must be as well.
+
 \begin{lemma}
 	\label{lem:symmetric_matrix_eigenvector_orthogonal}
 	The eigenvectors of a symmetric matrix with distinct eigenvalues are orthogonal.
@@ -208,6 +210,8 @@ The proof of this theorem requires some preparation, which we will do now.
 	
 	This shows that $(\lambda_1 - \lambda_2) \mathbf{v}_1 \cdot \mathbf{v}_2 = 0$ and as $\lambda_1$ and $\lambda_2$ are distinct, $\mathbf{v}_1$ and $\mathbf{v}_2$ must be orthogonal.
 \end{proof}
+
+[TODO what if the eigenvalues are not distinct?]
 
 Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagonalizable}. 
 
@@ -262,6 +266,16 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 
 \section{Principal Component Analysis}
 \label{sec:principal_component_analysis}
+
+Combining the concepts in section~\ref{sec:mathematical_basics} we derive the ideas and implementation of PCA.
+
+Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. What can we do to get more insight and find underlying patterns? For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. [TODO plot as img?]
+
+For larger values of $n$ this gets increasingly difficult\footnote{For $n = 3$ we can construct a 3 dimensional visualization. For higher dimensionality we have to use projection. Depending on the chosen projection the interpretation changes, which makes it difficult to interpret.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting structure is in the first few axis of the transformed $n$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
+
+
+
+What happens if we skip the step in which we transform the mean to zero? [TODO]
 
 \section{Sleep Stages and EEG Data}
 \label{sec:sleep_stages_and_eeg_data}
