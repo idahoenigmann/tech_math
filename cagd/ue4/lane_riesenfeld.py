@@ -2,13 +2,13 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
-def chaikin(px, py):
+def lane_riesenfeld(px, py, n):
     # copy
     x = [e for e in px for _ in range(2)]
     y = [e for e in py for _ in range(2)]
 
-    # average twice
-    for _ in range(2):
+    # average n times
+    for _ in range(n):
         x = [(x[i] + x[i + 1]) / 2 for i in range(len(x) - 1)]
         y = [(y[i] + y[i + 1]) / 2 for i in range(len(y) - 1)]
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     colors = ['blue', 'green', 'red']
 
     for l in range(3):
-        px, py = chaikin(px, py)
+        px, py = lane_riesenfeld(px, py, 5)
 
         for i in range(len(px)):
             ax.plot(px[i:i+2], py[i:i+2], c=colors[l], linewidth=3.5)
