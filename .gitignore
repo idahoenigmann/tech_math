@@ -303,3 +303,5 @@ TSWLatexianTemp*
 
 .idea/
 __pycache__/
+geopy/
+*.obj
