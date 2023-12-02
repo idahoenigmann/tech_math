@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 import matplotlib
 import matplotlib.pyplot as plt
 from csv import reader
@@ -33,7 +34,6 @@ if __name__ == '__main__':
     matplotlib.use('TkAgg')
 
     file_name = "spotify_songs"
-    category_list = ["pop", "rap"]
     categories = []
 
     with open('data/' + file_name + '.csv') as file:
@@ -53,6 +53,34 @@ if __name__ == '__main__':
 
     pca = PCA(n_components=2).fit(data)
     ref_data = np.dot(data, pca.components_.T)
+
+    """
+    print("cluster original data")
+    kmeans_org = KMeans(init="random", n_clusters=6, n_init=10, max_iter=100, random_state=42)
+    kmeans_org.fit(data)
+
+    result = {"pop": [], "rap": [], "rock": [], "latin": [], "r&b": [], "edm": []}
+    for l in range(len(kmeans_org.labels_)):
+        result[categories[l]].append(kmeans_org.labels_[l])
+
+    for genre, values in result.items():
+        print(genre, end=",")
+        print(f"{values.count(0)},{values.count(1)},{values.count(2)},{values.count(3)},"
+              f"{values.count(4)},{values.count(5)}", end="\n")
+
+    print("cluster pca data")
+    kmeans_pca = KMeans(init="random", n_clusters=6, n_init=10, max_iter=100, random_state=42)
+    kmeans_pca.fit(ref_data)
+
+    result = {"pop": [], "rap": [], "rock": [], "latin": [], "r&b": [], "edm": []}
+    for l in range(len(kmeans_pca.labels_)):
+        result[categories[l]].append(kmeans_pca.labels_[l])
+
+    for genre, values in result.items():
+        print(genre, end=",")
+        print(f"{values.count(0)},{values.count(1)},{values.count(2)},{values.count(3)},"
+              f"{values.count(4)},{values.count(5)}", end="\n")
+    """
 
     x_var = 1
     y_var = 10

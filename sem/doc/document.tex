@@ -4,6 +4,8 @@
 \usepackage{amsthm}
 \usepackage{enumerate}
 \usepackage[shortlabels]{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \newtheorem{definition}{Definition}
 \newtheorem{lemma}{Lemma}
@@ -46,26 +48,6 @@ In REM sleep the EEG data is that of high frequency and low amplitude patterns, 
 \section{Study of Literature}
 \label{sec:study_of_literature}
 
-%[Note:
-%
-%first work on pca \cite{Pearson1901} and \cite{Hotelling1933}
-%
-%given paper \cite{Jolliffe2016}
-%
-%when does pca fail? \cite{Shlens2014} and \cite{Tenenbaum2000} (non-linear method)
-%
-%book containing sleep phases eeg \cite{Ganong1997}
-%
-%Review Paper on Sleep Stage Classification Methods \cite{Boostani2017}
-%
-%papers trying to solve similar problem \cite{Tautan2021} and \cite{Putilov2015} and \cite{Metzner2023}
-%
-%competition using similar data set \cite{Ghassemi2018}
-%
-%winner of competition \cite{Howe2018}]
-%\\
-%\\
-%\\
 A substantial body of scientific research has been devoted to exploring Principal Component Analysis (PCA).
 The foundation of this method was laid by Pearson~\cite{Pearson1901} and Hotelling~\cite{Hotelling1933}.
 
@@ -211,7 +193,8 @@ Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existe
 	This shows that $(\lambda_1 - \lambda_2) \mathbf{v}_1 \cdot \mathbf{v}_2 = 0$ and as $\lambda_1$ and $\lambda_2$ are distinct, $\mathbf{v}_1$ and $\mathbf{v}_2$ must be orthogonal.
 \end{proof}
 
-[TODO what if the eigenvalues are not distinct?]
+What if the eigenvalues of the matrix are not distinct? In the proof of lemma~\ref{lem:existence_eigenvalues} we showed that every $\mathbf{v} \in \ker(\mathbf{A} - \lambda\mathbf{I}) \setminus \{\mathbf{0}\}$ is a eigenvector. If and only if $(\lambda - \lambda_i)$ appears $n \geq 2$ times in the determinant of $(\mathbf{A} - \lambda\mathbf{I})$ then $\mathbf{A}$ has a non unique eigenvalue $\lambda_i$. As $\dim(\ker(\mathbf{A} - \lambda_i\mathbf{I})) = n$ we can choose orthogonal eigenvectors. 
+
 
 Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagonalizable}. 
 
@@ -248,6 +231,7 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 \end{proof}
 
 \begin{lemma}
+	\label{lem:inverse_is_transpose}
 	If the columns of a matrix $\mathbf{A}$ are orthogonal, then $\mathbf{A}^{-1} = \mathbf{A}^T$.
 \end{lemma}
 
@@ -271,11 +255,62 @@ Combining the concepts in section~\ref{sec:mathematical_basics} we derive the id
 
 Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. What can we do to get more insight and find underlying patterns? For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. [TODO plot as img?]
 
-For larger values of $n$ this gets increasingly difficult\footnote{For $n = 3$ we can construct a 3 dimensional visualization. For higher dimensionality we have to use projection. Depending on the chosen projection the interpretation changes, which makes it difficult to interpret.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting structure is in the first few axis of the transformed $n$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
+For larger values of $n$ this gets increasingly difficult\footnote{For higher dimensionality we have to use some projection. Depending on the chosen projection the interpretation changes, therefore it is difficult to interpret the resulting image.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting features are in the first few axis of the transformed $m$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
 
+An example of PCA being applied to data of [TODO] can be seen in figure~\ref{fig:TODO}. In the left figure the original data and the direction of the first two PCs in relation to the x-axis and y-axis [TODO] is shown. The right figure depicts the transformed data. [TODO]
 
+Now we derive how to compute PCA. First we formulate a goal and define some assumptions.
 
-What happens if we skip the step in which we transform the mean to zero? [TODO]
+We assume that the most interesting features are those that have a large variance\footnote{This assumption can be false. For data where the noise has a larger variance than the feature we are trying to observe PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that:
+\begin{itemize}
+	\item the variance in the each axis is as large as possible.
+	\item the axis are all orthogonal to each other.
+	\item the axis are sorted (descending) by the variance in the axis.
+\end{itemize}
+
+From this we gather that another assumption is, that the axis are orthogonal.
+
+One way to achieve the goal is as follows:
+\begin{enumerate}
+	\item Find the direction which maximizes the variance.
+	\item Save this direction as the next axis.
+	\item Determine the subspace that is orthogonal to all axis we found so far.
+	\item If the subspace is non-trivial start at the first step again.
+	\item If the subspace is trivial we have found all axis.
+\end{enumerate}
+
+Let $\mathbf{X} \in \mathbb{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$.
+
+\begin{align*}
+	\mathbf{C}_{\mathbf{Y}} = \frac{1}{n}\mathbf{YY}^T = \frac{1}{n}(\mathbf{PX})(\mathbf{PX})^T = \frac{1}{n}\mathbf{PX}\mathbf{X}^T\mathbf{P}^T =\\
+	= \mathbf{P}(\frac{1}{n}\mathbf{X}\mathbf{X}^T)\mathbf{P}^T = \mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T
+\end{align*}
+
+The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a decomposition into an orthongonal Matrix of eigenvectors $\mathbf{E}$ and a diagonal matrix of eigenvalues $\mathbf{D}$. We choose $\mathbf{P}=\mathbf{E}^T$. From lemma~\ref{lem:inverse_is_transpose} it follows that $\mathbf{E}^{-1} = \mathbf{E}^T$.
+
+\begin{align*}
+	\mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T = \mathbf{P}(\mathbf{EDE}^{-1})\mathbf{P}^T = \mathbf{P}(\mathbf{EDE}^{T})\mathbf{P}^T =\\
+	\mathbf{P}(\mathbf{P}^T\mathbf{DP})\mathbf{P}^T = (\mathbf{P}\mathbf{P}^T)\mathbf{D}(\mathbf{P}\mathbf{P}^T) =\\
+	(\mathbf{P}\mathbf{P}^{-1})\mathbf{D}(\mathbf{P}\mathbf{P}^{-1}) = \mathbf{D}
+\end{align*}
+
+In summary $\mathbf{Y}$ has a diagonal covariance matrix if we choose $\mathbf{Y} = \mathbf{E}^T\mathbf{X}$, where $\mathbf{E}$ is the matrix of eigenvectors of $\mathbf{C}_\mathbf{X}$. The eigenvectors are the PCs and the eigenvalues are the variance in each new axis.
+
+As pseudo code we get the following program for calculating the PCA:
+
+\begin{algorithm}
+	\caption{Principal Component Analysis}\label{alg:pca}
+	\begin{algorithmic}
+		\Require matrix $X \in \mathbb{R}^{m\times n}$
+		\State Normalize each row in the matrix $X$
+		\State Calculate the covariance matrix $C_{X}$
+		\State Calculate the eigenvalues and eigenvectors of $C_{X}$
+		\State Sort the eigenvalues
+		\State Return sorted eigenvalues and corresponding eigenvectors
+	\end{algorithmic}
+\end{algorithm}
+
+What happens if we skip the step in which we normalize each row in the matrix? The variance of the variables have an impact on how ''important'' this variable is deemed. As we do not want to prioritize certain variables we avoid this behavior by normalizing the data beforehand.
 
 \section{Sleep Stages and EEG Data}
 \label{sec:sleep_stages_and_eeg_data}
