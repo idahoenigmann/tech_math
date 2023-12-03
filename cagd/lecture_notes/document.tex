@@ -770,7 +770,13 @@ Kreuzerlübung.
 	
 	The resulting polygon looks similar to the original one, but the corners are rounded. Continue by repeating the procedure with the new polygon as input.
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/chaikin}
+		\caption{Chaikin algorithm for five given points.}
+		\label{fig:chaikin}
+	\end{figure}
+	
 \end{algorithm}
 
 \begin{theorem}
@@ -784,7 +790,12 @@ Kreuzerlübung.
 \begin{algorithm}[Lane-Riesenfeld]
 	same as Chaikin, but copy once, average $n$ times
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/lane_riesenfeld}
+		\caption{Lane Riesenfeld algorithm with $n=3$ for five given points.}
+		\label{fig:lane_riesenfeld}
+	\end{figure}
 \end{algorithm}
 
 \begin{theorem}
@@ -807,6 +818,13 @@ Kreuzerlübung.
 	\end{align*}
 	
 	this is an affine combination. Inductive $p_i^2, ...$.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/four_point_scheme}
+		\caption{Four Point Scheme for six given points.}
+		\label{fig:four_point_scheme}
+	\end{figure}
 \end{algorithm}
 
 \begin{theorem}
@@ -829,9 +847,16 @@ Kreuzerlübung.
 \end{remark}
 
 \begin{remark}
-	All of the above schemes preserve sub spaces and therefore have the property of linear precision (llineare Präzesion). [TODO img]
+	All of the above schemes preserve sub spaces and therefore have the property of linear precision (lineare Präzesion).
 	
-	They do not have ''circular precision'', meaning that if all points lie on a sphere then the curve can leave the sphere. [TODO img]
+	They do not have ''circular precision'', meaning that if all points lie on a sphere then the curve can leave the sphere.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/precision}
+		\caption{Example for linear precision, but not circular precision.}
+		\label{fig:precision}
+	\end{figure}
 \end{remark}
 
 \subsection{Subdivision for meshes}
@@ -841,7 +866,12 @@ Kreuzerlübung.
 \end{definition}
 
 \begin{algorithm}[Loop (triangle meshes)]
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/loop}
+		\caption{Loop subdivision.}
+		\label{fig:loop}
+	\end{figure}
 \end{algorithm}
 
 \begin{theorem}
@@ -854,12 +884,31 @@ Kreuzerlübung.
 \end{theorem}
 
 \begin{algorithm}[Modified-Butterfly-Scheme (triangle meshes)]
-	[TODO img]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/butterfly}
+		\caption{Modified Butterfly subdivision.}
+		\label{fig:butterfly}
+	\end{figure}
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/butterfly_special}
+		\caption{Special case in Modified Butterfly subdivision.}
+		\label{fig:butterfly_special}
+	\end{figure}
 	
 	As in the image we generate new vertices from edges. For non-generic $k \not= 6$ we specify
 	\begin{align*}
 		s_j = \frac{1}{k} \left(\frac{1}{4} + \cos\left(\frac{2j\pi}{k}\right) + \frac{1}{2}\cos\left(\frac{4j\pi}{k}\right) \right)
 	\end{align*}
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/butterfly_overview}
+		\caption{Result of Modified Butterfly subdivision.}
+		\label{fig:butterfly_overview}
+	\end{figure}
 \end{algorithm}
 
 \begin{theorem}
@@ -872,7 +921,12 @@ Kreuzerlübung.
 \end{theorem}
 
 \begin{algorithm}[Catmull-Clark (square meshes)]
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/catmul_clark}
+		\caption{Catmul Clark subdivision.}
+		\label{fig:catmul_clark}
+	\end{figure}
 \end{algorithm}
 
 \begin{theorem}
@@ -885,7 +939,12 @@ Kreuzerlübung.
 \end{theorem}
 
 \begin{algorithm}[Doo-Sabin]
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/doo_sabin}
+		\caption{Doo Sabin subdivision.}
+		\label{fig:doo_sabin}
+	\end{figure}
 	
 	\begin{align*}
 		c_j = \frac{\left(3+2\cos\left(\frac{2\pi j}{k}\right)\right)}{4k}, j > 0 && c_0 = \frac{1}{4} + \frac{5}{4k}
@@ -902,8 +961,13 @@ Kreuzerlübung.
 \end{theorem}
 
 \begin{algorithm}[Kobbelt-Scheme (square meshes)]
-	[TODO image]
-	
+	\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/kobbelt}
+	\caption{Kobbelt subdivision.}
+	\label{fig:kobbelt}
+	\end{figure}
+
 	Apply four-point-scheme for vertical and horizontal vertexes. Then apply four point scheme on resulting points. The ''horizontal'' result and the ''vertical'' result are the same.
 \end{algorithm}
 
@@ -919,7 +983,12 @@ Kreuzerlübung.
 \begin{algorithm}[Half-Edge-Data-Structure]
 	given: mesh, that represents a orientable surface.
 	
-	[TODO img]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/halfedge}
+		\caption{Halfedge datastructure.}
+		\label{fig:halfedge}
+	\end{figure}
 	
 	A mesh is a collection of lists. These lists include vertices $v_i$, edges $e_i$, faces $f_i$ and half-edges $h_i$.
 	
