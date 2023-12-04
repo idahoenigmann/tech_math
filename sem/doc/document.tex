@@ -85,7 +85,7 @@ As shown in this section, the utilization of PCA to analyze EEG data has been us
 We define mathematical notation, which will be used in Section~\ref{sec:principal_component_analysis} to define the PCA.
 
 \subsection{Covariance}
-Assume we have two sets of $n$ observations of variables with mean 0. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
+Assume we have two sets of $n$ observations of variables with mean $0$. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
 
 \begin{definition}[covariance]
 Let us define the \textit{covariance} of $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$ as
@@ -125,7 +125,7 @@ The covariance matrix is a symmetric $m\times m$ matrix.
 	Every symmetric matrix is diagonalizable.
 \end{theorem}
 
-The proof of this theorem requires some preparation, which we will do now.
+This is the main theorem we need to derive PCA. The proof of this theorem requires some preparation, which we will do now.
 
 \begin{definition}[Eigenvalues and Eigenvectors]
 	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbb{R}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbb{R}^m\setminus\{\mathbf{0}\}$ if
@@ -174,10 +174,10 @@ The proof of this theorem requires some preparation, which we will do now.
 		(\mathbf{u}, \mathbf{Au}) =	(\mathbf{u}, \lambda\mathbf{u}) = \bar{\lambda} (\mathbf{u}, \mathbf{u}).
 	\end{align*}
 	
-	We derive that $\lambda = \bar{\lambda}$ and thus $\lambda \in \mathbb{R}$.
+	For $\mathbf{u} \neq \mathbf{0}$ we get $\lambda = \bar{\lambda}$ and thus $\lambda \in \mathbb{R}$.
 \end{proof}
 
-Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existence_eigenvalues} we know that the eigenvector $\mathbf{v}$ of eigenvalue $\lambda$ is from the $\ker(\mathbf{A} - \lambda\mathbf{I})$. Both the matrix $\mathbf{A}$ and $\lambda$ are real, so $\mathbf{v}$ must be as well.
+Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existence_eigenvalues} we know that the eigenvector $\mathbf{v}$ of eigenvalue $\lambda$ is in $\ker(\mathbf{A} - \lambda\mathbf{I})$. Both the matrix $\mathbf{A}$ and $\lambda$ are real, so $\mathbf{v}$ must be in $\mathbb{R}^m$ as well.
 
 \begin{lemma}
 	\label{lem:symmetric_matrix_eigenvector_orthogonal}
@@ -218,27 +218,30 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 		\end{matrix}\right)
 	\end{align*}
 	
-	In order to show that $\mathbf{A} = \mathbf{EDE}^{-1}$ we calculate
-	\begin{align*}
+	The definition of eigenvalues and eigenvectors gives us
+	\begin{align}
+		\label{eq:diagonalizable}
 		\mathbf{AE} = \left(\begin{matrix}
 			\mathbf{Av}_1 & \cdots & \mathbf{Av}_m
 		\end{matrix}\right) = \left(\begin{matrix}
 			\lambda_1\mathbf{v}_1 & \cdots & \lambda_m\mathbf{v}_m
 		\end{matrix}\right) = \mathbf{ED}.
-	\end{align*}
+	\end{align}
 	
-	From lemma~\ref{lem:symmetric_matrix_eigenvector_orthogonal} we know that the eigenvectors, and therefore the columns of $\mathbf{E}$, are orthogonal. From this it follows that $rank(\mathbf{E}) = m$ which gives us the existence of $\mathbf{E}^{-1}$.
+	From lemma~\ref{lem:symmetric_matrix_eigenvector_orthogonal} we know that the eigenvectors, and therefore the columns of $\mathbf{E}$, are orthogonal. It follows that $rank(\mathbf{E}) = m$ which gives us the existence of $\mathbf{E}^{-1}$.
+	
+	Rearranging equation~\ref{eq:diagonalizable} now gives us $\mathbf{A} = \mathbf{EDE}^{-1}$ which is what we wanted to show.
 	
 	This shows that $\mathbf{A}$ is diagonalizable.
 \end{proof}
 
 \begin{lemma}
 	\label{lem:inverse_is_transpose}
-	If the columns of a matrix $\mathbf{A}$ are orthogonal, then $\mathbf{A}^{-1} = \mathbf{A}^T$.
+	If the columns of matrix $\mathbf{A}$ are orthonormal, then $\mathbf{A}^{-1} = \mathbf{A}^T$.
 \end{lemma}
 
 \begin{proof}
-	Let $(\mathbf{a}_i)_{i=1,...,m}$ be the columns of the matrix.
+	Let $(\mathbf{a}_i)_{i=1,...,m}$ be the columns of the matrix. The columns are orthogonal and normed, therefore
 	
 	\begin{align*}
 		\forall i,j: \mathbf{a}_i^T\mathbf{a}_j = \begin{cases}
@@ -255,35 +258,34 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 
 Combining the concepts in section~\ref{sec:mathematical_basics} we derive the ideas and implementation of PCA.
 
-Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. What can we do to get more insight and find underlying patterns? For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. An exemplary plot of fossil fish teeth data can be seen in figure~\ref{fig:fossilfishteeth}.
+Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. The goal is to get more insight and find underlying patterns in the collected data. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\linewidth]{figs/fossil_fish_teeth}
-	\caption{Sample data of Samarium-147/Neodymium-144 ratio in fossil fish teeth.}
-	\label{fig:fossil_fish_teeth}
+	\includegraphics[width=\linewidth]{figs/some_nice_data_org}
+	\caption{Randomly generated sample data.}
+	\label{fig:some_nice_data}
 \end{figure}
-
 
 For larger values of $n$ this gets increasingly difficult\footnote{For higher dimensionality we have to use some projection. Depending on the chosen projection the interpretation changes, therefore it is difficult to interpret the resulting image.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting features are in the first few axis of the transformed $m$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
 
-An example of PCA being applied to the fossil fish teeth data can be seen in figure~\ref{fig:pca_example}. In the top figure the original data and the direction of the first two PCs in relation to the two axis is shown. The bottom figure depicts the transformed data.
+An example of PCA being applied to the data from figure~\ref{fig:some_nice_data} can be seen in figure~\ref{fig:pca_example}. In the top figure the original data and the direction of the new axis (called Principal Components (PC)) in relation to the two original axis is shown. The bottom figure depicts the transformed data. One can see that the data points are more spread out than in the original plot.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.5\textwidth}
-		\includegraphics[width=\textwidth]{figs/fossil_fish_teeth_with_pcs}
-		\caption{Original data and direction of the two PCs in relation to the ratio and depth.}
-		\label{fig:fossil_fish_teeth_with_pcs}
+		\includegraphics[width=\textwidth]{figs/some_nice_data_pc}
+		\caption{Normed data (mean is zero and variance is one) and direction of the two PCs in relation to the x and y position.}
+		\label{fig:some_nice_data_pc}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.5\textwidth}
-		\includegraphics[width=\textwidth]{figs/pca_of_fossil_fish_teeth}
-		\caption{Fossil teeth data after being transformed by PCA.}
-		\label{fig:pca_of_fossil_fish_teeth}
+		\includegraphics[width=\textwidth]{figs/some_nice_data_pca}
+		\caption{The data after being transformed by PCA. The variance along the PC1 axis is maximal, therefore the data is spread out most along this axis.}
+		\label{fig:some_nice_data_pca}
 	\end{subfigure}
 	
-	\caption{Example application of PCA on fossil fish teeth data.}
+	\caption{Example application of PCA.}
 	\label{fig:pca_example}
 \end{figure}
 
@@ -296,7 +298,25 @@ We assume that the most interesting features are those that have a large varianc
 	\item the axis are sorted (descending) by the variance in the axis.
 \end{itemize}
 
-From this we gather that another assumption is, that the axis are orthogonal.
+From this we gather that another assumption is, that the axis are orthogonal. Lastly we are only concerned with linear dependent features in the data. Some example cases in which PCA fails are shown in figure~\ref{fig:pca_fails}.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[width=\textwidth]{figs/pca_fails_nonlinear}
+		\caption{Clearly the relationship in this figure is non-linear. PCA can not describe circular dependencies, as shown in this data.}
+		\label{fig:pca_fails_nonlinear}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[width=\textwidth]{figs/pca_fails_nonorthogonal}
+		\caption{The two main axis along which the data is aligned are not orthogonal to each other. PCA always outputs orthogonal principal components, therefore it fails in this example.}
+		\label{fig:pca_fails_nonorthogonal}
+	\end{subfigure}
+	
+	\caption{Examples in which some of the assumptions of PCA are not valid. The results are sub-optimal.}
+	\label{fig:pca_fails}
+\end{figure}
 
 One way to achieve the goal is as follows:
 \begin{enumerate}
@@ -339,6 +359,10 @@ As pseudo code we get the following program for calculating the PCA:
 \end{algorithm}
 
 What happens if we skip the step in which we normalize each row in the matrix? A big variance is interpreted by the PCA algorithm as much information, thus the variance of the variables have an impact on how ''important'' the variable is deemed. As we do not want to prioritize certain variables we avoid this behavior by normalizing the data beforehand.
+
+\subsection{Example: Cluster Detection with PCA}
+
+One application of PCA is in cluster detection. 
 
 \section{Sleep Stages and EEG Data}
 \label{sec:sleep_stages_and_eeg_data}
