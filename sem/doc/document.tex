@@ -362,7 +362,34 @@ What happens if we skip the step in which we normalize each row in the matrix? A
 
 \subsection{Example: Cluster Detection with PCA}
 
-One application of PCA is in cluster detection. 
+One application of PCA is in cluster detection. We will demonstrate this using the data from [TODO https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset]. The data includes 32826 songs from Spotify. Each song is assigned the following attributes:
+\begin{itemize}
+	\item genre (one of: pop, rap, rock, latin, r\&b, edm)
+	\item track popularity (between 0 and 100, where 100 is most popular),
+	\item danceability (between 0 and 1, where 1 is most dancable),
+	\item energy (between 0 and 1, where 1 has most energy),
+	\item key (0 for C, 1 for C$\sharp$, and so on),
+	\item loudness (in dB),
+	\item speechiness (between 0 and 1, where 1 has most spoken words),
+	\item acousticness (between 0 and 1, where 1 is most acoustic),
+	\item instrumentalness (between 0 and 1, where 1 has least vocal content),
+	\item liveness (between 0 and 1, where 1 indicates higher probability of a live performance),
+	\item valence (between 0 and 1, where 1 is most positive),
+	\item tempo (in BPM),
+	\item duration (in ms)
+\end{itemize}
+
+The goal is defined as follows: Given all other attributes give an estimation of the genre.
+
+[TODO]
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\linewidth]{figs/songs}
+	\caption{[TODO]}
+	\label{fig:songs}
+\end{figure}
+
 
 \section{Sleep Stages and EEG Data}
 \label{sec:sleep_stages_and_eeg_data}
