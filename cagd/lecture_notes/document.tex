@@ -755,6 +755,152 @@ Kreuzerlübung.
 	NURBS and B-splines are invariant under affine transformations.
 \end{remark}
 
+\begin{example}
+	NURBS-curve over a quadratic bezier curve.
+	
+	\begin{align*}
+		b(t) = (1-t)^2b_0 + 2(1-t)tb_1 + t^2b_2\\
+		x(t) = \frac{(1-t)^2w_0b_0 + 2(1-t)tw_1b_1 + t^2w_2b_2}{(1-t)^2w_0 + 2(1-t)tw_1 + t^2w_2}
+	\end{align*}
+	
+	$x(t)$ is a central projection of a parabola, and therefore a conic section (Kegelschnitt).
+\end{example}
+
+\begin{example}
+	$w_0 = w_1 = w_2$ then $x(t) = b(t)$ which is a parabola.
+\end{example}
+
+\begin{example}
+	$w_0 = w_2 = 1$, $w:=w_1$ How do we have to choose $w$ in order for $x(t)$ to be a different conic section from a parabola?
+	
+	$x(t)$ is a $\begin{cases}
+		\text{ellipse}\\
+		\text{parabola}\\
+		\text{hyperbola}
+	\end{cases}$ if $x(t)$ has $\begin{cases}
+	0\\
+	1\\
+	2
+	\end{cases}$ points at infinity (Fernpunkt).
+	
+	Therefore we investigate how often the denominator is $0$. 
+	
+	\begin{align*}
+		(1-t)^2 + 2(1-t)tw + t^2 = 1 - 2t + t^2 + 2tw - 2t^2w + t^2 = (2-2w)t^2 + (-2+2w)t + 1\\
+		t_{1,2} = \frac{2-2w \pm \sqrt{(2-2w)^2 - 4(2-2w)}}{2(2-2w)}\\
+		(2-2w)^2 - 4(2-2w) = 4 - 8w + 4w^2 - 8 + 8w = 4w^2 - 4 = 4(w^2 - 1)
+	\end{align*}
+	
+	If $w=1$ we have already seen that the result is a parabola. Otherwise we do not divide by $0$. We are interested in what is under the square root.
+	
+	As $4(w^2-1) = 0 \iff w=1$ we have $\begin{cases}0\\ 1\\ 2\end{cases}$ real roots if $4(w^2-1) \begin{cases}<0\\ =0\\ >0\end{cases}$.
+\end{example}
+
+\begin{theorem}
+	$x(t)$ is a $\begin{cases}
+		\text{ellipse}\\
+		\text{parabola}\\
+		\text{hyperbola}
+	\end{cases}$ if $\begin{cases}w<1\\ w=1\\ w>1\end{cases}$.
+	
+	[TODO image]
+\end{theorem}
+
+\begin{example}
+	Is it possible to make a circle?
+	
+	Obviously the distance between $b_1$ and the two points $b_0$ and $b_2$ must be equal. [TODO image]
+	
+	A necessary condition is therefore that $b_0, b_1, b_2$ form an isosceles (gleichschenkelig) triangle.
+	
+	[TODO image]
+	
+	\begin{align*}
+		x(\frac{1}{2}) = \frac{(1-\frac{1}{2})^2b_0 + 2(1-\frac{1}{2})\frac{1}{2}wb_1 + (\frac{1}{2})^2b_2}{(1-\frac{1}{2})^2 + 2(1-\frac{1}{2})\frac{1}{2}w + (\frac{1}{2})^2} = \frac{\frac{1}{4}b_0 + \frac{1}{2}b_1 + \frac{1}{4}b_2}{\frac{1}{4} + \frac{1}{2}w + \frac{1}{4}} = \frac{b_0 + 2wb_1 + b_2}{2+2w} =\\
+		\frac{1}{2+2w}(b_0 + b_2 + 2wb_1) = \frac{1}{1+w}(\frac{b_0+b_2}{2} +wb_1) = \frac{1}{1+w} \frac{b_0 + b_2}{2} + \frac{w}{1+w} b_1
+	\end{align*}
+	which is a affine combination of $\frac{b_0 + b_2}{2}$ and $b_1$.
+	
+	[TODO image]
+	
+	\begin{align*}
+		c = (1-\lambda)a + \lambda b\\
+		\frac{x}{y} = \frac{c-1}{b-c} = \frac{(1-\lambda)a + \lambda b - a}{b - (1-\lambda) a - \lambda b} = \frac{\lambda(b-a)}{(1-\lambda)(b-a)} = \frac{\lambda}{1-\lambda}
+	\end{align*}
+	
+	For $(1-\lambda)a + \lambda b = (\frac{1}{1-w})\frac{b_0+b_2}{2} + \frac{w}{1+w}b_1$ we get $\frac{x}{y} = \frac{\lambda}{1-\lambda} = \frac{\frac{w}{1+w}}{\frac{1}{1+w}} = w$.
+	
+	With the intercept theorem (Strahlensatz) and law of sines (trigonometrischer Satz) we get $\sin(\frac{\phi}{2}) = \frac{p}{q} = w$.
+	
+	$\implies w = \sin(\frac{\phi}{2})$.
+\end{example}
+
+\begin{theorem}
+	$x(t)$ is a circle, if $b_0, b_1, b_2$ is an isosceles triangle and $w_0=w_2=1$, $w_1 = \sin(\frac{\phi}{2})$ where $\phi = \angle (b_0-b_1, b_2, b_1)$.
+\end{theorem}
+
+\begin{remark}
+	How can we calculate the angle?
+	
+	\begin{align*}
+		\cos(\phi) = \frac{<b_0-b_1, b_2-b_1>}{||b_0-b_1||\cdot ||b_2-b_1||}
+	\end{align*}
+	
+	With further calculations we get
+	\begin{align*}
+		w = \sin(\frac{\phi}{2}) = \frac{||(b_0-b_1)\times (\frac{b_0 - b_2}{2} - b_1)||}{||b_0 - b_1|| \cdot ||\frac{b_0 - b_2}{2} - b_1||}
+	\end{align*}
+\end{remark}
+
+\begin{remark}
+	Area of a triangle
+	
+	[TODO image]
+	
+	\begin{align*}
+		A = \frac{|\det(v,w)|}{2} = \frac{|\det (P-R, Q-R)|}{2} = \frac{\left|\det\left(\begin{matrix} 1 & R\\ 0 & P-R\\ 0 & Q-R \end{matrix}\right)\right|}{2} = \frac{\left|\det\left(\begin{matrix} 1 & R\\ 1 & P\\ 1 & Q \end{matrix}\right)\right|}{2}
+	\end{align*}
+\end{remark}
+
+\section{Free form surfaces}
+
+\begin{definition}
+	given a control mesh $b_{00}, b_{01}, ..., b_{mn} \in \mathbb{R}^d$, $m,n \in \mathbb{N}$ and two curve schemes $g(s) = \sum_{i=0}^{m}D_i(s)p_i$ and $h(t)=\sum_{j=0}^{n}E_j(t)q_j$.
+	
+	$f(s,t) := \sum_{i=0}^{m} \sum_{j=0}^{n} D_i(s) E_j(t) b_{ij}$ is called free form surface (also called tensor product surface) (Freiformfläche, Tensorproduktfläche).
+	
+	[TODO image]
+\end{definition}
+
+\begin{example}
+	$D_i(s) = B_i^m(s)$ and $E_j(t)=B_j^n(t)$ ... bernstein polynomials then $f(s,t)$ is a bezier surface from degree $(m,n)$.
+\end{example}
+
+\begin{example}
+	$D_i(s) = N_i^m(s)$ and $E_j(t)=N_j^n(t)$ ... b-spline base functions then $f(s,t)$ is a b-spline surface from degree $(m,n)$.
+\end{example}
+
+\begin{lemma}
+	\begin{align*}
+		f(s,t) = \sum_i \sum_j D_i(s) E_j(t) b_{ij} = \sum_i D_i(s) \underbrace{\sum_i E_j(t) b_{ij}}_{=: h_i(t)} = \sum_i D_i(s)h_i(t)\\
+		f(s,t) = ... = \sum_j E_j(t) \underbrace{\sum_i D_i(s) b_{ij}}_{=: g_j(s)} = \sum_j E_j(t) g_j(s)
+	\end{align*}
+	
+	For some $t_0$ $f(s,t_0)$ is called a $s$-parameter line.
+	
+	$f(s,t_0) = \sum_i D_i(s)\underbrace{h_i(t_0)}_{p_i}$. A $s$-parameter line is a curve of the type $g(s)$. The same is true for $t$-parameter line of type $h(t)$.
+\end{lemma}
+
+\begin{example}
+	bezier mesh of grade $(2,3)$
+	
+	[TODO image]
+\end{example}
+
+\begin{algorithm}[de casteljou for meshes]
+	[TODO image]
+\end{algorithm}
+
 \section{Subdivision algorithms}
 
 \subsection{Subdivision for curves}
