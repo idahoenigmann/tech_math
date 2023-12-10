@@ -803,17 +803,28 @@ Kreuzerlübung.
 		\text{hyperbola}
 	\end{cases}$ if $\begin{cases}w<1\\ w=1\\ w>1\end{cases}$.
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/nurbs_par_hyp_ellip}
+		\caption{NURBS curve for the different values of $w$}
+		\label{fig:nurbs_par_hyp_ellip}
+	\end{figure}
 \end{theorem}
 
 \begin{example}
 	Is it possible to make a circle?
 	
-	Obviously the distance between $b_1$ and the two points $b_0$ and $b_2$ must be equal. [TODO image]
+	Obviously the distance between $b_1$ and the two points $b_0$ and $b_2$ must be equal.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/nurbs_circle}
+		\caption{depection of conditions in order for $x(t)$ to be a circle}
+		\label{fig:nurbs_circle}
+	\end{figure}
 	
 	A necessary condition is therefore that $b_0, b_1, b_2$ form an isosceles (gleichschenkelig) triangle.
 	
-	[TODO image]
 	
 	\begin{align*}
 		x(\frac{1}{2}) = \frac{(1-\frac{1}{2})^2b_0 + 2(1-\frac{1}{2})\frac{1}{2}wb_1 + (\frac{1}{2})^2b_2}{(1-\frac{1}{2})^2 + 2(1-\frac{1}{2})\frac{1}{2}w + (\frac{1}{2})^2} = \frac{\frac{1}{4}b_0 + \frac{1}{2}b_1 + \frac{1}{4}b_2}{\frac{1}{4} + \frac{1}{2}w + \frac{1}{4}} = \frac{b_0 + 2wb_1 + b_2}{2+2w} =\\
@@ -821,7 +832,12 @@ Kreuzerlübung.
 	\end{align*}
 	which is a affine combination of $\frac{b_0 + b_2}{2}$ and $b_1$.
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/nurbs_ratio}
+		\caption{ratio between distances between points on a line}
+		\label{fig:nurbs_ratio}
+	\end{figure}
 	
 	\begin{align*}
 		c = (1-\lambda)a + \lambda b\\
@@ -855,7 +871,12 @@ Kreuzerlübung.
 \begin{remark}
 	Area of a triangle
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/area_triangle}
+		\caption{we want to calculate the area of the triangle between two vectors}
+		\label{fig:area_triangle}
+	\end{figure}
 	
 	\begin{align*}
 		A = \frac{|\det(v,w)|}{2} = \frac{|\det (P-R, Q-R)|}{2} = \frac{\left|\det\left(\begin{matrix} 1 & R\\ 0 & P-R\\ 0 & Q-R \end{matrix}\right)\right|}{2} = \frac{\left|\det\left(\begin{matrix} 1 & R\\ 1 & P\\ 1 & Q \end{matrix}\right)\right|}{2}
@@ -868,9 +889,14 @@ Kreuzerlübung.
 	given a control mesh $b_{00}, b_{01}, ..., b_{mn} \in \mathbb{R}^d$, $m,n \in \mathbb{N}$ and two curve schemes $g(s) = \sum_{i=0}^{m}D_i(s)p_i$ and $h(t)=\sum_{j=0}^{n}E_j(t)q_j$.
 	
 	$f(s,t) := \sum_{i=0}^{m} \sum_{j=0}^{n} D_i(s) E_j(t) b_{ij}$ is called free form surface (also called tensor product surface) (Freiformfläche, Tensorproduktfläche).
-	
-	[TODO image]
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/control_mesh}
+	\caption{control mesh}
+	\label{fig:control_mesh}
+\end{figure}
 
 \begin{example}
 	$D_i(s) = B_i^m(s)$ and $E_j(t)=B_j^n(t)$ ... bernstein polynomials then $f(s,t)$ is a bezier surface from degree $(m,n)$.
@@ -894,11 +920,21 @@ Kreuzerlübung.
 \begin{example}
 	bezier mesh of grade $(2,3)$
 	
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/bezier_mesh}
+		\caption{bezier mesh}
+		\label{fig:bezier_mesh}
+	\end{figure}
 \end{example}
 
 \begin{algorithm}[de casteljou for meshes]
-	[TODO image]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/decasteljou_mesh}
+		\caption{cateljou algorithm for meshes}
+		\label{fig:decasteljou_mesh}
+	\end{figure}
 \end{algorithm}
 
 \section{Subdivision algorithms}
