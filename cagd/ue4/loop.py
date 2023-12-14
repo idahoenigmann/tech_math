@@ -1,14 +1,11 @@
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib import cm
 import numpy as np
-import geopy.obj as obj
-from geopy.mesh import Mesh, Vertex
 import geopy.vis as vis
 from geopy.mesh import Mesh
+import geopy.obj as obj
 
 
 def loop(M):
+    # calculate new vertices from existing vertices
     vertices_from_vertex = []
     vertex_indices = []
     for vertex in M.vertices():
@@ -22,6 +19,7 @@ def loop(M):
         vertices_from_vertex.append(np.average(neighbor_lst, axis=0, weights=weights))
         vertex_indices.append(vertex.index)
 
+    # calculate new vertices from existing edges
     vertices_from_edge = []
     edge_indices = []
     for edge in M.edges():
@@ -33,14 +31,16 @@ def loop(M):
             vertices_from_edge.append(np.average(points, axis=0, weights=[3/8, 3/8, 1/8, 1/8]))
         edge_indices.append((edge.origin.index, edge.target.index))
 
+    # divide each triangle into four new ones
     triangles = []
-
     for face in M.faces():
+        # get indices
         ab, bc, ca = face.halfedge, face.halfedge.next, face.halfedge.prev
         a, b, c = ab.origin, bc.origin, ca.origin
 
         a_idx, b_idx, c_idx = a.index, b.index, c.index
 
+        # get indices of edges, they might be oriented in to opposite direction
         try:
             ab_idx = edge_indices.index((a_idx, b_idx))
         except ValueError:
@@ -54,10 +54,12 @@ def loop(M):
         except ValueError:
             ca_idx = edge_indices.index((a_idx, c_idx))
 
+        # as the list of vertices is concatinated later we update the indices here
         ab_idx += len(vertices_from_vertex)
         bc_idx += len(vertices_from_vertex)
         ca_idx += len(vertices_from_vertex)
 
+        # the four triangles
         triangles.append((ab_idx, bc_idx, ca_idx))
         triangles.append((a_idx, ab_idx, ca_idx))
         triangles.append((b_idx, bc_idx, ab_idx))
@@ -68,13 +70,18 @@ def loop(M):
 
 
 if __name__ == '__main__':
-    vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 2, 1]]
-    triangles = [[0, 1, 2], [3, 2, 1], [2, 3, 4]]
+    # vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 2, 1]]
+    # triangles = [[0, 1, 2], [3, 2, 1], [2, 3, 4]]
+
+    vertices, triangles = obj.read('humanoid_tri.obj', 'v', 'f')
 
     M = Mesh(vertices, triangles)
 
     output_M = loop(M)
+    for _ in range(3 - 1):
+        output_M = loop(output_M)
 
+    # visualize input and result
     mesh = vis.mesh(M, color=(1, 0, 0))
     mesh.GetProperty().EdgeVisibilityOn()
     mesh.GetProperty().SetLineWidth(2.0)
