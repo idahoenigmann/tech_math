@@ -23,7 +23,7 @@ def loop(M):
     vertices_from_edge = []
     edge_indices = []
     for edge in M.edges():
-        if edge.isboundary():
+        if edge.isboundary() or edge.pair.isboundary():
             vertices_from_edge.append(np.mean([edge.origin.point, edge.target.point], axis=0))
         else:
             points = [edge.origin.point, edge.target.point, edge.next.target.point,
@@ -70,15 +70,20 @@ def loop(M):
 
 
 if __name__ == '__main__':
-    # vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 2, 1]]
-    # triangles = [[0, 1, 2], [3, 2, 1], [2, 3, 4]]
+    k = 3   # number of times loop is applied to the mesh, try something like 3
 
-    vertices, triangles = obj.read('humanoid_tri.obj', 'v', 'f')
+    if False:
+        # simple test mesh
+        vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 2, 1]]
+        triangles = [[0, 1, 2], [3, 2, 1], [2, 3, 4]]
+    else:
+        # human looking mesh
+        vertices, triangles = obj.read('humanoid_tri.obj', 'v', 'f')
 
     M = Mesh(vertices, triangles)
 
     output_M = loop(M)
-    for _ in range(3 - 1):
+    for _ in range(k - 1):
         output_M = loop(output_M)
 
     # visualize input and result
