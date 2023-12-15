@@ -92,9 +92,13 @@ def catmull_clark(M):
 if __name__ == '__main__':
     k = 1   # number of times catmull-clark is applied to the mesh, try something like 3
 
-    # simple test mesh
-    vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 2, 1], [1, 2, 1], [2, 0, -1], [2, 1, -1]]
-    rectangles = [[0, 1, 2, 3], [5, 4, 3, 2], [2, 1, 6, 7]]
+    if True:
+        # simple test mesh
+        vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 2, 1], [1, 2, 1], [2, 0, -1], [2, 1, -1]]
+        rectangles = [[0, 1, 2, 3], [5, 4, 3, 2], [2, 1, 6, 7]]
+    else:
+        vertices = [[x * 3, y * 2, z] for x in range(2) for y in range(2) for z in range(2)]
+        rectangles = [[0, 1, 3, 2], [1, 0, 4, 5], [3, 1, 5, 7], [2, 3, 7, 6], [0, 2, 6, 4], [5, 4, 6, 7]]
 
     M = Mesh(vertices, rectangles)
 
