@@ -10,7 +10,7 @@ def catmull_clark(M):
     for face in M.faces():
         vertices_from_faces.append(np.mean([vert.point for vert in face.vertices()], axis=0))
         sorted_vert = np.sort([vert.index for vert in face.vertices()])
-        face_vert_idx.append(tuple(vert for vert in sorted_vert))
+        face_vert_idx.append(tuple(np.sort([vert for vert in sorted_vert])))
 
     vertices_from_edges = []
     edge_vert_idx = []
@@ -22,13 +22,27 @@ def catmull_clark(M):
                       edge.origin.point, edge.target.point,
                       edge.pair.next.target.point, edge.pair.prev.origin.point]
             vertices_from_edges.append(np.average(points, axis=0, weights=[1/16, 1/16, 3/8, 3/8, 1/16, 1/16]))
-        edge_vert_idx.append((edge.origin.index, edge.target.index))
+        edge_vert_idx.append(tuple(np.sort([edge.origin.index, edge.target.index])))
 
     vertices_from_vertices = []
     vert_vert_idx = []
     for vertex in M.vertices():
-        if vertex.halfedge.isboundary() or vertex.halfedge.pair.isboundary():
-            points = [vertex.halfedge.prev.origin.point, vertex.point, vertex.halfedge.target.point]
+
+        if vertex.isboundary():
+            boundary_vert = []
+            for hedge in vertex.halfedges():
+                if hedge.isboundary():
+                    if hedge.origin.index != vertex.index:
+                        boundary_vert.append(hedge.origin)
+                    else:
+                        boundary_vert.append(hedge.target)
+                if hedge.pair.isboundary():
+                    if hedge.origin.index != vertex.index:
+                        boundary_vert.append(hedge.origin)
+                    else:
+                        boundary_vert.append(hedge.target)
+
+            points = [boundary_vert[0].point, vertex.point, boundary_vert[1].point]
             vertices_from_vertices.append(np.average(points, weights=[1/8, 3/4, 1/8], axis=0))
         else:
             point = [vertex.point]
@@ -42,42 +56,36 @@ def catmull_clark(M):
         vert_vert_idx.append(vertex.index)
 
     rectangles = []
+    outer_edges = set()
     for face in M.faces():
+        if face.valence != 4:
+            raise ValueError("non rectangle mesh given")
+
         # get indices
         ab, bc, cd, da = face.halfedge, face.halfedge.next, face.halfedge.next.next, face.halfedge.prev
         a_idx, b_idx, c_idx, d_idx = ab.origin.index, bc.origin.index, cd.origin.index, da.origin.index
 
-        try:
-            ab_idx = edge_vert_idx.index((a_idx, b_idx))
-        except ValueError:
-            ab_idx = edge_vert_idx.index((b_idx, a_idx))
-        try:
-            bc_idx = edge_vert_idx.index((b_idx, c_idx))
-        except ValueError:
-            bc_idx = edge_vert_idx.index((c_idx, b_idx))
-        try:
-            cd_idx = edge_vert_idx.index((c_idx, d_idx))
-        except ValueError:
-            cd_idx = edge_vert_idx.index((d_idx, c_idx))
-        try:
-            da_idx = edge_vert_idx.index((d_idx, a_idx))
-        except ValueError:
-            da_idx = edge_vert_idx.index((a_idx, d_idx))
+        ab_idx = edge_vert_idx.index(tuple(np.sort([a_idx, b_idx])))
+        bc_idx = edge_vert_idx.index(tuple(np.sort([b_idx, c_idx])))
+        cd_idx = edge_vert_idx.index(tuple(np.sort([c_idx, d_idx])))
+        da_idx = edge_vert_idx.index(tuple(np.sort([d_idx, a_idx])))
 
         abcd_idx = face_vert_idx.index(tuple(np.sort([a_idx, b_idx, c_idx, d_idx])))
 
-        # add the four new rectangles
         # adjust indices because vertices are concatenated
-        adj_for_edge = len(vertices_from_faces)
-        adj_for_vert = adj_for_edge + len(vertices_from_edges)
-        rectangles.append((a_idx + adj_for_vert, ab_idx + adj_for_edge, abcd_idx, da_idx + adj_for_edge))
-        rectangles.append((b_idx + adj_for_vert, ab_idx + adj_for_edge, abcd_idx, bc_idx + adj_for_edge))
-        rectangles.append((c_idx + adj_for_vert, cd_idx + adj_for_edge, abcd_idx, bc_idx + adj_for_edge))
-        rectangles.append((d_idx + adj_for_vert, cd_idx + adj_for_edge, abcd_idx, da_idx + adj_for_edge))
+        ab_idx += len(vertices_from_vertices)
+        bc_idx += len(vertices_from_vertices)
+        cd_idx += len(vertices_from_vertices)
+        da_idx += len(vertices_from_vertices)
+        abcd_idx += len(vertices_from_vertices) + len(vertices_from_edges)
 
-        # TODO order edges to create orientable surface
+        # add the four new rectangles
+        rectangles.append((a_idx, ab_idx, abcd_idx, da_idx))
+        rectangles.append((b_idx, bc_idx, abcd_idx, ab_idx))
+        rectangles.append((c_idx, cd_idx, abcd_idx, bc_idx))
+        rectangles.append((d_idx, da_idx, abcd_idx, cd_idx))
 
-    vertices = np.concatenate((vertices_from_faces, vertices_from_edges, vertices_from_vertices))
+    vertices = np.concatenate((vertices_from_vertices, vertices_from_edges, vertices_from_faces))
     return Mesh(vertices, rectangles)
 
 
@@ -85,7 +93,7 @@ if __name__ == '__main__':
     k = 1   # number of times catmull-clark is applied to the mesh, try something like 3
 
     # simple test mesh
-    vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 2, -1], [1, 2, -1], [2, 0, 1], [2, 1, 1]]
+    vertices = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 2, 1], [1, 2, 1], [2, 0, -1], [2, 1, -1]]
     rectangles = [[0, 1, 2, 3], [5, 4, 3, 2], [2, 1, 6, 7]]
 
     M = Mesh(vertices, rectangles)

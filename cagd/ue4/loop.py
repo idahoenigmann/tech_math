@@ -29,30 +29,24 @@ def loop(M):
             points = [edge.origin.point, edge.target.point, edge.next.target.point,
                       edge.pair.next.target.point]
             vertices_from_edge.append(np.average(points, axis=0, weights=[3/8, 3/8, 1/8, 1/8]))
-        edge_indices.append((edge.origin.index, edge.target.index))
+        edge_indices.append(tuple(np.sort([edge.origin.index, edge.target.index])))
 
     # divide each triangle into four new ones
     triangles = []
     for face in M.faces():
+        if face.valence != 3:
+            raise ValueError("non triangle mesh given")
+
         # get indices
         ab, bc, ca = face.halfedge, face.halfedge.next, face.halfedge.prev
         a, b, c = ab.origin, bc.origin, ca.origin
 
         a_idx, b_idx, c_idx = a.index, b.index, c.index
 
-        # get indices of edges, they might be oriented in to opposite direction
-        try:
-            ab_idx = edge_indices.index((a_idx, b_idx))
-        except ValueError:
-            ab_idx = edge_indices.index((b_idx, a_idx))
-        try:
-            bc_idx = edge_indices.index((b_idx, c_idx))
-        except ValueError:
-            bc_idx = edge_indices.index((c_idx, b_idx))
-        try:
-            ca_idx = edge_indices.index((c_idx, a_idx))
-        except ValueError:
-            ca_idx = edge_indices.index((a_idx, c_idx))
+        # get indices of edges
+        ab_idx = edge_indices.index(tuple(np.sort([a_idx, b_idx])))
+        bc_idx = edge_indices.index(tuple(np.sort([b_idx, c_idx])))
+        ca_idx = edge_indices.index(tuple(np.sort([c_idx, a_idx])))
 
         # as the list of vertices is concatinated later we update the indices here
         ab_idx += len(vertices_from_vertex)
@@ -65,14 +59,14 @@ def loop(M):
         triangles.append((b_idx, bc_idx, ab_idx))
         triangles.append((c_idx, ca_idx, bc_idx))
 
-    vertices = np.concatenate((vertices_from_vertex, vertices_from_edge))
+    vertices = np.concatenate([vertices_from_vertex, vertices_from_edge])
     return Mesh(vertices, triangles)
 
 
 if __name__ == '__main__':
-    k = 3   # number of times loop is applied to the mesh, try something like 3
+    k = 1   # number of times loop is applied to the mesh, try something like 3
 
-    if False:
+    if True:
         # simple test mesh
         vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 2, 1]]
         triangles = [[0, 1, 2], [3, 2, 1], [2, 3, 4]]
