@@ -31,31 +31,17 @@ def doo_sabin(M):
             points = [(f1_idx, v1_idx), (f2_idx, v1_idx), (f2_idx, v2_idx), (f1_idx, v2_idx)]
             faces.append([vertices_idx.index(point) for point in points])
 
-    edges = set()
-    for face in faces:
-        edges.update([(face[idx], face[(idx + 1) % len(face)]) for idx in range(len(face))])
-        if (12, 11) in edges:
-            print(face)
-
     for face in M.faces():
         face_idx = tuple(np.sort([e.index for e in face.vertices()]))
-        new_face = [vertices_idx.index((face_idx, v_idx)) for v_idx in face_idx]
-        new_edges = set([(new_face[idx], new_face[(idx + 1) % len(new_face)]) for idx in range(len(new_face))])
+        new_face = [vertices_idx.index((face_idx, v.index)) for v in face.vertices()]
 
-        if new_edges.isdisjoint(edges):
-            faces.append(new_face)
-        elif set((y, x) for x,y in new_edges).isdisjoint(edges):
-            faces.append(new_face[::-1])
-        else:
-            print("how can this be true?")
-            print(new_edges)
-            print([(x, y) for x,y in edges if x in [11, 12, 13, 14] or y in [11, 12, 13, 14]])
+        faces.append(new_face)
 
     return Mesh(vertices, faces)
 
 
 if __name__ == '__main__':
-    k = 2   # number of times doo-sabin is applied to the mesh, try something like 3
+    k = 1   # number of times doo-sabin is applied to the mesh, try something like 3
 
     # simple test mesh
     n = 5
