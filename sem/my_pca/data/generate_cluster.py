@@ -1,4 +1,3 @@
-from csv import writer
 import numpy as np
 
 
@@ -6,22 +5,29 @@ if __name__ == '__main__':
     dimension = 3
     cnt_clusters = 4
     cnt_points_per_cluster = 100
-    variance = [3, 2, 3, 2]
-    mean = [[1, 4, 0], [5, 5, 2], [-1, 4, 0], [6, -1, -2]]
+    variance = [3, 2, 3, 2, 1]
+    mean = [[1, 4, 0], [5, 5, 2], [-1, 4, 0], [6, -1, -2], [0, 0, 0]]
 
-    with open('cluster.csv', 'w') as file:
-        csv_writer = writer(file, delimiter=" ")
+    a = np.zeros(shape=(dimension, dimension))
+    for i in range(dimension):
+        a[i, i:dimension] = np.random.random(size=(dimension-i))
+    b = np.zeros(shape=(dimension, dimension))
+    for i in range(dimension):
+        b[i, 0:(i+1)] = np.random.random(size=(i+1))
+    basis_change = a*b + np.random.random(size=(dimension, dimension))
 
-        header = ["feature " + str(d) for d in range(dimension)]
-        csv_writer.writerow(header)
+    header = ",".join(["feature " + str(d) for d in range(dimension)])
+    data = np.zeros((cnt_clusters * cnt_points_per_cluster, dimension))
+    categories = np.zeros((cnt_clusters * cnt_points_per_cluster))
 
-        with open('cluster_categories.csv', 'w') as cat_file:
-            csv_writer_cat = writer(cat_file, delimiter=" ")
+    for cluster in range(cnt_clusters):
+        cluster_data = np.matrix([[np.random.normal(loc=mean[cluster][d], scale=variance[cluster])
+                                   for d in range(dimension)] for _ in range(cnt_points_per_cluster)])
+        data[cluster * cnt_points_per_cluster:(cluster + 1) * cnt_points_per_cluster, :] = cluster_data
+        categories[cluster * cnt_points_per_cluster: (cluster + 1) * cnt_points_per_cluster] =\
+            [cluster for _ in range(cnt_points_per_cluster)]
 
-            csv_writer_cat.writerow(["cluster"])
+    data = np.dot(data, basis_change)
 
-            for cluster in range(cnt_clusters):
-                for _ in range(cnt_points_per_cluster):
-                    x = [np.random.normal(loc=mean[cluster][d], scale=variance[cluster]) for d in range(dimension)]
-                    csv_writer.writerow(x)
-                    csv_writer_cat.writerow([cluster])
+    np.savetxt("cluster.csv", data, delimiter=",", header=header, fmt="%10.5f")
+    np.savetxt("cluster_categories.csv", categories, delimiter=",", header="category", fmt="%d")
