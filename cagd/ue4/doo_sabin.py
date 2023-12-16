@@ -1,6 +1,7 @@
 import numpy as np
 import geopy.vis as vis
 from geopy.mesh import Mesh
+import geopy.obj as obj
 
 
 def doo_sabin(M):
@@ -43,13 +44,16 @@ def doo_sabin(M):
 if __name__ == '__main__':
     k = 1   # number of times doo-sabin is applied to the mesh, try something like 3
 
-    # simple test mesh
-    n = 5
-    vertices = [[np.sin(x * 2 * np.pi / n), np.cos(x * 2 * np.pi / n), 0] for x in range(n)]
-    faces = [[x for x in range(n)]]
-    vertices.append([2, 1, 1])
-    faces.append([2, 1, n])
-    faces.append([1, 0, n])
+    if True:
+        # simple test mesh
+        n = 5
+        vertices = [[np.sin(x * 2 * np.pi / n), np.cos(x * 2 * np.pi / n), 0] for x in range(n)]
+        faces = [[x for x in range(n)]]
+        vertices.append([2, 1, 1])
+        faces.append([2, 1, n])
+        faces.append([1, 0, n])
+    else:
+        vertices, faces = obj.read('humanoid_tri.obj', 'v', 'f')
 
     M = Mesh(vertices, faces)
 
