@@ -16,7 +16,7 @@
 %opening
 \title{Using PCA on EEG Data to Distinguish Sleep~Stages}
 \author{\IEEEauthorblockN{Ida Hönigmann}
-	\IEEEauthorblockA{\\Technical University Vienna, Austria\\
+	\IEEEauthorblockA{\\Technische Universität Wien, Austria\\
 		Email: e12002348@student.tuwien.ac.at}}
 
 \begin{document}
@@ -362,10 +362,32 @@ As pseudo code we get the following program for calculating the PCA:
 
 What happens if we skip the step in which we normalize each row in the matrix? A big variance is interpreted by the PCA algorithm as much information, thus the variance of the variables have an impact on how ''important'' the variable is deemed. As we do not want to prioritize certain variables we avoid this behavior by normalizing the data beforehand.
 
-\subsection{Example: Clustering with PCA}
-\label{subsec:example_clustering_with_pca}
+\section{Methodology}
+\label{sec:methodology}
 
-One application of PCA is in clustering. We will demonstrate this using the data from [TODO]. The data includes [TODO] data points in $\mathbb{R}^d$. The goal is to partition the data points into $k$ categories.
+\subsection{Classification}
+\label{subsec:classification}
+
+In classification the objective is to assign a new data point a category, given some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
+
+For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo code is as follows:
+
+\begin{algorithm}
+	\caption{k Nearest Neighbors}\label{alg:k_nearest_neighbors}
+	\begin{algorithmic}
+		\Require data points $(p_i)_{i \in \mathbb{N}} \in \mathbb{R}^{m}$, categories $(c_i)_{i \in \mathbb{N}} \in \{0, 1, ..., l\}$, point $x \in \mathbb{R}^{m}$, $k \in \mathbb{N}$
+		\State Calculate the distance between each point $p_i$ and $x$
+		\State Take the $k$ data points with the smallest distance to $x$
+		\State Return the category that most of the $k$ points are assigned
+	\end{algorithmic}
+\end{algorithm}
+
+This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then one only has to loop over points lying in the same (or close) chunks.
+
+[TODO image]
+
+\subsection{Fourier Transformation}
+\label{subsec:fourier_transformation}
 
 [TODO]
 
