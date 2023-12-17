@@ -27,7 +27,7 @@ if __name__ == '__main__':
         categories[cluster * cnt_points_per_cluster: (cluster + 1) * cnt_points_per_cluster] =\
             [cluster for _ in range(cnt_points_per_cluster)]
 
-    data = np.dot(data, basis_change)
+    # data = np.dot(data, basis_change)
 
     np.savetxt("cluster.csv", data, delimiter=",", header=header, fmt="%10.5f")
     np.savetxt("cluster_categories.csv", categories, delimiter=",", header="category", fmt="%d")

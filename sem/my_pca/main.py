@@ -12,7 +12,7 @@ def normalize(matrix):
 
     for i in range(matrix.shape[1]):
         ret_matrix[:, i] = ((matrix[:, i] - avg[0, i]) / np.sqrt(var[0, i])).ravel()
-    return ret_matrix
+    return ret_matrix, avg, var
 
 
 def pca(matrix, pc_count=None):
@@ -25,6 +25,12 @@ def pca(matrix, pc_count=None):
     eigenvalues, eigenvectors = eigenvalues[key], eigenvectors[:,key]
 
     return np.dot(matrix, eigenvectors), eigenvalues, eigenvectors
+
+
+def k_nearest_neighbour(k, data, categories, point):
+    distances_categories = np.array([[np.linalg.norm(data[idx] - point), categories[idx]] for idx in range(len(data))])
+    unique, counts = np.unique(distances_categories[distances_categories[:, 0].argsort()][0:k, 1], return_counts=True)
+    return unique[np.argmax(counts)]
 
 
 def read_data(file_name, delimiter=" "):

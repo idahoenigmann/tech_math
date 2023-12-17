@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from csv import reader
-from main import normalize, pca, read_data
+from main import normalize, pca, read_data, k_nearest_neighbour
 
 
 def visualize_3d(x_data, y_data, z_data, colors, labels, file_name):
@@ -78,11 +78,10 @@ if __name__ == '__main__':
     colors = [color_list[categories[idx]] for idx in range(data.shape[0])]
 
     visualize_3d(x_data, y_data, z_data, colors, [header[x_var], header[y_var], header[z_var]], file_name+"_org")
-
     visualize_histogram(data, header, categories, color_list, x_var, y_var)
 
     # pca
-    data = normalize(np.matrix(data))
+    data, avg, var = normalize(np.matrix(data))
     ret_data, evs, pcs = pca(data)
 
     # visualize pca results
@@ -92,5 +91,10 @@ if __name__ == '__main__':
     colors = [color_list[categories[idx]] for idx in range(ret_data.shape[0])]
 
     visualize_3d(x_data, y_data, z_data, colors, ["PC 1", "PC 2", "PC 3"], file_name+"_pca")
-
     visualize_histogram(ret_data, ["PC 1", "PC 2"], categories, color_list, 0, 1)
+
+    point = [0, 0, 0]
+    point = (np.array(point) - avg) / var
+    point = np.dot(point, pcs)
+
+    print(k_nearest_neighbour(15, ret_data, categories, point))

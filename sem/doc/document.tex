@@ -362,15 +362,10 @@ As pseudo code we get the following program for calculating the PCA:
 
 What happens if we skip the step in which we normalize each row in the matrix? A big variance is interpreted by the PCA algorithm as much information, thus the variance of the variables have an impact on how ''important'' the variable is deemed. As we do not want to prioritize certain variables we avoid this behavior by normalizing the data beforehand.
 
-\subsection{Example: Cluster Detection with PCA}
+\subsection{Example: Clustering with PCA}
+\label{subsec:example_clustering_with_pca}
 
-One application of PCA is in cluster detection. We will demonstrate this using the data from [TODO]. The data includes [TODO] data points, each is assigned the following attributes:
-\begin{itemize}
-	\item category (0, 1, 2, ..., k)
-	\item position in $\mathbb{R}^d$
-\end{itemize}
-
-The goal is defined as follows: Given the position give an estimation of the category.
+One application of PCA is in clustering. We will demonstrate this using the data from [TODO]. The data includes [TODO] data points in $\mathbb{R}^d$. The goal is to partition the data points into $k$ categories.
 
 [TODO]
 
