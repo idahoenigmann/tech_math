@@ -365,10 +365,12 @@ What happens if we skip the step in which we normalize each row in the matrix? A
 \section{Methodology}
 \label{sec:methodology}
 
+For the algorithm in section~\ref{sec:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
+
 \subsection{Classification}
 \label{subsec:classification}
 
-In classification the objective is to assign a new data point a category, given some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
+In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
 
 For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo code is as follows:
 
@@ -382,9 +384,16 @@ For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo
 	\end{algorithmic}
 \end{algorithm}
 
-This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then one only has to loop over points lying in the same (or close) chunks.
+Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbb{R}^2$ and $k=10$.
 
-[TODO image]
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figs/k_nearest_neighbors}
+	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the k-nearest-neighbors algorithm for $k=10$.}
+	\label{fig:k_nearest_neighbors}
+\end{figure}
+
+This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then one only has to loop over points lying in the same or close chunks.
 
 \subsection{Fourier Transformation}
 \label{subsec:fourier_transformation}
