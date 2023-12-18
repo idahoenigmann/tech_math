@@ -346,7 +346,7 @@ The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a d
 
 In summary $\mathbf{Y}$ has a diagonal covariance matrix if we choose $\mathbf{Y} = \mathbf{V}^T\mathbf{X}$, where $\mathbf{V}$ is the matrix of eigenvectors of $\mathbf{C}_\mathbf{X}$. The eigenvectors are the PCs and the eigenvalues are the variance in each new axis.
 
-As pseudo code we get the following program for calculating the PCA:
+As pseudo code we get the program from algorithm~\ref{alg:pca} for calculating the PCA.
 
 \begin{algorithm}
 	\caption{Principal Component Analysis}\label{alg:pca}
@@ -372,7 +372,7 @@ For the algorithm in section~\ref{sec:data_and_algorithm} a few other methods wi
 
 In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
 
-For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo code is as follows:
+For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo code is shown in algorithm~\ref{alg:k_nearest_neighbors}.
 
 \begin{algorithm}
 	\caption{k Nearest Neighbors}\label{alg:k_nearest_neighbors}
@@ -393,7 +393,7 @@ Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the alg
 	\label{fig:k_nearest_neighbors}
 \end{figure}
 
-This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then one only has to loop over points lying in the same or close chunks.
+This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
 
 \subsection{Fourier Transformation}
 \label{subsec:fourier_transformation}

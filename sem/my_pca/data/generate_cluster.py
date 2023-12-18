@@ -3,10 +3,10 @@ import numpy as np
 
 if __name__ == '__main__':
     dimension = 2
-    cnt_clusters = 3
-    cnt_points_per_cluster = 9
-    variance = [3, 2.5, 3, 2, 1]
-    mean = [[-4, 4, 0], [5, 6, 2], [-1, -3, 0], [6, -1, -2], [0, 0, 0]]
+    cnt_clusters = 4
+    cnt_points_per_cluster = 10
+    variance = [5, 3, 4, 7, 7]
+    mean = [[4, 4, 0], [5, 6, 2], [-1, -3, 0], [6, -1, -2], [0, 0, 0]]
 
     a = np.zeros(shape=(dimension, dimension))
     for i in range(dimension):
