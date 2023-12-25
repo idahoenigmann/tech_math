@@ -1,0 +1,367 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{enumitem}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage[margin=3cm]{geometry}
+\usepackage{pagecolor}
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\definecolor{orangy}{RGB}{253, 241, 183}
+
+% This command is used at the end of a day to start a new protocol page
+\newcommand*\sepstars{%
+  \begin{center}
+    $\star\star\star$
+  \end{center}
+  \newpage
+}
+
+% For creating a summary of the day,
+% containing applied points, category and total duration
+\newcommand{\daySummary}[3]{
+    \begin{itemize}[label={}]
+        \item \textbf{Points:} #1, \textbf{Category:} #2
+        \item \textbf{Total Duration:} #3 minutes
+    \end{itemize}
+    \medskip
+}
+
+% For creating one meditation entry.
+% The first argument is selecting the meditation category.
+% The second is the name of the meditation.
+% The third is when the meditation started.
+% The fourth is how long the meditation took.
+% The sixth is optional. It is for special incidents.
+% Example: \meditationEntry{1}{Om}{08:00}{4}{alone}{}
+% -> Category 1(Short meditation), Om meditation, start at 8 o'clock, took 4 minutes, performed alone, no incidents
+\newcommand{\meditationEntry}[6]{
+    \ifcase#1
+        \or \paragraph{I Short Meditation}% Argument is 1
+        \or \paragraph{II Meditation}% Argument is 2
+        \or \paragraph{III Attended Meeting}% Argument is 3
+        \or \paragraph{IV Attended Meeting with prior morning meditation}% Argument is 4
+        \or \paragraph{V Meditation Day}% Argument is 5
+        \or \paragraph{VI You Organized a meditation}% Argument is 6
+        \else Invalid Argument% Argument is not 1, 2, 3, 4, 5 or 6
+    \fi
+    \begin{itemize}[label={}]
+        \item Name: #2
+        \item Time: #3
+        \item Duration: #4 minutes
+        \item Group: #5
+        \ifx&#6&% Check if the sixth argument is empty
+        \else
+            \item Incidents: #6
+        \fi
+    \end{itemize}
+    \smallskip
+}
+
+% For writing about the self study
+% The first argument is the score, the second is just general text.
+\newcommand{\selfStudy}[3]{
+\paragraph{Self-study}
+    \begin{itemize}[label={}]
+        \item Attention: #1
+        \item #2
+    \end{itemize}
+    \medskip
+}
+
+\begin{document}
+
+\newpagecolor{orangy}\afterpage{\restorepagecolor}
+\title{\LARGE\bfseries Meditation Protocol H3}
+\author{Ida Hönigmann \\ 12002348}
+\date{26.11.2023 - 25.12.2023}
+\maketitle
+
+\begin{tabular}{l|l|l|l|l}
+	                                   & \textbf{H1} & \textbf{H2} & \textbf{H3} & \textbf{Total}\\
+	\hline
+	\textbf{Time Spent on Meditations} & 556 minutes & 519 minutes & 743 minutes & 1818 minutes  \\
+	\textbf{Number of Meditation Days} & 25 days     & 28 days     & 29 days     & 82 days       \\
+	\textbf{Points Applied For}        & 36 points   & 36 points   & 42 points   & 114 points    \\
+	\hline
+	Category I                         & 21          & 24          & 35          & 80            \\
+	Category II                        & 1           & 3           & 1           & 5             \\
+	Category III                       & 1           & 0           & 0           & 1             \\
+	Category IV                        & 2           & 1           & 3           & 6             \\
+	Category V                         & 0           & 0           & 0           & 0             \\
+	Category VI                        & 0           & 0           & 0           & 0             \\
+\end{tabular}
+
+\paragraph{Total Points Applied For: 114 points}
+\paragraph{Total Time Spent on Meditations: 30 hours 18 minutes}
+\paragraph{Total Number of Meditation Days: 82 days}
+
+%\paragraph{Questions:}
+%\begin{itemize}
+%    \item 
+%\end{itemize}
+
+\paragraph{Self-study:}
+\begin{itemize}
+	\item Question:\\
+	Where was my attention during the meditation?
+    \item Summary of results:\\
+    I am mostly concerned with my body and mind. Only if I am feeling particularly down or happy on a given day I will focus on my emotions during the meditation.
+\end{itemize}
+
+\paragraph{Index:}
+
+H3 is pages 1 to 30
+
+H2 is pages 31 to 59
+
+H1 is pages 60 to 83
+
+
+\vspace*{\fill}
+
+\begin{tabular}{@{}p{.5in}p{4in}@{}}
+	%&\includegraphics[width=0.5\linewidth]{../../../../Desktop/signature}\\[-7.5ex]
+    Signature: & \hrulefill , \today{} \\
+\end{tabular}
+
+%%%%%%%%%%%% BEGIN OF THE PROTOCOL %%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\section*{Day 82: 24. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Watch the gap}{23:40 - 23:52}{12}{with buddy}{}
+\selfStudy{being total, breath}{I am enthusiastic about trying new techniques. I like this one.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+\section*{Day 81: 23. 12. 2023}
+\daySummary{1}{I}{25}
+
+\meditationEntry{1}{Observe Breath}{23:15 - 23:28}{13}{alone}{}
+\selfStudy{relaxing the mind}{I did this meditation after the first one did not have much effect on me. This one made me calmer.}
+
+\meditationEntry{1}{Prayer Meditation}{23:02 - 23:14}{12}{alone}{}
+\selfStudy{thoughts}{Doing this meditation felt weird today for some reason.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 80: 22. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Prayer Meditation}{23:23 - 23:35}{12}{with buddy}{}
+\selfStudy{relaxing, difference between upright and facing down}{In the last lecture it was cleared up, that the movement is to be repeated seven times. I thought six times was recommended before, but as I always lost count anyway it is not that important. Obviously we did seven times not (if I counted correctly).}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 79: 21. 12. 2023}
+\daySummary{1}{I}{14}
+
+\meditationEntry{1}{Observe Breath}{22:22 - 22:36}{14}{alone}{}
+\selfStudy{breath, thoughts}{I am listening to the wind outside, it is very calming.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 78: 20. 12. 2023}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Vipassana and various}{08:00 - 10:00}{120}{at home joining the meeting with big blue button}{my phone went off}
+\selfStudy{thoughts, feet}{I forgot to turn off my phone, so the notification startled me a bit. I was able to continue with the meditation regardless. Thank you for the possibility of attending the meeting and meditation from home.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 77: 19. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{22:56 - 23:09}{12}{alone}{}
+\selfStudy{movement in belly}{My nose is still closed from being ill, but I was able to breath through it for this meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 76: 18. 12. 2023}
+\daySummary{1}{I}{14}
+
+\meditationEntry{1}{When joy arises}{22:09 - 22:23}{14}{alone}{}
+\selfStudy{where I can feel the joy}{The emotions feel like connected to my belly. At first I thought about things that make me joyous and then moved to the feeling of joyousness. Especially with news being grim and me being ill this meditation seemed right.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 75: 17. 12. 2023}
+\daySummary{1}{I}{15}
+
+\meditationEntry{1}{Prayer Meditation}{22:56 - 23:09}{15}{alone}{}
+\selfStudy{happiness, energy}{I am happier than usual. Lets hope it stays this way. It takes time until I get into the meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 74: 16. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{22:56 - 23:09}{12}{with buddy}{}
+\selfStudy{thoughts}{I breathed through my mouth as my nose is closed. Had many thoughts.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 73: 15. 12. 2023}
+\daySummary{1}{I}{13}
+
+\meditationEntry{1}{Observe Breath}{22:56 - 23:09}{13}{with buddy}{}
+\selfStudy{belly movement, rhythm of breathing}{I tried to concentrate on my belly, but drifted off for a while before realizing and returning my attention.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 72: 14. 12. 2023}
+\daySummary{1}{I}{13}
+
+\meditationEntry{1}{Observe Breath}{22:29 - 22:42}{13}{alone}{}
+\selfStudy{expanding of belly, thoughts}{I am starting to feel ill. Quite probably covid. :-(}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 71: 13. 12. 2023}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Dynamic Meditation and Vipassana}{08:10 - 09:10 and 09:35 - 10:35}{120}{at home with big blue button}{}
+\selfStudy{not giving in and feet while walking}{I am glad we did this at home as I haven't sweat so much in quite some time, and this way I was able to shower in between meditations.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 70: 12. 12. 2023}
+\daySummary{1}{I}{16}
+
+\meditationEntry{1}{Prayer Meditation}{22:10 - 22:26}{16}{alone}{}
+\selfStudy{no thought state}{Sometimes my mind tricks me: Instead of having no thoughts it thinks of a time where I had no thoughts. It tries to make me feel good, but does not achieve the goal. I am exited for both meditations tomorrow. During Vipassana it felt good to observe instead of trying not to think.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 69: 11. 12. 2023}
+\daySummary{1}{I}{14}
+
+\meditationEntry{1}{Observe Breath}{22:48 - 23:02}{14}{alone}{}
+\selfStudy{movement of belly}{I got a new watch that can track my pulse. During meditation my heart beats slightly slower than before.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 68: 10. 12. 2023}
+\daySummary{1}{I}{14}
+
+\meditationEntry{1}{Prayer Meditation}{21:02 - 21:16}{14}{with buddy}{}
+\selfStudy{energy}{Today was not very good (again), but this meditation made me feel better. Once again I thought of things that make me happy before the meditation, to get in the right mood. This helps.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 67: 09. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{23:13 - 23:25}{12}{alone}{}
+\selfStudy{being happy}{The entire day I felt bad. I did not sleep well last night and was not able to finish any of the math exercises I tried to do the entire day. Frustrating!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 66: 08. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{17:03 - 17:15}{12}{alone}{}
+\selfStudy{belly, nose}{Before going to bed 12 minutes seem shorter than they do now.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 65: 07. 12. 2023}
+\daySummary{2}{II}{60}
+
+\meditationEntry{2}{Vipassana}{18:33 - 19:33}{60}{alone}{}
+\selfStudy{letting loose, felling of carpet under my feet}{Yesterday I went on a long walk through the snow covered park instead of doing a long meditation, so I did one today. I like trying new ones. Sitting in the first phase was difficult.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 64: 06. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Gently Sway}{21:30 - 21:42}{12}{with buddy}{}
+\selfStudy{emotions}{This evening I have felt sad and angry. It was hard getting more positive before the meditation, but my buddy helped to cheer me up. Thank you!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 63: 05. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Prayer Meditation}{21:48 - 22:00}{12}{with buddy}{}
+\selfStudy{feeling, not thinking}{I tried to bring my attention to feel energy moving through you, but noticed that rather than feeling I was imagining what the energy would feel like and where it might be. I could then feel something in my arms and belly (warmth?).}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 62: 04. 12. 2023}
+\daySummary{1}{I}{13}
+
+\meditationEntry{1}{Gently Sway}{22:15 - 22:28}{13}{alone}{}
+\selfStudy{no thoughts}{When I have thoughts sometimes I go ''meta'', meaning I notice and think about having thoughts. Now I go meta-meta and notice (and think about) having thoughts about having thoughts.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 61: 03. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{22:45 - 22:57}{12}{alone}{}
+\selfStudy{smoothness of belly motion}{When paying attention to my belly, the movement at first felt robot like (sudden expansion, contraction). I observed further and it got less robotic after a while.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 60: 02. 12. 2023}
+\daySummary{1}{I}{16}
+
+\meditationEntry{1}{Om}{23:10 - 23:26}{16}{with buddy}{}
+\selfStudy{humming, silence afterwards}{This felt longer than I anticipated. For the nadabrahma meditation in class time appeared to be flying by when in the Om stage.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 59: 01. 12. 2023}
+\daySummary{1}{I}{13}
+
+\meditationEntry{1}{Prayer Meditation}{22:45 - 22:58}{13}{with buddy}{}
+\selfStudy{lower back, belly, counting}{Today was very stressful. From the test I had today I can still feel my legs being tense from the adrenaline. The sensation comes from my lower back, which is why we decided on this technique. As I did not know how many repetitions I did the last few times I counted today.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 58: 30. 11. 2023}
+\daySummary{1}{I}{13}
+
+\meditationEntry{1}{Prayer Meditation}{21:21 - 21:34}{13}{alone}{}
+\selfStudy{energy in belly, positive thoughts}{My usual spot with soft light. Today it was quiet. As I mostly felt energy in my arms last time, I payed attention to my belly this time. Additionally I tried to only have positive thoughts during the meditation (e.g. jokes).}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 57: 29. 11. 2023}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Nadabrahma}{08:00 - 10:00}{120}{morning meditation and various in class}{}
+\selfStudy{sound, humming, no thoughts}{It is interesting doing this again. There were differences, for example I felt more confident this time.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 56: 28. 11. 2023}
+\daySummary{1}{I}{8}
+
+\meditationEntry{1}{Gently Sway}{21:30 - 21:38}{8}{alone}{}
+\selfStudy{shoulder and upper back}{Obviously when swaying I can not lean back onto the chair. Thoughts about my bad posture started.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 55: 27. 11. 2023}
+\daySummary{1}{I}{8}
+
+\meditationEntry{1}{Prayer Meditation}{22:38 - 22:46}{8}{alone}{}
+\selfStudy{lower back}{Hopefully I will fall asleep soon. I feel tired and my back hurts.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 54: 26. 11. 2023}
+\daySummary{1}{I}{6}
+
+\meditationEntry{1}{Gently Sway}{21:48 - 21:54}{6}{with buddy}{}
+\selfStudy{-}{When I started meditating in the beginning of this semester it took longer to get into the groove. Now this is almost instantaneous. Note: I did my last self study question and scored my relaxation at 9 out of 10.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
