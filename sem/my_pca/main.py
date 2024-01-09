@@ -69,3 +69,52 @@ def visualize_data(data, header, file_name="", pcs=None):
     if file_name != "":
         plt.savefig('data/' + file_name + '.png')
     plt.show()
+
+
+def visualize_3d(x_data, y_data, z_data, colors, labels, file_name):
+    fig = plt.figure()
+    ax = plt.axes(projection="3d")
+
+    ax.scatter3D(x_data, y_data, z_data, c=colors)
+
+    ax.set_xlabel(labels[0])
+    ax.set_ylabel(labels[1])
+    ax.set_zlabel(labels[2])
+
+    plt.savefig('data/' + file_name + '.png')
+    plt.show()
+
+
+def plot_histogram(x_data, y_data, labels, color, ax, min=None, max=None):
+    if min is not None and max is not None:
+        binwidth = (max - min) / 25
+        bins = np.arange(min, max + binwidth, binwidth)
+    else:
+        bins = 25
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["white", color])
+    ax.hist2d(x_data, y_data, bins=bins, cmap=cmap)
+
+    if min is not None and max is not None:
+        ax.set_xlim([min, max])
+        ax.set_ylim([min, max])
+    ax.set_xlabel(labels[0])
+    ax.set_ylabel(labels[1])
+    ax.set_aspect('equal', 'box')
+
+
+def visualize_histogram(data, header, categories, color_list, x_var, y_var):
+    fig, ax = plt.subplots(int(np.ceil(len(set(categories)) / 2)), 2)
+    l = 0
+    for i in range(len(set(categories))):
+        category = list(set(categories))[i]
+        x_data = [data[idx, x_var] for idx in range(data.shape[0]) if categories[idx] == category]
+        y_data = [data[idx, y_var] for idx in range(data.shape[0]) if categories[idx] == category]
+
+        min_x, max_x = np.min([data[:, x_var]]), np.max([data[:, x_var]])
+        min_y, max_y = np.min([data[:, y_var]]), np.max([data[:, y_var]])
+
+        plot_histogram(x_data, y_data, [header[x_var], header[y_var]], color_list[i], ax[i // 2, i % 2],
+                       min(min_x, min_y), max(max_x, max_y))
+        l += 1
+
+    plt.show()

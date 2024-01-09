@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from csv import reader
-from main import read_data, k_nearest_neighbour
+from main import read_data
 
 
 if __name__ == '__main__':
