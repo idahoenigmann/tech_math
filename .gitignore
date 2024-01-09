@@ -305,3 +305,4 @@ TSWLatexianTemp*
 __pycache__/
 geopy/
 *.obj
+sem/my_pca/data/*.png

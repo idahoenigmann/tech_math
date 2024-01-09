@@ -6,6 +6,10 @@ from main import read_data, k_nearest_neighbour
 
 
 if __name__ == '__main__':
+    """
+        call python generate_cluster.py with dim=2 in advance
+    """
+
     file_name = "cluster"
     categories = []
 

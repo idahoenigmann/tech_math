@@ -2,6 +2,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{bbm}
 \usepackage{enumerate}
 \usepackage[shortlabels]{enumitem}
 \usepackage{algorithm}
@@ -59,7 +60,7 @@ Recent applications and variants of PCA are explored by Jolliffe et. al.~\cite{J
 Shlens discusses the limitations of PCA, as well as examples in which PCA fails, such as the requirement of linearly dependent data.
 Tenenbaum proposes a non-linear method to combat this problem\cite{Tenenbaum2000}.
 
-Generally speaking the variables must not have third or higher order dependencies\footnote{e.g. $\mathbb{E}[x_ix_jx_k] \neq 0$ for some $i, j, k$ assuming mean-free variables} between them. In some cases it is possible to reduce a problem with higher order dependencies to a second order one by applying a non-linear transformation beforehand. This method is called kernel PCA\cite{Scholkopf1997}.
+Generally speaking the variables must not have third or higher order dependencies\footnote{e.g. $\mathbbm{E}[x_ix_jx_k] \neq 0$ for some $i, j, k$ assuming mean-free variables} between them. In some cases it is possible to reduce a problem with higher order dependencies to a second order one by applying a non-linear transformation beforehand. This method is called kernel PCA\cite{Scholkopf1997}.
 
 Another method for dealing with this problem is Independent Component Analysis (ICA) which is discussed by Naik~et.~al.\cite{Naik2011}.
 \\
@@ -88,7 +89,7 @@ We define mathematical notation, which will be used in Section~\ref{sec:principa
 Assume we have two sets of $n$ observations of variables with mean $0$. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
 
 \begin{definition}[Covariance]
-Let us define the \textit{covariance} of $\mathbf{a} \in \mathbb{R}^n$ and $\mathbf{b} \in \mathbb{R}^n$ as
+Let us define the \textit{covariance} of $\mathbf{a} \in \mathbbm{R}^n$ and $\mathbf{b} \in \mathbbm{R}^n$ as
 \begin{align*}
 	\sigma_{\mathbf{ab}} := \frac{1}{n} \sum_{i=1}^{n}a_ib_i = \frac{1}{n}\mathbf{a}\cdot\mathbf{b}^T.
 \end{align*}
@@ -128,7 +129,7 @@ The covariance matrix is a symmetric $m\times m$ matrix.
 This is the main theorem we need in order to derive PCA. The proof of this theorem requires some preparation, which we will do now.
 
 \begin{definition}[Eigenvalues and Eigenvectors]
-	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbb{C}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbb{C}^m\setminus\{\mathbf{0}\}$ if
+	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbbm{C}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbbm{C}^m\setminus\{\mathbf{0}\}$ if
 	\begin{align}
 		\label{eq:def_eigenvalue}
 		\mathbf{Av} = \lambda \mathbf{v}.
@@ -146,7 +147,7 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}
 	\end{align*}
 	
-	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbb{C}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbb{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
+	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbbm{C}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbbm{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
 \end{proof}
 
 \begin{lemma}
@@ -158,7 +159,7 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 	\begin{align*}
 		(\mathbf{u}, \mathbf{v}) := \sum_{i=1}^{m} u_i \bar{v_i}
 	\end{align*}
-	This dot product has the following properties for all $\mathbf{A} \in \mathbb{C}^{m\times m}, \mathbf{u}, \mathbf{v} \in \mathbb{C}^m, \lambda \in \mathbb{C}$
+	This dot product has the following properties for all $\mathbf{A} \in \mathbbm{C}^{m\times m}, \mathbf{u}, \mathbf{v} \in \mathbbm{C}^m, \lambda \in \mathbbm{C}$
 	\begin{itemize}
 		\item $(\mathbf{Au}, \mathbf{v}) = (\mathbf{u}, \mathbf{A}^T\mathbf{v})$,
 		\item $(\lambda \mathbf{u}, \mathbf{v}) = \lambda(\mathbf{u}, \mathbf{v})$,
@@ -166,18 +167,18 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 		\item $(\mathbf{u}, \mathbf{u}) = 0 \iff \mathbf{u} = 0$
 	\end{itemize}
 	
-	Let $\mathbf{A}$ be a symmetric matrix with eigenvalue $\lambda \in \mathbb{C}$.
+	Let $\mathbf{A}$ be a symmetric matrix with eigenvalue $\lambda \in \mathbbm{C}$.
 	
-	For all $\mathbf{u} \in \mathbb{C}^m$ we have
+	For all $\mathbf{u} \in \mathbbm{C}^m$ we have
 	\begin{align*}
 		\lambda (\mathbf{u}, \mathbf{u}) = (\lambda \mathbf{u}, \mathbf{u}) = (\mathbf{Au}, \mathbf{u}) = (\mathbf{u}, \mathbf{A}^T\mathbf{u}) =\\
 		(\mathbf{u}, \mathbf{Au}) =	(\mathbf{u}, \lambda\mathbf{u}) = \bar{\lambda} (\mathbf{u}, \mathbf{u}).
 	\end{align*}
 	
-	For $\mathbf{u} \neq \mathbf{0}$ we get $\lambda = \bar{\lambda}$ and thus $\lambda \in \mathbb{R}$.
+	For $\mathbf{u} \neq \mathbf{0}$ we get $\lambda = \bar{\lambda}$ and thus $\lambda \in \mathbbm{R}$.
 \end{proof}
 
-Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existence_eigenvalues} we know that the eigenvector $\mathbf{v}$ of eigenvalue $\lambda$ is in $\ker(\mathbf{A} - \lambda\mathbf{I})$. Both the matrix $\mathbf{A}$ and $\lambda$ are real, so $\mathbf{v}$ must be in $\mathbb{R}^m$ as well.
+Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existence_eigenvalues} we know that the eigenvector $\mathbf{v}$ of eigenvalue $\lambda$ is in $\ker(\mathbf{A} - \lambda\mathbf{I})$. Both the matrix $\mathbf{A}$ and $\lambda$ are real, so $\mathbf{v}$ must be in $\mathbbm{R}^m$ as well.
 
 \begin{lemma}
 	\label{lem:symmetric_matrix_eigenvector_orthogonal}
@@ -201,7 +202,7 @@ What if the eigenvalues of the matrix are not distinct? In the proof of lemma~\r
 Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagonalizable}. 
 
 \begin{proof}[Proof of Theorem~\ref{th:symmetric_matrix_diagonalizable}]
-	Let $\mathbf{A} \in \mathbb{R}^{m\times m}$ be a symmetric matrix. From lemma~\ref{lem:existence_eigenvalues} we know that eigenvalues $\lambda_1, ..., \lambda_m$ with corresponding eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_m$ exist.
+	Let $\mathbf{A} \in \mathbbm{R}^{m\times m}$ be a symmetric matrix. From lemma~\ref{lem:existence_eigenvalues} we know that eigenvalues $\lambda_1, ..., \lambda_m$ with corresponding eigenvectors $\mathbf{v}_1, ..., \mathbf{v}_m$ exist.
 	
 	Define the following matrices
 	\begin{align*}
@@ -329,7 +330,7 @@ One way to achieve the goal is as follows:
 
 While this algorithm shows us what conceptually has to be done, we do not know how to compute the axis yet. We will now investigate this problem using the mathematical concepts from section~\ref{sec:mathematical_basics}. This will lead us to an algorithm in which all axis can be computed simultaneously.
 
-Let $\mathbf{X} \in \mathbb{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$.
+Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$.
 
 \begin{align*}
 	\mathbf{C}_{\mathbf{Y}} = \frac{1}{n}\mathbf{YY}^T = \frac{1}{n}(\mathbf{PX})(\mathbf{PX})^T = \frac{1}{n}\mathbf{PX}\mathbf{X}^T\mathbf{P}^T =\\
@@ -351,7 +352,7 @@ As pseudo code we get the program from algorithm~\ref{alg:pca} for calculating t
 \begin{algorithm}
 	\caption{Principal Component Analysis}\label{alg:pca}
 	\begin{algorithmic}
-		\Require matrix $X \in \mathbb{R}^{m\times n}$
+		\Require matrix $X \in \mathbbm{R}^{m\times n}$
 		\State Normalize each row in the matrix $X$
 		\State Calculate the covariance matrix $C_{X}$
 		\State Calculate the eigenvalues and eigenvectors of $C_{X}$
@@ -372,19 +373,19 @@ For the algorithm in section~\ref{sec:data_and_algorithm} a few other methods wi
 
 In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
 
-For data that can be represented in $\mathbb{R}^m$ and $l$ categories the pseudo code is shown in algorithm~\ref{alg:k_nearest_neighbors}.
+For data that can be represented in $\mathbbm{R}^m$ and $l$ categories the pseudo code is shown in algorithm~\ref{alg:k_nearest_neighbors}.
 
 \begin{algorithm}
 	\caption{k Nearest Neighbors}\label{alg:k_nearest_neighbors}
 	\begin{algorithmic}
-		\Require data points $(p_i)_{i \in \mathbb{N}} \in \mathbb{R}^{m}$, categories $(c_i)_{i \in \mathbb{N}} \in \{0, 1, ..., l\}$, point $x \in \mathbb{R}^{m}$, $k \in \mathbb{N}$
+		\Require data points $(p_i)_{i \in \mathbbm{N}} \in \mathbbm{R}^{m}$, categories $(c_i)_{i \in \mathbbm{N}} \in \{0, 1, ..., l\}$, point $x \in \mathbbm{R}^{m}$, $k \in \mathbbm{N}$
 		\State Calculate the distance between each point $p_i$ and $x$
 		\State Take the $k$ data points with the smallest distance to $x$
 		\State Return the category that most of the $k$ points are assigned
 	\end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbb{R}^2$ and $k=10$.
+Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbbm{R}^2$ and $k=10$.
 
 \begin{figure}
 	\centering

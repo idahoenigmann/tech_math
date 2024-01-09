@@ -2,7 +2,7 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    dimension = 2
+    dimension = 3
     cnt_clusters = 4
     cnt_points_per_cluster = 10
     variance = [5, 3, 4, 7, 7]

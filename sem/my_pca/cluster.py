@@ -55,6 +55,10 @@ def visualize_histogram(data, header, categories, color_list, x_var, y_var):
 
 
 if __name__ == '__main__':
+    """
+    call python generate_cluster.py with dim=3 in advance
+    """
+
     file_name = "cluster"
     categories = []
 
