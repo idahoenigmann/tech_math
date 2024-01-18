@@ -3,6 +3,8 @@ from geomdl import NURBS
 from geomdl import utilities
 from geomdl.visualization import VisMPL
 
+# https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline
+
 if __name__ == '__main__':
     ctrlpts = [[1.0, 0.0],
                [1.0, 1.0],
