@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     # visualize_data(data, header, file_name=file_name + "_org")
 
-    data = normalize(np.matrix(data))
+    data, _, _ = normalize(np.matrix(data))
     ret_data, evs, pcs = pca(data)
 
     pca = PCA(n_components=2).fit(data)
