@@ -1,7 +1,9 @@
+import os
 import numpy as np
 import matplotlib
+from matplotlib import cm
 import matplotlib.pyplot as plt
-from main import read_data, pca, visualize_data
+from main import read_data, pca, visualize_3d
 
 
 if __name__ == "__main__":
@@ -10,19 +12,17 @@ if __name__ == "__main__":
     _, data = read_data(f"n1", delimiter=",")
     data = np.matrix(data)
 
-    print(data[:, 0:2])
+    sleep_stages = np.loadtxt("data/CAPsleepdatan01.csv", delimiter=";", dtype=int, skiprows=1)
+    sleep_stages = sleep_stages[5:452, 0]
+    color_lst = cm.jet(np.linspace(0, 1, 5))
+    colors = [color_lst[sleep_stages[i] - 1] for i in range(sleep_stages.shape[0])]
 
-    visualize_data(data[:, 0:2], ["frequency", "amplitude"])
-    pca_output, _, _ = pca(data[:, 1:].T)
-    visualize_data(pca_output, ["pc1", "pc2"])
+    if os.path.isfile("data/pca_output.csv"):
+        pca_output = np.loadtxt("data/pca_output.csv", delimiter=",")
+    else:
+        print("pca started")
+        pca_output, _, _ = pca(data[:, 1:].T)
+        print("pca finished")
+        np.savetxt("data/pca_output.csv", pca_output, delimiter=",", newline="\n")
 
-    fig, axes = plt.subplots(nrows=1, ncols=1)
-    plt.subplots_adjust(hspace=0.8)
-
-    x_data = [pca_output[idx, 0] for idx in range(pca_output.shape[0])]
-    y_data = [pca_output[idx, 1] for idx in range(pca_output.shape[0])]
-    axes.plot(x_data, y_data)
-    axes.set_xlabel("pc1")
-    axes.set_ylabel("pc2")
-
-    plt.show()
+    visualize_3d(pca_output[:, 0], pca_output[:, 1], pca_output[:, 2], colors, ["pc1", "pc2", "pc3"])

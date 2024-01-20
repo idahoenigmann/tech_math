@@ -17,7 +17,7 @@ if __name__ == '__main__':
     time = raw_data[1]
     # raw.plot()
 
-    print(f"Duration: {time[-1] - time[0]}s")
+    print(f"Duration: {time[-1]}-{time[0]} = {time[-1] - time[0]}s")
 
     output_data = []
 

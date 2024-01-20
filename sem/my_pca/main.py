@@ -71,17 +71,19 @@ def visualize_data(data, header, file_name="", pcs=None):
     plt.show()
 
 
-def visualize_3d(x_data, y_data, z_data, colors, labels, file_name):
+def visualize_3d(x_data, y_data, z_data, colors, labels, file_name=""):
     fig = plt.figure()
     ax = plt.axes(projection="3d")
 
+    ax.plot(x_data, y_data, z_data, "darkgray")
     ax.scatter3D(x_data, y_data, z_data, c=colors)
 
     ax.set_xlabel(labels[0])
     ax.set_ylabel(labels[1])
     ax.set_zlabel(labels[2])
 
-    plt.savefig('data/' + file_name + '.png')
+    if file_name != "":
+        plt.savefig('data/' + file_name + '.png')
     plt.show()
 
 
