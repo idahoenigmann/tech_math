@@ -8,27 +8,27 @@ from main import read_data, pca, visualize_3d
 if __name__ == "__main__":
     matplotlib.use('TkAgg')
 
-    patient_number = 2
+    input_number = 2
 
-    start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[patient_number - 1, :]
+    start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[input_number - 1, :]
     start, end = int(start), int(end)
 
     # read data from csv
-    _, data = read_data(f"n{patient_number}", delimiter=",")
+    _, data = read_data(f"n{input_number}", delimiter=",")
     data = np.matrix(data)
 
     # read sleep stages
-    sleep_stages = np.loadtxt(f"data/CAPsleepdatan{patient_number}.csv", delimiter=";", dtype=int, skiprows=1)
+    sleep_stages = np.loadtxt(f"data/CAPsleepdatan{input_number}.csv", delimiter=";", dtype=int, skiprows=1)
     sleep_stages = sleep_stages[0:data.shape[1]-1, 0]
 
     # do pca or read from file
-    if os.path.isfile(f"data/pca_output{patient_number}.csv"):
-        pca_output = np.loadtxt(f"data/pca_output{patient_number}.csv", delimiter=",")
+    if os.path.isfile(f"data/pca_output{input_number}.csv"):
+        pca_output = np.loadtxt(f"data/pca_output{input_number}.csv", delimiter=",")
     else:
         print("pca started")
         pca_output, _, _ = pca(data[:, 1:].T)
         print("pca finished")
-        np.savetxt(f"data/pca_output{patient_number}.csv", pca_output, delimiter=",", newline="\n")
+        np.savetxt(f"data/pca_output{input_number}.csv", pca_output, delimiter=",", newline="\n")
 
     # show output
     color_lst = cm.jet(np.linspace(0, 1, 5))
