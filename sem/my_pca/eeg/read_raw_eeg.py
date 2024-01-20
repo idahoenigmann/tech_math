@@ -8,13 +8,23 @@ if __name__ == '__main__':
     matplotlib.use('TkAgg')
 
     plot_output = False
+    patient_number = 2
+
+    start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[patient_number-1, :]
+    start, end = int(start), int(end)
 
     # read data from edf file
-    file = "data/n1.edf"
-    raw = mne.io.read_raw_edf(file)
-    raw_data = raw.get_data(picks=['F2-F4'], start=42001, stop=6918000, return_times=True)
+    file = f"data/n{patient_number}.edf"
+    raw = mne.io.read_raw_edf(file, preload=True)
+    raw = raw.resample(sfreq=200, npad=0)
 
     print(raw.info)
+
+    # todo check channel name
+    print(set(raw.ch_names))
+    print(set(raw.ch_names).intersection(set("F2-F4", "Fp2-F4", "F1-F3", "Fp1-F3")))
+
+    raw_data = raw.get_data(picks=['Fp2-F4'], start=int(start*512/200), stop=int(end*512/200), return_times=True)
 
     data = raw_data[0][0]
     time = raw_data[1]
@@ -36,7 +46,7 @@ if __name__ == '__main__':
         # save frequencies only once
         if idx == 0:
             number_samplepoints = end - start
-            sample_spacing = 1.0 / 512.0
+            sample_spacing = 1.0 / 200.0
             frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), number_samplepoints // 2)
             output_data.append(frequencies)
 
@@ -64,4 +74,4 @@ if __name__ == '__main__':
 
     # write output to csv file
     header = "frequency, " + ",".join([f"t{i} amplitude" for i in range(idx)])
-    np.savetxt(f"data/n1.csv", np.matrix(output_data).T, delimiter=",", newline="\n", header=header)
+    np.savetxt(f"data/n{patient_number}.csv", np.matrix(output_data).T, delimiter=",", newline="\n", header=header)
