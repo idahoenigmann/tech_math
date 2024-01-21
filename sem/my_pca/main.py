@@ -22,7 +22,7 @@ def pca(matrix, pc_count=None):
 
     # sort according to eigenvalue
     key = np.argsort(eigenvalues)[::-1][:pc_count]
-    eigenvalues, eigenvectors = eigenvalues[key], eigenvectors[:,key]
+    eigenvalues, eigenvectors = eigenvalues[key], eigenvectors[:, key]
 
     return np.dot(matrix, eigenvectors), eigenvalues, eigenvectors
 
@@ -60,28 +60,30 @@ def visualize_data(data, header, file_name="", pcs=None):
     axes.set_xlabel(header[0])
     axes.set_ylabel(header[1])
 
-    ax_lim = max(abs(np.max(x_data)), abs(np.min(x_data)), abs(np.max(y_data)), abs(np.min(y_data))) * 1.1
+    """ax_lim = max(abs(np.max(x_data)), abs(np.min(x_data)), abs(np.max(y_data)), abs(np.min(y_data))) * 1.1
 
     plt.xlim(-ax_lim, ax_lim)
     plt.ylim(-ax_lim, ax_lim)
-    axes.set_aspect('equal', adjustable='box')
+    axes.set_aspect('equal', adjustable='box')"""
 
     if file_name != "":
         plt.savefig('data/' + file_name + '.png')
     plt.show()
 
 
-def visualize_3d(x_data, y_data, z_data, colors, labels, file_name):
+def visualize_3d(x_data, y_data, z_data, colors, labels, file_name=""):
     fig = plt.figure()
     ax = plt.axes(projection="3d")
 
+    ax.plot(x_data, y_data, z_data, "darkgray")
     ax.scatter3D(x_data, y_data, z_data, c=colors)
 
     ax.set_xlabel(labels[0])
     ax.set_ylabel(labels[1])
     ax.set_zlabel(labels[2])
 
-    plt.savefig('data/' + file_name + '.png')
+    if file_name != "":
+        plt.savefig('data/' + file_name + '.png')
     plt.show()
 
 
