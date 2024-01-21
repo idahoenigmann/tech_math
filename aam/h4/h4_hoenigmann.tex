@@ -1,0 +1,390 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{enumitem}
+\usepackage{lipsum}
+\usepackage{hyperref}
+\usepackage[margin=3cm]{geometry}
+\usepackage{pagecolor}
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\definecolor{orangy}{RGB}{253, 241, 183}
+
+% This command is used at the end of a day to start a new protocol page
+\newcommand*\sepstars{%
+  \begin{center}
+    $\star\star\star$
+  \end{center}
+  \newpage
+}
+
+% For creating a summary of the day,
+% containing applied points, category and total duration
+\newcommand{\daySummary}[3]{
+    \begin{itemize}[label={}]
+        \item \textbf{Points:} #1, \textbf{Category:} #2
+        \item \textbf{Total Duration:} #3 minutes
+    \end{itemize}
+    \medskip
+}
+
+% For creating one meditation entry.
+% The first argument is selecting the meditation category.
+% The second is the name of the meditation.
+% The third is when the meditation started.
+% The fourth is how long the meditation took.
+% The sixth is optional. It is for special incidents.
+% Example: \meditationEntry{1}{Om}{08:00}{4}{alone}{}
+% -> Category 1(Short meditation), Om meditation, start at 8 o'clock, took 4 minutes, performed alone, no incidents
+\newcommand{\meditationEntry}[6]{
+    \ifcase#1
+        \or \paragraph{I Short Meditation}% Argument is 1
+        \or \paragraph{II Meditation}% Argument is 2
+        \or \paragraph{III Attended Meeting}% Argument is 3
+        \or \paragraph{IV Attended Meeting with prior morning meditation}% Argument is 4
+        \or \paragraph{V Meditation Day}% Argument is 5
+        \or \paragraph{VI You Organized a meditation}% Argument is 6
+        \else Invalid Argument% Argument is not 1, 2, 3, 4, 5 or 6
+    \fi
+    \begin{itemize}[label={}]
+        \item Name: #2
+        \item Time: #3
+        \item Duration: #4 minutes
+        \item Group: #5
+        \ifx&#6&% Check if the sixth argument is empty
+        \else
+            \item Incidents: #6
+        \fi
+    \end{itemize}
+    \smallskip
+}
+
+% For writing about the self study
+% The first argument is the score, the second is just general text.
+\newcommand{\selfStudy}[3]{
+\paragraph{Self-study}
+    \begin{itemize}[label={}]
+        \item Happiness: #1
+        \item #2
+    \end{itemize}
+    \medskip
+}
+
+\begin{document}
+
+\newpagecolor{orangy}\afterpage{\restorepagecolor}
+\title{\LARGE\bfseries Meditation Protocol H4}
+\author{Ida Hönigmann \\ 12002348}
+\date{26.12.2023 - 24.01.2024}
+\maketitle
+
+\begin{tabular}{l|l|l|l|l|l}
+	                                             &\textbf{H1}&\textbf{H2}&\textbf{H3}&\textbf{H4}&\textbf{Total}\\
+	\hline
+	\textbf{Time Spent on Meditations (minutes)} &556        &519        &743        &846        &2664          \\
+	\textbf{Number of Meditation Days}           &25         &28         &29         &31         &113           \\
+	\textbf{Points Applied For}                  &36         &36         &42         &39         &153           \\
+	\hline
+	Category I                                   &21         &24         &25         &29         &99            \\
+	Category II                                  &1          &3          &1          &0          &5             \\
+	Category III                                 &1          &0          &0          &0          &1             \\
+	Category IV                                  &2          &1          &3          &2          &8             \\
+	Category V                                   &0          &0          &0          &0          &0             \\
+	Category VI                                  &0          &0          &0          &0          &0             \\
+\end{tabular}
+
+\paragraph{Total Points Applied For: 153 points}
+\paragraph{Total Time Spent on Meditations: 44 hours 24 minutes}
+\paragraph{Total Number of Meditation Days: 113 days}
+
+%\paragraph{Questions:}
+%\begin{itemize}
+%    \item 
+%\end{itemize}
+
+\paragraph{Self-study:}
+\begin{itemize}
+	\item Question:\\
+	Am I happy (before the meditation)? What makes me happy or unhappy?
+    \item Summary of results:\\
+    TODO
+\end{itemize}
+
+\paragraph{Index:}
+
+H4 is pages 1 to 32
+
+H3 is pages 33 to 52
+
+H2 is pages 53 to 91
+
+H1 is pages 92 to 115
+
+
+\vspace*{\fill}
+
+\begin{tabular}{@{}p{.5in}p{4in}@{}}
+	%&\includegraphics[width=0.5\linewidth]{../../../../Desktop/signature}\\[-5.5ex]
+    Signature: & \hrulefill , \today{} \\
+\end{tabular}
+
+%%%%%%%%%%%% BEGIN OF THE PROTOCOL %%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\section*{Day 113: 24. 01. 2024}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{a meditation and various short ones in class}{08:00 - 10:00}{120}{in class}{}
+\selfStudy{-}{This day is in the future.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 112: 23. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{????}{??:?? - ??:??}{20}{alone or with buddy}{}
+\selfStudy{-}{This day is in the future.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 111: 22. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{TODO}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{TODO}{TODO}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 110: 21. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{TODO}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{TODO}{TODO}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 109: 20. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{TODO}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{TODO}{TODO}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 108: 19. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{TODO}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{TODO}{TODO}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 107: 18. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{TODO}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{TODO}{TODO}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 106: 17. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Gently Sway}{22:36 - 22:56}{20}{with buddy}{}
+\selfStudy{moderate}{I am not very aware yet. I only notice now how unhappy I was in the last weeks because of the many exams.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 105: 16. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{11:30 - 11:50}{20}{alone}{}
+\selfStudy{happy, the exam is finally over}{On my way back home from the exam. The train is empty.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 104: 15. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Watch the Gap}{21:52 - 22:12}{20}{with buddy}{}
+\selfStudy{very happy about results of last exam}{I took my time with this meditation. Thinking stops in the gaps, resumes sometimes in between. I imagined a glow and nice scent for a short part of this meditation. Tomorrow is my last exam of partial differential equations.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 103: 14. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{22:34 - 22:54}{20}{alone}{}
+\selfStudy{happy}{I spent the entire day teaching linked lists to someone. I could see him getting better, which improved my mood. My original plan for today was to learn for a math lecture. Now I have to do two days worth tomorrow.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 102: 13. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Gently Sway}{23:17 - 23:37}{20}{with buddy}{}
+\selfStudy{neutral}{I am almost bored today after the eventful last few days.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 101: 12. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{~18:00 - 18:20}{20}{alone}{}
+\selfStudy{-}{I forgot to write anything down as I did not have the book with me.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 100: 11. 01. 2024}
+\daySummary{1}{I}{47}
+
+\meditationEntry{1}{Observe Breath}{17:14 - 17:41}{27}{alone}{}
+\selfStudy{tense from the exam, finished both exams :-)}{Normally I would be very stressed about two exams in the same day, but after the first I suddenly felt better while walking from one to the other place of the exams. Now I am happy that this lies behind me.}
+
+\meditationEntry{1}{Observe Breath}{10:19 - 10:39}{20}{alone}{}
+\selfStudy{nervous, I have an exam today}{I have some time until I have to leave for an exam, which I am spending drinking tea and meditating. My palms are sweaty already. I am still nervous afterwards.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 99: 10. 01. 2024}
+\daySummary{5}{IV}{120}
+
+\meditationEntry{4}{Nataraj and various in class}{08:00 - 10:00}{120}{in class}{}
+\selfStudy{stressed}{Lying down in the middle stage of this meditation felt good It felt better than in the last few short meditations I did.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 98: 09. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{~16:00 - 16:20}{20}{alone}{}
+\selfStudy{sooo much headache :-(}{I have such a bad headache, that I decided to relax by meditating. I did not have this book with me (I keep my meditation notes in a small book), so I forgot to remember the exact time. I felt a bit better afterwards.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 97: 08. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{21:52 - 22:12}{20}{with buddy}{}
+\selfStudy{todays meeting went well, I managed to do some of the exercises, so all in all good}{There is a TV running in the room next door, that I could hear. I focused on my breath in my belly and tried not to get distracted.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 96: 07. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{From the Head to the Heart}{17:41 - 18:01}{20}{alone}{}
+\selfStudy{so much still to learn and do :-O}{My head feels overused and I wanted a break from learning, so I looked through the short meditations list to look for one I can do. This one seemed fitting given my current state. I started with walking, but then soon changed to sitting.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 95: 06. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Prayer Meditation}{18:56 - 19:16}{20}{with buddy}{}
+\selfStudy{progress at learning, therefore happy}{We baked some bread and the recipe said to bake for 20 minutes (with lid closed). We used this time to do this meditation.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 94: 05. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Gently Sway}{21:26 - 21:46}{20}{with buddy}{}
+\selfStudy{slightly stressed for upcoming tests}{As we went to bed so late in the last days we decided to go earlier today. I tried to push away my thoughts, but as I was tired and this is difficult I only managed to do this shortly.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 93: 04. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{23:05 - 23:25}{20}{with buddy}{}
+\selfStudy{a tiny bit sick}{I am conflicted between trying not to think about anything and contemplating some of the impossible problems posed in the reading materials for Zen.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 92: 03. 01. 2024}
+\daySummary{1}{I}{40}
+
+\meditationEntry{1}{Gently Sway}{22:42 - 23:02}{20}{with buddy}{}
+\selfStudy{tired}{I did some of the preparations for the next lecture today. As part of this I read the ''puzzles'' and thought about them during this meditation.}
+
+\meditationEntry{1}{Prayer Meditation}{18:26 - 18:46}{20}{alone}{}
+\selfStudy{neutral, nothing to do (that I want to do)}{Managed to do my meditation earlier today. I spent the first part doing what the instructions say, but finished about 5 minutes earlier, so I just sat and observed my breath for the rest.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 91: 02. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Prayer Meditation}{21:54 - 22:14}{20}{with buddy}{}
+\selfStudy{relaxed, only slightly stressed when thinking about the next weeks}{I feel not as motivated to meditate as I did a week ago (and before then). My theory is that as I am less stressed (because of the holiday) I also do not ''need'' to meditate as much in order to feel better.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 90: 01. 01. 2024}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{22:02 - 22:22}{20}{with buddy}{}
+\selfStudy{a bit restless, but happy}{My legs are tired from walking and standing (we went to a museum). First meditation of this year!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 89: 31. 12. 2023}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{20:59 - 21:14}{20}{with buddy}{}
+\selfStudy{relaxed on holiday}{We are having a relaxed evening at our hotel. There are already a few fireworks outside.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 88: 30. 12. 2023}
+\daySummary{1}{I}{21}
+
+\meditationEntry{1}{Om}{23:11 - 23:31}{21}{with buddy}{}
+\selfStudy{had a great day}{My buddy and I are on holiday together. We are having a great time!}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 87: 29. 12. 2023}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{23:11 - 23:31}{20}{with buddy}{}
+\selfStudy{my laptop broke today}{I would like to meditate earlier tomorrow. This was quite late.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 86: 28. 12. 2023}
+\daySummary{1}{I}{20}
+
+\meditationEntry{1}{Observe Breath}{22:40 - 23:00}{20}{with buddy}{}
+\selfStudy{fun day, still have so much to learn}{We are in a crowded space, but I always enjoy the quiet buzz of people.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 85: 27. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Watch the gap}{23:17 - 23:29}{12}{alone}{}
+\selfStudy{-}{My thoughts do not stop, but I constantly have something to think about (watching the gap, counting, ...). I did not yet know my new self study question, but answered the old one: Attention: inhale, exhale, gaps.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 84: 26. 12. 2023}
+\daySummary{1}{I}{12}
+
+\meditationEntry{1}{Observe Breath}{23:59 - 00:11}{12}{with buddy}{}
+\selfStudy{-}{My buddy and I are on our way to Hamburg for this winter holiday. The train ride today was very long and tiring. I almost fell asleep during this meditation. I did not yet know my new self study question, but answered the old one: Attention: not falling asleep.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Day 83: 25. 12. 2023}
+\daySummary{1}{I}{14}
+
+\meditationEntry{1}{Prayer Meditation}{22:11 - 22:25}{14}{with buddy}{}
+\selfStudy{-}{The bell went off before I did the seventh repetition, so I continued until finished. I had trouble breathing through the nose when bowing down, so I inhaled through the mouth. I did not yet know my new self study question, but answered the old one: Attention: breath, counting.}
+
+\sepstars %%%%%%%%%%%% NEW DAY %%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
