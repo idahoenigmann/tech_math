@@ -37,7 +37,8 @@ def read_data(file_name, delimiter=" "):
     with open('data/' + file_name + '.csv') as file:
         csv_reader = reader(file, delimiter=delimiter)
         header = next(csv_reader)
-        data = np.array([[float(r) for r in row] for row in csv_reader])
+        # data = np.array([[float(r) for r in row] for row in csv_reader])
+    data = np.loadtxt('data/' + file_name + '.csv', delimiter=delimiter, skiprows=1, dtype=float)
     return header, data
 
 

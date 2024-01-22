@@ -44,7 +44,7 @@ def doo_sabin(M):
 if __name__ == '__main__':
     k = 1   # number of times doo-sabin is applied to the mesh, try something like 3
 
-    if True:
+    if False:
         # simple test mesh
         n = 5
         vertices = [[np.sin(x * 2 * np.pi / n), np.cos(x * 2 * np.pi / n), 0] for x in range(n)]
@@ -53,21 +53,21 @@ if __name__ == '__main__':
         faces.append([2, 1, n])
         faces.append([1, 0, n])
     else:
-        vertices, faces = obj.read('humanoid_tri.obj', 'v', 'f')
+        vertices, faces = obj.read('snorlax_low_poly.obj', 'v', 'f')
 
     M = Mesh(vertices, faces)
 
-    output_M = doo_sabin(M)
+    """output_M = doo_sabin(M)
     for _ in range(k - 1):
-        output_M = doo_sabin(output_M)
+        output_M = doo_sabin(output_M)"""
 
     # visualize input and result
     mesh = vis.mesh(M, color=(1, 0, 0))
     mesh.GetProperty().EdgeVisibilityOn()
     mesh.GetProperty().SetLineWidth(2.0)
     mesh.GetProperty().SetOpacity(0.5)
-    mesh = vis.mesh(output_M, color=(0, 1, 0))
+    """mesh = vis.mesh(output_M, color=(0, 1, 0))
     mesh.GetProperty().EdgeVisibilityOn()
     mesh.GetProperty().SetLineWidth(2.0)
-    mesh.GetProperty().SetOpacity(0.5)
+    mesh.GetProperty().SetOpacity(0.5)"""
     vis.show()
