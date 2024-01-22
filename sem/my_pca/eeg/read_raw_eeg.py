@@ -11,7 +11,7 @@ if __name__ == '__main__':
     input_number = 1
 
     start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[input_number - 1, :]
-    start, end = int(start), int(end)
+    start, end = int(start) - 1, int(end) - 1
 
     # read data from edf file
     file = f"data/n{input_number}.edf"
@@ -21,13 +21,16 @@ if __name__ == '__main__':
     print(raw.info)
 
     # check which channels exist
-    possible_channels = set(raw.ch_names).intersection({"F2-F4", "Fp2-F4", "F1-F3", "Fp1-F3"})
+    possible_channels = set(raw.ch_names).intersection({"Fp2-F4", "FP2-F4", "Fp1-F3", "FP1-F3", "Fp2",
+                                                        "F2-F4", "C4-A1", "F3A2", "C3-A2"})
     channel = possible_channels.pop()
+    print(f"channel used: {channel}")
 
-    raw_data = raw.get_data(picks=[channel], start=int(start*512/200), stop=int(end*512/200), return_times=True)
+    raw_data = raw.get_data(picks=[channel], return_times=True)
 
-    data = raw_data[0][0]
-    time = raw_data[1]
+    data = raw_data[0][0, start:end]
+    print(data.shape)
+    time = raw_data[1][start:end]
 
     print(f"Duration: {time[-1]}-{time[0]} = {time[-1] - time[0]}s")
 
@@ -59,5 +62,5 @@ if __name__ == '__main__':
         output_data.append(amplitude_over_frequency)
 
     # write output to csv file
-    header = ",".join([f"t{i} amplitude" for i in range(amplitude_over_frequency.shape[0])])
+    header = f"amplitudes"
     np.savetxt(f"data/n{input_number}.csv", np.matrix(output_data), delimiter=",", newline="\n", header=header)

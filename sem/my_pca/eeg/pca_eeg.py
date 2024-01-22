@@ -7,7 +7,7 @@ from main import read_data, pca, visualize_3d
 if __name__ == "__main__":
     matplotlib.use('TkAgg')
 
-    input_numbers = [1]
+    input_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16]
 
     data = []
     sleep_stages = []
@@ -28,8 +28,11 @@ if __name__ == "__main__":
 
     # pca
     print("pca started")
-    pca_output, _, _ = pca(data)
+    pca_output, eval, evec = pca(data)
     print("pca finished")
+
+    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.9][0]} axis explain "
+          f"90% of the variance.")
 
     # generate color list
     color_lst = cm.jet(np.linspace(0, 1, 5))
