@@ -76,7 +76,7 @@ def visualize_3d(x_data, y_data, z_data, colors, labels, file_name=""):
     fig = plt.figure()
     ax = plt.axes(projection="3d")
 
-    ax.plot(x_data, y_data, z_data, "darkgray")
+    # ax.plot(x_data, y_data, z_data, "darkgray")
     ax.scatter3D(x_data, y_data, z_data, c=colors)
 
     ax.set_xlabel(labels[0])
