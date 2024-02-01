@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib
 from matplotlib import cm
-from main import read_data, pca, visualize_3d
+from main import read_data, pca, visualize_3d, visualize_histogram
 
 
 if __name__ == "__main__":
@@ -26,16 +26,24 @@ if __name__ == "__main__":
     data = np.concatenate(data)
     sleep_stages = np.concatenate(sleep_stages)
 
+    print(f"Data size: {data.shape}")
+
     # pca
     print("pca started")
     pca_output, eval, evec = pca(data)
     print("pca finished")
 
-    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.9][0]} axis explain "
-          f"90% of the variance.")
+    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.5][0]} of {len(eval)}"
+          f" axis explain 50% of the variance.")
+    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.8][0]} of {len(eval)}"
+          f" axis explain 80% of the variance.")
+    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.9][0]} of {len(eval)}"
+          f" axis explain 90% of the variance.")
+    print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.95][0]} of {len(eval)}"
+          f" axis explain 95% of the variance.")
 
     # generate color list
-    color_lst = cm.jet(np.linspace(0, 1, 5))
+    color_lst = ["blue", "green", "yellow", "orange", "red"]
     colors = [color_lst[sleep_stages[i] - 1] for i in range(sleep_stages.shape[0])]
 
     x_data = np.squeeze(np.asarray(pca_output[:, 0]))
@@ -44,3 +52,5 @@ if __name__ == "__main__":
 
     # show output
     visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
+
+    # visualize_histogram([x_data, y_data], ["pc1", "pc2"], colors, color_lst, 0, 1)
