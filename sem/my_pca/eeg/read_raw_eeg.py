@@ -11,12 +11,13 @@ if __name__ == '__main__':
     input_number = 1
 
     start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[input_number - 1, :]
-    start, end = int(start) - 1, int(end) - 1
+    start, end = int(start) - 1, int(end)
 
     # read data from edf file
     file = f"data/n{input_number}.edf"
     raw = mne.io.read_raw_edf(file, preload=True)
-    raw = raw.resample(sfreq=200, npad=0)
+    raw.filter(0.5, 30)
+    raw.resample(sfreq=200, npad=0)
 
     print(raw.info)
 

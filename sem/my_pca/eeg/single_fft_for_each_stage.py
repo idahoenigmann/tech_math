@@ -7,7 +7,6 @@ import mne
 if __name__ == '__main__':
     matplotlib.use('TkAgg')
 
-    plot_output = False
     input_number = 1
 
     start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[input_number - 1, :]
@@ -20,7 +19,8 @@ if __name__ == '__main__':
     # read data from edf file
     file = f"data/n{input_number}.edf"
     raw = mne.io.read_raw_edf(file, preload=True)
-    raw = raw.resample(sfreq=200, npad=0)
+    raw.filter(0.5, 30)
+    raw.resample(sfreq=200, npad=0)
 
     print(raw.info)
 
@@ -39,30 +39,38 @@ if __name__ == '__main__':
     print(f"Duration: {time[-1]}-{time[0]} = {time[-1] - time[0]}s")
 
     # loop through all 30s segments
-    output_data = []
+    output_data = {1: [], 2: [], 3: [], 4: [], 5: []}
     number_samplepoints = 30 * 200
-    total_number_samplepoints = 0
+    total_number_samplepoints = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
     for idx in range(len(sleep_stages_seg)):
-        if sleep_stages_seg[idx] == 5:
-            output_data.append(data[idx * number_samplepoints:idx * number_samplepoints + number_samplepoints])
-            total_number_samplepoints += number_samplepoints
+        total_number_samplepoints[sleep_stages_seg[idx]] += number_samplepoints
+        output_data[sleep_stages_seg[idx]].append(data[idx * number_samplepoints:idx * number_samplepoints + number_samplepoints])
 
-    output_data = np.concatenate(output_data)
-    # do fft
-    fft_output = np.absolute(np.fft.fft(output_data))
-    amplitude_over_frequency = 2.0 / total_number_samplepoints * fft_output[:total_number_samplepoints // 2]
-    sample_spacing = 1.0 / 200.0
-    frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), total_number_samplepoints // 2)
+    sleep_stages_name = ["awake", "REM", "S1", "S2", "S3"]
 
-    # plot figures
-    fig, axs = plt.subplots(nrows=2)
-    axs[0].plot(time[start:start + total_number_samplepoints], output_data[0: total_number_samplepoints])
-    axs[0].set_xlabel("time (s)")
-    axs[0].set_ylabel("amplitude")
+    for sleep_stage in output_data.keys():
+        if len(output_data[sleep_stage]) == 0:
+            print(f"skipping sleep stage {sleep_stage}={sleep_stages_name[sleep_stage - 1]} as there is no data in this category.")
+            continue
+        sleep_stage_data = np.concatenate(output_data[sleep_stage])
+        nbr_sample_points = total_number_samplepoints[sleep_stage]
+        # do fft
+        fft_output = np.absolute(np.fft.fft(sleep_stage_data))
+        amplitude_over_frequency = 2.0 / nbr_sample_points * fft_output[:nbr_sample_points // 2]
+        sample_spacing = 1.0 / 200.0
+        frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), nbr_sample_points // 2)
 
-    axs[1].plot(frequencies, amplitude_over_frequency)
-    axs[1].set_xlabel("frequency (Hz)")
-    axs[1].set_ylabel("amplitude")
+        # plot figures
+        fig, axs = plt.subplots(nrows=2)
+        fig.suptitle(f"Total data from sleep stage {sleep_stages_name[sleep_stage - 1]}")
+        axs[0].plot(time[start:start + nbr_sample_points], sleep_stage_data[0: nbr_sample_points])
+        axs[0].set_xlabel("time (s)")
+        axs[0].set_ylabel("amplitude")
 
-    plt.show()
+        axs[1].plot(frequencies, amplitude_over_frequency)
+        axs[1].set_xlabel("frequency (Hz)")
+        axs[1].set_ylabel("amplitude")
+
+        # fig.canvas.manager.full_screen_toggle()
+        plt.show()
