@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt,bibliography=totoc,listof=totoc,headinclude=true,cleardoublepage=empty,oneside]{scrbook}
 % Option "oneside" für einseitigen Druck. Weglassen, falls die Arbeit doppelseitig gedruckt wird
 
-\usepackage[english,ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 %\usepackage{fullpage}
 \usepackage{ifthen}
@@ -9,6 +9,7 @@
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{psfrag}
+\usepackage{epstopdf}
 
 % links in pdf
 \usepackage[unicode,colorlinks=true,pagebackref=false]{hyperref}
@@ -23,6 +24,7 @@
 \usepackage{amsthm}
 \usepackage{bbm}
 \usepackage{enumerate}
+\usepackage{epstopdf}
 \usepackage[shortlabels]{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -53,7 +55,7 @@
 % TITELSEITE
 
 \pagenumbering{Alph}
-\selectlanguage{ngerman}
+\selectlanguage{english}
 
 \begin{titlepage}
   %\vspace*{-2cm}
@@ -62,7 +64,7 @@
     \vskip 1cm%
     {\LARGE S~\Large E~M~I~N~A~R~A~R~B~E~I~T}
     \vskip 8mm
-    {\huge\bfseries\color{change}Titel \\[1ex] ggf.\ mehrzeilig}
+    {\huge\bfseries\color{change}Using PCA on EEG Data \\[1ex] to Distinguish Sleep~Stages}
     \vskip 1cm
     \large 
     ausgef\"uhrt am    
@@ -72,20 +74,20 @@
     \vskip0.75cm
     unter der Anleitung von
     \vskip0.75cm
-    {\Large\bfseries\color{change}Name des Betreuers}\\[1ex]
+    {\Large\bfseries\color{change}Assistant Prof. \\[1ex] Dipl.-Ing. Dipl.-Ing. Dr.techn. Andreas Körner, BSc}\\[1ex]
     \vskip 0.5cm
     durch
     \vskip 0.5cm
-    {\Large\bfseries\color{change}Name des Autors}\\[1ex]
-    Matrikelnummer: {\color{change}12345678}\\[1ex]
-    {\color{change}Straße und Hausnummer}\\[1ex]
+    {\Large\bfseries\color{change}Ida Hönigmann}\\[1ex]
+    Matrikelnummer: {\color{change}12002348}\\[1ex]
+    {\color{change}Straße und Hausnummer [TODO is this necessary?]}\\[1ex]
     {\color{change}PLZ und Ort}
   \end{center}
   
   \vfill
   
   \small
-  Wien, am {\color{change} Datum} %\today
+  Wien, am {\color{change} [TODO insert correct date]}
   \vspace*{-15mm}
 \end{titlepage}
 
@@ -104,29 +106,27 @@
 
 \chapter{Introduction}
 \label{chapter:introduction}
-%\input{introduction.tex}
+\input{introduction.tex}
 
 \chapter{Study of Literature}
 \label{chapter:study_of_literature}
-%\input{study_of_literature.tex}
+\input{study_of_literature.tex}
 
 \chapter{Mathematical Basics}
 \label{chapter:mathematical_basics}
-%\input{mathematical_basics.tex}
+\input{mathematical_basics.tex}
 
 \chapter{Principal Component Analysis}
 \label{chapter:principal_component_analysis}
-%\input{principal_component_analysis.tex}
+\input{principal_component_analysis.tex}
 
 \chapter{Methodology}
 \label{chapter:methodology}
-%\input{methodology.tex}
-
-\chapter{Sleep Stages and EEG Data}
-\label{chapter:sleep_stages_and_eeg_data}
+\input{methodology.tex}
 
 \chapter{Data and Algorithm}
 \label{chapter:data_and_algorithm}
+\input{data_and_algorithm.tex}
 
 \chapter{Results}
 \label{chapter:results}

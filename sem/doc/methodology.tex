@@ -1,7 +1,12 @@
-For the algorithm in section~\ref{sec:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
+For the algorithm in section~\ref{chapter:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
+
+\section{Fourier Transformation}
+\label{sec:fourier_transformation}
+
+TODO
 
 \section{Classification}
-\label{subsec:classification}
+\label{sec:classification}
 
 In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
 
@@ -21,14 +26,9 @@ Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the alg
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\linewidth]{figs/k_nearest_neighbors}
+	\includegraphics[width=0.8\linewidth]{figs/k_nearest_neighbors}
 	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the k-nearest-neighbors algorithm for $k=10$.}
 	\label{fig:k_nearest_neighbors}
 \end{figure}
 
 This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
-
-\section{Fourier Transformation}
-\label{subsec:fourier_transformation}
-
-[TODO]

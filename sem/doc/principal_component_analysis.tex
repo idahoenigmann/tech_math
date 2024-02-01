@@ -1,10 +1,10 @@
-Combining the concepts in section~\ref{sec:mathematical_basics} we derive the ideas and implementation of PCA.
+Combining the concepts in section~\ref{chapter:mathematical_basics} we derive the ideas and implementation of PCA.
 
 Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. The goal is to get more insight and find underlying patterns in the collected data. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\linewidth]{figs/some_nice_data_org}
+	\includegraphics[width=0.8\linewidth]{figs/some_nice_data_org}
 	\caption{Randomly generated sample data. The data lies along a line with slope $1$ and has mean $\mathbf{0}$.}
 	\label{fig:some_nice_data}
 \end{figure}
@@ -15,13 +15,13 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/some_nice_data_pc}
 		\caption{Normed data (mean is zero and variance is one) and direction of the two PCs in relation to the x and y position.}
 		\label{fig:some_nice_data_pc}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/some_nice_data_pca}
 		\caption{The data after being transformed by PCA. The variance along the PC1 axis is maximal, therefore the data is spread out most along this axis.}
 		\label{fig:some_nice_data_pca}
@@ -44,13 +44,13 @@ From this we gather that another assumption is, that the axis are orthogonal. La
 
 \begin{figure}
 	\centering
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/pca_fails_nonlinear}
 		\caption{Clearly the relationship in this figure is non-linear. PCA can not describe circular dependencies, as shown in this data.}
 		\label{fig:pca_fails_nonlinear}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/pca_fails_nonorthogonal}
 		\caption{The two main axis along which the data is aligned are not orthogonal to each other. PCA always outputs orthogonal principal components, therefore it fails in this example.}
 		\label{fig:pca_fails_nonorthogonal}
@@ -69,7 +69,7 @@ One way to achieve the goal is as follows:
 	\item If the subspace is trivial we have found all axis.
 \end{enumerate}
 
-While this algorithm shows us what conceptually has to be done, we do not know how to compute the axis yet. We will now investigate this problem using the mathematical concepts from section~\ref{sec:mathematical_basics}. This will lead us to an algorithm in which all axis can be computed simultaneously.
+While this algorithm shows us what conceptually has to be done, we do not know how to compute the axis yet. We will now investigate this problem using the mathematical concepts from section~\ref{chapter:mathematical_basics}. This will lead us to an algorithm in which all axis can be computed simultaneously.
 
 Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$.
 
