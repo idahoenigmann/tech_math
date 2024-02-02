@@ -1,29 +1,51 @@
 \section{Data}
 \label{sec:data}
 
-The given dataset describes multiple channels of EEG data recorded during sleep. There are 14 sleep recordings which are between 490 and 735 minutes long. We are interested in the channels Fp2-F4 and Fp1-F3 as they record activity in the frontal area, where different sleep patterns are shown. [TODO cite something showing this.] The figure~\ref{fig:head_placement} shows where the sensors where placed.
+We use the CAP Sleep Database\cite{Terzano2001}\cite{Goldberger2000} which provides 16 recordings of patients without pathology. Two of these recordings have corrupted files and thus could not be analyzed. The table~\ref{tab:meta_data_of_recordings} shows some meta data of the recordings.
 
-[TODO describe dataset in more detail]
+\begin{table}
+	\centering
+	\begin{tabular}{c|c|c|c|c|c}
+		File Name & Age & Gender & Length of Recording & Channel Name & Sampling Frequency \\
+		\hline
+		n1  & 37 & F & 577 minutes & F2-F4  & 512 Hz \\
+		n2  & 34 & M & 735 minutes & C4-A1  & 512 Hz \\
+		n3  & 35 & F & 551 minutes & FP1-F3 & 512 Hz \\
+		n4  & 25 & F & 596 minutes & Fp2-F4 & 200 Hz \\
+		n5  & 35 & F & 524 minutes & Fp2-F4 & 512 Hz \\
+		n6  & 31 & M & 527 minutes & C3-A2  & 128 Hz \\
+		n7  & 31 & M & 492 minutes & C3-A2  & 128 Hz \\
+		n8  & 42 & F & 501 minutes & C3-A2  & 200 Hz \\
+		n9  & 31 & M & 532 minutes & C3-A2  & 128 Hz \\
+		n10 & 23 & M & 490 minutes & C4-A1  & 512 Hz \\
+		n11 & 28 & F & 527 minutes & Fp2-F4 & 512 Hz \\
+		n12 & 29 & M & 495 minutes & C4-A1  & 100 Hz \\
+		n15 & 34 & M & 494 minutes & F3A2   & 200 Hz \\
+		n16 & 41 & F & 513 minutes & Fp2-F4 & 100 Hz \\
+	\end{tabular}
+	\caption{Meta data of the 14 recordings from the CAP Sleep Database.}
+	\label{tab:meta_data_of_recordings}
+\end{table}
+
+The given dataset describes multiple channels of EEG data recorded during sleep. We are interested in the channels recording activity in the frontal area, as this is where differences in sleep stages are easier to detect. [TODO cite something showing this.] The figure~\ref{fig:head_placement} shows where the sensors where placed.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figs/head_placement}
-	\caption{Scheme of sensor placement in recordings of EEG data. Fp1-F3 measure the difference in TODO between Fp1 and F3, both shown in red. Fp2-F4 is analogous for Fp2 and F4, shown in blue. All four points are located in the frontal area.}
+	\caption{Scheme of sensor placement in recordings of EEG data.}
 	\label{fig:head_placement}
 \end{figure}
 
-% length of recordings in minutes: 577, 735, 551, 596, 524, 527, 492, 501, 532, 490, 527, 495, 494, 513
+The data was recorded in different frequencies. To reduce data size and standardize all channels we resample to 200 Hz.
 
-The data was recorded in 512 Hz for channels Fp2-F4 and Fp1-F3. [TODO other channels in other frequencies?] We resample to 200 Hz to reduce data size and standardize all channels.
-
-Very low and very high frequencies often stem from other sources, such as the measurement equipment, breathing or measuring inaccuracies. To get rid of these noises we apply a low pass filter of 30 Hz and a high pass filter of 0.5 Hz.
+Very low and very high frequencies often stem from other sources, such as the measurement equipment, breathing of the patients or measuring inaccuracies. To get rid of these noises we apply a low pass filter of 30 Hz and a high pass filter of 0.5 Hz.
 
 \section{Algorithm}
 \label{sec:algorithm}
 
 We now describe the general structure of the algorithm from reading the data files to the clustering.
 
-First we split the recorded data into 30 second sections. For each of these sections we get the data as a function of amplitude over time. An example segment is shown in the upper figure of~\ref{fig:example_30s_segment}. We apply a Fourier transformation as described in section~\ref{sec:fourier_transformation} and get a function of amplitude over frequency. This gives a frequency based representation of the data. As the sleep stages are characterized by different frequencies and amplitudes, as described in section~\ref{sec:eeg_data_and_sleep_stages}, this will help us distinguishing them. The output of such an FFT can be seen in the lower figure of~\ref{fig:example_30s_segment}. The pseudo code for this processing is 
+First we split the recorded data into 30 second sections. For each of these sections we get the data as a function of amplitude over time. An example segment is shown in the upper figure of~\ref{fig:example_30s_segment}. We apply a Fourier transformation as described in section~\ref{sec:fourier_transformation} and get a function of amplitude over frequency. This gives a frequency based representation of the data. As the sleep stages are characterized by different frequencies and amplitudes, as described in section~\ref{sec:eeg_data_and_sleep_stages}, this will help us distinguishing them. The output of such an FFT can be seen in the lower figure of~\ref{fig:example_30s_segment}. The pseudo code for this processing is described in algorithm~\ref{alg:process_eeg_data}.
 
 \begin{algorithm}
 	\caption{EEG data processing}\label{alg:process_eeg_data}
@@ -75,7 +97,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 	\label{fig:pca_output_3d}
 \end{figure}
 
-If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of PCs. Lastly we can get a guess of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is
+If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of PCs. Lastly we can get a guess of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
 \begin{algorithm}
 	\caption{Get guess for sleep stage}\label{alg:gues_sleep_stage}

@@ -3,7 +3,34 @@ For the algorithm in section~\ref{chapter:data_and_algorithm} a few other method
 \section{Fourier Transformation}
 \label{sec:fourier_transformation}
 
-TODO
+Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most often we are not interested at the amplitudes at a specific point in time, as a temporal shift would represent a very similar information. This is demonstrated in figure~\ref{fig:TOOD}.
+
+As the function is cyclic we might be interested in a decomposition into simple cyclic function, such as $\sin$. We can then analyze the most prominent frequencies and their respective amplitudes. This gives a representation of the data, that can be easier to interpret.
+
+We describe one approach to achieve this representation as a sum of $\sin$ functions, called Fast Fourier Transformation (FFT), in algorithm~\ref{alg:fft}.
+
+\begin{algorithm}
+	\caption{FFT}\label{alg:fft}
+	\begin{algorithmic}
+		\Function{FFT}{$x$, $N$, $s$}
+			\If{$N$ = $1$}
+				\State $X_0 \gets x_0$
+			\Else
+				\State $X_{0, ..., N/2-1} \gets FFT(x, N/2, 2s)$
+				\State $X_{N/2, ..., N-1} \gets FFT(x+s, N/2, 2s)$
+				\For{$k=0$ to $N/2-1$}
+					\State $p \gets X_k$
+					\State $q \gets exp(-2\pi i/N k) X_{k+N/2}$
+					\State $X_k \gets p + q$
+					\State $X_{k+N/2} \gets p - q$
+				\EndFor
+			\EndIf
+			\State \Return $X_{0, ..., N-1}$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+Figure~\ref{fig:TODO} shows how an example input and output of the FFT algorithm looks.
 
 \section{Classification}
 \label{sec:classification}

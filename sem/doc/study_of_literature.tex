@@ -1,3 +1,6 @@
+As shown in this chapter, the utilization of PCA to analyze EEG data has been used with success.
+
+\section{Principal Component Analysis}
 
 A substantial body of scientific research has been devoted to exploring Principal Component Analysis (PCA).
 The foundation of this method was laid by Pearson~\cite{Pearson1901} and Hotelling~\cite{Hotelling1933}.
@@ -12,6 +15,7 @@ Generally speaking the variables must not have third or higher order dependencie
 
 Another method for dealing with this problem is Independent Component Analysis (ICA) which is discussed by Naik~et.~al.\cite{Naik2011}.
 
+\section{Using PCA on EEG Data}
 
 The given problem of distinguishing sleep stages given some EEG data has been investigated by use of PCA, as well as neural networks. Some of these works are summarized below.
 
@@ -24,6 +28,3 @@ Putilov\cite{Putilov2015} used PCA to find boundaries between Stage~1, Stage~2 a
 Metzner et. al.\cite{Metzner2023} try to rediscover the different human-defined sleep stages. They find that using PCA on the results makes clusters apparent. These clusters could then be used as a basis for a redefinition of sleep stages.
 
 The PhysioNet/Computing in Cardiology Challange 2018\cite{Ghassemi2018} was a competition using a similar dataset. The goal was to identify arousal during sleep from EEG, EOG, EMG, ECG and SaO2 data given. The winning paper\cite{Howe2018} of this competition describes the use of a dense recurrent convolutional neural network (DRCNN) comprised of multiple dense convolutional layers, a bidirectional long-short term memory layer and a softmax output layer.
-
-
-As shown in this section, the utilization of PCA to analyze EEG data has been used with success.
