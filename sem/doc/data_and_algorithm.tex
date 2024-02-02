@@ -8,13 +8,15 @@ The given dataset describes multiple channels of EEG data recorded during sleep.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{figs/head_placement}
-	\caption{Scheme of sensor placement in recordings of EEG data. Fp1, Fp2, F3 and F4 are located in the frontal area.}
+	\caption{Scheme of sensor placement in recordings of EEG data. Fp1-F3 measure the difference in TODO between Fp1 and F3, both shown in red. Fp2-F4 is analogous for Fp2 and F4, shown in blue. All four points are located in the frontal area.}
 	\label{fig:head_placement}
 \end{figure}
 
 % length of recordings in minutes: 577, 735, 551, 596, 524, 527, 492, 501, 532, 490, 527, 495, 494, 513
 
 The data was recorded in 512 Hz for channels Fp2-F4 and Fp1-F3. [TODO other channels in other frequencies?] We resample to 200 Hz to reduce data size and standardize all channels.
+
+Very low and very high frequencies often stem from other sources, such as the measurement equipment, breathing or measuring inaccuracies. To get rid of these noises we apply a low pass filter of 30 Hz and a high pass filter of 0.5 Hz.
 
 \section{Algorithm}
 \label{sec:algorithm}
@@ -28,6 +30,7 @@ First we split the recorded data into 30 second sections. For each of these sect
 	\begin{algorithmic}
 		\For{each patient}
 		\State Read EEG data from file
+		\State Apply a low pass and high pass filter
 		\State Resample with frequency 200 Hz
 		\State Get one of the channels Fp2-F4, Fp1-F3, C4-A1, F3A2 or C3-A2 (in this order)
 		\State Section out the part of data where the patient is asleep
