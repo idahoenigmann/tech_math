@@ -309,3 +309,4 @@ sem/my_pca/pca_tests/data/*.png
 sem/my_pca/eeg/data/*.png
 sem/my_pca/eeg/data/*.csv
 sem/my_pca/eeg/data/*.edf
+sem/doc/figures-external/

@@ -1,0 +1,91 @@
+\chapter{Results}
+\label{chapter:results}
+
+In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the PCs of the PCA uses the same frequencies.
+
+\section{Compression of Data}
+From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions of data. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
+
+We find the first index for which the sum of eigenvalues from the PCA is bigger than a certain percentage. The output for a few values are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, which in our case means information, the PCA can successfully be used as a way to reduce the dimensions.
+
+\begin{table}
+	\centering
+	\begin{tabular}{c|c}
+		percentage of variance & number of dimensions needed \\
+		\hline
+		50\% & 1 out of 3000 \\
+		80\% & 4 out of 3000 \\
+		90\% & 26 out of 3000 \\
+		95\% & 60 out of 3000 \\
+	\end{tabular}
+	\caption{Percentage of variance retained after reducing the dimension.}
+	\label{tab:explained_variance}
+\end{table}
+
+\section{Testing the Accuracy}
+To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results.
+
+[TODO]
+
+\section{Rhythm Analysis}
+There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
+
+\begin{itemize}
+	\item Alpha: 8 - 12 Hz
+	\item Beta: 18 - 30 Hz
+	\item Theta: 4 - 7 Hz
+	\item Delta: $<$ 4 Hz
+\end{itemize}
+
+It is easy to analyze the presence of these rhythms when looking at the fourier transformed data, as shown in figure~\ref{fig:eeg_with_rhythm}.
+
+\begin{figure}
+	\centering	
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+			\addplot+ [no marks, color=black] table[col sep=comma] {figs/fft_output.csv};
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(8,0.000002)   (12,0.000002)} |- (axis cs:8,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(18,0.000002)   (30,0.000002)} |- (axis cs:18,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(4.1,0.000002)   (7,0.000002)} |- (axis cs:4.1,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(0,0.000002)   (3.9,0.000002)} |- (axis cs:0,0) -- cycle;
+		\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Fourier transformed data with rhythms highlighted.}
+	\label{fig:eeg_with_rhythm}
+\end{figure}
+
+We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 26 PCs is shown. We chose 26 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
+
+\begin{figure}
+	\centering	
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+			\addplot+ [no marks, color=black] table[col sep=comma] {figs/pc_analysis.csv};
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(8,4)   (12,4)} |- (axis cs:8,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(18,4)   (30,4)} |- (axis cs:18,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(4.1,4)   (7,4)} |- (axis cs:4.1,0) -- cycle;
+			
+			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
+			{(0,4)   (3.9,4)} |- (axis cs:0,0) -- cycle;
+		\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Sum of the absolute values of the first 26 PCs.}
+	\label{fig:pc_analysis}
+\end{figure}
+

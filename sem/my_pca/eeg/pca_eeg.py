@@ -42,6 +42,18 @@ if __name__ == "__main__":
     print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > 0.95][0]} of {len(eval)}"
           f" axis explain 95% of the variance.")
 
+    number_samplepoints = 30 * 200
+    sample_spacing = 1.0 / 200.0
+    frequencies = np.fft.fftfreq(number_samplepoints, d=sample_spacing)
+    frequencies = frequencies[0:len(frequencies) // 2]
+
+    # pc_analysis = np.matrix([frequencies, np.sum(evec[:26, :], axis=0).T])
+    pc_analysis = np.zeros((2, 3000))
+    pc_analysis[0, :] = frequencies
+    pc_analysis[1, :] = [e for e in np.sum(np.abs(evec[:26, :]), axis=0)][0]
+
+    np.savetxt("pc_analysis.csv", pc_analysis.T, delimiter=",", newline="\n")
+
     # generate color list
     color_lst = ["blue", "green", "yellow", "orange", "red"]
     colors = [color_lst[sleep_stages[i] - 1] for i in range(sleep_stages.shape[0])]

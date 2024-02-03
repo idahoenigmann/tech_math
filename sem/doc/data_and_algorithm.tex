@@ -1,3 +1,8 @@
+\chapter{Data and Algorithm}
+\label{chapter:data_and_algorithm}
+
+This chapter describes the CAP Sleep Database used and the algorithm implemented. The algorithm uses FFT, PCA and k-nearest neighbor to guess the sleep stage from a recorded EEG signal.
+
 \section{Data}
 \label{sec:data}
 
@@ -27,7 +32,7 @@ We use the CAP Sleep Database\cite{Terzano2001}\cite{Goldberger2000} which provi
 	\label{tab:meta_data_of_recordings}
 \end{table}
 
-The given dataset describes multiple channels of EEG data recorded during sleep. We are interested in the channels recording activity in the frontal area, as this is where differences in sleep stages are easier to detect. [TODO cite something showing this.] The figure~\ref{fig:head_placement} shows where the sensors where placed.
+The given dataset describes multiple channels of EEG data recorded during sleep. We are interested in the channels recording activity in the frontal area, as this is where differences in sleep stages are easier to detect\cite[chapter~11]{Ganong1997}. The figure~\ref{fig:head_placement} shows where the sensors were placed.
 
 \begin{figure}
 	\centering
@@ -52,7 +57,7 @@ First we split the recorded data into 30 second sections. For each of these sect
 	\begin{algorithmic}
 		\For{each patient}
 		\State Read EEG data from file
-		\State Apply a low pass and high pass filter
+		\State Apply a 30 Hz low pass and a 0.5 Hz high pass filter
 		\State Resample with frequency 200 Hz
 		\State Get one of the channels Fp2-F4, Fp1-F3, C4-A1, F3A2 or C3-A2 (in this order)
 		\State Section out the part of data where the patient is asleep
@@ -84,7 +89,7 @@ First we split the recorded data into 30 second sections. For each of these sect
 	\end{subfigure}
 	
 	
-	\caption{A 30 second segment of the data. The data was filtered with a 0.5 Hz highpass and a 30 Hz lowpass filter. The top shown the recorded signal of the EEG. The bottom shows the output of the Fourier transformation. This segment was assigned the REM sleep stage.}
+	\caption{A 30 second segment of the data. The top shows the recorded signal of the EEG. The bottom shows the output of the Fourier transformation.}
 	\label{fig:example_30s_segment}
 \end{figure}
 
