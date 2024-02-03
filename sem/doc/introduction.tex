@@ -15,4 +15,29 @@ Ganong~\cite{Ganong1997} describes typical patterns observed in electroencephalo
 \noindent
 In REM sleep the EEG data is that of high frequency and low amplitude patterns, resembling the data observed in alert humans.
 
-Example EEG data of these different sleep stages can be seen in Figure~\ref{pic:TODO} [TODO image].
+Example EEG data of these different sleep stages can be seen in Figure~\ref{fig:different_sleep_stages}.
+
+\begin{figure}
+	\centering
+
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[width=\textwidth, height=0.6\textwidth, ytick=\empty, xtick=\empty, clip=false]
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_stage_awake.csv};
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_stage_S1.csv};
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_stage_S2.csv};
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_stage_S3.csv};
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_stage_REM.csv};
+				
+				\node[above,black] at (-15.0,420.0) {awake};
+				\node[above,black] at (-15.0,315.0) {REM};
+				\node[above,black] at (-15.0,220.0) {S1};
+				\node[above,black] at (-15.0,125.0) {S2};
+				\node[above,black] at (-15.0,30.0) {S3};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	
+	\caption{Short data segments of the sleep stages awake, Stage 1, Stage 2, Stage 3 and REM.}
+	\label{fig:different_sleep_stages}
+\end{figure}

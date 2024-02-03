@@ -66,8 +66,24 @@ First we split the recorded data into 30 second sections. For each of these sect
 
 
 \begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{figs/example_30s_segment}
+	\centering	
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[xlabel=Time (seconds), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_30s_segment1.csv};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	\vskip\baselineskip
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_30s_segment2.csv};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	
+	
 	\caption{A 30 second segment of the data. The data was filtered with a 0.5 Hz highpass and a 30 Hz lowpass filter. The top shown the recorded signal of the EEG. The bottom shows the output of the Fourier transformation. This segment was assigned the REM sleep stage.}
 	\label{fig:example_30s_segment}
 \end{figure}

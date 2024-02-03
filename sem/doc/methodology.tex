@@ -3,7 +3,28 @@ For the algorithm in section~\ref{chapter:data_and_algorithm} a few other method
 \section{Fourier Transformation}
 \label{sec:fourier_transformation}
 
-Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most often we are not interested at the amplitudes at a specific point in time, as a temporal shift would represent a very similar information. This is demonstrated in figure~\ref{fig:TOOD}.
+Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most often we are not interested at the amplitudes at a specific point in time, as a temporal shift would represent a very similar information. This is demonstrated in figure~\ref{fig:tempoal_shift}.
+
+\begin{figure}[h]
+	\centering
+	
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[xlabel=Time, ylabel=Amplitude, width=\textwidth, height=0.4\textwidth]
+				\addplot+ [domain=0:pi, samples=100, no marks, color=black]{0};
+				\addplot+ [domain=pi:3*pi, samples=100, no marks, color=black]{sin(deg(x)) + 0.5*sin(deg(4*x)) + 0.1*sin(deg(10*x))};
+				\addplot+ [domain=3*pi:15, samples=100, no marks, color=black]{0};
+				
+				\addplot+ [domain=0:pi+2, samples=100, no marks, color=red]{0};
+				\addplot+ [domain=pi+2:3*pi+2, samples=100, no marks, color=red]{sin(deg(x-2)) + 0.5*sin(deg(4*(x-2))) + 0.1*sin(deg(10*(x-2)))};
+				\addplot+ [domain=3*pi+2:15, samples=100, no marks, color=red]{0};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	
+	\caption{Two signals that only differ by a temporal shift.}
+	\label{fig:tempoal_shift}
+\end{figure}
 
 As the function is cyclic we might be interested in a decomposition into simple cyclic function, such as $\sin$. We can then analyze the most prominent frequencies and their respective amplitudes. This gives a representation of the data, that can be easier to interpret.
 
@@ -30,7 +51,37 @@ We describe one approach to achieve this representation as a sum of $\sin$ funct
 	\end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:TODO} shows how an example input and output of the FFT algorithm looks.
+Figure~\ref{fig:example_fft} shows how an example input and output of the FFT algorithm looks.
+
+\begin{figure}
+	\centering
+	
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[xlabel=Time, ylabel=Amplitude, width=\textwidth, height=0.4\textwidth]
+				\addplot+ [domain=0:20, samples=200, no marks, color=black]{sin(deg(x)) + 0.5*sin(deg(4*x)) + 0.1*sin(deg(10*x))};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	\vskip\baselineskip
+	\begin{subfigure}[b]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}[xlabel=Frequency, ylabel=Amplitude, width=\textwidth, height=0.4\textwidth]
+				\addplot+ [mark=*, only marks, ybar, bar width=0.5pt, color=black] coordinates {
+					(0.159, 1)
+					(0.637, 0.5)
+					(1.592, 0.1)
+				};
+				\addplot+ [domain=0:5, samples=100, no marks, color=black]{0};
+			\end{axis}
+		\end{tikzpicture}
+	\end{subfigure}
+	
+	\caption{A signal composed of different $\sin$ functions and the corresponding FFT output.}
+	\label{fig:example_fft}
+\end{figure}
+
+\newpage
 
 \section{Classification}
 \label{sec:classification}
