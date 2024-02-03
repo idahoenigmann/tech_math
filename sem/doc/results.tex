@@ -23,9 +23,25 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 \end{table}
 
 \section{Testing the Accuracy}
-To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results.
+To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 7 of the 14 patients and the validation data contains the other 7 patients.
 
-[TODO]
+Out of [TODO] 30 second segments the algorithm guessed the correct one [TODO] times, which corresponds to a success rate of [TODO]\%. Table~\ref{tab:error_validation} shows the outcome in more detail. 
+
+\begin{table}
+	\centering
+	\begin{tabular}{c|ccccc}
+		 & awake & S1 & S2 & S3 & REM \\
+		\hline
+		awake & 0 & 0 & 0 & 0 & 0 \\
+		S1    & 0 & 0 & 0 & 0 & 0 \\
+		S2    & 0 & 0 & 0 & 0 & 0 \\
+		S3    & 0 & 0 & 0 & 0 & 0 \\
+		REM   & 0 & 0 & 0 & 0 & 0 \\
+	\end{tabular}
+	\caption{Number of assignments for each stage, with the true value corresponding to the column and the guess from the algorithm corresponding to the row. [TODO fill this table]}
+	\label{tab:error_validation}
+\end{table}
+
 
 \section{Rhythm Analysis}
 There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
