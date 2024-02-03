@@ -7,7 +7,7 @@ import mne
 if __name__ == '__main__':
     matplotlib.use('TkAgg')
 
-    input_number = 1
+    input_number = 16
 
     start, end = np.loadtxt("data/startend.csv", delimiter=",", skiprows=1)[input_number - 1, :]
     start, end = int(start) - 1, int(end)
@@ -40,16 +40,17 @@ if __name__ == '__main__':
 
     # loop through all 30s segments
     number_samplepoints = 30 * 200
-    sleep_stages_name = ["awake", "REM", "S1", "S2", "S3"]
+    sample_spacing = 1.0 / 200.0
+    sleep_stages_name = ["S3", "S2", "S1", "REM", "awake"]
 
     for idx in range(len(sleep_stages_seg)):
         output_data = data[idx * number_samplepoints:idx * number_samplepoints + number_samplepoints]
 
         # do fft
+        frequencies = np.fft.fftfreq(number_samplepoints, d=sample_spacing)
+        frequencies = frequencies[0:len(frequencies) // 2]
         fft_output = np.absolute(np.fft.fft(output_data))
-        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[:number_samplepoints // 2]
-        sample_spacing = 1.0 / 200.0
-        frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), number_samplepoints // 2)
+        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[0:len(frequencies)]
 
         # plot figures
         fig, axs = plt.subplots(nrows=2)

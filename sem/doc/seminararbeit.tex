@@ -30,6 +30,11 @@
 \usepackage{algpseudocode}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepgfplotslibrary{external}
+\tikzexternalize[prefix=figures-external/]
 
 \newtheorem{definition}{Definition}
 \newtheorem{lemma}{Lemma}
@@ -79,9 +84,7 @@
     durch
     \vskip 0.5cm
     {\Large\bfseries\color{change}Ida Hönigmann}\\[1ex]
-    Matrikelnummer: {\color{change}12002348}\\[1ex]
-    {\color{change}Straße und Hausnummer [TODO is this necessary?]}\\[1ex]
-    {\color{change}PLZ und Ort}
+    Matrikelnummer: {\color{change}12002348}
   \end{center}
   
   \vfill

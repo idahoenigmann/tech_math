@@ -47,7 +47,7 @@ if __name__ == '__main__':
         total_number_samplepoints[sleep_stages_seg[idx]] += number_samplepoints
         output_data[sleep_stages_seg[idx]].append(data[idx * number_samplepoints:idx * number_samplepoints + number_samplepoints])
 
-    sleep_stages_name = ["awake", "REM", "S1", "S2", "S3"]
+    sleep_stages_name = ["S3", "S2", "S1", "REM", "awake"]
 
     for sleep_stage in output_data.keys():
         if len(output_data[sleep_stage]) == 0:
@@ -56,10 +56,11 @@ if __name__ == '__main__':
         sleep_stage_data = np.concatenate(output_data[sleep_stage])
         nbr_sample_points = total_number_samplepoints[sleep_stage]
         # do fft
-        fft_output = np.absolute(np.fft.fft(sleep_stage_data))
-        amplitude_over_frequency = 2.0 / nbr_sample_points * fft_output[:nbr_sample_points // 2]
         sample_spacing = 1.0 / 200.0
-        frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), nbr_sample_points // 2)
+        frequencies = np.fft.fftfreq(nbr_sample_points, d=sample_spacing)
+        frequencies = frequencies[0:len(frequencies) // 2]
+        fft_output = np.absolute(np.fft.fft(sleep_stage_data))
+        amplitude_over_frequency = 2.0 / nbr_sample_points * fft_output[0:len(frequencies)]
 
         # plot figures
         fig, axs = plt.subplots(nrows=2)

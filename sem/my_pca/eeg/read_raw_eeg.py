@@ -30,7 +30,6 @@ if __name__ == '__main__':
     raw_data = raw.get_data(picks=[channel], return_times=True)
 
     data = raw_data[0][0, start:end]
-    print(data.shape)
     time = raw_data[1][start:end]
 
     print(f"Duration: {time[-1]}-{time[0]} = {time[-1] - time[0]}s")
@@ -39,12 +38,13 @@ if __name__ == '__main__':
     output_data = []
     number_samplepoints = 30 * 200
     sample_spacing = 1.0 / 200.0
-    frequencies = np.linspace(0.0, 1.0 / (2.0 * sample_spacing), number_samplepoints // 2)
+    frequencies = np.fft.fftfreq(number_samplepoints, d=sample_spacing)
+    frequencies = frequencies[0:len(frequencies) // 2]
 
     for start in range(0, len(data)//number_samplepoints * number_samplepoints, number_samplepoints):
         # do fft
         fft_output = np.absolute(np.fft.fft(data[start:start + number_samplepoints]))
-        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[:number_samplepoints // 2]
+        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[0:len(frequencies)]
 
         # plot figures
         if plot_output:
