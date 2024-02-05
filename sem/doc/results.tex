@@ -27,7 +27,7 @@ To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide
 
 First the training data is used to calculate the PC of the PCA. Then the validation data is transformed according to the PC. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
 
-We test different values for $k$ of the k-nearest-neighbor algorithm. Using $k=10$ yields the best outcome in this limited validation set. Out of TODO 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of TODO\%. Table~\ref{tab:error_validation} shows the outcome in more detail and also includes other values of $k$ tested.
+We test different values for $k$ of the k-nearest-neighbor algorithm. Using $k=10$ yields the best outcome in this limited validation set. Out of 3184 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of TODO\%. Table~\ref{tab:error_validation} shows the outcome in more detail and also includes other values of $k$ tested.
 
 \begin{table}
 	\centering
