@@ -1,7 +1,7 @@
 \chapter{Results}
 \label{chapter:results}
 
-In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the PCs of the PCA uses the same frequencies.
+In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the principal components of the PCA uses the same frequencies.
 
 \section{Compression of Data}
 From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions of data. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
@@ -25,7 +25,7 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 \section{Testing the Accuracy}
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 11 of the 14 patients and the validation data contains the other 3 patients.
 
-First the training data is used to calculate the PC of the PCA. Then the validation data is transformed according to the PC. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage} from the previous chapter.
+First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
 
 When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
@@ -131,7 +131,7 @@ It is easy to analyze the presence of these rhythms when looking at the fourier 
 	\label{fig:eeg_with_rhythm}
 \end{figure}
 
-We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 26 PCs is shown. We chose 26 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
+We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 26 principal components is shown. We chose 26 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
 
 \begin{figure}
 	\centering	
@@ -153,7 +153,7 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 		\end{axis}
 	\end{tikzpicture}
 	
-	\caption{Sum of the absolute values of the first 26 PCs.}
+	\caption{Sum of the absolute values of the first 26 principal components.}
 	\label{fig:pc_analysis}
 \end{figure}
 

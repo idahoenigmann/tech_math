@@ -1,8 +1,7 @@
 \chapter{Introduction}
 \label{chapter:introduction}
 
-[TODO general introduction]
-
+This work aims to combine Principal Component Analysis (PCA), a data analysis tool, with electroencephalogram recordings of sleeping persons. The main focus lies in giving an understanding of PCA as well as demonstrating an use case.
 
 \section{EEG Data and Sleep Stages}
 \label{sec:eeg_data_and_sleep_stages}
@@ -46,3 +45,9 @@ Example EEG data of these different sleep stages can be seen in Figure~\ref{fig:
 	\caption{Short data segments of the the different sleep stages.}
 	\label{fig:different_sleep_stages}
 \end{figure}
+
+\section{Data Analysis Tool}
+
+PCA is a data analysis tool that aims to find the best change of basis to apply to a set of data points. Therefore it does not change the data points, but simply orients new axis through the data. These new axis are mathematically optimal in some sense and can be ordered. The ordering is done by a value representing the amount of information of the data along this axis.
+
+When the data is high dimensional, PCA can be used to get few axis that sill describe most of the information in the dataset. Thus PCA is often used as a dimension reduction technique.

@@ -94,7 +94,7 @@ First we split the recorded data into 30 second sections. For each of these sect
 \end{figure}
 
 
-We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start searching for cluster in the data we want to find a lower dimensional representation. This is were PCA can be used. From the output of algorithm~\ref{alg:pca_of_eeg_data} we get PCs, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages each recording goes through. We show a visual representation of the data in the first three PC axis in figure~\ref{fig:pca_output_3d}.
+We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start searching for cluster in the data we want to find a lower dimensional representation. This is were PCA can be used. From the output of algorithm~\ref{alg:pca_of_eeg_data} we get principal components, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages each recording goes through. We show a visual representation of the data in the first three principal components in figure~\ref{fig:pca_output_3d}.
 
 \begin{algorithm}
 	\caption{Apply PCA to the EEG data}\label{alg:pca_of_eeg_data}
@@ -106,7 +106,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 		\State Concatenate FFT data of all patients
 		\State Concatenate sleep stages of all patients
 		\State Do PCA on the combined FFT data
-		\State Transform data according to the PC from the PCA
+		\State Transform data according to the principal components from the PCA
 		\State Visualize the data in the first three axis, with the color corresponding to the sleep stage
 	\end{algorithmic}
 \end{algorithm}
@@ -118,7 +118,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 	\label{fig:pca_output_3d}
 \end{figure}
 
-If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of PCs. Lastly we can get a estimate of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
+If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of principal components. Lastly we can get a estimate of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
 \begin{algorithm}
 	\caption{Get estimate for sleep stage}\label{alg:gues_sleep_stage}
@@ -126,7 +126,7 @@ If we have a new recording and want to know the sleep stages we have to follow s
 		\Require{EEG recording of sleep}
 		\For{each 30s segment}
 			\State Do FFT on the segment
-			\State Multiply FFT output by PCs matrix
+			\State Multiply FFT output by principal component matrix
 			\State Reduce dimensions
 			\State Do k nearest neighbor
 			\State Save the result of k nearest neighbor

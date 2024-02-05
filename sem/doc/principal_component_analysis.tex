@@ -14,19 +14,19 @@ Assume we have gathered observations of different variables as part of an experi
 
 For larger values of $n$ this gets increasingly difficult\footnote{For higher dimensionality we have to use some projection. Depending on the chosen projection the interpretation changes making it difficult to interpret the resulting image.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting features are in the first few axis of the transformed $m$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
 
-An example of PCA being applied to the data from figure~\ref{fig:some_nice_data} can be seen in figure~\ref{fig:pca_example}. In the top figure the normed data and the direction of the new axis (called Principal Components (PC)) in relation to the two original axis are shown. The bottom figure depicts the transformed data. One can see that the variance is maximal in the PC 1 axis.
+An example of PCA being applied to the data from figure~\ref{fig:some_nice_data} can be seen in figure~\ref{fig:pca_example}. In the top figure the normed data and the direction of the new axis (called principal components) in relation to the two original axis are shown. The bottom figure depicts the transformed data. One can see that the variance is maximal in the first principal component.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/some_nice_data_pc}
-		\caption{Normed data (mean is zero and variance is one) and direction of the two PCs in relation to the x and y position.}
+		\caption{Normed data (mean is zero and variance is one) and direction of the two principal components (PC1, PC2) in relation to the x and y position.}
 		\label{fig:some_nice_data_pc}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/some_nice_data_pca}
-		\caption{The data after being transformed by PCA. The variance along the PC1 axis is maximal, therefore the data is spread out most along this axis.}
+		\caption{The data after being transformed by PCA. The variance along the first principal component (PC1) axis is maximal, therefore the data is spread out most along this axis.}
 		\label{fig:some_nice_data_pca}
 	\end{subfigure}
 	
@@ -89,7 +89,7 @@ The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a d
 	(\mathbf{P}\mathbf{P}^{-1})\mathbf{D}(\mathbf{P}\mathbf{P}^{-1}) = \mathbf{D}
 \end{align*}
 
-In summary $\mathbf{Y}$ has a diagonal covariance matrix if we choose $\mathbf{Y} = \mathbf{V}^T\mathbf{X}$, where $\mathbf{V}$ is the matrix of eigenvectors of $\mathbf{C}_\mathbf{X}$. The eigenvectors are the PCs and the eigenvalues are the variance in each new axis.
+In summary $\mathbf{Y}$ has a diagonal covariance matrix if we choose $\mathbf{Y} = \mathbf{V}^T\mathbf{X}$, where $\mathbf{V}$ is the matrix of eigenvectors of $\mathbf{C}_\mathbf{X}$. The eigenvectors are the principal components and the eigenvalues are the variance in each new axis.
 
 As pseudo code we get the program from algorithm~\ref{alg:pca} for calculating the PCA.
 
