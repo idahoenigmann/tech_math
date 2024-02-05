@@ -25,9 +25,9 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 \section{Testing the Accuracy}
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 11 of the 14 patients and the validation data contains the other 3 patients.
 
-First the training data is used to calculate the PC of the PCA. Then the validation data is transformed according to the PC. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
+First the training data is used to calculate the PC of the PCA. Then the validation data is transformed according to the PC. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage} from the previous chapter.
 
-When guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
+When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
 \begin{algorithm}
 	\caption{Get estimate for sleep stage without PCA}\label{alg:gues_sleep_stage_without_PCA}
