@@ -1,7 +1,7 @@
 \chapter{Data and Algorithm}
 \label{chapter:data_and_algorithm}
 
-This chapter describes the CAP Sleep Database used and the algorithm implemented. The algorithm uses FFT, PCA and k-nearest neighbor to guess the sleep stage from a recorded EEG signal.
+This chapter describes the CAP Sleep Database used and the algorithm implemented. The algorithm uses FFT, PCA and k-nearest neighbor to estimate the sleep stage from a recorded EEG signal.
 
 \section{Data}
 \label{sec:data}
@@ -118,17 +118,19 @@ We now have high dimensional data points, as each 30 second segment is represent
 	\label{fig:pca_output_3d}
 \end{figure}
 
-If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of PCs. Lastly we can get a guess of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
+If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of PCs. Lastly we can get a estimate of the sleep stage by using the k nearest neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
 \begin{algorithm}
-	\caption{Get guess for sleep stage}\label{alg:gues_sleep_stage}
+	\caption{Get estimate for sleep stage}\label{alg:gues_sleep_stage}
 	\begin{algorithmic}
 		\Require{EEG recording of sleep}
 		\For{each 30s segment}
 			\State Do FFT on the segment
 			\State Multiply FFT output by PCs matrix
+			\State Reduce dimensions
 			\State Do k nearest neighbor
 			\State Save the result of k nearest neighbor
 		\EndFor
+		\State \Return results of k nearest neighbor
 	\end{algorithmic}
 \end{algorithm}

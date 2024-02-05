@@ -30,6 +30,8 @@ def get_data_and_stages(number_list):
 
 if __name__ == "__main__":
     matplotlib.use('TkAgg')
+    PCA = False
+    SHOW_PLOT = False
 
     train_input_numbers = [2, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16]
     val_input_numbers = [1, 3, 6]
@@ -41,45 +43,63 @@ if __name__ == "__main__":
     print(f"Val data size: {val_data.shape}")
 
     # pca
-    print("pca started")
-    pca_output, eval, evec = pca(train_data)
-    print("pca finished")
+    if PCA:
+        print("pca started")
+        pca_output, eval, evec = pca(train_data)
+        print("pca finished")
 
-    percentages = [0.5, 0.8, 0.9, 0.95]
+        percentages = [0.5, 0.8, 0.9, 0.95]
 
-    for per in percentages:
-        print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > per][0]}"
-              f" of {len(eval)} axis explain {per * 100}% of the variance.")
+        for per in percentages:
+            print(f"The first {[idx for idx in range(len(eval)) if np.sum(eval[0:idx]) / np.sum(eval) > per][0]}"
+                  f" of {len(eval)} axis explain {per * 100}% of the variance.")
 
-    # generate color list
-    color_lst = ["blue", "green", "yellow", "orange", "red"]
-    colors = [color_lst[train_sleep_stages[i] - 1] for i in range(train_sleep_stages.shape[0])]
+        transformed_val = np.dot(val_data, evec)
+    else:
+        pca_output = train_data
+        transformed_val = val_data
 
-    x_data = np.squeeze(np.asarray(pca_output[:, 0]))
-    y_data = np.squeeze(np.asarray(pca_output[:, 1]))
-    z_data = np.squeeze(np.asarray(pca_output[:, 2]))
+    if SHOW_PLOT:
+        # train
+        color_lst = ["blue", "green", "yellow", "orange", "red"]
+        colors = [color_lst[train_sleep_stages[i] - 1] for i in range(train_sleep_stages.shape[0])]
 
-    # show output
-    visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
+        x_data = np.squeeze(np.asarray(pca_output[:, 0]))
+        y_data = np.squeeze(np.asarray(pca_output[:, 1]))
+        z_data = np.squeeze(np.asarray(pca_output[:, 2]))
 
-    # validation
-    transformed_val = np.dot(val_data, evec)
+        visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
 
-    pca_output = pca_output[:, 0:26]
-    transformed_val = transformed_val[:, 0:26]
+        # validation
+        color_lst = ["blue", "green", "yellow", "orange", "red"]
+        colors = [color_lst[val_sleep_stages[i] - 1] for i in range(val_sleep_stages.shape[0])]
 
-    print(["S3", "S2", "S1", "REM", "awake"])
-    for k in [1, 3, 5, 10, 15]:
+        x_data = np.squeeze(np.asarray(transformed_val[:, 0]))
+        y_data = np.squeeze(np.asarray(transformed_val[:, 1]))
+        z_data = np.squeeze(np.asarray(transformed_val[:, 2]))
+
+        visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
+
+    if PCA:
+        pca_output = pca_output[:, 0:26]
+        transformed_val = transformed_val[:, 0:26]
+
+    states = ["S3", "S2", "S1", "REM", "awake"]
+    for k in [30, 35]:
         print(f"k = {k}")
         val_matrix = np.zeros((5, 5))
 
-        for idx in range(len(transformed_val)):
+        for idx in range(len(val_sleep_stages)):
             guess = k_nearest_neighbour(k, pca_output, train_sleep_stages, transformed_val[idx])
             truth = val_sleep_stages[idx]
-            # print(f"guess: {guess}, truth: {truth}")
             val_matrix[int(guess - 1), int(truth - 1)] += 1
 
-        for row in val_matrix:
+        for i in range(5):
+            row = val_matrix[i]
+            print(states[i], end="")
             for e in row:
-                print(int(e), end=", ")
-            print("")
+                print("", end=f" & {int(e)} ")
+            print("\\\\")
+
+        t = val_matrix[0, 0] + val_matrix[1, 1] + val_matrix[2, 2] + val_matrix[3, 3] + val_matrix[4, 4]
+        print(f"{t} / {np.sum(val_matrix)} = {t/np.sum(val_matrix)}\n\n")
