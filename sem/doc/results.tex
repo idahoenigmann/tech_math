@@ -27,197 +27,71 @@ To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide
 
 First the training data is used to calculate the PC of the PCA. Then the validation data is transformed according to the PC. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
 
-We test different values for $k$ of the k-nearest-neighbor algorithm. Using $k=10$ yields the best outcome in this limited validation set. Out of 3184 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of TODO\%. Table~\ref{tab:error_validation} shows the outcome in more detail and also includes other values of $k$ tested.
-
-\begin{table}
-	\centering
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 1 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3    & 333 & 123 & 0  & 12  & 4     \\
-			S2    & 407 & 767 & 20 & 204 & 41    \\
-			S1    & 2   & 28  & 15 & 24  & 25    \\
-			REM   & 51  & 361 & 46 & 374 & 81    \\
-			awake & 20  & 75  & 14 & 78  & 79    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 5 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3    & 334 & 75  & 0  & 12  & 5     \\
-			S2    & 436 & 882 & 25 & 194 & 47    \\
-			S1    & 0   & 6   & 6  & 8   & 8     \\
-			REM   & 36  & 349 & 53 & 437 & 99    \\
-			awake & 7   & 42  & 11 & 41  & 71    \\
-		\end{tabular}
-	\end{subtable}
-	\vskip\baselineskip
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 10 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 335 & 70  & 1  & 8   & 4     \\
-			S2     & 444 & 892 & 20 & 194 & 39    \\
-			S1     & 0   & 1   & 0  & 1   & 1     \\
-			REM    & 28  & 348 & 60 & 453 & 110   \\
-			awake  & 6   & 43  & 14 & 36  & 76    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 15 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 325 & 51  & 1  & 6   & 5     \\
-			S2     & 456 & 901 & 20 & 175 & 35    \\
-			S1     & 0   & 1   & 0  & 2   & 0     \\
-			REM    & 27  & 356 & 61 & 478 & 115   \\
-			awake  & 5   & 45  & 13 & 31  & 75    \\
-		\end{tabular}
-	\end{subtable}
-	\vskip\baselineskip
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 20 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 319 & 48  & 0  & 6   & 5     \\
-			S2     & 465 & 911 & 20 & 165 & 36    \\
-			S1     & 0   & 1   & 0  & 0   & 0     \\
-			REM    & 25  & 353 & 66 & 498 & 118   \\
-			awake  & 4   & 41  & 9  & 23  & 71    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 25 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3 & 310  & 50  & 0  & 5  & 6 \\
-			S2 & 473  & 891  & 22  & 170  & 37 \\
-			S1 & 0  & 1  & 0  & 2  & 0 \\
-			REM & 26  & 375  & 66  & 500  & 121 \\
-			awake & 4  & 37  & 7  & 15  & 66 \\
-		\end{tabular}
-	\end{subtable}
-	
-	\caption{Number of sleep stages assigned to each stage by algorithm~\ref{alg:gues_sleep_stage}, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row.}
-	\label{tab:error_validation}
-\end{table}
-
-When guessing we expect an accuracy of 20\%. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
+When guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
 \begin{algorithm}
 	\caption{Get estimate for sleep stage without PCA}\label{alg:gues_sleep_stage_without_PCA}
 	\begin{algorithmic}
 		\Require{EEG recording of sleep}
 		\For{each 30s segment}
-			\State Do FFT on the segment
-			\State Do k nearest neighbor
-			\State Save the result of k nearest neighbor
+		\State Do FFT on the segment
+		\State Do k nearest neighbor
+		\State Save the result of k nearest neighbor
 		\EndFor
 		\State \Return results of k nearest neighbor
 	\end{algorithmic}
 \end{algorithm}
 
-The results of algorithm~\ref{alg:gues_sleep_stage_without_PCA} are TODO and are shown in table~\ref{tab:error_validation_without_PCA}.
-
-\begin{table}
-	\centering
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 1 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3    & 283 & 230 & 2  & 13  & 4     \\
-			S2    & 426 & 659 & 12 & 144 & 40    \\
-			S1    & 2   & 42  & 19 & 31  & 31    \\
-			REM   & 87  & 315 & 50 & 410 & 113   \\
-			awake & 15  & 108 & 12 & 94  & 42    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 5 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3    & 281 & 217 & 3  & 12  & 6     \\
-			S2    & 481 & 752 & 17 & 156 & 35    \\
-			S1    & 0   & 20  & 9  & 16  & 13    \\
-			REM   & 50  & 336 & 62 & 485 & 134   \\
-			awake & 1   & 29  & 4  & 23  & 42    \\
-		\end{tabular}
-	\end{subtable}
-	\vskip\baselineskip
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 10 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 294 & 182 & 3  & 5   & 6     \\
-			S2     & 468 & 782 & 16 & 127 & 32    \\
-			S1     & 0   & 0   & 1  & 2   & 3     \\
-			REM    & 47  & 360 & 70 & 536 & 148   \\
-			awake  & 4   & 30  & 5  & 22  & 41    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 15 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 283 & 149 & 2  & 3   & 6     \\
-			S2     & 477 & 803 & 14 & 112 & 22    \\
-			S1     & 0   & 0   & 0  & 1   & 1     \\
-			REM    & 50  & 370 & 72 & 551 & 158   \\
-			awake  & 3   & 32  & 7  & 25  & 43    \\			
-		\end{tabular}
-	\end{subtable}
-	\vskip\baselineskip
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 20 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 283 & 139 & 1  & 3   & 4     \\
-			S2     & 476 & 807 & 13 & 106 & 23    \\
-			S1     & 0   & 0   & 0  & 1   & 1     \\
-			REM    & 52  & 376 & 78 & 563 & 155   \\
-			awake  & 2   & 32  & 3  & 19  & 47    \\
-		\end{tabular}
-	\end{subtable}
-	\hfill
-	\begin{subtable}{0.48\textwidth}
-		\begin{tabular}{c|ccccc}
-			k = 25 & S3  & S2  & S1 & REM & awake \\
-			\hline
-			S3     & 273 & 123 & 1  & 2   & 5     \\
-			S2     & 483 & 810 & 14 & 102 & 22    \\
-			S1     & 0   & 0   & 0  & 1   & 0     \\
-			REM    & 55  & 388 & 76 & 570 & 152   \\
-			awake  & 2   & 33  & 4  & 17  & 51    \\
-		\end{tabular}
-	\end{subtable}
-	
-	\caption{Number of sleep stages assigned to each stage by algorithm~\ref{alg:gues_sleep_stage_without_PCA}, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row.}
-	\label{tab:error_validation_without_PCA}
-\end{table}
-
-Table~\ref{tab:error_validation_overview} gives a overview of the accuracy achieved with and without PCA and different values for k.
+We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref{tab:error_validation_overview} gives a overview of the accuracy achieved with and without PCA and different values for $k$. For every value of $k$ using PCA improves the accuracy.
 
 \begin{table}
 	\centering
 	\begin{tabular}{c|c|c}
 		k & accuracy with PCA & accuracy without PCA \\
 		\hline
-		1  & 49.25\% & 44.38\% \\
-		5  & 54.33\% & 49.28\% \\
-		10 & 55.15\% & 51.95\% \\
-		15 & 55.87\% & 52.76\% \\
-		20 & 56.50\% & 53.39\% \\
-		25 & 55.50\% & 53.52\% \\
+		1  & 40.88\% & 41.67\% \\
+		5  & 45.28\% & 48.23\% \\
+		10 & 45.72\% & 49.73\% \\
+		15 & 45.62\% & 49.11\% \\
+		20 & 45.62\% & 48.45\% \\
+		25 & 44.93\% & 47.66\% \\
+		30 & 44.81\% & 47.73\% \\
+		35 & 44.43\% & 47.13\% \\
 	\end{tabular}
 	\caption{Overview of accuracy achieved with different values for k of k-nearest-neighbor.}
 	\label{tab:error_validation_overview}
+\end{table}
+
+Using $k=10$ yields the best outcome in this limited validation set. Out of 3187 30 second segments the algorithm estimated the correct one 1457 times, which corresponds to a success rate of 45,72\%. Table~\ref{tab:error_validation} shows the outcome in more detail.
+
+\begin{table}
+	\centering
+	\begin{subtable}{0.48\textwidth}
+		\begin{tabular}{c|ccccc}
+			    & S3  & S2  & S1 & REM & awake \\
+			\hline
+			S3 & 280  & 37  & 0  & 1  & 7 \\
+			S2 & 401  & 634  & 8  & 176  & 35 \\
+			S1 & 0  & 11  & 7  & 20  & 8 \\
+			REM & 119  & 608  & 67  & 464  & 111 \\
+			awake & 13  & 64  & 13  & 31  & 72 \\
+		\end{tabular}
+	\end{subtable}
+	\hfill
+	\begin{subtable}{0.48\textwidth}
+		\begin{tabular}{c|ccccc}
+			   & S3  & S2  & S1 & REM & awake \\
+			\hline
+			S3 & 225  & 25  & 0  & 0  & 5 \\
+			S2 & 384  & 666  & 4  & 22  & 24 \\
+			S1 & 0  & 15  & 5  & 16  & 13 \\
+			REM & 196  & 615  & 82  & 635  & 137 \\
+			awake & 8  & 33  & 4  & 19  & 54 \\
+		\end{tabular}
+	\end{subtable}
+	
+	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=10$.}
+	\label{tab:error_validation}
 \end{table}
 
 
