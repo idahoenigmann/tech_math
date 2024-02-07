@@ -3,12 +3,12 @@
 
 From the results of chapter~\ref{chapter:results} it is clear, that the algorithm proposed is does not have enough accuracy to be used. The reasons for this could be multitude. For one there is only limited training data. Using a bigger sample of sleep recordings could improve the results achieved. Secondly a different classification algorithm could be tested. From figure~\ref{fig:pca_output_3d} it looks like a linear separation could be possible between the sleep stages S3, S2 and S1. Awake and REM on the other hand appear more difficult so separate from the rest.
 
-We propose some changes for possible future work. 
+We propose some changes for possible future work.
 
-[TODO]
-\newline
-\newline
-future work:\\
-* use multiple channels at one to determine sleep stage\\
-* calculate power spectral density from fft output\\
-* use better classification
+One way to get more data is to use more than one channel per sleep recording. The disadvantage is that the data points would no longer be independent of each other.
+
+One could also put more thought into the input of the PCA. Compacting the data by calculating the presence of the signal in each of the rhythms from section~\ref{sec:rhythm_analysis} could be an option.
+
+The data points depend on each other, as not every change from one sleep stage to another is equally likely. For example typically the recording start with the patient still awake and then proceeding to sleep stages S1, S2 and S3. The REM stage often only appears later.
+
+Lastly the classification algorithm used could be changed. Using k-nearest-neighbors works best if there are about equally many data points in each category. This is not the case in the CAP Sleep Database, as not all sleep stages appear equally often.
