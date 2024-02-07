@@ -43,6 +43,7 @@
 	before skip=\topsep,
 	after skip=\topsep,
 }
+
 \begin{document}
 	
 	\title{Computer Aided Geometric Design Compendium WS2023}
@@ -937,6 +938,23 @@ Kreuzerlübung.
 	\end{figure}
 \end{algorithm}
 
+All lemmas and theorems are very similar to free form curves. Therefore we only show selected theorems.
+
+\begin{theorem}
+	If $D_i$, $E_i$ are affine invariant, then $f$ is affine invariant.
+\end{theorem}
+
+\begin{proof}
+	Let $\alpha$ be affine invariant. We have to show $\alpha(f(s,t)) = \sum_i \sum_j D_i(s) E_j(t) \alpha(b_{i,j})$.
+	
+	\begin{align*}
+		\alpha(f(s,t)) = \alpha(\sum_{i=0}^{m} \sum_{j=0}^{n} D_i(s) E_j(t) b_{ij}) = \alpha(\sum_{i=0}^{m}  D_i(s) \overbrace{\sum_{j=0}^{n} E_j(t) b_{ij}}^{h_{ij}}) = \alpha(\sum_{i=0}^{m}  D_i(s) \alpha(h_{ij})) =\\
+		\alpha(\sum_{i=0}^{m}  D_i(s) \alpha(\sum_{j=0}^{n} E_j(t) b_{ij})) = \sum_{i=0}^{m} \sum_{j=0}^{n} D_i(s) E_j(t) \alpha(b_{i,j})
+	\end{align*}
+\end{proof}
+
+Other theorems such as convex hull, end-point-interpolating are analogous.
+
 \section{Subdivision algorithms}
 
 \subsection{Subdivision for curves}
@@ -1180,5 +1198,86 @@ Kreuzerlübung.
 \begin{remark}
 	In python use the package \texttt{geopy}. Find it via tiss/Lehrunterlagen. The documentation is at \url{www.geometrie.tuwien.ac.at/kilian/docs/geopy}.
 \end{remark}
+
+\section{Conform Pattern Matching}
+(Musterübertragung)
+
+\subsection{Euclidean Geometry}
+
+Transformations: Translation, Rotation, Reflection
+
+[TODO Grafik]
+
+From the figure it follows that euclidean transformations can be represented as reflections along hyper-planes.
+
+\subsection{Möbius Geometry}
+
+\begin{definition}
+	Möbius transformations are compositions of reflections along hyper-spheres.
+\end{definition}
+
+\begin{definition}[reflection along sphere]
+	[TODO Grafik]
+	
+	\begin{align*}
+		\tilde{\omega} := \frac{r^2}{||\omega||^2}\omega
+	\end{align*}
+\end{definition}
+
+\begin{remark}
+	Reflecting twice yields the identity.
+	
+	\begin{align*}
+		\tilde{(\tilde{\omega})} = \frac{r^2}{||\tilde{\omega}||^2}\tilde{\omega} = \frac{r^2}{||\frac{r^2}{||\omega||^2}\omega||^2}\frac{r^2}{||\omega||^2}\omega = \frac{r^2}{r^4||\omega||^2}||\omega||^2 r^2 \omega = \omega
+	\end{align*}
+\end{remark}
+
+Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
+[TODO Grafik]
+
+\begin{align*}
+	\tilde{\omega} = \frac{r^2(\omega - c)}{||\omega - c||^2} + c
+\end{align*}
+
+\begin{remark}
+	Special case: reflection of point $c$: $\tilde{c} := \infty$ and $\tilde{\infty} := c$
+\end{remark}
+
+\begin{remark}
+	We can identify $\mathbb{R}^2$ with $\mathbb{C}$. Then we get
+	
+	\begin{align*}
+		\tilde{\omega} = \frac{r^2(\omega - c)}{(\omega - c)(\bar{\omega} - \bar{c})} + c = \frac{r^2}{\bar{\omega} - \bar{c}} + c
+	\end{align*}
+	
+	In complex analysis möbius transformations are of the form $m(z) = (az+b)/(cz+d)$ with $a,b,c,d \in \mathbb{C}, ad-bc \neq 0$.  Anti-möbius transformations are $m(z) = (a\bar{z}+b)/(c\bar{z}+d)$.
+	
+	\begin{align*}
+		m(z) = \frac{az+b}{cz+d} = \left(\begin{matrix}
+			a & b\\ c & d
+		\end{matrix}\right) \left(\begin{matrix}
+		z\\ 1
+		\end{matrix}\right) = \left(\begin{matrix}
+		az+b\\ cz+d
+		\end{matrix}\right)
+	\end{align*}
+	
+	Embedding $\mathbb{C} \rightarrow \mathbb{P}(\mathbb{C}) := \{u \subseteq \mathbb{C}^2 | \dim u = 1\}$ with $z \in \mathbb{C} \mapsto [(z, 1)]$ and $[(z_0, z_1)] \mapsto \frac{z_0}{z_1}$, $z_1 \neq 0$.
+	
+	Then möbius transformations in $\hat{\mathbb{C}} := \mathbb{C} \cup \{\infty\}$ can be represented as a composition of
+	
+	\begin{itemize}
+		\item Rotation: $z \mapsto pz$, with $|p|=1$
+		\item Stretching: $z \mapsto Az$, with $A \in \mathbb{R}$
+		\item Inversion: $z \mapsto \frac{1}{z}$
+		\item Translation: $z \mapsto z + B$, with $B \in \mathbb{C}$
+	\end{itemize}
+
+	Proof on Wikipedia.	 
+\end{remark}
+
+\begin{definition}
+	TODO Doppelverhältnis
+\end{definition}
 
 \end{document}
