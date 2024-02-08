@@ -22,8 +22,8 @@ if __name__ == '__main__':
     print(raw.info)
 
     # check which channels exist
-    possible_channels = set(raw.ch_names).intersection({"Fp2-F4", "FP2-F4", "Fp1-F3", "FP1-F3", "Fp2",
-                                                        "F2-F4", "C4-A1", "F3A2", "C3-A2"})
+    possible_channels = set(raw.ch_names).intersection({"C4-A1", "C3-A2"})
+    # {"Fp2-F4", "FP2-F4", "Fp1-F3", "FP1-F3", "Fp2", "F2-F4", "C4-A1", "F3A2", "C3-A2"})
     channel = possible_channels.pop()
     print(f"channel used: {channel}")
 
