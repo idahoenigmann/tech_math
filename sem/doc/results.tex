@@ -22,7 +22,11 @@ To do this we find the first index for which the sum of eigenvalues up to this i
 	\label{tab:explained_variance}
 \end{table}
 
+We assume that most of the variance in the data stems from information in the EEG signal. Some variance might be caused by outliers. If we assume that about 90\% of variance is caused by actual information we reduce the data to 24 dimensions.
+
 \section{Testing the Accuracy}
+From this section on, accuracy refers to the percentage of data points classified as the correct sleep stage when given a new sleep recording.
+
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
 
 First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is algorithm~\ref{alg:gues_sleep_stage}.
@@ -93,6 +97,8 @@ Using $k=10$ yields the best outcome in this limited validation set. Out of TODO
 	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=20$.}
 	\label{tab:error_validation}
 \end{table}
+
+The results form this section might change when different patients are chosen for the validation data, as not all recordings might have the same quality.
 
 
 \section{Rhythm Analysis}
