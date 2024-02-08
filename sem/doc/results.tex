@@ -143,16 +143,16 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 	\begin{tikzpicture}
 		\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(8,0.2)   (12,0.2)} |- (axis cs:8,0) -- cycle;
+			{(8,4)   (12,4)} |- (axis cs:8,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(18,0.2)   (30,0.2)} |- (axis cs:18,0) -- cycle;
+			{(18,4)   (30,4)} |- (axis cs:18,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(4.1,0.2)   (7,0.2)} |- (axis cs:4.1,0) -- cycle;
+			{(4.1,4)   (7,4)} |- (axis cs:4.1,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(0,0.2)   (3.9,0.2)} |- (axis cs:0,0) -- cycle;
+			{(0,4)   (3.9,4)} |- (axis cs:0,0) -- cycle;
 			
 			\addplot+ [no marks, color=black] table[col sep=comma] {figs/pc_analysis.csv};
 			

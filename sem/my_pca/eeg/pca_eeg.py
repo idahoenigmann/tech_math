@@ -33,7 +33,7 @@ if __name__ == "__main__":
     PCA = True
     SHOW_PLOT = True
 
-    train_input_numbers = [2, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16]
+    train_input_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16]
     val_input_numbers = [1, 3, 6]
 
     train_data, train_sleep_stages = get_data_and_stages(train_input_numbers)
@@ -48,6 +48,12 @@ if __name__ == "__main__":
         pca_output, eval, evec = pca(train_data)
         print("pca finished")
 
+        """
+        # output for pc analysis
+        X = np.sum(np.abs(evec[0:24]), axis=0)[0].T
+        np.savetxt("pc_analysis.csv", X, delimiter=",", newline="\n")
+        exit()"""
+
         percentages = [0.5, 0.8, 0.9, 0.95]
 
         for per in percentages:
@@ -56,8 +62,8 @@ if __name__ == "__main__":
 
         transformed_val = np.dot(val_data, evec)
 
-        pca_output = pca_output[:, 0:26]
-        transformed_val = transformed_val[:, 0:26]
+        pca_output = pca_output[:, 0:24]
+        transformed_val = transformed_val[:, 0:24]
     else:
         pca_output = train_data
         transformed_val = val_data
