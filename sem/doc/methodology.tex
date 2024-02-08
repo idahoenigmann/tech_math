@@ -1,12 +1,12 @@
 \chapter{Methodology}
 \label{chapter:methodology}
 
-For the algorithm in section~\ref{chapter:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
+For the main algorithm of this work from section~\ref{chapter:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
 
 \section{Fourier Transformation}
 \label{sec:fourier_transformation}
 
-Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most often we are not interested at the amplitudes at a specific point in time, as a temporal shift would represent a very similar information. This is demonstrated in figure~\ref{fig:tempoal_shift}.
+Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most of the time we are not interested in the amplitude at a specific point in time, as a temporal shift would represent a very similar information. Such a shift is demonstrated in figure~\ref{fig:tempoal_shift}.
 
 \begin{figure}
 	\centering
@@ -29,7 +29,7 @@ Many applications are concerned with cyclic temporal data. Examples are sound wa
 	\label{fig:tempoal_shift}
 \end{figure}
 
-As the function is cyclic we might be interested in a decomposition into simple cyclic function, such as $\sin$. We can then analyze the most prominent frequencies and their respective amplitudes. This gives a representation of the data, that can be easier to interpret.
+As the function of sound waves or EEG data is cyclic we might be interested in a decomposition into simple cyclic function, such as $\sin$. We can then analyze the most prominent frequencies and their respective amplitudes. This gives a representation of the data, that can be easier to interpret.
 
 We describe one approach to achieve this representation as a sum of $\sin$ functions, called Fast Fourier Transformation (FFT), in algorithm~\ref{alg:fft}.
 
@@ -54,7 +54,7 @@ We describe one approach to achieve this representation as a sum of $\sin$ funct
 	\end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:example_fft} shows how an example input and output of the FFT algorithm looks.
+Figure~\ref{fig:example_fft} shows an example input and output of the FFT algorithm.
 
 \begin{figure}
 	\centering
@@ -112,4 +112,4 @@ Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the alg
 	\label{fig:k_nearest_neighbors}
 \end{figure}
 
-This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
+This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition the space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.

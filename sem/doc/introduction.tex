@@ -1,14 +1,23 @@
 \chapter{Introduction}
 \label{chapter:introduction}
 
-This work aims to combine Principal Component Analysis (PCA), a data analysis tool, with electroencephalogram recordings of sleeping persons. The main focus lies in giving an understanding of PCA as well as demonstrating an use case.
+This work aims to combine Principal Component Analysis (PCA), a data analysis tool, with electroencephalogram (EEG) recordings of sleeping persons. The main focus lies in giving an understanding of PCA as well as demonstrating an use case.
+
+\section{Data Analysis Tool}
+
+PCA is a data analysis tool that aims to find the best change of basis to apply to a given set of data points. Therefore it does not change the data points, but simply orients new axis through the data. These new axis are mathematically optimal in some sense and can be ordered. The ordering is done by a value representing the amount of information of the data along this axis.
+
+When the data is high dimensional, PCA can be used to get few axis that sill describe most of the information in the dataset. Thus PCA is often used as a dimension reduction technique.
+
 
 \section{EEG Data and Sleep Stages}
 \label{sec:eeg_data_and_sleep_stages}
 
-An electroencephalogram (EEG) records the variations in potential in the brain. A bipolar EEG measures the potential between two electrodes placed on the head. In comparison a unipolar measures the potential between a electrode on the head and one on some other part of the body. In this work we are only concerned with bipolar EEG measurements.
+An EEG records the variations in potential in the brain. A bipolar EEG measures the potential between two electrodes placed on the head. In comparison a unipolar measures the potential between a electrode on the head and one on some other part of the body. In this work we are only concerned with bipolar EEG measurements.
 
-Ganong~\cite[chapter~11]{Ganong1997} describes typical patterns observed in EEG data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep. NREM sleep is further partitioned into three stages, termed Stage~1 (S1) to Stage~3 (S3)\footnote{some authors use four stages}. The EEG data of these stages is characterized by
+Ganong~\cite[chapter~11]{Ganong1997} describes typical patterns observed in EEG data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep. NREM sleep is further partitioned into three stages, termed Stage~1 (S1) to Stage~3 (S3)\footnote{some authors use four stages}. 
+
+The EEG data of these stages is characterized by
 
 \begin{enumerate}[label={S\arabic*:}]
 	\item low amplitude, high frequency
@@ -16,12 +25,10 @@ Ganong~\cite[chapter~11]{Ganong1997} describes typical patterns observed in EEG 
 	\item high amplitude, low frequency
 \end{enumerate}
 
-\noindent
 In REM sleep the EEG data is that of high frequency and low amplitude patterns, resembling the data observed in alert humans.
 
 Example EEG data of these different sleep stages can be seen in Figure~\ref{fig:different_sleep_stages}.
 
-\newpage
 \begin{figure}
 	\centering
 
@@ -46,9 +53,3 @@ Example EEG data of these different sleep stages can be seen in Figure~\ref{fig:
 	\caption{Short data segments of the the different sleep stages.}
 	\label{fig:different_sleep_stages}
 \end{figure}
-
-\section{Data Analysis Tool}
-
-PCA is a data analysis tool that aims to find the best change of basis to apply to a set of data points. Therefore it does not change the data points, but simply orients new axis through the data. These new axis are mathematically optimal in some sense and can be ordered. The ordering is done by a value representing the amount of information of the data along this axis.
-
-When the data is high dimensional, PCA can be used to get few axis that sill describe most of the information in the dataset. Thus PCA is often used as a dimension reduction technique.

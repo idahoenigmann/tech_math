@@ -1,12 +1,12 @@
 \chapter{Results}
 \label{chapter:results}
 
-In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the principal components of the PCA uses the same frequencies.
+In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the principal components of the PCA use the same frequencies.
 
 \section{Compression of Data}
-From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions of data. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
+From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
 
-We find the first index for which the sum of eigenvalues from the PCA is bigger than a certain percentage. The output for a few values are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, which in our case means information, the PCA can successfully be used as a way to reduce the dimensions.
+To do this we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, or in other words information, the PCA can successfully be used as a way to reduce dimensions.
 
 \begin{table}
 	\centering
@@ -23,9 +23,9 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 \end{table}
 
 \section{Testing the Accuracy}
-To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 11 of the 14 patients and the validation data contains the other 3 patients.
+To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
 
-First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
+First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is algorithm~\ref{alg:gues_sleep_stage}.
 
 When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
@@ -62,7 +62,7 @@ We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref
 	\label{tab:error_validation_overview}
 \end{table}
 
-Using $k=20$ yields the best outcome in this limited validation set. Out of TODO 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of 68.40\%. Table~\ref{tab:error_validation} shows the outcome in more detail.
+Using $k=10$ yields the best outcome in this limited validation set. Out of TODO 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of $68.37\%$. Table~\ref{tab:error_validation} shows the outcome in more detail.
 
 \begin{table}
 	\centering
