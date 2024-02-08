@@ -15,8 +15,8 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 		\hline
 		50\% & 1 out of 3000 \\
 		80\% & 4 out of 3000 \\
-		90\% & 26 out of 3000 \\
-		95\% & 60 out of 3000 \\
+		90\% & 24 out of 3000 \\
+		95\% & 55 out of 3000 \\
 	\end{tabular}
 	\caption{Percentage of variance retained after reducing the dimension.}
 	\label{tab:explained_variance}
@@ -25,7 +25,7 @@ We find the first index for which the sum of eigenvalues from the PCA is bigger 
 \section{Testing the Accuracy}
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 11 of the 14 patients and the validation data contains the other 3 patients.
 
-First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 26 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
+First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is the algorithm~\ref{alg:gues_sleep_stage}.
 
 When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
@@ -49,20 +49,20 @@ We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref
 	\begin{tabular}{c|c|c}
 		k & accuracy with PCA & accuracy without PCA \\
 		\hline
-		1  & 40.88\% & 41.67\% \\
-		5  & 45.28\% & 48.23\% \\
-		10 & 45.72\% & 49.73\% \\
-		15 & 45.62\% & 49.11\% \\
-		20 & 45.62\% & 48.45\% \\
-		25 & 44.93\% & 47.66\% \\
-		30 & 44.81\% & 47.73\% \\
-		35 & 44.43\% & 47.13\% \\
+		1  & 59.67\% & 50.80\% \\
+		5  & 65.57\% & 56.13\% \\
+		10 & 68.37\% & 57.73\% \\
+		15 & 67.74\% & 56.60\% \\
+		20 & 68.28\% & 57.42\% \\
+		25 & 68.28\% & 56.39\% \\
+		30 & 68.18\% & 56.89\% \\
+		35 & 68.28\% & 56.73\% \\
 	\end{tabular}
 	\caption{Overview of accuracy achieved with different values for k of k-nearest-neighbor.}
 	\label{tab:error_validation_overview}
 \end{table}
 
-Using $k=10$ yields the best outcome in this limited validation set. Out of 3187 30 second segments the algorithm estimated the correct one 1457 times, which corresponds to a success rate of 45,72\%. Table~\ref{tab:error_validation} shows the outcome in more detail.
+Using $k=20$ yields the best outcome in this limited validation set. Out of TODO 30 second segments the algorithm estimated the correct one TODO times, which corresponds to a success rate of 68.40\%. Table~\ref{tab:error_validation} shows the outcome in more detail.
 
 \begin{table}
 	\centering
@@ -70,11 +70,11 @@ Using $k=10$ yields the best outcome in this limited validation set. Out of 3187
 		\begin{tabular}{c|ccccc}
 			    & S3  & S2  & S1 & REM & awake \\
 			\hline
-			S3 & 280  & 37  & 0  & 1  & 7 \\
-			S2 & 401  & 634  & 8  & 176  & 35 \\
-			S1 & 0  & 11  & 7  & 20  & 8 \\
-			REM & 119  & 608  & 67  & 464  & 111 \\
-			awake & 13  & 64  & 13  & 31  & 72 \\
+			S3 & 467  & 35  & 1  & 1  & 28 \\
+			S2 & 339  & 1026  & 18  & 101  & 38 \\
+			S1 & 0  & 2  & 4  & 2  & 21 \\
+			REM & 4  & 258  & 64  & 577  & 44 \\
+			awake & 3  & 33  & 8  & 11  & 102 \\
 		\end{tabular}
 	\end{subtable}
 	\hfill
@@ -82,20 +82,22 @@ Using $k=10$ yields the best outcome in this limited validation set. Out of 3187
 		\begin{tabular}{c|ccccc}
 			   & S3  & S2  & S1 & REM & awake \\
 			\hline
-			S3 & 225  & 25  & 0  & 0  & 5 \\
-			S2 & 384  & 666  & 4  & 22  & 24 \\
-			S1 & 0  & 15  & 5  & 16  & 13 \\
-			REM & 196  & 615  & 82  & 635  & 137 \\
-			awake & 8  & 33  & 4  & 19  & 54 \\
+			S3 & 290  & 5  & 1  & 0  & 9 \\
+			S2 & 508  & 803  & 4  & 11  & 29 \\
+			S1 & 0  & 2  & 16  & 1  & 26 \\
+			REM & 13  & 518  & 66  & 626  & 74 \\
+			awake & 2  & 26  & 8  & 54  & 95 \\
 		\end{tabular}
 	\end{subtable}
 	
-	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=10$.}
+	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=20$.}
 	\label{tab:error_validation}
 \end{table}
 
 
 \section{Rhythm Analysis}
+\label{sec:rhythm_analysis}
+
 There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
 
 \begin{itemize}
@@ -107,6 +109,10 @@ There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These r
 
 It is easy to analyze the presence of these rhythms when looking at the fourier transformed data, as shown in figure~\ref{fig:eeg_with_rhythm}.
 
+We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 24 principal components is shown. We chose 24 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
+
+
+\newpage
 \begin{figure}
 	\centering	
 	\begin{tikzpicture}
@@ -131,7 +137,6 @@ It is easy to analyze the presence of these rhythms when looking at the fourier 
 	\label{fig:eeg_with_rhythm}
 \end{figure}
 
-We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 26 principal components is shown. We chose 26 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
 
 \begin{figure}
 	\centering	
@@ -153,7 +158,7 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 		\end{axis}
 	\end{tikzpicture}
 	
-	\caption{Sum of the absolute values of the first 26 principal components.}
+	\caption{Sum of the absolute values of the first 24 principal components.}
 	\label{fig:pc_analysis}
 \end{figure}
 

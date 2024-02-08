@@ -10,6 +10,8 @@
 \usepackage{graphicx}
 \usepackage{psfrag}
 \usepackage{epstopdf}
+\usepackage[parfill]{parskip}
+\usepackage[section]{placeins}
 
 % links in pdf
 \usepackage[unicode,colorlinks=true,pagebackref=false]{hyperref}
@@ -90,7 +92,7 @@
   \vfill
   
   \small
-  Wien, am {\color{change} [TODO insert correct date]}
+  Wien, am {\color{change} 07. Februar 2024}
   \vspace*{-15mm}
 \end{titlepage}
 
@@ -114,10 +116,13 @@
 \input{methodology.tex}
 \input{data_and_algorithm.tex}
 \input{results.tex}
-\input{conclusion.tex}
+\input{discussion.tex}
 
+\listoffigures
+\listoftables
+\listofalgorithms
 
-\bibliographystyle{alpha} 
+\bibliographystyle{alpha}
 %\bibliographystyle{abbrv}
 \bibliography{literature.bib}
 

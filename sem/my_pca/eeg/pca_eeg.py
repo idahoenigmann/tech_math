@@ -30,7 +30,7 @@ def get_data_and_stages(number_list):
 
 if __name__ == "__main__":
     matplotlib.use('TkAgg')
-    PCA = False
+    PCA = True
     SHOW_PLOT = True
 
     train_input_numbers = [2, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16]
