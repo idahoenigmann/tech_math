@@ -112,9 +112,17 @@ We now have high dimensional data points, as each 30 second segment is represent
 \end{algorithm}
 
 \begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{figs/pca_output_3d}
-	\caption{Three dimensional representation of the data. Each 30 second segment is represented by a dot in the color corresponding to the sleep stage this segment is assigned to. Awake is represented by red, orange is REM, yellow is S1, green S2 and blue S3.}
+	\centering	
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=principal component 1, ylabel=principal component 2, zlabel=principal component 3, width=0.8\textwidth, height=0.3\textwidth, view/az=-45, view/el=45, legend entries={awake, REM, S3, S2, S1}, legend pos=outer north east, z post scale=3.5]
+			\addplot3+ [only marks, mark=x, red] table[col sep=comma] {figs/pca_output_3d_stage_awake.csv};
+			\addplot3+ [only marks, mark=x, black] table[col sep=comma] {figs/pca_output_3d_stage_REM.csv};			
+			\addplot3+ [only marks, mark=x, blue] table[col sep=comma] {figs/pca_output_3d_stage_S3.csv};		
+			\addplot3+ [only marks, mark=x, green] table[col sep=comma] {figs/pca_output_3d_stage_S2.csv};
+			\addplot3+ [only marks, mark=x, yellow] table[col sep=comma] {figs/pca_output_3d_stage_S1.csv};
+		\end{axis}
+	\end{tikzpicture}	
+	\caption{Three dimensional representation of the data. Each 30 second segment is represented by a dot in the color corresponding to the sleep stage this segment is assigned to.}
 	\label{fig:pca_output_3d}
 \end{figure}
 
