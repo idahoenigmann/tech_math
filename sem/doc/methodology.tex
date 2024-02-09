@@ -89,6 +89,8 @@ Figure~\ref{fig:example_fft} shows an example input and output of the FFT algori
 \section{Classification}
 \label{sec:classification}
 
+As the classification algorithm is not the main focus of this work, we decided to go with a simple one.
+
 In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
 
 For data that can be represented in $\mathbbm{R}^m$ and $l$ categories the pseudo code is shown in algorithm~\ref{alg:k_nearest_neighbors}.
@@ -111,5 +113,9 @@ Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the alg
 	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the k-nearest-neighbors algorithm for $k=10$.}
 	\label{fig:k_nearest_neighbors}
 \end{figure}
+
+If there are significantly more data points in a certain category k-nearest-neighbor can be dominated by these categories. As there are more point in the category, they are statistically more common in the k nearest, which leads to k-nearest-neighbor giving bad results.
+
+Variations of k-nearest-neighbor are achieved by applying a weight to the data points. The weight can depend on the distance between the points.
 
 This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition the space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.

@@ -22,7 +22,11 @@ To do this we find the first index for which the sum of eigenvalues up to this i
 	\label{tab:explained_variance}
 \end{table}
 
+We assume that most of the variance in the data stems from information in the EEG signal. Some variance might be caused by outliers. If we assume that about 90\% of variance is caused by actual information we reduce the data to 24 dimensions.
+
 \section{Testing the Accuracy}
+From this section on, accuracy refers to the percentage of data points classified as the correct sleep stage when given a new sleep recording.
+
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
 
 First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. This is algorithm~\ref{alg:gues_sleep_stage}.
@@ -94,6 +98,8 @@ Using $k=10$ yields the best outcome in this limited validation set. Out of TODO
 	\label{tab:error_validation}
 \end{table}
 
+The results form this section might change when different patients are chosen for the validation data, as not all recordings might have the same quality.
+
 
 \section{Rhythm Analysis}
 \label{sec:rhythm_analysis}
@@ -143,16 +149,16 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 	\begin{tikzpicture}
 		\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(8,0.2)   (12,0.2)} |- (axis cs:8,0) -- cycle;
+			{(8,4)   (12,4)} |- (axis cs:8,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(18,0.2)   (30,0.2)} |- (axis cs:18,0) -- cycle;
+			{(18,4)   (30,4)} |- (axis cs:18,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(4.1,0.2)   (7,0.2)} |- (axis cs:4.1,0) -- cycle;
+			{(4.1,4)   (7,4)} |- (axis cs:4.1,0) -- cycle;
 			
 			\addplot+ [red, opacity=0.3, fill=red!90!black, no marks] coordinates 
-			{(0,0.2)   (3.9,0.2)} |- (axis cs:0,0) -- cycle;
+			{(0,4)   (3.9,4)} |- (axis cs:0,0) -- cycle;
 			
 			\addplot+ [no marks, color=black] table[col sep=comma] {figs/pc_analysis.csv};
 			
