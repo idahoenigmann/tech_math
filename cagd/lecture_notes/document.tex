@@ -11,6 +11,7 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{hyperref}
+\usepackage{biblatex}
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
@@ -43,6 +44,7 @@
 	before skip=\topsep,
 	after skip=\topsep,
 }
+
 
 \begin{document}
 	
@@ -1212,6 +1214,11 @@ From the figure it follows that euclidean transformations can be represented as 
 
 \subsection{Möbius Geometry}
 
+\begin{remark}
+	This section is closely following the paper Conformal equivalence of triangle meshes by Boris Springborn, Peter Schröder and Ulrich Pinkall from the year 2008.
+\end{remark}
+
+
 \begin{definition}
 	Möbius transformations are compositions of reflections along hyper-spheres.
 \end{definition}
@@ -1268,7 +1275,7 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 	
 	\begin{itemize}
 		\item Rotation: $z \mapsto pz$, with $|p|=1$
-		\item Stretching: $z \mapsto Az$, with $A \in \mathbb{R}$
+		\item Scaling: $z \mapsto Az$, with $A \in \mathbb{R}$
 		\item Inversion: $z \mapsto \frac{1}{z}$
 		\item Translation: $z \mapsto z + B$, with $B \in \mathbb{C}$
 	\end{itemize}
@@ -1276,8 +1283,377 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 	Proof on Wikipedia.	 
 \end{remark}
 
-\begin{definition}
-	TODO Doppelverhältnis
+\begin{definition}[Cross-Ratio (Doppelverhältnis)]
+	For $a,b,c,d \in \mathbb{C}$ ... pairwise different we define $DV(a,b,c,d) := \frac{(a-b)(c-d)}{(b-c)(d-a)} \in \mathbb{C}$ as the cross-ratio.
 \end{definition}
+
+\begin{example}
+	$a,b,c,d \in \mathbb{C}$
+	
+	\begin{align*}
+		DV(a,b,c,d) = \frac{(a-b)}{(c-b)} \frac{(c-d)}{(a-d)} = \frac{r e^{i\phi}}{s e^{i\psi}} \frac{t e^{i\xi}}{u e^{i\nu}} = \frac{r}{s} e^{i(\phi - \psi)} \frac{t}{u} e^{i(\xi - \nu)} = \underbrace{\frac{rt}{su}}_{\in \mathbb{R}} e^{i(\alpha + \beta)}
+	\end{align*}
+	
+	[TODO Grafik]
+	
+	The argument of $DV$ is the angle of circumscribed circle of $abc$ and $cda$. As seen in the image.
+\end{example}
+
+\begin{remark}
+	$DV(a,b,c,d) \in \mathbb{R}$, if and only if they share the circumscribed circle.
+	
+	[TODO Grafik]
+	
+	[TODO Grafik]
+\end{remark}
+
+\begin{theorem}
+	The $DV$ is invariant under all möbius transformations.
+\end{theorem}
+
+\begin{proof}
+	\begin{itemize}
+		\item Scaling:
+		\begin{align*}
+			DV(Aa, Ab, Ac, Ad)= \frac{(Aa - Ab)(Ac - Ad)}{(Ac - Ab)(Aa - Ad)} = \frac{A(a-b)(c-d)}{A(c-b)(a-d)} = DV(a,b,c,d)
+		\end{align*}
+		\item Translation:
+		\begin{align*}
+			DV(a+B, b+B, c+B, d+B)= \frac{((a+B) - (b+B))((c+B) - (d+B))}{((c+B) - (b+B))((a+B) - (d+B))} = DV(a,b,c,d)
+		\end{align*}
+		\item Rotation: $p=e^{i\phi}, z=r e^{i\psi}$ then $pz=r e^{i(\phi+\psi)}$
+		\item Inversion:
+		\begin{align*}
+			DV\left(\frac{1}{a}, \frac{1}{b}, \frac{1}{c}, \frac{1}{d}\right)= \frac{\left(\frac{1}{a} - \frac{1}{b}\right) \left(\frac{1}{c} - \frac{1}{d}\right) abcd}{\left(\frac{1}{b} - \frac{1}{c}\right) \left(\frac{1}{d} - \frac{1}{a}\right) abcd} = \frac{(b-a)(d-c)}{(c-b)(a-d)} = DV(a,b,c,d)
+		\end{align*}
+	\end{itemize}
+	
+	[TODO Grafik]
+\end{proof}
+
+\begin{theorem}
+	Möbius transformations are circle-preserving (kreistreu).
+\end{theorem}
+
+\begin{proof}
+	$a,b,c,z \in K$ where $K$ is any circle. Then $DV(a,b,c,z) \in \mathbb{R}$. As $DV(m(a), m(b), m(c), m(z)) = DV(a,b,c,z) \in \mathbb{R}$ it follows that $m(a), m(b), m(c), m(z)$ lie on a circle.
+\end{proof}
+
+\begin{theorem}
+	Möbius transformations are conformal, which means preserving angles (konform, d.h. winkeltreu).
+\end{theorem}
+
+\begin{proof}
+	
+	[TODO Grafik]
+	
+	Consider tangential circles as in the figure. They will be transformed into intersecting circles, as they already are intersecting.
+	
+	$DV(a,b,c,d) = r e^{i\phi} \implies \phi$ is the angle. $\implies DV(m(a), m(b), m(c), m(d)) = r e^{i\phi}$. Therefore the angle is preserved. 
+	
+\end{proof}
+
+\begin{remark}
+	Holomorphic (holomorphe = komplex diffbare) functions preserve angles, but do not preserve circles.
+\end{remark}
+
+\begin{example}
+	$z \mapsto sin(z^2)$ is holomorphic, but does not preserve circles.
+\end{example}
+
+\begin{remark}
+	Möbius transformations are the only conformal, bijective functions from open subsets of $\mathbb{R}^n$, where $n \geq 3$. (Theorem of Liouville).
+\end{remark}
+
+\begin{remark}
+	Let $a,b,c,d \in Im \mathbb{H}$ (Quaternions) $\cong \mathbb{R}^3$.
+	
+	$DV(a,b,c,d) = (a-b) (b-c)^{-1} (c-d) (d-a)^{-1}$ as $\mathbb{H}$ is not commutative (Schiefkörper).
+	
+	It still holds that $DV(a,b,c,d) \in \mathbb{R} \iff a,b,c,d$ lie on a common circle.
+\end{remark}
+
+\begin{definition}
+	
+	[TODO figure]
+	
+	$f, \tilde{f}$... bijective, $\phi:f(U) \rightarrow \tilde{f}(U), x \mapsto \tilde{f} \circ f^{-1}(x)$.
+	
+	$\phi$ is described over $f, \tilde{f}$ by the same parameter (durch den gleichen Parameter beschrieben).
+\end{definition}
+
+We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
+
+\begin{definition}[preserving length]
+	$\phi$ is preserving length $\iff \forall $ curves $c$ in $f(U):$ $\phi(c)$ is as long as $c$
+	
+	[TODO Grafik]
+	
+	$c:I \rightarrow \mathbb{R}^3$ ... curve, then the length of $c$ is defined by $L(c) := \int_{I} ||\dot{c}(t)|| dt$
+\end{definition} 
+
+\begin{lemma}
+	$\phi$ is isometric $\iff \forall \gamma : I \rightarrow U: L(f \circ \gamma) = L(\phi(f \circ \gamma))$.
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		||\dot{c}(t)||^2 = ||\frac{dc(t)}{dt}||^2 = || fu \dot{\gamma_1} + fv \dot{\gamma_2}||^2 = <\dot{\gamma_1}fu + \dot{\gamma_2} fv + \dot{\gamma_1}fu + \dot{\gamma_2} fv> =\\
+		\dot{\gamma_1}^2 \underbrace{<fu, fu>}_{=E} + 2 \dot{\gamma_1} \dot{\gamma_2} \underbrace{<fu, fv>}_{=F} + \dot{\gamma_2}^2 \underbrace{<fv, fv>}_{=G} = (\dot{\gamma_1}, \dot{\gamma_2}) \left(\begin{matrix}
+			E & F\\ F & G
+		\end{matrix}\right) \left(\begin{matrix}
+		\dot{\gamma_1} \\ \dot{\gamma_2}
+		\end{matrix}\right) = \dot{\gamma}^T \underbrace{\left(\begin{matrix}
+			E & F\\ F & G
+		\end{matrix}\right)}_{=I} \dot{\gamma}
+	\end{align*}
+	
+	$I$ is matrix of first fundamental form (1. Fundamentalform).
+	
+	$\implies ||\dot{c}(t)||^2 = \dot{\gamma}^T I \dot{\gamma}$. Therefore $L(c) = \int_{a}^{b} \sqrt{\dot{\gamma}^T I \dot{\gamma}}dt$
+	
+	$\phi$ is preserving length $\iff \forall \gamma: L(f\circ \gamma) = L(\phi(f \circ \gamma))$
+	
+	$\gamma:(a,b) \rightarrow U, t \mapsto q + (t_0+t, 0)^T$.
+	
+	\begin{align*}
+		L(f \circ \gamma) = \int_{a}^{b} \sqrt{(1, 0) \left(\begin{matrix}
+				E & F \\ F & G
+			\end{matrix}\right) \left(\begin{matrix}
+			1 \\ 0
+			\end{matrix}\right)} dt = \int_{a}^{b} \sqrt{E} dt\\
+		L(\phi(f \circ \gamma)) = \int_{a}^{b} \sqrt{\tilde{E}} dt\\
+		\tilde{E} = <\tilde{f}u, \tilde{f}u>, \tilde{F} = <\tilde{f}u, \tilde{f}v>, \tilde{G} = <\tilde{f}v, \tilde{f}v>
+	\end{align*}
+	
+	$\phi$ is preserving length $\iff \forall a,b: \int_{a}^{b} \sqrt{E} dt = \int_{a}^{b} \sqrt{\tilde{E}} dt \iff \sqrt{E} = \sqrt{\tilde{E}} \iff E = \tilde{E} (\iff <fu, fu> = <\tilde{f}u, \tilde{f}u>)$.
+	
+	Analogous $\gamma(t) = q + (0, t_0+t)^T \implies G = \tilde{G}$.
+	
+	\begin{align*}
+		\gamma(t) = q + \left(\begin{matrix}
+			t_0 + t \\ t_1 + t
+		\end{matrix}\right) \implies \sqrt{E + 2F + G} = \sqrt{\tilde{E} + 2\tilde{F} + \tilde{G}}\\
+		E+2F+G = ||fu||^2 + 2 <fu, fv> + ||fv||^2 \geq ||fu||^2 - 2||fu||\cdot ||fv|| + ||fv||^2 = (||fu||- ||fv||)^2\\
+		\implies F = \tilde{F}
+	\end{align*}
+	
+	$\implies \phi$ is preserving length $\implies I = \tilde{I}$ and $I = \tilde{I} \implies \phi$ is preserving length.
+\end{proof}
+
+\begin{theorem}
+	$\phi$ is preserving area $\iff \det I = \det \tilde{I}$.
+\end{theorem}
+
+\begin{proof}
+	without proof.
+\end{proof}
+
+\begin{corollary}
+	preserving length $\implies I = \tilde{I} \implies \det I = \det \tilde{I} \implies$ preserving area.
+\end{corollary}
+
+\begin{theorem}
+	$\phi$ is conformal (preserving angles) $\iff \exists \lambda: \mathbb{R} \rightarrow \mathbb{R}\setminus\{0\}: I = \lambda^2 \tilde{I}$.
+\end{theorem}
+
+\begin{remark}
+	preserving length $\iff$ preserving angles and preserving area.
+	
+	[TODO Grafik]
+	
+	Stereographic projection are preserving angles.
+	
+	[TODO Grafik]
+\end{remark}
+
+\begin{definition}[Triangle mesh]
+	Triangle mesh = polyhedral area (local like open subset of $\mathbb{R}^2$) and all areas are triangles.
+	
+	[TODO Grafik]
+	
+	$T=(V,E,F)$ where $V$ ... vertices, $E$ ... edges, $F$ ... faces
+\end{definition}
+
+\begin{remark}
+	$\forall$ polyhedron (Polyeder) that are homeomorph (homöomorph): $F-E+V=2$.
+\end{remark}
+
+\begin{definition}
+	A function $L:E \rightarrow \mathbb{R}_{\geq 0}$ for which $\forall f \in F:$ $f$ satisfies the triangle equations, is called discrete metric (diskrete Metrik) auf $T$.
+	
+	The triangle equations are given by:
+	\begin{align*}
+		l_{ij} = l(v_i, v_j) \text{... length of the edge between } v_i and v_j\\
+		l_{ij} \leq l_{jk} + l_{ki}\\
+		l_{jk} \leq l_{ki} + l_{ij}\\
+		l_{ki} \leq l_{ij} + l_{jk}\\
+		l_{ij} = l_{ji} \forall i, j, k
+	\end{align*}
+\end{definition}
+
+\begin{example}
+	The ''true'' lengths $l_{ij} = ||v_i - v_j||$ of the edges form a discrete metric.
+\end{example}
+
+\begin{definition}
+	Two combinatorial equivalent triangle meshes $T, \tilde{T}$ are called discrete conform equivalent (diskret konform äquivalent), if $\exists \lambda: E \rightarrow \mathbb{R}_{\geq 0}$ with $\tilde{l}_{ij} = \lambda_i \lambda_j l_{ij} \forall (i,j) \in E$.
+\end{definition}
+
+\begin{lemma}
+	Let $m$ be a möbius tranformation $m:\mathbb{R}^n \cup \{\infty\} \rightarrow \mathbb{R}^n \cup \{\infty\}$.
+	
+	$\implies \exists \rho:\mathbb{R}^n \rightarrow \mathbb{R}_{\geq 0}: ||m(x)-m(y)|| = \rho(x) \rho(y) ||x-y||$.
+\end{lemma}
+
+\begin{proof}
+	without proof
+\end{proof}
+
+\begin{definition}
+	length cross-ration (Längendoppelverhältnis) $LDV(v_i, v_j, v_k, v_m) := \frac{l_{ij}l_{km}}{l_{jk}l_{mi}}$
+\end{definition}
+
+\begin{remark}
+	$a,b,c,d \in \mathbb{C}$ then $LDV(a,b,c,d) = |DV(a,b,c,d)|$
+\end{remark}
+
+\begin{theorem}
+	$(T,l)$ and $(\tilde{T}, \tilde{l})$ are discrete conform equivalent $\iff \forall ik \in E: LDV(v_i, v_j, v_k, v_m) = LDV(\tilde{v_i}, \tilde{v_j}, \tilde{v_k}, \tilde{v_m})$.
+	
+	[TODO Grafik]
+\end{theorem}
+
+\begin{theorem}
+	Let $T$ be a triangle mesh with metric $l_{ij} := ||v_i - v_j||$. Let $m$ be a möbius transformation. Then $T$ and $\tilde{T}$ are conform equivalent.
+\end{theorem}
+
+\begin{remark}
+	In the above theorem we means that when the edges are möbius transformed and then connected with straight edges to get a triangle mesh.
+	
+	[TODO Grafik]
+\end{remark}
+
+\begin{proof}
+	use the above lemma.
+\end{proof}
+
+\begin{remark}
+	In a plane möbius transformations are uniquely given by three points.
+\end{remark}
+
+\begin{definition}[(Milnov's) Lobachevsky-Function]
+	\begin{align*}
+		 \Pi(x) := \int_{0}^{x} \log |2\sin(t)| dt
+	\end{align*}
+	
+	Cyrillic L looks like $\Pi$.
+\end{definition}
+
+\begin{lemma}
+	Properties of $\Pi(x)$:
+	\begin{itemize}
+		\item $\Pi(0) = 0$
+		\item $\Pi(x+\pi) = \Pi(x)$ ... pi-periodic
+		\item $\Pi(k\pi) = 0$
+		\item $\Pi(-x) = -\Pi(x)$
+	\end{itemize}
+\end{lemma}
+
+\begin{definition}
+	\begin{align*}
+		M := \{(x,y,z) \in \mathbb{R}^3 | e^x, e^y, e^z \text{ are the lengths of sides of a trianlge}\} =\\
+		\{(x,y,z) \in \mathbb{R}^3| e^x \leq e^y + e^z, e^y \leq e^x + e^z, e^z \leq e^x + e^y\}\\
+		\\
+		f(x,y,z) := \alpha x + \beta y + \gamma z + \Pi(\alpha) + \Pi(\beta) + \Pi(\gamma)
+	\end{align*}
+	
+	where $\alpha(x,y,z), \beta(x,y,z), \gamma(x,y,z)$ are the angles of the triangle. $x,y,z \in M$.
+	
+	[TODO Grafik]
+\end{definition}
+
+\begin{lemma}
+	\begin{align*}
+		\frac{\delta f}{\delta x} = \alpha && \frac{\delta f}{\delta y} = \beta && \frac{\delta f}{\delta z} = \gamma
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		\frac{\delta f}{\delta x} = \frac{\delta \alpha}{\delta x} x + \alpha + \frac{\delta \beta}{\delta x} y + \frac{\delta \gamma}{\delta x}z + (- \log |2\sin(\alpha)|) \frac{\delta \alpha}{\delta x} + (-\log |2\sin(\beta)|) \frac{\delta \beta}{\delta x} + (- \log(|2\sin\gamma)|) \frac{\delta \gamma}{\delta x} =\\
+		\alpha + \frac{\delta \alpha}{\delta x}(x-\log(|2\sin\alpha|)) + \frac{\delta \beta}{\delta x}(y-\log(|2\sin\beta|)) + \frac{\delta \gamma}{\delta x}(z-\log(|2\sin\gamma|)) = ...
+	\end{align*}
+	
+	We do a short calculation on the side:
+	
+	\begin{align*}
+		\sin(\alpha) = \frac{\frac{e^x}{2}}{R} \implies 2 R \sin(\alpha) = e^x \implies R = \frac{e^x}{|2 \sin(\alpha)|} \implies \log R = x - \log|2\sin(\alpha)|
+	\end{align*}
+	
+	Which gives us
+	
+	\begin{align*}
+		... = \alpha + \frac{\delta \alpha}{\delta x} \log R + \frac{\delta \beta}{\delta x} \log R + \frac{\delta \gamma}{\delta x} \log R = \alpha + \log R (\frac{\delta (\alpha + \beta + \gamma)}{\delta x}) = \alpha + \log R \underbrace{(\frac{\delta \Pi}{\delta x})}_{=0} = \alpha
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Discrete conform equivalent $\tilde{l}_{ij} = \lambda_i\lambda_j l_{ij}$ in different wording:
+	
+	$\exists \lambda_i > 0 \implies \exists u_i : \lambda_i = e^{\frac{u_i}{2}}$ with $u_i \in \mathbb{R}$.
+	
+	$\gamma_{ij} := \log l_{ij}$, $\tilde{\gamma}_{ij} := \log \tilde{l}_{ij}$ gives us
+	
+	$\log \tilde{l}_{ij} = \log \lambda_i + \log \lambda_j + \log l_{ij} \iff \tilde{\lambda}_{ij} = \frac{u_i}{2} + \frac{u_j}{2} + \gamma_{ij}$
+	
+	which is an additive condition for conformal equivalency.
+\end{remark}
+
+\begin{definition}[Interior angle (Innenwinkel) at the position $i$]
+	
+	$\alpha_{jk}^i$
+	
+	Sum of interior angles $\sum_{jk \in star(i)}\alpha_{jk}^i$ where $star(i)$ is the vertex star around the edge $i$.
+	
+	[TODO Grafik]
+	
+\end{definition}
+
+Goal: Given a triangle mesh $T, \Phi_i \in \mathbb{R}{>0} \forall i \in V$. We want a triangle mesh $\tilde{T}$, which is conform equivalent to $T$ with sum of interior angles equal to $\Phi_i \forall i \in V$.
+
+\begin{remark}
+	If such a $\tilde{T}$ exists and $\Phi_i = 2\pi \forall i$ ... interior vertex, then $\tilde{T}$ can be thought of as in a plane.
+	
+	[TODO Grafik]
+	
+	Let $u \in \mathbb{R}^{\# V}$ with $\tilde{l}_{ij} = e^{u_i/2} e^{u_j/2} l_{ij} = e^{(u_i+u_j)/2} l_{ij}$ are lengths of a triangle mesh.
+	
+	\begin{align*}
+		E(u) := \sum_{i,j,k \in F} \left[2 f\left( \frac{\tilde{\gamma}_{ij}}{2}, \frac{\tilde{\gamma}_{jk}}{2}, \frac{\tilde{\gamma}_{ki}}{2} \right) - \frac{\pi}{2} (\tilde{\gamma}_{ij} + \tilde{\gamma}_{jk} + \tilde{\gamma}_{ki}) \right] + \sum_{i\in V} u_i \Phi_i\\
+		\tilde{\gamma}_{ij} = \frac{u_i + u_j}{2} + \gamma_{ij} = \frac{u_i}{2} + \frac{u_j}{2} + \log l_{ij}
+	\end{align*}
+\end{remark}
+
+\begin{lemma}
+	Properties of $E(u)$:
+	\begin{itemize}
+		\item
+		\begin{align*}
+			\frac{\delta E(u)}{\delta u_i} = \Phi_i - \sum_{jk \in star(i)} \alpha_{jk}^i
+		\end{align*}
+		
+		Therefore the critical points are those interesting us.
+		\item  $E$ can be extended as a convex function onto $\mathbb{R}^{\# V}$
+	\end{itemize}
+\end{lemma}
+
+\begin{theorem}
+	The critical points of $E$ describe the triangle mesh $\tilde{T}$. This means $\tilde{T}$ is conform equivalent to $T$ and $\forall i \in V: \Phi_i = \sum_{jk \in star(i)} \alpha_{jk}^i$.
+	
+	As $E$ is convex there exists such a critical point.
+\end{theorem}
+
+[TODO Grafik]
 
 \end{document}
