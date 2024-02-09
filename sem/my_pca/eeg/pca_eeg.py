@@ -33,7 +33,7 @@ if __name__ == "__main__":
     PCA = True
     SHOW_PLOT = True
 
-    train_input_numbers = [2, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16]
+    train_input_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16]
     val_input_numbers = [1, 3, 6]
 
     train_data, train_sleep_stages = get_data_and_stages(train_input_numbers)
@@ -80,6 +80,22 @@ if __name__ == "__main__":
         x_data = np.squeeze(np.asarray(transformed_val[:, 0]))
         y_data = np.squeeze(np.asarray(transformed_val[:, 1]))
         z_data = np.squeeze(np.asarray(transformed_val[:, 2]))
+
+        X1 = np.matrix(
+            [[x_data[idx], y_data[idx], z_data[idx]] for idx in range(len(x_data)) if val_sleep_stages[idx] == 1])
+        X2 = np.matrix(
+            [[x_data[idx], y_data[idx], z_data[idx]] for idx in range(len(x_data)) if val_sleep_stages[idx] == 2])
+        X3 = np.matrix(
+            [[x_data[idx], y_data[idx], z_data[idx]] for idx in range(len(x_data)) if val_sleep_stages[idx] == 3])
+        X4 = np.matrix(
+            [[x_data[idx], y_data[idx], z_data[idx]] for idx in range(len(x_data)) if val_sleep_stages[idx] == 4])
+        X5 = np.matrix(
+            [[x_data[idx], y_data[idx], z_data[idx]] for idx in range(len(x_data)) if val_sleep_stages[idx] == 5])
+        np.savetxt("pca_output_3d_stage_S3.csv", X1, delimiter=",", newline="\n")
+        np.savetxt("pca_output_3d_stage_S2.csv", X2, delimiter=",", newline="\n")
+        np.savetxt("pca_output_3d_stage_S1.csv", X3, delimiter=",", newline="\n")
+        np.savetxt("pca_output_3d_stage_REM.csv", X4, delimiter=",", newline="\n")
+        np.savetxt("pca_output_3d_stage_awake.csv", X5, delimiter=",", newline="\n")
 
         visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
 
