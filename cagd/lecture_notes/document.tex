@@ -1208,7 +1208,12 @@ Other theorems such as convex hull, end-point-interpolating are analogous.
 
 Transformations: Translation, Rotation, Reflection
 
-[TODO Grafik]
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/euclidean_transformation_reflection}
+	\caption{Representation of euclidean transformations as reflections.}
+	\label{fig:euclidean_transformation_reflection}
+\end{figure}
 
 From the figure it follows that euclidean transformations can be represented as reflections along hyper-planes.
 
@@ -1223,13 +1228,18 @@ From the figure it follows that euclidean transformations can be represented as 
 	Möbius transformations are compositions of reflections along hyper-spheres.
 \end{definition}
 
-\begin{definition}[reflection along sphere]
-	[TODO Grafik]
-	
+\begin{definition}[reflection along sphere]	
 	\begin{align*}
 		\tilde{\omega} := \frac{r^2}{||\omega||^2}\omega
 	\end{align*}
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/reflection_on_circle}
+	\caption{Reflection of point along a circle.}
+	\label{fig:reflection_on_circle}
+\end{figure}
 
 \begin{remark}
 	Reflecting twice yields the identity.
@@ -1240,7 +1250,13 @@ From the figure it follows that euclidean transformations can be represented as 
 \end{remark}
 
 Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
-[TODO Grafik]
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/reflection_on_any_circle}
+	\caption{Reflection of point along a circle with different origin.}
+	\label{fig:reflection_on_any_circle}
+\end{figure}
 
 \begin{align*}
 	\tilde{\omega} = \frac{r^2(\omega - c)}{||\omega - c||^2} + c
@@ -1294,7 +1310,13 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 		DV(a,b,c,d) = \frac{(a-b)}{(c-b)} \frac{(c-d)}{(a-d)} = \frac{r e^{i\phi}}{s e^{i\psi}} \frac{t e^{i\xi}}{u e^{i\nu}} = \frac{r}{s} e^{i(\phi - \psi)} \frac{t}{u} e^{i(\xi - \nu)} = \underbrace{\frac{rt}{su}}_{\in \mathbb{R}} e^{i(\alpha + \beta)}
 	\end{align*}
 	
-	[TODO Grafik]
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/DV_angle}
+		\caption{DV as the angle.}
+		\label{fig:DV_angle}
+	\end{figure}
 	
 	The argument of $DV$ is the angle of circumscribed circle of $abc$ and $cda$. As seen in the image.
 \end{example}
@@ -1302,9 +1324,12 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 \begin{remark}
 	$DV(a,b,c,d) \in \mathbb{R}$, if and only if they share the circumscribed circle.
 	
-	[TODO Grafik]
-	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/DV_same_circle}
+		\caption{DV and the corresponding angle, as well as examples where the circumscribed circle is shared.}
+		\label{fig:DV_same_circle}
+	\end{figure}
 \end{remark}
 
 \begin{theorem}
@@ -1328,7 +1353,12 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 		\end{align*}
 	\end{itemize}
 	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/DV_rotation_invariant}
+		\caption{DV is rotation invariant.}
+		\label{fig:DV_rotation_invariant}
+	\end{figure}
 \end{proof}
 
 \begin{theorem}
@@ -1345,7 +1375,12 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 
 \begin{proof}
 	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/moebius_angle_conserving}
+		\caption{Corresponding circles are transformed into intersecting circles.}
+		\label{fig:moebius_angle_conserving}
+	\end{figure}
 	
 	Consider tangential circles as in the figure. They will be transformed into intersecting circles, as they already are intersecting.
 	
@@ -1373,24 +1408,28 @@ Reflecting $\omega$ on a sphere with center $c$ and radius $r$.
 	It still holds that $DV(a,b,c,d) \in \mathbb{R} \iff a,b,c,d$ lie on a common circle.
 \end{remark}
 
-\begin{definition}
-	
-	[TODO figure]
-	
+\begin{definition}	
 	$f, \tilde{f}$... bijective, $\phi:f(U) \rightarrow \tilde{f}(U), x \mapsto \tilde{f} \circ f^{-1}(x)$.
 	
 	$\phi$ is described over $f, \tilde{f}$ by the same parameter (durch den gleichen Parameter beschrieben).
 \end{definition}
+
+
 
 We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 
 \begin{definition}[preserving length]
 	$\phi$ is preserving length $\iff \forall $ curves $c$ in $f(U):$ $\phi(c)$ is as long as $c$
 	
-	[TODO Grafik]
-	
 	$c:I \rightarrow \mathbb{R}^3$ ... curve, then the length of $c$ is defined by $L(c) := \int_{I} ||\dot{c}(t)|| dt$
 \end{definition} 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/preserving_length}
+	\caption{Definition preserving length.}
+	\label{fig:preserving_length}
+\end{figure}	
 
 \begin{lemma}
 	$\phi$ is isometric $\iff \forall \gamma : I \rightarrow U: L(f \circ \gamma) = L(\phi(f \circ \gamma))$.
@@ -1460,20 +1499,35 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 \begin{remark}
 	preserving length $\iff$ preserving angles and preserving area.
 	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/no_length_preserving_exists}
+		\caption{There exists no such length preserving $\phi$.}
+		\label{fig:no_length_preserving_exists}
+	\end{figure}	
 	
 	Stereographic projection are preserving angles.
 	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/stereographic_projection}
+		\caption{Stereographic projections are preserving angles.}
+		\label{fig:stereographic_projection}
+	\end{figure}	
 \end{remark}
 
 \begin{definition}[Triangle mesh]
 	Triangle mesh = polyhedral area (local like open subset of $\mathbb{R}^2$) and all areas are triangles.
 	
-	[TODO Grafik]
-	
 	$T=(V,E,F)$ where $V$ ... vertices, $E$ ... edges, $F$ ... faces
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/triangle_mesh}
+	\caption{Triangles mesh (top) and ones consisting of triangles that are not triangle meshes (bottom).}
+	\label{fig:triangle_mesh}
+\end{figure}	
 
 \begin{remark}
 	$\forall$ polyhedron (Polyeder) that are homeomorph (homöomorph): $F-E+V=2$.
@@ -1491,6 +1545,13 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 		l_{ij} = l_{ji} \forall i, j, k
 	\end{align*}
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/discrete_metric}
+	\caption{Vertices associated to face $f$ in definition of discrete metric.}
+	\label{fig:discrete_metric}
+\end{figure}	
 
 \begin{example}
 	The ''true'' lengths $l_{ij} = ||v_i - v_j||$ of the edges form a discrete metric.
@@ -1514,14 +1575,19 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 	length cross-ration (Längendoppelverhältnis) $LDV(v_i, v_j, v_k, v_m) := \frac{l_{ij}l_{km}}{l_{jk}l_{mi}}$
 \end{definition}
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/length_cross_ratio}
+	\caption{Definition of length cross ratio.}
+	\label{fig:length_cross_ratio}
+\end{figure}
+
 \begin{remark}
 	$a,b,c,d \in \mathbb{C}$ then $LDV(a,b,c,d) = |DV(a,b,c,d)|$
 \end{remark}
 
 \begin{theorem}
 	$(T,l)$ and $(\tilde{T}, \tilde{l})$ are discrete conform equivalent $\iff \forall ik \in E: LDV(v_i, v_j, v_k, v_m) = LDV(\tilde{v_i}, \tilde{v_j}, \tilde{v_k}, \tilde{v_m})$.
-	
-	[TODO Grafik]
 \end{theorem}
 
 \begin{theorem}
@@ -1531,7 +1597,12 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 \begin{remark}
 	In the above theorem we means that when the edges are möbius transformed and then connected with straight edges to get a triangle mesh.
 	
-	[TODO Grafik]
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/moebius_transformation_triangle_mesh}
+		\caption{Möbius transformation of the triangle mesh.}
+		\label{fig:moebius_transformation_triangle_mesh}
+	\end{figure}
 \end{remark}
 
 \begin{proof}
@@ -1569,9 +1640,14 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 	\end{align*}
 	
 	where $\alpha(x,y,z), \beta(x,y,z), \gamma(x,y,z)$ are the angles of the triangle. $x,y,z \in M$.
-	
-	[TODO Grafik]
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/definition_M}
+	\caption{Definition of M and corresponding angles.}
+	\label{fig:definition_M}
+\end{figure}
 
 \begin{lemma}
 	\begin{align*}
@@ -1590,6 +1666,13 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 	\begin{align*}
 		\sin(\alpha) = \frac{\frac{e^x}{2}}{R} \implies 2 R \sin(\alpha) = e^x \implies R = \frac{e^x}{|2 \sin(\alpha)|} \implies \log R = x - \log|2\sin(\alpha)|
 	\end{align*}
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.3\linewidth]{figures/proof_deviation_f}
+		\caption{Figure for side calculation.}
+		\label{fig:proof_deviation_f}
+	\end{figure}
 	
 	Which gives us
 	
@@ -1615,17 +1698,21 @@ We ask our-self when $\phi$ is isometric (isometrisch = längentreu).
 	$\alpha_{jk}^i$
 	
 	Sum of interior angles $\sum_{jk \in star(i)}\alpha_{jk}^i$ where $star(i)$ is the vertex star around the edge $i$.
-	
-	[TODO Grafik]
-	
 \end{definition}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/interior_angle}
+	\caption{Interior angle definition.}
+	\label{fig:interior_angle}
+\end{figure}
 
 Goal: Given a triangle mesh $T, \Phi_i \in \mathbb{R}{>0} \forall i \in V$. We want a triangle mesh $\tilde{T}$, which is conform equivalent to $T$ with sum of interior angles equal to $\Phi_i \forall i \in V$.
 
 \begin{remark}
 	If such a $\tilde{T}$ exists and $\Phi_i = 2\pi \forall i$ ... interior vertex, then $\tilde{T}$ can be thought of as in a plane.
 	
-	[TODO Grafik]
+
 	
 	Let $u \in \mathbb{R}^{\# V}$ with $\tilde{l}_{ij} = e^{u_i/2} e^{u_j/2} l_{ij} = e^{(u_i+u_j)/2} l_{ij}$ are lengths of a triangle mesh.
 	
@@ -1654,6 +1741,11 @@ Goal: Given a triangle mesh $T, \Phi_i \in \mathbb{R}{>0} \forall i \in V$. We w
 	As $E$ is convex there exists such a critical point.
 \end{theorem}
 
-[TODO Grafik]
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/proj_transform_as_color}
+	\caption{Using projective transformations provides better results than affine transformations.}
+	\label{fig:proj_transform_as_color}
+\end{figure}
 
 \end{document}
