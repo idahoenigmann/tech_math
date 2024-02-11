@@ -1,7 +1,7 @@
 \chapter{Principal Component Analysis}
 \label{chapter:principal_component_analysis}
 
-Combining the concepts in section~\ref{chapter:mathematical_basics} we derive the ideas and implementation of PCA.
+Combining the concepts in chapter~\ref{chapter:mathematical_basics} we derive the ideas and implementation of PCA.
 
 Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. The goal is to get more insight and find underlying patterns in the collected data. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
 
@@ -34,7 +34,7 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 	\label{fig:pca_example}
 \end{figure}
 
-Now we derive how to compute PCA. First we formulate a goal and define some assumptions.
+Now we derive the ideas of PCA, as well as the mathematics behind it. First we formulate a goal and define some assumptions.
 
 We assume that the most interesting features are those that have a large variance\footnote{This assumption can be false. For data where the noise has a larger variance than the feature we are trying to observe, PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that:
 \begin{itemize}

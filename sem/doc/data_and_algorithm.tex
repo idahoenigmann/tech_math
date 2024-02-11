@@ -51,7 +51,7 @@ We now describe the general structure of the algorithm from reading the data fil
 
 The EEG data is stored in European data format (EDF) files. They provide a standard for exchanging and storing medical time-series data.
 
-First we split the recorded data into 30 second sections, as is common in sleep stage classification. For each of these sections we get the data as a function of amplitude over time. An example segment is shown in the upper figure of~\ref{fig:example_30s_segment}. We apply a Fourier transformation as described in section~\ref{sec:fourier_transformation} and get a function of amplitude over frequency. This gives a frequency based representation of the data. As the sleep stages are characterized by different frequencies and amplitudes, as described in section~\ref{sec:eeg_data_and_sleep_stages}, this will help us distinguishing them. The output of such an FFT can be seen in the lower figure of~\ref{fig:example_30s_segment}. The pseudo code for this processing is described in algorithm~\ref{alg:process_eeg_data}.
+First we split the recorded data into 30 second sections, as is common in sleep stage classification. For each of these sections we get the data as a function of amplitude over time. An example segment is shown in the upper figure of~\ref{fig:example_30s_segment}. We apply a Fourier transformation as described in section~\ref{sec:fourier_transformation} and get a function of amplitude over frequency. This gives a frequency based representation of the data. As the sleep stages are characterized by different frequencies and amplitudes, as described in section~\ref{sec:eeg_data_and_sleep_stages}, this will help us to distinguish them. The output of such an FFT can be seen in the lower figure of~\ref{fig:example_30s_segment}. The pseudo code for this processing is described in algorithm~\ref{alg:process_eeg_data}.
 
 \begin{algorithm}
 	\caption{EEG data processing}\label{alg:process_eeg_data}
@@ -75,7 +75,7 @@ First we split the recorded data into 30 second sections, as is common in sleep 
 	\centering	
 	\begin{subfigure}[b]{\textwidth}
 		\begin{tikzpicture}
-			\begin{axis}[xlabel=Time (seconds), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+			\begin{axis}[xlabel=Time, x unit=\si\second, ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
 				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_30s_segment1.csv};
 			\end{axis}
 		\end{tikzpicture}
@@ -83,7 +83,7 @@ First we split the recorded data into 30 second sections, as is common in sleep 
 	\vskip\baselineskip
 	\begin{subfigure}[b]{\textwidth}
 		\begin{tikzpicture}
-			\begin{axis}[xlabel=Frequency (Hz), ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
+			\begin{axis}[xlabel=Frequency, x unit=\si\hertz, ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]
 				\addplot+ [no marks, color=black] table[col sep=comma] {figs/example_30s_segment2.csv};
 			\end{axis}
 		\end{tikzpicture}
@@ -94,14 +94,14 @@ First we split the recorded data into 30 second sections, as is common in sleep 
 	\label{fig:example_30s_segment}
 \end{figure}
 
-We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start searching for cluster in the data we want to find a lower dimensional representation. This is were PCA can be used. From the output of algorithm~\ref{alg:pca_of_eeg_data} we get principal components, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages each recording goes through. We show a visual representation of the data in the first three principal components in figure~\ref{fig:pca_output_3d}.
+We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start searching for clusters in the data we want to find a lower dimensional representation. This is were PCA can be used. From the output of algorithm~\ref{alg:pca_of_eeg_data} we get principal components, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages of the different segments in the recording. We show a visual representation of the data in the first three principal components in figure~\ref{fig:pca_output_3d}.
 
 \begin{algorithm}
 	\caption{Apply PCA to the EEG data}\label{alg:pca_of_eeg_data}
 	\begin{algorithmic}
 		\For{each patient}
 			\State Read FFT output from patients file
-			\State Read the sleep stages from another file
+			\State Read sleep stages from another file
 		\EndFor
 		\State Concatenate FFT data of all patients
 		\State Concatenate sleep stages of all patients
@@ -114,7 +114,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 \begin{figure}
 	\centering	
 	\begin{tikzpicture}
-		\begin{axis}[xlabel=principal component 1, ylabel=principal component 2, zlabel=principal component 3, width=0.8\textwidth, height=0.3\textwidth, view/az=-45, view/el=45, legend entries={awake, REM, S3, S2, S1}, legend pos=outer north east, z post scale=3.5]
+		\begin{axis}[xlabel=PC 1, ylabel=PC 2, zlabel=PC 3, width=0.8\textwidth, height=0.3\textwidth, view/az=-45, view/el=45, legend entries={awake, REM, S3, S2, S1}, legend pos=outer north east, z post scale=3.5]
 			\addplot3+ [only marks, mark=x, red] table[col sep=comma] {figs/pca_output_3d_stage_awake.csv};
 			\addplot3+ [only marks, mark=x, black] table[col sep=comma] {figs/pca_output_3d_stage_REM.csv};			
 			\addplot3+ [only marks, mark=x, blue] table[col sep=comma] {figs/pca_output_3d_stage_S3.csv};		

@@ -14,13 +14,13 @@ Many applications are concerned with cyclic temporal data. Examples are sound wa
 	\begin{subfigure}[b]{\textwidth}
 		\begin{tikzpicture}
 			\begin{axis}[xlabel=Time, ylabel=Amplitude, width=\textwidth, height=0.4\textwidth]
-				\addplot+ [domain=0:pi, samples=100, no marks, color=black]{0};
-				\addplot+ [domain=pi:3*pi, samples=100, no marks, color=black]{sin(deg(x)) + 0.5*sin(deg(4*x)) + 0.1*sin(deg(10*x))};
-				\addplot+ [domain=3*pi:15, samples=100, no marks, color=black]{0};
+				\addplot+ [domain=0:pi, samples=100, no marks, color=black, style=solid]{0};
+				\addplot+ [domain=pi:3*pi, samples=100, no marks, color=black, style=solid]{sin(deg(x)) + 0.5*sin(deg(4*x)) + 0.1*sin(deg(10*x))};
+				\addplot+ [domain=3*pi:15, samples=100, no marks, color=black, style=solid]{0};
 				
-				\addplot+ [domain=0:pi+2, samples=100, no marks, color=red]{0};
-				\addplot+ [domain=pi+2:3*pi+2, samples=100, no marks, color=red]{sin(deg(x-2)) + 0.5*sin(deg(4*(x-2))) + 0.1*sin(deg(10*(x-2)))};
-				\addplot+ [domain=3*pi+2:15, samples=100, no marks, color=red]{0};
+				\addplot+ [domain=0:pi+2, samples=100, no marks, color=red, style=solid]{0};
+				\addplot+ [domain=pi+2:3*pi+2, samples=100, no marks, color=red, style=solid]{sin(deg(x-2)) + 0.5*sin(deg(4*(x-2))) + 0.1*sin(deg(10*(x-2)))};section
+				\addplot+ [domain=3*pi+2:15, samples=100, no marks, color=red, style=solid]{0};
 			\end{axis}
 		\end{tikzpicture}
 	\end{subfigure}
@@ -114,7 +114,7 @@ Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the alg
 	\label{fig:k_nearest_neighbors}
 \end{figure}
 
-If there are significantly more data points in a certain category k-nearest-neighbor can be dominated by these categories. As there are more point in the category, they are statistically more common in the k nearest, which leads to k-nearest-neighbor giving bad results.
+If there are significantly more data points in a certain category k-nearest-neighbor can be dominated by these categories. As there are more points in the category, they are statistically more common in the k nearest, which leads to k-nearest-neighbor giving bad results.
 
 Variations of k-nearest-neighbor are achieved by applying a weight to the data points. The weight can depend on the distance between the points.
 

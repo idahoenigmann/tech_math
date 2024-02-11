@@ -7,12 +7,12 @@ In this chapter some limitations of this approach and possible refinements are d
 
 With an accuracy of $68.37\%$ the algorithm proposed gives better results than a comparative one not using PCA. From table~\ref{tab:error_validation} it is apparent that the algorithm can not easily distinguish stages S2 and S3. Furthermore stage S1 is underrepresented in the estimation given by the algorithm.
 
-From the results of chapter~\ref{chapter:results} it is clear, that the algorithm proposed is does not have enough accuracy to be used in a medical setting. The reasons for this could be multitude. For one there is only limited training data. Using a bigger sample of sleep recordings could improve the results achieved. Secondly a different classification algorithm could be tested. From figure~\ref{fig:pca_output_3d} it looks like a linear separation could be possible between the sleep stages S3, S2 and S1. Awake and REM on the other hand appear more difficult so separate from the rest.
+From the results of chapter~\ref{chapter:results} it is clear, that the algorithm proposed does not have enough accuracy to be used in a medical setting. The reasons for this could be multitude. For one there is only limited training data. Using a bigger sample of sleep recordings could improve the results achieved. Secondly a different classification algorithm could be tested. From figure~\ref{fig:pca_output_3d} it looks like a linear separation could be possible between the sleep stages S3, S2 and S1. Awake and REM on the other hand appear more difficult so separate from the rest.
 
 \section{Future Work}
 We propose some improvements for possible future work. One way to get more data is to use more than one channel per sleep recording. There are two options, which we propose. Either all available channels are treated as separate sleep recordings. Comparing different channels might be difficult, but all channels share similar aspects in the different sleep stages. This would provide more training data, but has the disadvantage that the data points would no longer be independent of each other. This would reduces the data quality.
 
-The other option is to construct a higher dimensional input from multiple channels recorded from the same sleep recording. This requires all recordings to have all these channels, as the input dimension of PCA must be fixed. One work around could be to replace the missing data with a fixed value, such as zero.
+The other option is to construct a higher dimensional input from multiple channels recorded from the same sleep recording. This requires all recordings to have all these channels, as the input dimension of PCA must be fixed. One workaround could be to replace the missing data with a fixed value, such as zero.
 
 One could also put more thought into the input of the PCA. Compacting the data by calculating the presence of the signal in each of the rhythms from section~\ref{sec:rhythm_analysis} could be an option.
 
