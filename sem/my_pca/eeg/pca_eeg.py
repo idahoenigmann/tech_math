@@ -30,10 +30,10 @@ def get_data_and_stages(number_list):
 
 if __name__ == "__main__":
     matplotlib.use('TkAgg')
-    PCA = True
-    SHOW_PLOT = True
+    PCA = False
+    SHOW_PLOT = False
 
-    train_input_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16]
+    train_input_numbers = [2, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16]
     val_input_numbers = [1, 3, 6]
 
     train_data, train_sleep_stages = get_data_and_stages(train_input_numbers)
@@ -106,7 +106,7 @@ if __name__ == "__main__":
         visualize_3d(x_data, y_data, z_data, colors, ["pc1", "pc2", "pc3"])
 
     states = ["S3", "S2", "S1", "REM", "awake"]
-    for k in [1, 5, 10, 15, 20, 25, 30, 35]:
+    for k in [10]:
         print(f"k = {k}")
         val_matrix = np.zeros((5, 5))
 
