@@ -34,6 +34,17 @@
 	after skip=\topsep,
 }
 
+\tcolorboxenvironment{theorem}{
+	colback=yellow!5!white,
+	boxrule=0pt,
+	boxsep=1pt,
+	left=2pt,right=2pt,top=2pt,bottom=2pt,
+	oversize=2pt,
+	sharp corners,
+	before skip=\topsep,
+	after skip=\topsep,
+}
+
 \tcolorboxenvironment{definition}{
 	colback=green!5!white,
 	boxrule=0pt,
@@ -546,18 +557,18 @@ Kreuzerlübung.
 \begin{theorem}[Sub-division-property (Unterteilungseigenschaft)]
 	Let $b(t)$ be a bezier curve to $b_0, ..., b_n$ and $\alpha \in \mathbb{R}$.
 	\begin{align*}
-		\tilde{b}(t) := b(\alpha t) & \hat{b}(t) := b((1-\alpha)t + \alpha)
+		\tilde{b}(t) := b(\alpha t) && \hat{b}(t) := b((1-\alpha)t + \alpha)
 	\end{align*}
 	
-	Then $\tilde{b}$ is a bezier curve to $b_0^0(\alpha), b_0^1(\alpha), ..., b_0^n(\alpha)$; $\hat{b}$ is a bezier curve to $b_0^n(\alpha), b_1^{n-i}(\alpha), ..., b_n^0(\alpha)$ and ''glued together'' they result in the original bezier curve.
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.3\linewidth]{figures/sub_division}
-		\caption{bezier curve $b$ is divided at point $b(\alpha)$ into two bezier curves $\tilde{b}$ and $\hat{b}$}
-		\label{fig:sub_division}
-	\end{figure}
+	Then $\tilde{b}$ is a bezier curve to $b_0^0(\alpha), b_0^1(\alpha), ..., b_0^n(\alpha)$; $\hat{b}$ is a bezier curve to $b_0^n(\alpha), b_1^{n-1}(\alpha), ..., b_n^0(\alpha)$ and ''glued together'' they result in the original bezier curve.
 \end{theorem}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/sub_division}
+	\caption{bezier curve $b$ is divided at point $b(\alpha)$ into two bezier curves $\tilde{b}$ and $\hat{b}$}
+	\label{fig:sub_division}
+\end{figure}
 
 \begin{proof}
 	\begin{align*}
@@ -602,7 +613,7 @@ Kreuzerlübung.
 \end{theorem}
 
 \begin{proof}
-	$d := \max_{0 \leq i \leq n} || b_i - b_{i+1}$ ... maximum length of edges of control polygon
+	$d := \max_{0 \leq i \leq n} ||b_i - b_{i+1}||$ ... maximum length of edges of control polygon
 	
 	\begin{figure}[h!]
 		\centering
@@ -626,9 +637,9 @@ Kreuzerlübung.
 
 \section{B-Spline-Curves}
 
-\begin{remark}
+\begin{definition}
 	B-Spline curves are compositions of bezier curves.
-\end{remark}
+\end{definition}
 
 \begin{example}
 	\begin{figure}[h!]
@@ -805,14 +816,14 @@ Kreuzerlübung.
 		\text{parabola}\\
 		\text{hyperbola}
 	\end{cases}$ if $\begin{cases}w<1\\ w=1\\ w>1\end{cases}$.
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.3\linewidth]{figures/nurbs_par_hyp_ellip}
-		\caption{NURBS curve for the different values of $w$}
-		\label{fig:nurbs_par_hyp_ellip}
-	\end{figure}
 \end{theorem}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.3\linewidth]{figures/nurbs_par_hyp_ellip}
+	\caption{NURBS curve for the different values of $w$}
+	\label{fig:nurbs_par_hyp_ellip}
+\end{figure}
 
 \begin{example}
 	Is it possible to make a circle?
