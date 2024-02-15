@@ -50,7 +50,7 @@ The covariance matrix is a symmetric $m\times m$ matrix.
 This is the main theorem we need in order to derive PCA. The proof of this theorem requires some preparation, which we will do now.
 
 \begin{definition}[Eigenvalues and Eigenvectors]
-	Let $\mathbf{A}$ be a real $m\times m$ matrix. $\lambda \in \mathbbm{C}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbbm{C}^m\setminus\{\mathbf{0}\}$ if
+	Let $\mathbf{A}$ be a real $m\times m$ matrix. A complex number $\lambda$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbbm{C}^m\setminus\{\mathbf{0}\}$ if
 	\begin{align}
 		\label{eq:def_eigenvalue}
 		\mathbf{Av} = \lambda \mathbf{v}.
@@ -65,7 +65,7 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 \begin{proof}
 	We can rewrite equation~\ref{eq:def_eigenvalue} as
 	\begin{align*}
-		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}
+		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}.
 	\end{align*}
 	
 	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbbm{C}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbbm{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
@@ -78,12 +78,12 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 \begin{proof}
 	Let $\bar{.}$ denote the complex conjugate. Define a complex dot product
 	\begin{align*}
-		(\mathbf{u}, \mathbf{v}) := \sum_{i=1}^{m} u_i \bar{v_i}
+		(\mathbf{u}, \mathbf{v}) := \sum_{i=1}^{m} u_i \bar{v_i}.
 	\end{align*}
-	This dot product has the following properties for all $\mathbf{A} \in \mathbbm{C}^{m\times m}, \mathbf{u}, \mathbf{v} \in \mathbbm{C}^m, \lambda \in \mathbbm{C}$
+	This dot product has the following properties for all $\mathbf{A} \in \mathbbm{C}^{m\times m}, \mathbf{u}, \mathbf{v} \in \mathbbm{C}^m, \lambda \in \mathbbm{C}$.
 	\begin{itemize}
-		\item $(\mathbf{Au}, \mathbf{v}) = (\mathbf{u}, \mathbf{A}^T\mathbf{v})$,
-		\item $(\lambda \mathbf{u}, \mathbf{v}) = \lambda(\mathbf{u}, \mathbf{v})$,
+		\item $(\mathbf{Au}, \mathbf{v}) = (\mathbf{u}, \mathbf{A}^T\mathbf{v})$
+		\item $(\lambda \mathbf{u}, \mathbf{v}) = \lambda(\mathbf{u}, \mathbf{v})$
 		\item $(\mathbf{u}, \lambda \mathbf{v}) = \bar{\lambda} (\mathbf{u}, \mathbf{v})$
 		\item $(\mathbf{u}, \mathbf{u}) = 0 \iff \mathbf{u} = 0$
 	\end{itemize}
@@ -132,12 +132,12 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 			0 & \lambda_2 & \cdots & 0\\
 			\vdots & \vdots & \ddots & \vdots\\
 			0 & 0 & \cdots & \lambda_m
-		\end{matrix}\right) &&
+		\end{matrix}\right), &&
 		\mathbf{V} := \left(\begin{matrix}
 			& & &\\
 			\mathbf{v}_1 & \mathbf{v}_2 & \cdots & \mathbf{v}_m\\
 			& & &\\
-		\end{matrix}\right)
+		\end{matrix}\right).
 	\end{align*}
 	
 	The definition of eigenvalues and eigenvectors gives us
@@ -150,7 +150,7 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 		\end{matrix}\right) = \mathbf{VD}.
 	\end{align}
 	
-	From lemma~\ref{lem:symmetric_matrix_eigenvector_orthogonal} we know that the eigenvectors, and therefore the columns of $\mathbf{V}$, are orthogonal. It follows that $rank(\mathbf{V}) = m$ which gives us the existence of $\mathbf{V}^{-1}$.
+	From lemma~\ref{lem:symmetric_matrix_eigenvector_orthogonal} we know that the eigenvectors, and therefore the columns of $\mathbf{V}$, are orthogonal. It follows that rank$(\mathbf{V}) = m$ which gives us the existence of $\mathbf{V}^{-1}$.
 	
 	Rearranging equation~\ref{eq:diagonalizable} now gives us $\mathbf{A} = \mathbf{VDV}^{-1}$ which is what we wanted to show.
 	
@@ -169,8 +169,8 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 	
 	\begin{align*}
 		\forall i,j: \mathbf{a}_i^T\mathbf{a}_j = \begin{cases}
-			1 & \text{if } i=j\\
-			0 & \text{otherwise}
+			1, & \text{if } i=j,\\
+			0, & \text{otherwise.}
 		\end{cases} \implies \mathbf{A}^T\mathbf{A} = \mathbf{I}
 	\end{align*}
 	

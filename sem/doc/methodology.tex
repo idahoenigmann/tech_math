@@ -6,7 +6,7 @@ For the main algorithm of this work from section~\ref{chapter:data_and_algorithm
 \section{Fourier Transformation}
 \label{sec:fourier_transformation}
 
-Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most of the time we are not interested in the amplitude at a specific point in time, as a temporal shift would represent a very similar information. Such a shift is demonstrated in figure~\ref{fig:tempoal_shift}.
+Many applications are concerned with cyclic temporal data. Examples are sound waves or EEG data. This data can be represented as a function of amplitude over time. Most of the time we are not interested in the amplitude at a specific point in time, as a temporal shift would represent very similar information. Such a shift is demonstrated in figure~\ref{fig:tempoal_shift}.
 
 \begin{figure}
 	\centering
@@ -44,7 +44,7 @@ We describe one approach to achieve this representation as a sum of $\sin$ funct
 				\State $X_{N/2, ..., N-1} \gets FFT(x+s, N/2, 2s)$
 				\For{$k=0$ to $N/2-1$}
 					\State $p \gets X_k$
-					\State $q \gets exp(-2\pi i/N k) X_{k+N/2}$
+					\State $q \gets \exp(-2\pi i/N k) X_{k+N/2}$
 					\State $X_k \gets p + q$
 					\State $X_{k+N/2} \gets p - q$
 				\EndFor

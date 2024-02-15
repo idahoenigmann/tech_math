@@ -54,6 +54,13 @@
 		conv(M) := \{\sum_{i=0}^{n} \lambda_i v_i: v_i \in M, \lambda_i \geq 0, \sum_{i=0}^{n} \lambda_i = 1, n\in \mathbb{N}\}
 	\end{align*}
 \end{definition}
+
+\begin{definition}[Described by Same Parameter]
+	$\phi$ is described over $f$, $\tilde{f}$ by the same parameter, iff $f,\tilde{f}$ ... bij.
+	\begin{align*}
+		\phi: f(U) \rightarrow \tilde{f}(U), x \mapsto \tilde{f} \circ f^{-1}(x)
+	\end{align*}
+\end{definition}
 	
 \section{Parameterized Curves}
 
@@ -81,6 +88,18 @@
 	$c(t)$ with $\dot{\kappa}(t) = 0$
 \end{definition}
 	
+\begin{definition}[Length]
+	\begin{align*}
+		L(c) := \int_I ||\dot{c}(t)|| dt
+	\end{align*}
+\end{definition}
+
+\begin{definition}[Isometric = Preserving Length]
+	\begin{align*}
+		\forall c:I\rightarrow M: L(\phi(c)) = L(c)
+	\end{align*}
+\end{definition}
+
 \section{Bezier Curves}
 
 \begin{algorithm}[of de Casteljou]
@@ -106,7 +125,7 @@
 	$B_l^j(t) = (1-t)B_l^{j-1}(t) + t B_{l-1}^{j-1}(t)$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma}[Properties of Bernstein Polynomials]
 	\begin{align*}
 		\sum_{i=1}^{n} B_i^n(t) = 1\\
 		t \in [0, 1] \implies B_i^n(t) \geq 0\\
@@ -122,7 +141,7 @@
 	\end{align*}
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma}[Tangent of Bezier Curves]
 	\begin{align*}
 		\dot{b}(t) = n(b_1^{n-1}(t) - b_0^{n-1}(t))
 	\end{align*}
@@ -152,6 +171,7 @@
 	\end{align*}
 \end{theorem}
 
+\newpage
 \begin{theorem}[Sub-division property]
 	\begin{align*}
 		\tilde{b}(t) := b(\alpha t) && \hat{b}(t) := b((1-\alpha)t + \alpha)
@@ -195,7 +215,7 @@
 	\end{align*}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}[Properties of B-Spline Base Functions]
 	\begin{align*}
 		\sum_{i=0}^{m} N_i^n(t) = 1 && N_i^n(t) \geq 0
 	\end{align*}
@@ -256,11 +276,11 @@
 \begin{algorithm}[Chaikin]
 	copy once, average twice
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\linewidth]{figures/chaikin_short}
-		\caption{Chaikin}
-	\end{figure}
+%	\begin{figure}[h!]
+%		\centering
+%		\includegraphics[width=0.4\linewidth]{figures/chaikin_short}
+%		\caption{Chaikin}
+%	\end{figure}
 	
 	\begin{itemize}
 		\item $\rightarrow$ quadratic B-Spline
@@ -273,11 +293,11 @@
 \begin{algorithm}[Lane-Riesenfeld]
 	copy once, average $n$ times
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\linewidth]{figures/lane_riesenfeld_short}
-		\caption{Lane-Riesenfeld}
-	\end{figure}
+%	\begin{figure}[h!]
+%		\centering
+%		\includegraphics[width=0.4\linewidth]{figures/lane_riesenfeld_short}
+%		\caption{Lane-Riesenfeld}
+%	\end{figure}
 	
 	\begin{itemize}
 		\item $\rightarrow$ B-Spline of degree $n$
@@ -291,11 +311,11 @@
 	$p_i^0 := p_i$\\
 	$p_i^l := -\frac{1}{16} p_{i-1}^{l-1} + \frac{9}{16} p_i^{l-1} + \frac{9}{16} p_{i+1}^{l-1} - \frac{1}{16} p_{i+2}^{l-1}$
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\linewidth]{figures/four_point_short}
-		\caption{Four Point Scheme}
-	\end{figure}
+%	\begin{figure}[h!]
+%		\centering
+%		\includegraphics[width=0.4\linewidth]{figures/four_point_short}
+%		\caption{Four Point Scheme}
+%	\end{figure}
 	
 	\begin{itemize}
 		\item $\rightarrow C^1$ curve
@@ -312,7 +332,7 @@
 	
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=0.5\linewidth]{figures/loop_short}
+		\includegraphics[width=0.4\linewidth]{figures/loop_short}
 		\caption{Loop}
 	\end{figure}
 	
@@ -324,12 +344,13 @@
 	\end{itemize}
 \end{algorithm}
 
+\newpage
 \begin{algorithm}[Modified Butterfly]
 	triangle mesh
 	
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=0.5\linewidth]{figures/modified_butterfly_short}
+		\includegraphics[width=0.4\linewidth]{figures/modified_butterfly_short}
 		\caption{Modified Butterfly}
 	\end{figure}
 	
@@ -345,7 +366,7 @@
 	
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=0.5\linewidth]{figures/catmull_clark_short}
+		\includegraphics[width=0.4\linewidth]{figures/catmull_clark_short}
 		\caption{Catmull Clark}
 	\end{figure}
 	
@@ -361,7 +382,7 @@
 	
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=0.5\linewidth]{figures/doo_sabin_short}
+		\includegraphics[width=0.4\linewidth]{figures/doo_sabin_short}
 		\caption{Doo Sabin}
 	\end{figure}
 	
@@ -375,11 +396,11 @@
 \begin{algorithm}[Kobbelt]
 	square mesh
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.5\linewidth]{figures/kobbelt_short}
-		\caption{Kobbelt}
-	\end{figure}
+%	\begin{figure}[h!]
+%		\centering
+%		\includegraphics[width=0.4\linewidth]{figures/kobbelt_short}
+%		\caption{Kobbelt}
+%	\end{figure}
 	
 	four point scheme horizontal or vertical, then four point scheme on results
 	
@@ -389,5 +410,71 @@
 		\item face splitting
 	\end{itemize}
 \end{algorithm}
+
+\section{Conformal Pattern Matching}
+
+\begin{definition}[Möbius Transformation]
+	Composition of reflections on hyper-sphere.
+\end{definition}
+
+\begin{definition}[Reflection on Sphere]
+	\begin{align*}
+		\tilde{\omega} := \frac{r^2}{||\omega||^2} \omega && \tilde{0} := \infty && \tilde{\infty} := 0
+	\end{align*}
+\end{definition}
+
+\begin{definition}[Cross Ratio]
+	\begin{align*}
+		DV(a,b,c,d) := \frac{(a-b)(c-d)}{(b-c)(d-a)} \in \mathbb{C}
+	\end{align*}
+\end{definition}
+
+\begin{theorem}
+	Cross Ratio is invariant under Möbius transformations.
+\end{theorem}
+
+\begin{theorem}
+	Möbius transformations preserve angles (=conformal) and circles.
+\end{theorem}
+
+\begin{definition}[Discrete Metric]
+	\begin{align*}
+		L:E \rightarrow \mathbb{R}_{\geq 0}\\
+		\forall f \in F: l_{ij} \leq l_{jk} + l_{ki}, l_{jk} \leq l_{ki} + l_{ij}, l_{ki} \leq l_{ij} + l_{jk}, l_{ij} = l_{ji}
+	\end{align*}
+\end{definition}
+
+\begin{definition}[Discrete Conform Equivalent]
+	
+	$T, \tilde{T}$ .. combinatorial equivalent triangle meshes with
+	
+	\begin{align*}
+		\exists \lambda: E \rightarrow \mathbb{R}_{\geq 0} \forall (i,j) \in E: \tilde{l}_{ij} = \lambda_i \lambda_j l_{ij}
+	\end{align*}
+\end{definition}
+
+\begin{definition}[Length Cross Ratio]
+	\begin{align*}
+		LDV(v_i, v_j, v_k, v_m) := \frac{l_{ij} l_{km}}{l_{jk} l_{mi}}
+	\end{align*}
+\end{definition}
+
+\begin{lemma}
+	$(T,l), (\tilde{T}, \tilde{l})$ are discrete conformal equivalent, iff $LDV(v_i, v_j, v_k, v_m) = LDV(\tilde{v}_i, \tilde{v}_j, \tilde{v}_k, \tilde{v}_m)$
+\end{lemma}
+
+\begin{lemma}
+	$T$ ... triangle mesh, $l_{ij} := ||v_i - v_j||$, $m$ ... Möbius transformation, then $T, m(T)$ are discrete conformal equivalent.
+\end{lemma}
+
+\begin{theorem}
+	Let $T$ be a triangle mesh and $\Phi_i \geq 0 \forall i \in V$.
+	
+	There exists a discrete conformal equivalent triangle mesh $\tilde{T}$, such that the sum of interior angles is $\Phi_i \forall i \in V$.
+\end{theorem}
+
+\begin{proof}
+	There is a function $E(u)$ with $\frac{dE(u)}{du_i} = \Phi_i - \sum_{jk \in star(i)} \alpha_{jk}^i$, that can be extended to be a convex function on $\mathbb{R}^{\#V}$. Finding the critical points, that exist as $E(u)$ is convex, gives us the equivalent mesh $\tilde{T}$.
+\end{proof}
 
 \end{document}

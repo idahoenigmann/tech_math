@@ -3,7 +3,7 @@
 
 Combining the concepts in chapter~\ref{chapter:mathematical_basics} we derive the ideas and implementation of PCA.
 
-Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create a $m \times n$ matrix of this data. The goal is to get more insight and find underlying patterns in the collected data. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$ axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
+Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create an $m \times n$ matrix of this data. The goal is to get more insight and find underlying patterns in the collected data. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$-axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
 
 \begin{figure}
 	\centering
@@ -20,7 +20,7 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 	\centering
 	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/some_nice_data_pc}
-		\caption{Normed data (mean is zero and variance is one) and direction of the two principal components (PC1, PC2) in relation to the x and y position.}
+		\caption{Normed data (mean is zero and variance is one) and direction of the two principal components (PC1, PC2) in relation to the $x$ and $y$ position.}
 		\label{fig:some_nice_data_pc}
 	\end{subfigure}
 	\hfill
@@ -36,10 +36,10 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 
 Now we derive the ideas of PCA, as well as the mathematics behind it. First we formulate a goal and define some assumptions.
 
-We assume that the most interesting features are those that have a large variance\footnote{This assumption can be false. For data where the noise has a larger variance than the feature we are trying to observe, PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that:
+We assume that the most interesting features are those that have a large variance\footnote{This assumption can be false. For data where the noise has a larger variance than the feature we are trying to observe, PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that
 \begin{itemize}
-	\item the variance in the each axis is as large as possible.
-	\item the axis are all orthogonal to each other.
+	\item the variance in the each axis is as large as possible,
+	\item the axis are all orthogonal to each other,
 	\item the axis are sorted (descending) by the variance in the axis.
 \end{itemize}
 
@@ -49,7 +49,7 @@ From this we gather that another assumption is, that the axis are orthogonal. La
 	\centering
 	\begin{subfigure}{0.8\linewidth}
 		\includegraphics[width=\textwidth]{figs/pca_fails_nonlinear}
-		\caption{Clearly the relationship in this figure is non-linear. PCA can not describe circular dependencies, as shown in this data.}
+		\caption{Clearly the relationship in this figure is non-linear. PCA cannot describe circular dependencies, as shown in this data.}
 		\label{fig:pca_fails_nonlinear}
 	\end{subfigure}
 	\hfill
@@ -80,7 +80,7 @@ Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find
 
 \begin{align*}
 	\mathbf{C}_{\mathbf{Y}} = \frac{1}{n}\mathbf{YY}^T = \frac{1}{n}(\mathbf{PX})(\mathbf{PX})^T = \frac{1}{n}\mathbf{PX}\mathbf{X}^T\mathbf{P}^T =\\
-	= \mathbf{P}(\frac{1}{n}\mathbf{X}\mathbf{X}^T)\mathbf{P}^T = \mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T
+	= \mathbf{P}\left(\frac{1}{n}\mathbf{X}\mathbf{X}^T\right)\mathbf{P}^T = \mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T
 \end{align*}
 
 The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a decomposition into an orthogonal matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{D}$. We choose $\mathbf{P}=\mathbf{V}^T$. From lemma~\ref{lem:inverse_is_transpose} it follows that $\mathbf{V}^{-1} = \mathbf{V}^T$.

@@ -122,11 +122,11 @@ We now have high dimensional data points, as each 30 second segment is represent
 			\addplot3+ [only marks, mark=x, yellow] table[col sep=comma] {figs/pca_output_3d_stage_S1.csv};
 		\end{axis}
 	\end{tikzpicture}	
-	\caption{Three dimensional representation of the data. Each 30 second segment is represented by a dot in the color corresponding to the sleep stage this segment is assigned to.}
+	\caption{Three dimensional representation of the data. Each 30 second segment is represented by a cross in the color corresponding to the sleep stage this segment is assigned to.}
 	\label{fig:pca_output_3d}
 \end{figure}
 
-If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of principal components. Lastly we can get a estimate of the sleep stage by using the k-nearest-neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
+If we have a new recording and want to know the sleep stages we have to follow similar steps. First the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of principal components. Lastly we can get an estimate of the sleep stage by using the k-nearest-neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
 \begin{algorithm}
 	\caption{Get estimate for sleep stage}\label{alg:gues_sleep_stage}

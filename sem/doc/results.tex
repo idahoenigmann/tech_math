@@ -6,7 +6,7 @@ In this chapter we will analyze with which accuracy the algorithm from chapter~\
 \section{Compression of Data}
 From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
 
-To do this we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, or in other words information, the PCA can successfully be used as a way to reduce dimensions.
+To do this we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, the PCA can successfully be used as a way to reduce dimensions.
 
 \begin{table}
 	\centering
@@ -51,7 +51,7 @@ We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref
 \begin{table}
 	\centering
 	\begin{tabular}{c|c|c}
-		k & accuracy with PCA & accuracy without PCA \\
+		$k$ & accuracy with PCA & accuracy without PCA \\
 		\hline
 		1  & 59.67\% & 50.80\% \\
 		5  & 65.57\% & 56.13\% \\
@@ -62,7 +62,7 @@ We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref
 		30 & 68.18\% & 56.89\% \\
 		35 & 68.28\% & 56.73\% \\
 	\end{tabular}
-	\caption{Overview of accuracy achieved with different values for k of k-nearest-neighbor.}
+	\caption{Overview of accuracy achieved with different values for $k$ of k-nearest-neighbor.}
 	\label{tab:error_validation_overview}
 \end{table}
 
@@ -94,11 +94,11 @@ Using $k=10$ yields the best outcome in this limited validation set. Out of 3187
 		\end{tabular}
 	\end{subtable}
 	
-	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=20$.}
+	\caption{The left table shows output for the algorithm using PCA, while the right table is from the algorithm that does not use PCA. Both tables show the number of sleep stages assigned to each stage, with the true value corresponding to the column and the estimate from the algorithm corresponding to the row. For both tables $k=10$.}
 	\label{tab:error_validation}
 \end{table}
 
-The results form this section might change when different patients are chosen for the validation data, as not all recordings might have the same quality.
+The results from this section might change when different patients are chosen for the validation data, as not all recordings might have the same quality.
 
 
 \section{Rhythm Analysis}
@@ -107,13 +107,13 @@ The results form this section might change when different patients are chosen fo
 There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
 
 \begin{itemize}
-	\item Alpha: 8 - 12 Hz
-	\item Beta: 18 - 30 Hz
-	\item Theta: 4 - 7 Hz
-	\item Delta: $<$ 4 Hz
+	\item Beta: 18 - 30 Hz,
+	\item Alpha: 8 - 12 Hz,
+	\item Theta: 4 - 7 Hz,
+	\item Delta: $<$ 4 Hz.
 \end{itemize}
 
-It is easy to analyze the presence of these rhythms when looking at the fourier transformed data, as shown in figure~\ref{fig:eeg_with_rhythm}.
+It is easy to analyze the presence of these rhythms when looking at the Fourier transformed data, as shown in figure~\ref{fig:eeg_with_rhythm}.
 
 We can now see if the output of the PCA gives importance to these rhythms. In figure~\ref{fig:pc_analysis} the sum of the absolute values of the first 24 principal components is shown. We chose 24 as from table~\ref{tab:explained_variance} we gather that 90\% of the variance is preserved. The most emphasis is given on the values from the theta rhythm. This was expected as the amplitudes in the FFT output are the highest in this region and we did not normalize the data before doing PCA.
 
