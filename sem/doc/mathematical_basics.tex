@@ -1,12 +1,12 @@
 \chapter{Mathematical Basics}
 \label{chapter:mathematical_basics}
 
-We define mathematical notation, which will be used in Section~\ref{chapter:principal_component_analysis} to define PCA.
+\color{change} We give an overview of mathematical notation, which will be used in Section~\ref{chapter:principal_component_analysis} to define PCA. Definitions of covariance and theorems regarding diagonalizable matrices along with their proves are given. \color{black}
 
 \section{Covariance}
 \label{sec:covariance}
 
-Assume we have two sets of $n$ observations of variables with mean $0$. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)$ and the second $\mathbf{b} = (b_1, ..., b_n)$.
+Assume we have two sets of $n$ observations of variables with mean $0$. Let us call the first list of observations $\mathbf{a} = (a_1, ..., a_n)^T$ and the second $\mathbf{b} = (b_1, ..., b_n)^T$.
 
 \begin{definition}[Covariance]
 	Let us define the \textit{covariance} of $\mathbf{a} \in \mathbbm{R}^n$ and $\mathbf{b} \in \mathbbm{R}^n$ as
@@ -18,39 +18,40 @@ Assume we have two sets of $n$ observations of variables with mean $0$. Let us c
 From the definition it is obvious, that the covariance is symmetric, $\sigma_{\mathbf{ab}} = \sigma_{\mathbf{ba}}$. In the special case $\mathbf{a} = \mathbf{b}$ the covariance $\sigma_{\mathbf{aa}}$ is called \textit{variance} $\sigma_{\mathbf{a}}^2$.
 
 \begin{definition}[Covariance Matrix]
-	Generalizing to $m$ variables $\mathbf{X} = (\mathbf{x_1}, ..., \mathbf{x_m})$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
+	Generalizing to $m$ variables $\mathbf{X} = (\mathbf{x}_1, ..., \mathbf{x}_m) \in \mathbbm{R}^m$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
 	
 	\begin{align*}
 		\mathbf{C_X} := \left(\begin{matrix}
 			\sigma_{\mathbf{x_1x_1}}	& \cdots & \sigma_{\mathbf{x_1x_m}}	\\
 			\vdots						& \ddots & \vdots					\\
 			\sigma_{\mathbf{x_mx_1}}	& \cdots & \sigma_{\mathbf{x_mx_m}}	\\
-		\end{matrix}\right) = \frac{1}{n} \mathbf{X}\mathbf{X}^T
+		\end{matrix}\right) = \frac{1}{n} \mathbf{X}\mathbf{X}^T \in \mathbbm{R}^{m\times m}
 	\end{align*}
 \end{definition}
 
-The covariance matrix is a symmetric $m\times m$ matrix.
+The covariance matrix is a symmetric matrix.
 
 \section{Diagonalizable Matrix}
 \label{sec:diagonalizable_matrix}
 
 \begin{definition}[Diagonalizable Matrix]
-	A square matrix $\mathbf{A}$ is called \textit{diagonalizable}, if there exists an invertable matrix $\mathbf{P}$ and a diagonal matrix $\mathbf{D}$ such that $\mathbf{A} = \mathbf{P}\mathbf{D}\mathbf{P}^{-1}$.
+	A square matrix $\mathbf{A} \in \mathbbm{R}^{n \times n}$ is called \textit{diagonalizable}, if there exists an invertable matrix $\mathbf{P} \in \mathbbm{R}^{n \times n}$ and a diagonal matrix $\mathbf{D} \in \mathbbm{R}^{n \times n}$ such that $\mathbf{A} = \mathbf{P}\mathbf{D}\mathbf{P}^{-1}$.
 \end{definition}
 
 \begin{definition}[Symmetric matrix]
 	A square matrix $\mathbf{A}$ is called \textit{symmetric}, if $\mathbf{A}^T = \mathbf{A}$.
 \end{definition}
 
+\newpage
 \begin{theorem}
 	\label{th:symmetric_matrix_diagonalizable}
 	Every symmetric matrix is diagonalizable.
 \end{theorem}
 
-This is the main theorem we need in order to derive PCA. The proof of this theorem requires some preparation, which we will do now.
+This is the main theorem we need in order to derive PCA. The proof of this theorem requires some preparation, which we will \color{change} present \color{black} now.
 
 \begin{definition}[Eigenvalues and Eigenvectors]
-	Let $\mathbf{A}$ be a real $m\times m$ matrix. A complex number $\lambda$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbbm{C}^m\setminus\{\mathbf{0}\}$ if
+	Let $\mathbf{A} \in \mathbbm{R}^{m\times m}$ be a matrix. A number $\lambda \in \mathbbm{C}$ is called a \textit{eigenvalue} with \textit{eigenvector} $\mathbf{v} \in \mathbbm{C}^m\setminus\{\mathbf{0}\}$ if
 	\begin{align}
 		\label{eq:def_eigenvalue}
 		\mathbf{Av} = \lambda \mathbf{v}.
@@ -59,7 +60,7 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 
 \begin{lemma}
 	\label{lem:existence_eigenvalues}
-	Every square $m\times m$ matrix has $m$ (not necessarily unique) eigenvalues.
+	Every square matrix $\mathbf{A} \in \mathbbm{R}^{m\times m}$ has $m$ (not necessarily unique) eigenvalues.
 \end{lemma}
 
 \begin{proof}
@@ -68,7 +69,7 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 		(\mathbf{A} - \lambda \mathbf{I})\mathbf{v} = \mathbf{0}.
 	\end{align*}
 	
-	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbbm{C}^m$. For $\lambda$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\ker(\mathbf{A} - \lambda \mathbf{I}) \neq \{\mathbf{0}\}$ are eigenvalues. We know this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbbm{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
+	This allows us to interpret $(\mathbf{A}-\lambda \mathbf{I})$ as a function, which takes vectors $\mathbf{v} \in \mathbbm{C}^m$. For $\lambda \in \mathbbm{C}$ to be a eigenvalue of $\mathbf{A}$ with eigenvector $\mathbf{v}$ it has to satisfy $\mathbf{v} \in \ker(\mathbf{A} - \lambda \mathbf{I})$ and $\mathbf{v} \neq 0$. From this we gather that all $\lambda$ with $\dim(\ker(\mathbf{A} - \lambda \mathbf{I})) > 0$ are eigenvalues. We know this holds if and only if $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. The determinant is a polynomial of degree $m$ which can be expressed in the form $(\lambda - \lambda_1)...(\lambda - \lambda_m)$ with $\lambda_1, ..., \lambda_m \in \mathbbm{C}$. These $\lambda_1, ..., \lambda_m$ are the $m$ eigenvalues we wanted to find.
 \end{proof}
 
 \begin{lemma}
@@ -81,12 +82,10 @@ This is the main theorem we need in order to derive PCA. The proof of this theor
 		(\mathbf{u}, \mathbf{v}) := \sum_{i=1}^{m} u_i \bar{v_i}.
 	\end{align*}
 	This dot product has the following properties for all $\mathbf{A} \in \mathbbm{C}^{m\times m}, \mathbf{u}, \mathbf{v} \in \mathbbm{C}^m, \lambda \in \mathbbm{C}$.
-	\begin{itemize}
-		\item $(\mathbf{Au}, \mathbf{v}) = (\mathbf{u}, \mathbf{A}^T\mathbf{v})$
-		\item $(\lambda \mathbf{u}, \mathbf{v}) = \lambda(\mathbf{u}, \mathbf{v})$
-		\item $(\mathbf{u}, \lambda \mathbf{v}) = \bar{\lambda} (\mathbf{u}, \mathbf{v})$
-		\item $(\mathbf{u}, \mathbf{u}) = 0 \iff \mathbf{u} = 0$
-	\end{itemize}
+	
+	\begin{align*}
+		(\mathbf{Au}, \mathbf{v}) = (\mathbf{u}, \mathbf{A}^T\mathbf{v}), && (\lambda \mathbf{u}, \mathbf{v}) = \lambda(\mathbf{u}, \mathbf{v}), && (\mathbf{u}, \lambda \mathbf{v}) = \bar{\lambda} (\mathbf{u}, \mathbf{v}), && (\mathbf{u}, \mathbf{u}) = 0 \iff \mathbf{u} = 0.
+	\end{align*}
 	
 	Let $\mathbf{A}$ be a symmetric matrix with eigenvalue $\lambda \in \mathbbm{C}$.
 	
@@ -107,7 +106,7 @@ Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existe
 \end{lemma}
 
 \begin{proof}
-	Let $\lambda_1, \lambda_2$ be two distinct eigenvalues with eigenvectors $\mathbf{v}_1, \mathbf{v}_2$ of the matrix $\mathbf{A}$.
+	Let $\lambda_1, \lambda_2$ be two distinct eigenvalues with eigenvectors $\mathbf{v}_1, \mathbf{v}_2$ of the matrix $\mathbf{A}$ respectively.
 	
 	\begin{align*}
 		\lambda_1 \mathbf{v}_1 \cdot \mathbf{v}_2 = (\lambda_1\mathbf{v}_1)^T \mathbf{v}_2 = (\mathbf{Av}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T \mathbf{A}^T \mathbf{v}_2 =\\
@@ -117,7 +116,7 @@ Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existe
 	This shows $(\lambda_1 - \lambda_2) \mathbf{v}_1 \cdot \mathbf{v}_2 = 0$ and as $\lambda_1$ and $\lambda_2$ are distinct, $\mathbf{v}_1$ and $\mathbf{v}_2$ must be orthogonal.
 \end{proof}
 
-What if the eigenvalues of the matrix are not distinct? In the proof of lemma~\ref{lem:existence_eigenvalues} we showed that every $\mathbf{v} \in \ker(\mathbf{A} - \lambda\mathbf{I}) \setminus \{\mathbf{0}\}$ is a eigenvector. If and only if $(\lambda - \lambda_i)$ appears $k \geq 2$ times in the determinant of $(\mathbf{A} - \lambda\mathbf{I})$ then $\mathbf{A}$ has a non unique eigenvalue $\lambda_i$. As $\dim(\ker(\mathbf{A} - \lambda_i\mathbf{I})) = k$ we can choose orthogonal eigenvectors. 
+What if the eigenvalues of the matrix are not distinct? In the proof of lemma~\ref{lem:existence_eigenvalues} we showed that every $\mathbf{v} \in \ker(\mathbf{A} - \lambda\mathbf{I}) \setminus \{\mathbf{0}\}$ is an eigenvector. If and only if $(\lambda - \lambda_i)$ appears $k \geq 2$ times in the determinant of $(\mathbf{A} - \lambda\mathbf{I})$ then $\mathbf{A}$ has a non unique eigenvalue $\lambda_i$. As ${\dim(\ker(\mathbf{A} - \lambda_i\mathbf{I})) = k}$ we can choose orthogonal eigenvectors. 
 
 
 Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagonalizable}. 

@@ -3,13 +3,10 @@
 
 In this chapter some limitations of this approach and possible refinements are discussed.
 
-\section{Limitations of the Algorithm}
-
 With an accuracy of $68.37\%$ the algorithm proposed gives better results than a comparative one not using PCA. From table~\ref{tab:error_validation} it is apparent that the algorithm cannot easily distinguish stages S2 and S3. Furthermore stage S1 is underrepresented in the estimation given by the algorithm.
 
 From the results of chapter~\ref{chapter:results} it is clear that the algorithm proposed does not have enough accuracy to be used in a medical setting. The reasons for this could be multitude. For one there is only limited training data. Using a bigger sample of sleep recordings could improve the results achieved. Secondly a different classification algorithm could be tested. From figure~\ref{fig:pca_output_3d} it looks like a linear separation could be possible between the sleep stages S3, S2 and S1. Awake and REM on the other hand appear more difficult to separate from the rest.
 
-\section{Future Work}
 We propose some improvements for possible future work. One way to get more data is to use more than one channel per sleep recording. There are two options, which we propose. Either all available channels are treated as separate sleep recordings. Comparing different channels might be difficult, but all channels share similar aspects in the different sleep stages. This would provide more training data, but has the disadvantage that the data points would no longer be independent of each other. This would reduce the data quality.
 
 The other option is to construct a higher dimensional input from multiple channels recorded from the same sleep recording. This requires all recordings to have all these channels, as the input dimension of PCA must be fixed. One workaround could be to replace the missing data with a fixed value, such as zero.
@@ -18,6 +15,6 @@ One could also put more thought into the input of the PCA. Compacting the data b
 
 The data points depend on each other, as not every change from one sleep stage to another is equally likely. For example typically the recording start with the patient still awake and then proceeding to sleep stages S1, S2 and S3. The REM stage often only appears later. The information of the last sleep stage could be used as input in estimating the next sleep stage.
 
-Lastly the classification algorithm used could be changed. Using k-nearest-neighbors works best if there are about equally many data points in each category. This is not the case in the CAP Sleep Database, as not all sleep stages appear equally often.
+Lastly the classification algorithm used could be changed. Using $k$-nearest-neighbors works best if there are about equally many data points in each category. This is not the case in the CAP Sleep Database, as not all sleep stages appear equally often.
 
-Overall this work aims to give a good starting point for further investigation of sleep stage classification.
+Overall this work aims to give a good starting point for further investigation of sleep stage classification. The mathematical foundation of PCA and its usage in this context was thoroughly explored. Further research is still needed, in order to improve the accuracy to an acceptable level.

@@ -1,12 +1,12 @@
 \chapter{Results}
 \label{chapter:results}
 
-In this chapter we will analyze with which accuracy the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the principal components of the PCA use the same frequencies.
+In this chapter we will analyze the accuracy of the algorithm from chapter~\ref{chapter:data_and_algorithm} classifies sleep stages. We will have a look into which frequencies differ most between the stages and whether the principal components of the PCA use the same frequencies.
 
 \section{Compression of Data}
 From section~\ref{chapter:principal_component_analysis} we know that it is possible to use PCA to reduce dimensions. We want to know how much information is still present in the compressed data. This can be calculated by testing how many dimensions it takes to retain a certain amount of variance in the data.
 
-To do this we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, the PCA can successfully be used as a way to reduce dimensions.
+To do this, we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, the PCA can successfully be used as a way to reduce dimensions.
 
 \begin{table}
 	\centering
@@ -22,16 +22,16 @@ To do this we find the first index for which the sum of eigenvalues up to this i
 	\label{tab:explained_variance}
 \end{table}
 
-We assume that most of the variance in the data stems from information in the EEG signal. Some variance might be caused by outliers. If we assume that about 90\% of variance is caused by actual information we reduce the data to 24 dimensions.
+We assume that most of the variance in the data stems from information in the EEG signal, some variance might be caused by outliers. If we assume that about 90\% of variance is caused by actual information we reduce the data to 24 dimensions.
 
 \section{Testing the Accuracy}
 From this section on, accuracy refers to the percentage of data points classified as the correct sleep stage when given a new sleep recording.
 
 To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
 
-First the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both the training and validation data are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly we use the k-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. The pseudo code for this is algorithm~\ref{alg:gues_sleep_stage}.
+First, the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both, the training and validation data, are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly, we use the $k$-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. The pseudo code for this is algorithm~\ref{alg:gues_sleep_stage}.
 
-When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage} the algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
+When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage}, algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
 \begin{algorithm}
 	\caption{Get estimate for sleep stage without PCA}\label{alg:gues_sleep_stage_without_PCA}
@@ -40,13 +40,13 @@ When randomly guessing the sleep stage we expect an accuracy of 20\%, as there a
 		\For{each 30s segment}
 		\State Do FFT on the segment
 		\State Do k nearest neighbor
-		\State Save the result of k nearest neighbor
+		\State Save the result of $k$ nearest neighbor
 		\EndFor
-		\State \Return results of k nearest neighbor
+		\State \Return results of $k$ nearest neighbor
 	\end{algorithmic}
 \end{algorithm}
 
-We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref{tab:error_validation_overview} gives a overview of the accuracy achieved with and without PCA and different values for $k$.
+We test different values for $k$ of the $k$-nearest-neighbor algorithm. Table~\ref{tab:error_validation_overview} gives a overview of the accuracy achieved with and without PCA and different values for $k$.
 
 \begin{table}
 	\centering
@@ -62,7 +62,7 @@ We test different values for $k$ of the k-nearest-neighbor algorithm. Table~\ref
 		30 & 68.18\% & 56.89\% \\
 		35 & 68.28\% & 56.73\% \\
 	\end{tabular}
-	\caption{Overview of accuracy achieved with different values for $k$ of k-nearest-neighbor.}
+	\caption{Overview of accuracy achieved with different values for $k$ of $k$-nearest-neighbor.}
 	\label{tab:error_validation_overview}
 \end{table}
 
@@ -104,7 +104,7 @@ The results from this section might change when different patients are chosen fo
 \section{Rhythm Analysis}
 \label{sec:rhythm_analysis}
 
-There are four rhythms observed in the EEG\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
+There are four rhythms observed in the EEG~\cite[chapter~11]{Ganong1997}. These rhythms differ in the frequency and are characterized as
 
 \begin{itemize}
 	\item Beta: 18 - 30 Hz,

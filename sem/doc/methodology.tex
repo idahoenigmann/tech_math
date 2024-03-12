@@ -1,7 +1,7 @@
 \chapter{Methodology}
 \label{chapter:methodology}
 
-For the main algorithm of this work from section~\ref{chapter:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview.
+For the main algorithm of this work from section~\ref{chapter:data_and_algorithm} a few other methods will be used. As they are not the focus of this work we only give a short overview \color{change} in this chapter. \color{black}
 
 \section{Fourier Transformation}
 \label{sec:fourier_transformation}
@@ -25,16 +25,17 @@ Many applications are concerned with cyclic temporal data. Examples are sound wa
 		\end{tikzpicture}
 	\end{subfigure}
 	
-	\caption{Two signals that only differ by a temporal shift.}
+	\caption{Two signals that differ by a temporal shift.}
 	\label{fig:tempoal_shift}
 \end{figure}
 
 As the function of sound waves or EEG data is cyclic we might be interested in a decomposition into simple cyclic function, such as $\sin$. We can then analyze the most prominent frequencies and their respective amplitudes. This gives a representation of the data, that can be easier to interpret.
 
-We describe one approach to achieve this representation as a sum of $\sin$ functions, called Fast Fourier Transformation (FFT), in algorithm~\ref{alg:fft}.
+We describe one approach to achieve this representation as a weighted sum of $\sin$ functions, called Fast Fourier Transformation (FFT), in algorithm~\ref{alg:fft}.
+Figure~\ref{fig:example_fft} shows an example input and output of the FFT algorithm.
 
 \begin{algorithm}
-	\caption{FFT}\label{alg:fft}
+	\caption{Fast Fourier Transformation}\label{alg:fft}
 	\begin{algorithmic}
 		\Function{FFT}{$x$, $N$, $s$}
 			\If{$N$ = $1$}
@@ -53,8 +54,6 @@ We describe one approach to achieve this representation as a sum of $\sin$ funct
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}
-
-Figure~\ref{fig:example_fft} shows an example input and output of the FFT algorithm.
 
 \begin{figure}
 	\centering
@@ -91,31 +90,33 @@ Figure~\ref{fig:example_fft} shows an example input and output of the FFT algori
 
 As the classification algorithm is not the main focus of this work, we decided to go with a simple one.
 
-In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the k-nearest-neighbors algorithm.
+In classification the objective is to find assignments between data points and categories. In our context we are interested in finding an assignment which closely matches some already categorized data. One simple approach to this problem is the $k$-nearest-neighbors algorithm (KNN).
 
 For data that can be represented in $\mathbbm{R}^m$ and $l$ categories the pseudo code is shown in algorithm~\ref{alg:k_nearest_neighbors}.
 
 \begin{algorithm}
-	\caption{k Nearest Neighbors}\label{alg:k_nearest_neighbors}
+	\caption{$k$ Nearest Neighbors}\label{alg:k_nearest_neighbors}
 	\begin{algorithmic}
-		\Require data points $(p_i)_{i \in \mathbbm{N}} \in \mathbbm{R}^{m}$, categories $(c_i)_{i \in \mathbbm{N}} \in \{0, 1, ..., l\}$, point $x \in \mathbbm{R}^{m}$, $k \in \mathbbm{N}$
+		\Require data points $(p_i)_{i \in \mathbbm{N}} \in \mathbbm{R}^{m}$, categories $(c_i)_{i \in \mathbbm{N}}, c_i \in \{0, 1, ..., l\} \forall i \in \mathbbm{N}$,
+		
+		point $x \in \mathbbm{R}^{m}$, $k \in \mathbbm{N}$
 		\State Calculate the distance between each point $p_i$ and $x$
 		\State Take the $k$ data points with the smallest distance to $x$
 		\State \Return the category that most of the $k$ points are assigned
 	\end{algorithmic}
 \end{algorithm}
 
-Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbbm{R}^2$ and $k=10$.
+If there are significantly more data points in a certain category KNN can be dominated by these categories. As there are more points in the category, they are statistically more common in the $k$ nearest, which leads to $k$-nearest-neighbor giving bad results.
+
+Variations of KNN are achieved by applying a weight to the data points. The weight can depend on the distance between the points.
+
+This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition the space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
+
+Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbbm{R}^2$ and ${k=10}$.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.8\linewidth]{figs/k_nearest_neighbors}
+	\includegraphics[width=0.45\linewidth]{figs/k_nearest_neighbors}
 	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the k-nearest-neighbors algorithm for $k=10$.}
 	\label{fig:k_nearest_neighbors}
 \end{figure}
-
-If there are significantly more data points in a certain category k-nearest-neighbor can be dominated by these categories. As there are more points in the category, they are statistically more common in the k nearest, which leads to k-nearest-neighbor giving bad results.
-
-Variations of k-nearest-neighbor are achieved by applying a weight to the data points. The weight can depend on the distance between the points.
-
-This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition the space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
