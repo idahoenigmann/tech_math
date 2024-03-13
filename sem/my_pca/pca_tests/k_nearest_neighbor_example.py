@@ -62,5 +62,5 @@ if __name__ == '__main__':
 
     file_name = "k_nearest_neighbors"
     if file_name != "":
-        plt.savefig('data/' + file_name + '.png')
+        plt.savefig('data/' + file_name + '.svg')
     plt.show()
