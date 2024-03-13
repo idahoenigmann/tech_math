@@ -8,7 +8,7 @@ From section~\ref{chapter:principal_component_analysis} we know that it is possi
 
 To do this, we find the first index for which the sum of eigenvalues up to this index from the PCA is bigger than a certain percentage of the sum of all eigenvalues. The output for a few percentages are shown in table~\ref{tab:explained_variance}. As only few dimensions are needed to preserve 90\% of variance, the PCA can successfully be used as a way to reduce dimensions.
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{c|c}
 		percentage of variance & number of dimensions needed \\
@@ -27,13 +27,13 @@ We assume that most of the variance in the data stems from information in the EE
 \section{Testing the Accuracy}
 From this section on, accuracy refers to the percentage of data points classified as the correct sleep stage when given a new sleep recording.
 
-To test the accuracy of the algorithm from section~\ref{sec:algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
+To test the accuracy of the algorithm from chapter~\ref{chapter:data_and_algorithm} we divide the dataset into two partitions, one for training the PCA and one for validating the results. The training data contains 10 of the 13 patients and the validation data contains the other 3 patients.
 
 First, the training data is used to calculate the principal components of the PCA. Then the validation data is transformed according to the principal components. Both, the training and validation data, are reduced to 24 dimensions, as we know that means only about 10\% of variance is lost. Lastly, we use the $k$-nearest-neighbor algorithm to estimate the sleep stage of the validation data and compare it to the true classification. The pseudo code for this is algorithm~\ref{alg:gues_sleep_stage}.
 
 When randomly guessing the sleep stage we expect an accuracy of 20\%, as there are five different stages. For better comparison of the accuracy achieved, we run an algorithm, that does not use PCA, but otherwise follow the same logic. In comparison to algorithm~\ref{alg:gues_sleep_stage}, algorithm~\ref{alg:gues_sleep_stage_without_PCA} does not reduce dimensions, as there is no clear way of doing this without using PCA.
 
-\begin{algorithm}
+\begin{algorithm}[h]
 	\caption{Get estimate for sleep stage without PCA}\label{alg:gues_sleep_stage_without_PCA}
 	\begin{algorithmic}
 		\Require{EEG recording of sleep}
@@ -48,7 +48,7 @@ When randomly guessing the sleep stage we expect an accuracy of 20\%, as there a
 
 We test different values for $k$ of the $k$-nearest-neighbor algorithm. Table~\ref{tab:error_validation_overview} gives a overview of the accuracy achieved with and without PCA and different values for $k$.
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{c|c|c}
 		$k$ & accuracy with PCA & accuracy without PCA \\
@@ -68,7 +68,7 @@ We test different values for $k$ of the $k$-nearest-neighbor algorithm. Table~\r
 
 Using $k=10$ yields the best outcome in this limited validation set. Out of 3187 30 second segments the algorithm estimated the correct one 2179 times, which corresponds to a success rate of $68.37\%$. Table~\ref{tab:error_validation} shows the outcome in more detail.
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{subtable}{0.48\textwidth}
 		\begin{tabular}{c|ccccc}
@@ -119,7 +119,7 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 
 
 \newpage
-\begin{figure}
+\begin{figure}[h]
 	\centering	
 	\begin{tikzpicture}
 		\begin{axis}[xlabel=Frequency, x unit=\si\hertz, ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]			
@@ -144,7 +144,7 @@ We can now see if the output of the PCA gives importance to these rhythms. In fi
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h]
 	\centering	
 	\begin{tikzpicture}
 		\begin{axis}[xlabel=Frequency, x unit=\si\hertz, ylabel=Amplitude, width=\textwidth, height=0.3\textwidth]			

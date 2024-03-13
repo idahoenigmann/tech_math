@@ -15,6 +15,7 @@ One could also put more thought into the input of the PCA. Compacting the data b
 
 The data points depend on each other, as not every change from one sleep stage to another is equally likely. For example typically the recording start with the patient still awake and then proceeding to sleep stages S1, S2 and S3. The REM stage often only appears later. The information of the last sleep stage could be used as input in estimating the next sleep stage.
 
+\newpage
 Lastly the classification algorithm used could be changed. Using $k$-nearest-neighbors works best if there are about equally many data points in each category. This is not the case in the CAP Sleep Database, as not all sleep stages appear equally often.
 
-Overall this work aims to give a good starting point for further investigation of sleep stage classification. The mathematical foundation of PCA and its usage in this context was thoroughly explored. Further research is still needed, in order to improve the accuracy to an acceptable level.
+Overall this work aims to give a good starting point for further investigation of sleep stage classification. \color{change} The mathematical foundation of PCA and its usage in this context was thoroughly explored. Further research is still needed, in order to improve the accuracy of the sleep stage classification algorithm to an acceptable level. \color{black}

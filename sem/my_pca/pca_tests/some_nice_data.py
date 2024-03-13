@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 
 def generate_data(file_name):
     with open('data/' + file_name + '.csv', 'w') as file:
-        csv_writer = writer(file, delimiter=" ")
+        csv_writer = writer(file, delimiter=",")
         csv_writer.writerow(["x position", "y position"])
         for k in range(-30, 35):
             x = k/10 + np.random.uniform(-0.2, 0.2)

@@ -1,7 +1,7 @@
 \chapter{Introduction}
 \label{chapter:introduction}
 
-This work aims to combine Principal Component Analysis (PCA), a data analysis tool, with electroencephalogram (EEG) recordings of sleeping persons \color{change} to classify different levels of sleep. \color{black} The main focus lies in giving an understanding of PCA as well as demonstrating an use case \color{change} of PCA in the medical field. \color{black}
+This work aims to combine Principal Component Analysis (PCA), a data analysis tool, with electroencephalogram (EEG) recordings of sleeping persons \color{change} to classify different levels of sleep. \color{black} The main focus lies in giving an understanding of PCA as well as demonstrating a use case \color{change} of PCA in the medical field. \color{black}
 
 We introduce the general concepts of this work in this chapter. In chapter~\ref{chapter:study_of_literature} we mention work published about this topic. Chapter~\ref{chapter:mathematical_basics} gives a foundation of the mathematical concepts used in chapter~\ref{chapter:principal_component_analysis} to define PCA. In chapter~\ref{chapter:methodology}, we introduce additional methods used in the classification algorithm proposed in this work. In chapter~\ref{chapter:data_and_algorithm}, we delve into more detail regarding the dataset used and the functioning of the algorithm. We compare the algorithm in chapter~\ref{chapter:results} and discuss limitations and possible future work in chapter~\ref{chapter:discussion}.
 
@@ -12,7 +12,7 @@ When the data is high dimensional, PCA can be used to get few axis that still de
 
 An EEG records the variations in electrical potential in the brain. A bipolar EEG measures the potential between two electrodes placed on the head. In comparison an unipolar measures the potential between an electrode on the head and one on some other part of the body, such as the ears. In this work we are only concerned with unipolar EEG measurements.
 
-Ganong~\cite[chapter~11]{Ganong1997} describes typical patterns observed in EEG data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep. NREM sleep is further partitioned into three stages, termed Stage~1 (S1) to Stage~3 (S3)\footnote{\color{change} In the past the standard used to be four stages, but new work use three as there is no clear clinical distinction between Stage~3 and Stage~4. \color{black}}. 
+Ganong~\cite[chapter~11]{Ganong1997} describes typical patterns observed in EEG data of a sleeping person. He describes the EEG patterns associated with rapid eye movement~(REM) sleep and non-REM~(NREM) sleep. NREM sleep is further partitioned into three stages, termed Stage~1 (S1) to Stage~3 (S3)\footnote{\color{change} In the past four stages were used, but new work use three as there is no clear clinical distinction between Stage~3 and Stage~4. \color{black}}.
 
 \newpage
 The EEG data of these stages is characterized by
@@ -23,7 +23,7 @@ The EEG data of these stages is characterized by
 	\item high amplitude, low frequency
 \end{enumerate}
 
-In REM sleep the EEG data is that of high frequency and low amplitude patterns, resembling the data observed in alert humans.
+In REM sleep the EEG data is that of high frequency and low amplitude patterns, resembling the data observed in alert humans. \color{change} For details on the frequency ranges see section~\ref{sec:rhythm_analysis}. \color{black}
 
 Example EEG data of these different sleep stages can be seen in Figure~\ref{fig:different_sleep_stages}.
 

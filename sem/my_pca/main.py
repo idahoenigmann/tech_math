@@ -68,7 +68,7 @@ def visualize_data(data, header, file_name="", pcs=None):
     axes.set_aspect('equal', adjustable='box')"""
 
     if file_name != "":
-        plt.savefig('data/' + file_name + '.png')
+        plt.savefig('data/' + file_name + '.svg')
     plt.show()
 
 

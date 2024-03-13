@@ -11,7 +11,7 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.45\linewidth]{figs/some_nice_data_org}
+	\includesvg[width=0.45\linewidth]{figs/some_nice_data_org.svg}
 	\caption{Randomly generated sample data. The data lies along a line with slope $1$ and has mean $0$.}
 	\label{fig:some_nice_data}
 \end{figure}
@@ -19,13 +19,13 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.45\linewidth}
-		\includegraphics[width=\textwidth]{figs/some_nice_data_pc}
+		\includesvg[width=\textwidth]{figs/some_nice_data_pc.svg}
 		\caption{}
 		\label{fig:some_nice_data_pc}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.45\linewidth}
-		\includegraphics[width=\textwidth]{figs/some_nice_data_pca}
+		\includesvg[width=\textwidth]{figs/some_nice_data_pca.svg}
 		\caption{}
 		\label{fig:some_nice_data_pca}
 	\end{subfigure}
@@ -43,20 +43,20 @@ We assume that the most interesting features are those that have a large varianc
 	\item the axis are sorted (descending) by the variance in the axis.
 \end{itemize}
 
-From this we gather that another assumption is, that the axis are orthogonal. Lastly we are only concerned with linear dependent features in the data. Some example cases in which PCA fails are shown in figure~\ref{fig:pca_fails}.
+\color{change} From this we gather another assumption, namely all axis must be orthogonal. \color{black} Lastly we are only concerned with linear dependent features in the data. Some example cases in which PCA fails are shown in figure~\ref{fig:pca_fails}.
 
 \newpage
 
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.45\linewidth}
-		\includegraphics[width=\textwidth]{figs/pca_fails_nonlinear}
+		\includesvg[width=\textwidth]{figs/pca_fails_nonlinear.svg}
 		\caption{}
 		\label{fig:pca_fails_nonlinear}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.45\linewidth}
-		\includegraphics[width=\textwidth]{figs/pca_fails_nonorthogonal}
+		\includesvg[width=\textwidth]{figs/pca_fails_nonorthogonal.svg}
 		\caption{}
 		\label{fig:pca_fails_nonorthogonal}
 	\end{subfigure}
@@ -86,7 +86,8 @@ Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find
 	= \mathbf{P}\left(\frac{1}{n}\mathbf{X}\mathbf{X}^T\right)\mathbf{P}^T = \mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T.
 \end{align*}
 
-The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a decomposition into an orthogonal matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{D}$. We choose $\mathbf{P}=\mathbf{V}^T$. From lemma~\ref{lem:inverse_is_transpose} it follows that $\mathbf{V}^{-1} = \mathbf{V}^T$ \color{change} and it holds \color{black}
+The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a decomposition into an orthogonal matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{D}$. From lemma~\ref{lem:inverse_is_transpose} it follows that $\mathbf{V}^{-1} = \mathbf{V}^T$.
+\color{change} For this reason we can now choose $\mathbf{P}=\mathbf{V}^T$ and get \color{black}
 
 \begin{align*}
 	\mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T = \mathbf{P}(\mathbf{VDV}^{-1})\mathbf{P}^T = \mathbf{P}(\mathbf{VDV}^{T})\mathbf{P}^T =\\

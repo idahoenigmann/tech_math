@@ -1,7 +1,7 @@
 \chapter{Mathematical Basics}
 \label{chapter:mathematical_basics}
 
-\color{change} We give an overview of mathematical notation, which will be used in Section~\ref{chapter:principal_component_analysis} to define PCA. Definitions of covariance and theorems regarding diagonalizable matrices along with their proves are given. \color{black}
+\color{change} We give an overview of mathematical notation, which will be used in Section~\ref{chapter:principal_component_analysis} to define PCA. Definitions and theorems, along with their proves are given, ensuring the existence of PCA and showing it is well-defined. \color{black}
 
 \section{Covariance}
 \label{sec:covariance}
@@ -18,7 +18,7 @@ Assume we have two sets of $n$ observations of variables with mean $0$. Let us c
 From the definition it is obvious, that the covariance is symmetric, $\sigma_{\mathbf{ab}} = \sigma_{\mathbf{ba}}$. In the special case $\mathbf{a} = \mathbf{b}$ the covariance $\sigma_{\mathbf{aa}}$ is called \textit{variance} $\sigma_{\mathbf{a}}^2$.
 
 \begin{definition}[Covariance Matrix]
-	Generalizing to $m$ variables $\mathbf{X} = (\mathbf{x}_1, ..., \mathbf{x}_m) \in \mathbbm{R}^m$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
+	Generalizing to $m$ variables $\mathbf{X} = (\mathbf{x}_1, ..., \mathbf{x}_m) \in \mathbbm{R}^{n\times m}$, each having been observed $n$ times, gives us the \textit{covariance matrix}.
 	
 	\begin{align*}
 		\mathbf{C_X} := \left(\begin{matrix}
@@ -106,7 +106,7 @@ Are the corresponding eigenvectors real? From the proof of lemma~\ref{lem:existe
 \end{lemma}
 
 \begin{proof}
-	Let $\lambda_1, \lambda_2$ be two distinct eigenvalues with eigenvectors $\mathbf{v}_1, \mathbf{v}_2$ of the matrix $\mathbf{A}$ respectively.
+	Let $\lambda_1, \lambda_2$ be two distinct eigenvalues with eigenvectors $\mathbf{v}_1, \mathbf{v}_2$ of the matrix $\mathbf{A}$ \color{change} respectively. It holds that \color{black}
 	
 	\begin{align*}
 		\lambda_1 \mathbf{v}_1 \cdot \mathbf{v}_2 = (\lambda_1\mathbf{v}_1)^T \mathbf{v}_2 = (\mathbf{Av}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T \mathbf{A}^T \mathbf{v}_2 =\\
