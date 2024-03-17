@@ -43,17 +43,21 @@ if __name__ == '__main__':
     sample_spacing = 1.0 / 200.0
     sleep_stages_name = ["S3", "S2", "S1", "REM", "awake"]
 
+    asdf = []
+
     for idx in range(len(sleep_stages_seg)):
         output_data = data[idx * number_samplepoints:idx * number_samplepoints + number_samplepoints]
 
+        asdf.append(output_data[::10])
+
         # do fft
-        frequencies = np.fft.fftfreq(number_samplepoints, d=sample_spacing)
+        """frequencies = np.fft.fftfreq(number_samplepoints, d=sample_spacing)
         frequencies = frequencies[0:len(frequencies) // 2]
         fft_output = np.absolute(np.fft.fft(output_data))
-        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[0:len(frequencies)]
+        amplitude_over_frequency = 2.0 / number_samplepoints * fft_output[0:len(frequencies)]"""
 
         # plot figures
-        fig, axs = plt.subplots(nrows=2)
+        """fig, axs = plt.subplots(nrows=2)
         fig.suptitle(f"sleep stage {sleep_stages_name[sleep_stages_seg[idx] - 1]}")
         axs[0].plot(time[start:start + number_samplepoints], output_data[0: number_samplepoints])
         axs[0].set_xlabel("time (s)")
@@ -64,4 +68,6 @@ if __name__ == '__main__':
         axs[1].set_ylabel("amplitude")
 
         # fig.canvas.manager.full_screen_toggle()
-        plt.show()
+        plt.show()"""
+
+    np.savetxt("data/final_img.csv", asdf, delimiter=",", newline="\n")

@@ -3,7 +3,7 @@
 
 Combining the concepts in chapter~\ref{chapter:mathematical_basics} we derive the ideas and implementation of PCA.
 
-Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create an $m \times n$ matrix of this data. \color{change} The goal is to find underlying patterns in the collected data and get more insight. \color{black} For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$-axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
+Assume we have gathered observations of different variables as part of an experiment. If we have $n$ variables, each having been observed $m$ times, we can create an $m \times n$ matrix of this data. The goal is to find underlying patterns in the collected data and get more insight. For $n = 2$ we could try to plot the data, with the first variable as the $x$-axis and the second as the $y$-axis. An exemplary plot of some data can be seen in figure~\ref{fig:some_nice_data}.
 
 For larger values of $n$ this gets increasingly difficult\footnote{For higher dimensionality we have to use some projection. Depending on the chosen projection the interpretation changes making it difficult to interpret the resulting image.}. PCA tries to solve this problem by transforming the data in such a way that the most interesting features are in the first few axis of the transformed $m$ dimensional space. This makes it easy to look at a low dimension representation of the data, without loosing much information.
 
@@ -36,14 +36,14 @@ An example of PCA being applied to the data from figure~\ref{fig:some_nice_data}
 
 Now we derive the ideas of PCA, as well as the mathematics behind it. First we formulate a goal and define some assumptions.
 
-We assume that the most interesting features are those that have a large variance\footnote{\color{change} This requirement is not necessarily fulfilled. \color{black} For data where the noise has a larger variance than the feature we are trying to observe, PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that
+We assume that the most interesting features are those that have a large variance\footnote{This requirement is not necessarily fulfilled. For data where the noise has a larger variance than the feature we are trying to observe, PCA fails because this assumption is not met.}. Our goal is to find a transformation into new coordinates such that
 \begin{itemize}
 	\item the variance in the each axis is as large as possible,
 	\item the axis are all orthogonal to each other,
 	\item the axis are sorted (descending) by the variance in the axis.
 \end{itemize}
 
-\color{change} From this we gather another assumption, namely all axis must be orthogonal. \color{black} Lastly we are only concerned with linear dependent features in the data. Some example cases in which PCA fails are shown in figure~\ref{fig:pca_fails}.
+From this we gather another assumption, namely all axis must be orthogonal. Lastly we are only concerned with linear dependent features in the data. Some example cases in which PCA fails are shown in figure~\ref{fig:pca_fails}.
 
 \newpage
 
@@ -76,10 +76,10 @@ One way to achieve the goal is as follows:
 
 While this algorithm shows us what conceptually has to be done, we do not know how to compute the axis yet. We will now investigate this problem using the mathematical concepts from section~\ref{chapter:mathematical_basics}. This will lead us to an algorithm in which all axis can be computed simultaneously.
 
-Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$. \color{change} In the subsequent calculation we assume such a matrix $\mathbf{P}$ exists to find properties with which we can then calculate $\mathbf{P}$. \color{black}
+Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find some orthonormal matrix $\mathbf{P}$ such that $\mathbf{Y}:=\mathbf{PX}$ has a diagonal covariance matrix $\mathbf{C}_{\mathbf{Y}}$. In the subsequent calculation we assume such a matrix $\mathbf{P}$ exists to find properties with which we can then calculate $\mathbf{P}$.
 
 \newpage
-\color{change}From the definition of the covariance matrix we can rewrite \color{black}
+From the definition of the covariance matrix we can rewrite
 
 \begin{align*}
 	\mathbf{C}_{\mathbf{Y}} = \frac{1}{n}\mathbf{YY}^T = \frac{1}{n}(\mathbf{PX})(\mathbf{PX})^T = \frac{1}{n}\mathbf{PX}\mathbf{X}^T\mathbf{P}^T =\\
@@ -87,7 +87,7 @@ Let $\mathbf{X} \in \mathbbm{R}^{m\times n}$ be the data matrix. We want to find
 \end{align*}
 
 The covariance matrix $\mathbf{C}_\mathbf{X}$ is symmetric and therefore has a decomposition into an orthogonal matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{D}$. From lemma~\ref{lem:inverse_is_transpose} it follows that $\mathbf{V}^{-1} = \mathbf{V}^T$.
-\color{change} For this reason we can now choose $\mathbf{P}=\mathbf{V}^T$ and get \color{black}
+For this reason we can now choose $\mathbf{P}=\mathbf{V}^T$ and get
 
 \begin{align*}
 	\mathbf{P}\mathbf{C}_\mathbf{X}\mathbf{P}^T = \mathbf{P}(\mathbf{VDV}^{-1})\mathbf{P}^T = \mathbf{P}(\mathbf{VDV}^{T})\mathbf{P}^T =\\

@@ -1,4 +1,4 @@
-\chapter{\color{change} Sleep Database and Sleep Stage Classification Algorithm \color{black}}
+\chapter{Sleep Database and Sleep Stage Classification Algorithm}
 \label{chapter:data_and_algorithm}
 
 This chapter describes the Cyclic Alternating Pattern (CAP) Sleep Database used and the algorithm implemented. The algorithm uses FFT, PCA and $k$-nearest-neighbor to estimate the sleep stage from a recorded EEG signal.
@@ -40,7 +40,7 @@ The given dataset describes multiple channels of EEG data recorded during sleep.
 \newpage
 The data was recorded with different sampling frequencies. To reduce data size and standardize all channels we resample to 200 Hz.
 
-\color{change} Frequencies lower than 0.5 Hz and higher than 30 Hz often stem from other sources, such as the measurement equipment, breathing of the patients or measuring inaccuracies. To remove these noises from the data we want to remove these very low and very high frequencies from the recordings. We do this by applying a low pass filter of 30 Hz and a high pass filter of 0.5 Hz before using the data. \color{black}
+Frequencies lower than 0.5 Hz and higher than 30 Hz often stem from other sources, such as the measurement equipment, breathing of the patients or measuring inaccuracies. To remove these noises from the data we want to remove these very low and very high frequencies from the recordings. We do this by applying a low pass filter of 30 Hz and a high pass filter of 0.5 Hz before using the data.
 
 We now describe the general structure of the algorithm from reading the data files to the clustering.
 
@@ -122,7 +122,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 
 If we have a new recording and want to know the sleep stages we have to follow similar steps. First, the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of principal components. Lastly, we can get an estimate of the sleep stage by using the $k$-nearest-neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
-\begin{algorithm}[h!]
+\begin{algorithm}[h]
 	\caption{Get estimate for sleep stage}\label{alg:gues_sleep_stage}
 	\begin{algorithmic}
 		\Require{EEG recording of sleep}
