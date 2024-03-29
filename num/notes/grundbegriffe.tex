@@ -1,0 +1,160 @@
+\section{Grundbegriffe}
+\subsection{Gegenstand der Numerischen Mathematik}
+
+Von der Realität bis zur Interpretation einer Simulation ist es ein langer Weg.
+
+\begin{itemize}
+	\item \textbf{Mathematisches Modell} versucht mit Hilfe von mathematischen Formeln (idR. Differentialgl.) die Realität zu beschreiben.
+	\item Die wenigsten Lösungen dieser mathematischen Modelle kann man exakt berechnen, d.h. man approximiert die exakte Lösung mittels \textbf{numerischer Simulation} am Rechner.
+	\item Diese \textbf{numerische Lösung} wird dann interpretiert und man hofft, dass diese Interpretation die Realität beschreibt.
+\end{itemize}
+
+Jede numerische Simulation zerfällt in kleinere \textbf{numerische Probleme}, die geeignet zu lösen sind. Die elementarsten numerischen Probleme sind Gegenstand dieser Vorlesung.
+
+\begin{example}
+	\begin{itemize}
+		\item Wie approximiert man komplizierte Funktionen mittels einfacher Funktionen (z.B. stückweise Polynome)?
+		\item Wie berechnet man Grenzwerte (z.B. Integral, Differential)?
+		\item Wie löst man lineare / nichtlineare Gleichungen?
+	\end{itemize}
+\end{example}
+
+Jede numerische Simulation ist fehlerbehaftet.
+
+\begin{itemize}
+	\item \textbf{Modellfehler:} Das mathematische Modell vereinfacht die Realität.
+	\item \textbf{Datenfehler:} Die Eingangsdaten einer Simulation stammen meistens aus physikalischen Messungen und haben daher eine gewisse Mess(un-)genauigkeit.
+	\item \textbf{Rundungsfehler:} Auf Rechnern ersetzt die endliche Menge an Gleitkommazahlen das kontinuierliche $\mathbb{R}$, d.h. sowohl die Daten als auch die Rechnungen sind rundungsfehlerbehaftet.
+	\item \textbf{Verfahrensfehler:} Viele Probleme werden mathematisch in unendlich dimensionalen Räumen oder mit Limiten formuliert. Beides steht im Rechner nicht zur Verfügung und muss diskretisiert werden.
+\end{itemize}
+
+In der Vorlesung liegt unser Hauptaugenmerk auf dem Verfahrensfehler und dem Aufwand zugehöriger Algorithmen.
+
+
+\subsection{Kondition und Stabilität}
+
+Betrachte ein abstraktes Problem. Werte $\Phi: X \rightarrow Y$ bei $x\in X$ aus, wobei $X,Y$ geeignete normierte Räume sind. Die \textbf{Kondition eines Problems} besagt, wie stark Änderungen in $x$ (z.B. Rundungsfehler) sich auf $\Phi(x)$ auswirken.
+
+\begin{definition}
+	Das Problem ist \textbf{schlecht konditioniert bzgl. absolutem Fehler}, wenn es eine kleine Störung $\tilde{x}$ von $x$ gibt mit $||\Phi(x)-\Phi(\tilde{x})|| \gg ||x-\tilde{x}||$.
+	
+	Das Problem ist \textbf{schlecht konditioniert bzgl. relativem Fehler}, falls $x \neq 0 \neq \Phi(x)$ und es ex. eine kleine Störung $\tilde{x}$ von $x$ gibt mit $\frac{||\Phi(x)-\Phi(\tilde{x})||}{||\Phi(x)||} \gg \frac{||x-\tilde{x}||}{||x||}$.
+	
+	Andernfalls bezeichnet man das Problem als \textbf{gut konditioniert (bzgl. abs./rel. Fehler)}.
+\end{definition}
+
+\begin{remark}
+	Ist $\Phi$ stetig differenzierbar, d.h. $\Phi(x) - \Phi(\tilde{x}) = D\Phi(x)(x-\tilde{x}) + o(||x-\tilde{x}||)$ für $\tilde{x}\rightarrow x$ so beschreibt die Ableitung $D\Phi(x) \in L(X,Y)$ wie stark sich Änderungen in $x$ auf den Fehler auswirken.
+	
+	Deshalb bezeichnet man $\kappa_{abs}(x) = ||D\Phi(x)||$, $\kappa_{rel}(x) = \frac{||D\Phi(x)|| \cdot ||x||}{||\Phi(x)||}$ als \textbf{Konditionszahlen (bzgl. abs./rel. Fehler)}, d.h. man ist gut konditioniert für $\kappa_{abs}, \kappa_{rel}$ vergleichsweise klein.
+\end{remark}
+
+\begin{definition}
+	Es sei $\tilde{\Phi}$ eine algorithmische Umsetzung von $\Phi$. Der Algorithmus $\tilde{\Phi}$ ist \textbf{instabil}, wenn es eine kleine Störung $\tilde{x}$ von $x$ gibt, sodass $\underbrace{||\Phi(x)-\tilde{\Phi}(\tilde{x})||}_{\text{tatsätlicher Fehler im Rechner}} \gg \underbrace{||\Phi(x)-\Phi(\tilde{x})||}_{\text{unvermeidlicher Fehler}}$.
+	
+	Andernfalls ist der Algorithmus stabil.
+\end{definition}
+
+\begin{remark}
+	Mir ist bewusst, dass die Symbolik $\gg$ (''wesentlich größer'') ungenauer ist, als Sie es aus anderen Vorlesungen kennen. Aber ''schlecht konditioniert'' und ''instabil'' hängt halt an der Genauigkeit der Daten und den Erfordernissen des Nutzers!
+\end{remark}
+
+In der Vorlesung geht es primär um die Asymptotik, d.h. was könnte im Worst-Case passieren.
+
+\textbf{Erinnerung/Warnung:} Die Arithmetik im Rechner erfüllt weder Assoziativität noch Distributivgesetz, d.h. die Reihenfolge (und Formulierung) der Rechenoperatoren spielt eine Rolle für Stabilität.
+
+\begin{example}[schlechte Kondition bei Auslöschung]
+	Als \textbf{Auslöschung} bezeichnet man das Phänomen, dass bei Subtraktion zweier annähernd gleicher Zahlen im Rechner die hinteren Ziffern (welche rundungsbehaftet sind) signifikant werden. Der relative Fehler kann sogar beliebig groß werden, d.h. $\Phi: \mathbb{R}^2 \rightarrow \mathbb{R}, (x,y) \mapsto x-y$ hat $\kappa_{rel}(x,y) = \frac{\sqrt{2} ||(x,y)||_2}{|x-y|} \gg 0$ für $x\approx y$.
+\end{example}
+
+\textbf{Achtung:} Oft ist ein Problem gut konditioniert, wird aber in Teilprobleme zerlegt (im Algorithmus) sodass der resultierende Algorithmus instabil wird.
+
+\begin{example}
+	Werte $\Phi(x) = \frac{1}{x+1} - \frac{1}{x}$ für $x \gg 0$ aus.
+	
+	\begin{align*}
+		\Phi'(x) = - \frac{1}{(x+1)^2} + \frac{1}{x^2} = \frac{(x+1)^2 - x^2}{x^2(x+1)^2} = \frac{2x+1}{x^2(x+1)^2}\\
+		\Phi(x) = \frac{x-(x+1)}{x(x+1)} = \frac{-1}{x(x+1)}\\
+		\kappa_{rel}(x) = \frac{|\Phi'(x)| \cdot |x|}{|\Phi(x)|} = \frac{(2x+1)}{x^2(x+1)^2} x^2 (x+1) = 1 + \frac{x}{x+1} \leq 2
+	\end{align*}
+	
+	$\implies$ gut konditioniert!	
+\end{example}
+
+\begin{example}
+	Es sei $||.||$ eine Norm auf $\mathbb{K}^n$ und wir verwenden dieselbe Notation für die induzierte Operatornorm $||A|| := \sum_{x\in \mathbb{K}^n, x \neq 0}\frac{||Ax||}{||x||}$ für $A \in \mathbb{K}^{n\times n}$.
+	
+	Ist $A$ invertierbar, so bezeichnet $cond(A) := ||A|| \cdot ||A^{-1}||$ die \textbf{Konditionszahl von $A$ (bzgl. $||.||$)}. Betrachtet man das Lösungsproblem $\Phi:\mathbb{K}^n \rightarrow \mathbb{K}^n, \Phi(b) = A^{-1}b$, so gilt für die relative Konditionszahl (mit $x=A^{-1}b$)
+	\begin{align*}
+		\kappa_{rel}(b) = \frac{||D\Phi(b)|| \cdot ||b||}{||\Phi(b)||} = \frac{||A^{-1}|| \cdot ||Ax||}{||x||} \leq cond(A),
+	\end{align*}
+	wobei die letzte Abschätzung \textbf{scharf ist}, d.h. es gilt Gleichheit für mindestens ein $b$ (und ein $x$).
+\end{example}
+
+\subsection{Verfahrensfehler}
+
+Im Wesentlichen gibt es zwei Arten von Verfahrensfehlern
+
+\begin{itemize}
+	\item \textbf{Abbruchfehler}, wenn ein konvergenter (aber unendlicher) Algorithmus nach endlich vielen Schritten abgebrochen wird.
+	\item \textbf{Diskretisierungsfehler}, wenn eine kontinuierliche Größe durch eine diskrete vereinfacht wird, z.B. Differenzenquotienten statt Differenzialquotient.
+\end{itemize}
+
+\begin{example}[Abbruchfehler Heron-Verfahren]
+	Für $x>0$ def. $y_1 := \frac{1}{2} (1+x), y_{n+1} := \frac{1}{2}(y_n + \frac{x}{y_n})$.
+	
+	\begin{align*}
+		\implies y_{n+1}^2 - x = \frac{1}{4} (y_n^2 + 2x + \frac{x^2}{y_n}) - x = \frac{1}{4} (y_n - \frac{x}{y_n})^2 \geq 0\\
+		\implies y_{n+1}^2 \geq x > 0 \text{ und } y_{n+1} - y_n = \frac{1}{2} (y_n + \frac{x}{y_n}) - y_n = \frac{x}{2y_n} - \frac{y_n}{2} = \frac{x-y_n^2}{2y_n} \leq 0\\
+		\implies 0 < \sqrt{x} \leq y_{n+1} \leq y_n \implies y_n \rightarrow y\\
+		\implies y = \frac{1}{2}(y + \frac{x}{y}) \implies \frac{1}{2}y^2 = \frac{1}{2}y^2 + \frac{1}{2}x \implies y^2 = x \implies y = \sqrt{x}
+	\end{align*}
+	
+	$\implies (y_n)$ konvergiert monoton fallend gegen $\sqrt{x}$. Sobald $y_n = \sqrt{x}$, würde auch $y_{n+1} = \sqrt{x}$ gelten, d.h. endkonstante Folge.
+\end{example}
+
+\textbf{Später}: Heron-Verfahren ist tatsächlich \textbf{quadratisch konvergent}, d.h. ex. $C>0$ mit $|\sqrt{x}-y_{n+1}| \leq C |\sqrt{x}-y_n|^2$. $\implies$ schnelle konvergenz, weil sich korrekte Ziffern pro Schritt verdoppeln!
+
+\begin{example}[Diskretesierungsfehler einseitiger Differenzenquotient]
+	Sei $f:\mathbb{R} \rightarrow \mathbb{R}$ differenzierbar, $x\in \mathbb{R}$
+	
+	Ziel: Approximiere $\Phi:=f'(x)$ durch den einseitigen Diffquot. $\Phi_h = \frac{f(x+h)-f(x)}{h}$
+	
+	klar: $\Phi_h \rightarrow \Phi$ für $h \rightarrow 0$, aber die Konvergenz kann beliebig langsam sein. Man interessiert sich in der Numerik auch für Konvergenzraten bzgl. des Diskretisierungsparameters.
+	
+	Für $f \in \mathcal{C}^2$ (lokal um $x$) gilt nach Mittelwertsatz
+	\begin{align*}
+		f'(x) - \frac{f(x+h)-f(x)}{h} = f'(x) - f'(\zeta) = f''(\xi)(x-\zeta)
+	\end{align*}
+	mit Zwischenstellen $x \leq \xi \leq \zeta \leq x+h$
+	\begin{align*}
+		\implies |\Phi - \Phi_n| \leq ||f''||_{L^{\infty}(x,x+h)} h = \mathcal{O} (h)
+	\end{align*}
+	d.h. hier Konvergenzrate $1$ in $h$.
+\end{example}
+
+\begin{definition}
+	Es sei $\Phi$ eine kontinuierliche Große mit Diskretisierung $\Phi_h$ für $h>0$. Dann bezeichnet man eine Abschätzung der Form $|\Phi - \Phi_h| = \mathcal{O}(h^\alpha)$ als \textbf{a-priori Fehlerabschätzung} mit \textbf{Konvergenzrate} $\alpha > 0$ (auch \textbf{Konvergenzordung}).
+\end{definition}
+
+Natürlich interessiert sich die Numerik für Verfahren, bei denen $\alpha > 0$ möglich groß ist.
+
+\begin{example}[zentraler Differenzenquotient]
+	$f:\mathbb{R} \rightarrow \mathbb{R}$ diffbar, $x\in \mathbb{R}$, $\Phi := f'(x)$ und $\Phi_h := \frac{1}{2} \left(\frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h}\right)$
+	
+	klar: $\Phi_h \rightarrow \Phi$ für $h \rightarrow 0$, $|\Phi - \Phi_h| = \mathcal{O}(h)$ sofern $f \in \mathcal{C}^2$ (lokal um $x$).
+	
+	Für $f \in \mathcal{C}^3$ (lokal um $x$) gilt mit Taylor $f(x+h) = f(x)) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f'''(\zeta)$ für geeignete $x-h \leq \zeta_- \leq x \leq \zeta_+ \leq x+h$
+	\begin{align*}
+		\implies \frac{f(x+h)-f(x)}{h} = f'(x) + \frac{h}{2} f'(x) + \frac{h^2}{6} f'''(\zeta_-)\\
+		\frac{f(x)-f(x-h)}{h} = f'(x) - \frac{h}{2} f'(x) + \frac{h^2}{6} f'''(\zeta_+)\\
+		\implies |\Phi - \Phi_h| = \frac{h^2}{6} \frac{|f'''(\zeta_+) + f'''(\zeta_-)|}{2} = \mathcal{O}(h^2)
+	\end{align*}
+	d.h. Konvergenzrate $\alpha = 2$.
+	
+	$\implies$ höhere Genauigkeit für gleiches $h$ bzw. gleiche Genauigkeit für größeres $h$.
+\end{example}
+
+\begin{remark}
+	Auslöschung tritt immer auf (insb. bei Diffquot.), aber sie wird abgemildert durch Verfahren höherer Ordnung. Eine andere Möglichkeit für Verfahren höherer Ordnung zur Approximation von $f'(x)$ ist die Verwendung von Polynomapproximation, d.h. $f \approx p$ Polynom und berechne $p'(x) \approx f'(x)$.
+\end{remark}

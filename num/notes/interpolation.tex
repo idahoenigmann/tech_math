@@ -1,0 +1,581 @@
+\section{Interpolation}
+
+Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y_j)$ gegeben und eine ''einfache'' Funktion $p$ mit $p(x_j)=y_j \forall j$ gesucht, z.B. Polynome, Splines (= stückweise Polynome), rationale Funktionen (= Quotienten von Polynomen). Verwandt, aber mathematisch schwieriger sind \textbf{Approximationsprobleme}. Dabei ist eine Funktion $f$ und eine Norm $||.||$ gegeben, und es wird eine einfache Funktion $p$ gesucht, die $||f-p||$ in dieser Klasse einfacher Fkt. minimiert. Oft ist dabei die Funktion $f$ nur implizit gegeben, d.h. unbekannt.
+
+\subsection{Lagrange-Polynominterpolation}
+
+\textbf{Problemstellung:} Gegeben sind $n+1$ reelle \textbf{Stützstellen} $a \leq x_0 < ... < x_n \leq b$ und \textbf{Funktionswerte} $y_0, .., y_n \in \mathbb{K}$. Die \textbf{Lagrange-Interpolationsaufgabe} sucht ein Polynom $p \in \mathbb{P}_n = \{p(x)=\sum_{j=0}^{n}a_j x^j | a_0, ..., a_n \in \mathbb{K}\}$ vom Grad $n$ mit $p(x_j) = y_j \forall j=0, ..., n$
+
+\begin{lemma}
+	\begin{enumerate}
+		\item $\mathbb{P}_n$ ist $\mathbb{K}$-Vektorraum mit $\dim \mathbb{P}_n = n+1$.
+		\item Die \textbf{Monome} $p_j(x)=x^j, j=0, ..., n$ sind eine Basis von $\mathbb{P}_n$.
+		\item Die \textbf{Lagrange-Polynome} $L_j(x) = \prod_{k=0, k\neq j}^{n} \frac{x-x_k}{x_j-x_k} \in \mathbb{P}_n$ erfüllen $L_j(x_k) = \delta_{jk}$ für alle $j,k=0, ..., n$ und bilden eine Basis von $\mathbb{P}_n$.
+		\item Die \textbf{Newton-Polynome} $q_j(x) = \prod_{k=0}^{j-1} (x-x_k) \in \mathbb{P}_j$ für $j=0, ..., n$ bilden eine Basis von $\mathbb{P}_n$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	klar: $\mathbb{P}_n$ ist $\mathbb{K}$-Vektorraum, $\dim \mathbb{P}_n \leq n+1$,
+	
+	zz: $\{L_0, .., L_n\} \subseteq \mathbb{P}_n$ lin. unab.
+	
+	Sei $\mu_0, ..., \mu_n \in \mathbb{K}$ mit $\sum_{j=0}^{n} \mu_j L_j(x) = 0 \forall x$
+	
+	Für $x=x_k$ folgt
+	
+	\begin{align*}
+		0 = \sum_{j=0}^{n} \mu_j \underbrace{L_j(x_k)}_{=\delta_{jk}} = \mu_k
+	\end{align*}
+	
+	$\implies$ lin. unab. laut Def. $\implies \dim \mathbb{P}_n \geq n+1 \implies$ Monome + Lagrange Pol. bilden Basis von $\mathbb{P}_n$.
+	
+	zz. $\{q_0, ..., q_n\} \subseteq \mathbb{P}_n$ lin. unab.
+	
+	Seien $\mu_0, ..., \mu_n \in \mathbb{K}$ mit $\sum_{j=0}^{n} \mu_j \underbrace{q_j(x)}_{=\prod_{k=0}^{j-1}(x-x_k)} = 0$.
+	
+	Für $x=x_0$ folgt $\mu_0 q_0(x) = 0 \implies \mu_0 = 0$.
+	
+	Für $x=x_1$ folgt $\mu_1 \underbrace{q_1(x)}_{\neq 0} = 0$, also $\mu_1 = 0$. Induktives Vorgehen zeigt $\mu_j=0 \forall j$.
+\end{proof}
+
+\begin{theorem}[Eindeutigkeit + Existenz]
+	Betrachte Lagrange-Interpolation zu Stützstellen $a \leq x_0 < ... < x_n \leq b$ und Funktionswerten $y_0, ..., y_n \in \mathbb{K}$. Dann existiert ein eindeutiges $p \in \mathbb{P}_n$ mit $p(x_j) = y_j \forall j$. Dieses wird gegeben durch $p = \sum_{j=0}^{n} y_j L_j$. Ist $\{q_0, ..., q_n\} \subseteq \mathbb{P}_n$ eine Basis von $\mathbb{P}_n$ und $p = \sum_{j=0}^{n} \lambda_j q_j$, so löst $\lambda = (\lambda_0, ..., \lambda_n)$ das lineare Gleichungssystem
+	\begin{align*}
+		\underbrace{\left(\begin{matrix}
+			q_0(x_0) & ... & q_n(x_0)\\
+			\vdots & & \vdots\\
+			q_0(x_n) & ... & q_n(x_n)
+		\end{matrix}\right)}_{=: A}\lambda = 
+		\left(\begin{matrix}
+			y_0\\ \vdots\\ y_n
+		\end{matrix}\right)
+	\end{align*}
+	
+	Die Matrix $A$ ist regulär, d.h. $\lambda$ ist die eindeutige Lösung.
+\end{theorem}
+
+\begin{proof}
+	Da $L_j(x_k) = \delta_{jk} \forall j,k$ ist offensichtlich, dass $p=\sum_{j=0}^{n} \mu_j L_j$ genau dann das Interpolationsproblem löst, wenn $\mu_j=y_j \forall j$. $\implies$ Eindeutigkeit + Existenz
+	
+	Def. Lösungsoperator $\mathcal{P}: \mathbb{K}^{n-1} \rightarrow \mathbb{P}_n$ durch $(\mathcal{P}y)(x_j) = y_j \forall j=0, ..., n \forall y \in \mathbb{K}^{n+1}$
+	
+	$\implies$ wohldef, bijektiv
+	
+	Def. Auswertungsoperator $\mathcal{A}: \mathbb{P}_n \rightarrow \mathbb{K}^{n+1}, p \mapsto (p(x_0), ..., p(x_n))$
+	
+	$\implies$ wohldef, linear
+	
+	$\mathcal{P} \circ \mathcal{A} =$ Identität, $\mathcal{A} \circ \mathcal{P} =$ Identität,
+	
+	$\implies \mathcal{A} = \mathcal{P}^{-1}, \mathcal{P} = \mathcal{A}^{-1}$
+	
+	$\implies A$ ist die darstellende Matrix $\mathcal{A}$. $\implies A$ ist regulär, da $\mathcal{A}$ bijektiv, linear.
+\end{proof}
+
+\begin{remark}
+	Die Konditionszahl $cond(A)$ der sogenannten \textbf{Vandermonde-Matrix} $A$ hängt stark von der Wahl der Basis ab. Für die Lagrange-Polynome wäre $A$ die Identität. Für die Monome ist $cond(A)$ in der Regel indiskutabel schlecht (hängt an der Wahl der $x_j$). Die Basiswahl beeinflusst auch die Besetzungsstruktur der Matrix.
+\end{remark}
+
+\begin{example}
+	Die Newton-Basis führt auf eine untere Dreiecksmatrix
+	\begin{align*}
+		\left(\begin{matrix}
+			1 & 0 & ... & 0\\
+			1 & q_1(x_1) & ... & 0\\
+			\vdots & \vdots & \ddots & \vdots\\
+			1 & q_1(x_n) & ... & q_n(x_n)\\
+		\end{matrix}\right)
+	\end{align*}
+	d.h. das lineare GLS kann in $\mathcal{O}(n^2)$ statt $\mathcal{O}(n^3)$ gelöst werden.
+\end{example}
+
+\begin{lemma}[Horner-Schema]
+	Sei $p(x) = \sum_{j=0}^{n} \lambda_j \underbrace{q_j(x)}_{\prod_{k=0}^{j-1}(x-x_k)}$
+	
+	Für einen Auswertungspunkt $x \in \mathbb{R}$ betrachte
+	\begin{itemize}
+		\item $y = \lambda_n$
+		\item for $k=n-1:-1_0$
+		\item $y = (x-x_k)y + \lambda_k$
+		\item end
+	\end{itemize}
+	
+	$\implies$ Der Algorithmus berechnet in $3n$ Operationen den Funktionswert $y=p(x)$.
+\end{lemma}
+
+\begin{theorem}[Interpolationsfehlerdarstellung]
+	Sei $f \in \mathcal{C}^{n+1}[a,b], 0 \leq m \leq n, p \in \mathbb{P}_n$ mit $p(x_j) = f(x_j) \forall j=0, ..., n$, wobei $a \leq x_0 < ... < x_n \leq b$
+	\begin{align*}
+		\implies f^{(m)}(x) - p^{(m)}(x) = \frac{f^{(n+1)(\xi)}}{(n+1-m)!} \prod_{l=0}^{n-m}(x-\zeta_l),
+	\end{align*}
+	wobei $\xi = \xi(m,x)$ und $\zeta_l = \zeta_l(m,x,x_0,..,x_n)$ in $[a,b]$
+	
+	Für $m=0$ gilt $\zeta_l = x_l \forall l$.
+\end{theorem}
+
+\begin{proof}
+	$e := f-p \in \mathcal{C}^{n+1}[a,b]$
+	
+	$\implies e$ hat mindestens $n+1$ Nullstenen (bei $x_l$) $\implies e'$ hat mindestens $n$ Nullstellen $\implies e^{(m)}$ hat mindestens $n+1-m$ Nullstellen $a < \zeta_0 < ... < \zeta_{n-m} < b$
+	
+	o.B.d.A. $x \notin \{\zeta_0, ..., \zeta_{n-m}\}$
+	
+	Def. $F(y) := e^{(m)}(x)w(y) - e^{(m)}(y) w(x)$ mit $w(x) := \prod_{l=0}^{m-n}(y-\zeta_l)$
+	
+	$\implies F$ hat $n+2-m$ Nullstellen $\implies F^{(n+1-m)}$ hat mind. $1$ Nullstelle $\xi$
+	
+	\begin{align*}
+		0 = F^{(n+1-m)(\xi)} = \underbrace{e^{(m)}(x)}_{=f^{(m)}(x) - p^{(m)}(x)} \underbrace{w^{(n+1-m)}(\xi)}_{=(n+1-m)!} - \underbrace{e^{(n+1)}(\xi)}_{=f^{n+1}(\xi)} \underbrace{w(x)}_{=\prod_{l=0}^{n-m}(x-\zeta_l)}
+	\end{align*}
+\end{proof}
+
+\begin{corollary}[Interpolationsfehler-Abschätzung]
+	Seien $f \in \mathcal{C}^{n+1}[a,b]$ reell- oder komplexwertig, $a \leq x_0 < ... < x_n \leq b, p \in \mathbb{P}_n$ mit $p(x_j)=f(x_j) \forall j=0, ..., n, 0 \leq m \leq n$
+	\begin{align*}
+		\implies ||f^{(m)}-p^{(m)}||_{L^\infty(a,b)} \leq C_\mathbb{K} \frac{||f^{(n+1)}||_{L^\infty(a,b)}}{(n+1-m)!} (b-a)^{n+1-m}
+	\end{align*}
+	mit $C_{\mathbb{K}}=1$ für reelwertiges $f$, $C_{\mathbb{K}} = 2$ für komplexwertiges $f$.
+\end{corollary}
+
+\begin{proof}
+	klar für $\mathbb{K} = \mathbb{R}$.
+	
+	Für $\mathbb{K} = \mathbb{C}$, betrachte $Re(f), Im(f) \in \mathcal{C}^{n+1}[a,b]$.
+\end{proof}
+
+\begin{remark}
+	Aus der Fehlerabschätzung und der Konvergenz der Exponentialreihe $exp(y) = \sum_{k=0}^{\infty}\frac{y^k}{k!}$ folgt, dass der Interpolationsfehler ''schnell'' konvergiert, sofern sich die Ableitungen $||f^{(k)||_{L^\infty(a,b)}}$ gut verhalten (z.B. $||f^{(k)||_{L^\infty(a,b)}} \leq M < \infty$).
+\end{remark}
+
+\begin{remark}
+	Für $m=1, a = x$ und $b = x+h$ folgt
+	\begin{align*}
+		|f'(x)-p'(x)| \leq ||f'-p'||_{L^\infty(x,x+h)} \leq C_{\mathbb{K}} \frac{||f^{(n+1)}||_{L^\infty(x,x+h)}}{n!} h^n
+	\end{align*}
+	d.h. besser als die Differenzquotienten aus Kapitel 1.
+\end{remark}
+
+\subsection{Cebysev-Knoten}
+
+\begin{definition}
+	Sei $f:\mathbb{R} \rightarrow \mathbb{R}$ eine Funktion und $x \in \mathbb{R}$. Man nennt x eine \textbf{n-fache Nullstelle von $f$}, gdw. $f(x)=0$ und $f$ is lokal um $x$ $(n-1)$-mal diffbar mit $f^{(k)}(x)=0 \forall k=1, ..., n-1$. Wir schreiben $n(f,x) \in \mathbb{N}_0$ für die Vielfachheit.
+\end{definition}
+
+\begin{lemma}
+	Sei $p \in \mathbb{P}_n$ mit Nullstellen $x_1 < ... < x_k$ und $N := \sum_{j=1}^{n}n(f,x_j) > n$.
+	
+	$\implies p=0$, d.h. ein nicht-triviales Polynom vom Grad $n$ hat $\leq n$ Nullstellen, wobei diese mit Vielfachheit gezählt werden.
+\end{lemma}
+
+\begin{proof}
+	Induktion nach $n$.
+	
+	Ind.anf.: $n=0$, d.h. $p$ ist konstant mit mind. einer Nullstelle $\implies p=0 \checkmark$
+	
+	Ind.hyp: Die Aussage gelte für alle Polynome $q \in \mathbb{P}_{n-1}$.
+	
+	$p \in \mathbb{P}_n$ hat Nullstellen $x_1 < ... < x_k$ und $N = \sum_{j=1}^{k}n(p, x_j) > n$
+	
+	$\implies p \in \mathbb{P}_{n-1}$ hat Nullstellen $\zeta_1 < ... < \zeta_{k-1}$ mit $x_j < \zeta_j < x_{j+1}$ (nach MWS) und bei allen $x_j$ mit $n(p,x_j)>1$.
+	
+	Für die Nullstellen von $p'\in \mathbb{P}_{n-1}$ gilt also
+	\begin{align*}
+		\sum_{j=1}^{k-1} \underbrace{n(p',\zeta_j)}_{\geq 1} + \sum_{j=1}^{k} \max\{n(p,x_j)-1, 0\}
+		\geq -1 + \underbrace{\sum_{j=1}^{k} \underbrace{(\max\{n(p,x_j) - 1, 0\} + 1)}_{\geq n(p,x_j)} }_{=N > n} > n-1
+	\end{align*}
+	$\implies p' = 0 \implies p$ konstant $\implies p=0$.
+\end{proof}
+
+\begin{remark}
+	Aus der linearen Algebra wissen wir, dass sich jedes Polynom $p \in \mathbb{P}_n$ mit Nullstelle $x_0$ in der Form $p(x) = q(x)(x-x_0)$ schreiben lässt mit $q \in \mathbb{P}_{n-1}$, sog. \textbf{Polynomdivision}.
+\end{remark}
+
+Ferner gilt der \textbf{Fundamentalsatz der Algebra}: Für jedes $p \in \mathbb{P}_n$ existieren $x_1, ..., x_n \in \mathbb{C}$ und $\lambda \in \mathbb{C}$ mit $p(x) = \lambda \prod_{j=1}^{n}(x-x_j)$. Offensichtlich ist diese Aussage viel stärker als ''mein Lemma''.
+
+\textbf{Ziel}: Für $m=0$ gilt für alle $x \in [a,b]$
+\begin{align*}
+	|f(x)-p(x)| \leq C_{\mathbb{K}} \frac{||f^{(n+1)}||_{L^\infty(a,b)}}{(n+1)!} \prod_{l=0}^{n} |x-x_l|,
+\end{align*}
+wenn $f$ glatt und $p \in \mathbb{P}_n$ Lagrange-Interpolationspolynom zu $x_j$.
+
+Nun wollen wir die $x_j$ so wählen, dass $\max_{x\in [a,b]} \prod_{l=0}^{n} |x-x_l|$ minimal wird.
+
+\begin{definition}
+	Für $n \in \mathbb{N}_0$ definiere die \textbf{Cebysev-Polynome (der ersten Art)} durch $T_n(t) := \cos(n \arccos t)$ auf $[-1, 1]$.
+\end{definition}
+
+\begin{lemma}
+	\begin{enumerate}
+		\item $T_n(\cos(\Phi)) = \cos(n \Phi) \forall 0 \leq \Phi \leq \pi \forall n \in \mathbb{N}_0$
+		\item Auf $[-1, 1]$ gilt $T_0(t) = 1$, $T_1(t) = t$, $T_{n+1}(t) = 2t T_n(t) - T_{n-1}(t) \forall n \in \mathbb{N}$
+		\item $T_n \in \mathbb{P}_n[-1, 1]$ mit Leitkoeffizient $2^{n-1}$ für $n \geq 1$
+		\item $||T_n||_{L^\infty(-1, 1)} = 1$
+		\item $T_n$ hat in $[-1, 1]$ genau $n+1$ lokale Extrema $T_n(s_j^{(n)}) = (-1)^j$ mit $s_j^{(n)} = \cos \left(\frac{j\pi}{n}\right)$ für $j=0, ..., n$
+		\item $T_n$ hat in $[-1, 1]$ genau $n$ einfache Nullstellen $T_n(t_j^{(n)}) = 0$, $t_j^{(n)} = \cos \left(\frac{(2j-1)}{n}\frac{\pi}{2} \right)$ für $j=1, ..., n$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}[nur die sog. Drei-Term-Rekursion in (2)]
+	Whl: Additionstheorem des Cosinus: $\cos(x)+\cos(y) = 2\cos\left(\frac{x+y}{2}\right) \cos\left(\frac{x-y}{2}\right)$
+	
+	$t=\cos(\Theta), x:=(n+1)\Theta, y:=(n-1)\Theta$
+	\begin{align*}
+		\implies \frac{x+y}{2} = n \Theta, \frac{x-y}{2} = \Theta\\
+		\implies T_{n+1}(t) + T_{n-1}(t) = \cos(\underbrace{(n+1)\Theta}_{x}) + \cos(\underbrace{(n-1)\Theta}_{y}) = 2 \underbrace{\cos\left(\underbrace{\frac{x+y}{2}}_{n\Theta}\right)}_{T_n(t)} \underbrace{\cos\left(\underbrace{\frac{x-y}{2}}_{\Theta}\right)}_{=t}
+	\end{align*}
+\end{proof}
+
+\begin{theorem}[Optimalität der Cebysev-Knoten]
+	Betrachte die affine Transformation $\Psi:[-1, 1] \rightarrow [a,b], \Psi(t)=\frac{1}{2} \{(a+b) + t(b-a)\}$.
+	
+	Seien $t_1^{(n+1)}, ..., t_{n+1}^{(n+1)}$ die Nullstellen von $T_{n+1}$.
+	\begin{align*}
+		\implies \min_{x_0, ..., x_n \in [a,b]} \max_{x\in [a,b]} \prod_{j=0}^{n} |x-x_j| = \max_{x\in [a,b]} \prod_{j=0}^{n} |x - \Psi(t_{j+1}^{(n+1)})| = \left(\frac{b-a}{2}\right)^{n+1} \frac{1}{2^n}.
+	\end{align*}
+	Die $\Psi(t_{j+1}^{(n+1)})$ für $j=0, ..., n$ heißen \textbf{Cebysev-Knoten in [a,b]}.
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item zz: $\max_{t \in [-1, 1]} \prod_{j=0}^{n} |t-t_{j+1}^{(n+1)}| = \frac{1}{2^n}$
+		
+		Lemma (iii) + (vi) $\implies T_{n+1}(t) = 2^n \prod_{j=0}^{n} (t-t_{j+1}^{(n+1)})$
+		
+		Lemma (iv) $\implies 1 = ||T_{n+1}||_{L^\infty(-1, 1)} = \max_{t \in [-1, 1]} 2^n \prod_{j=0}^{n} |t-t_{j+1}^{(n+1)}|$
+		
+		\item zz. $\frac{1}{2^n} \leq \inf_{t_0, ..., t_n \in [-1, 1]} \max_{t \in [-1, 1]} \prod_{j=0}^{n} |t-t_j|$ (dann folgt die Behauptung für $[a, b] = [-1, 1]$)
+		
+		Annahme: Ex. $t_0, ..., t_n \in [-1, 1]$ mit $w(t) := \prod_{j=0}^{n} (t-t_i)$ erfüllt
+		\begin{align*}
+			||w||_{L^\infty(-1, 1)} = \max_{t \in [-1, 1]} \prod_{j=0}^{n} |t-t_j| \lneq \frac{1}{2^n}.
+		\end{align*}
+		
+		Definiere $p := \underbrace{\frac{1}{2^n} T_{n+1}}_{\in \mathbb{P}_{n+1}} - \underbrace{w}_{\in \mathbb{P}_{n+1}} \in \mathbb{P}_n$. Ferner $\frac{1}{2^n}T_{n+1}(s_j^{(n+1)}) = \frac{(-1)^j}{2^n}$ und $|w(s_j^{n+1})| < \frac{1}{2^n}$.
+		
+		$\implies p$ hat $n+1$ Vorzeichenwechsel $\implies n+1$ Nullstellen $\implies p=0 \implies w = \frac{1}{2^n} T_{n+1}$ \lightning
+		
+		\item klar: $\Psi$ ist Bijektion von $[-1, 1]$ auf $[a, b]$
+		
+		$\Psi(t) - \Psi(t_{j+1}^{(n+1)}) = \frac{1}{2} \{(t - t_{j+1}^{(n+1)})(b-a)\}$
+		
+		\begin{align*}
+			\implies \max_{x\in [a,b]} \prod_{j=0}^{n} |x-\Psi(t_{j+1}^{(n+1)})| = \max_{t \in [-1, 1]} \prod_{j=0}^{n} |\Psi(t) - \Psi(t_{j+1}^{(n+1)})| =\\
+			\left(\frac{b-a}{2}\right)^{n+1} \underbrace{\max_{t \in [-1, 1]} \prod_{j=0}^{n} |t-t_{j+1}	{(n+1)}|}_{=\frac{1}{2^n}}
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\subsection{Lebesgue-Konstante}
+
+\begin{theorem}
+	Seien $a \leq x_0 < ... < x_n \leq b$ Stützstellen mit zugehörigen Lagrange-Polynomen $L_0, ..., L_n \in \mathbb{P}_n$.
+	
+	Def. $I_n : \mathcal{C}[a,b] \rightarrow \mathbb{P}_n, I_nf := \sum_{j=0}^{n} f(x_j) L_j$.
+	
+	$\implies I_n$ ist eine lineare Projektion auf $\mathbb{P}_n$ mit Operatornorm
+	\begin{align*}
+		||I_n|| := \sup_{f \in \mathcal{C}[a, b], f\neq 0} \frac{||I_nf||_{L^\infty(a,b)}}{||f||_{L^\infty(a,b)}} = \max_{x\in [a,b]} \sum_{j=0}^{n} |L_j(x)| =: \Lambda(x_0, ..., x_n).
+	\end{align*}
+	
+	Die Zahl $\Lambda(x_0, ..., x_n)$ heißt \textbf{Lebesgue-Konstante}.
+\end{theorem}
+
+\begin{proof}
+	$I_n$ wohldef., linear \checkmark
+	
+	Für $p \in \mathbb{P}_n$ gilt $I_np = p$, da Polynominterpolation eine eindeutige Lsg. hat.
+	
+	Für $f \in \mathcal{C}[a,b]$ mit $f\neq 0$ gilt
+	\begin{align*}
+		\frac{||I_nf||_{L^\infty(a,b)}}{||f||_{L^\infty(a,b)}} = \max_{x\in [a,b]} \left|\sum_{j=0}^{n} \frac{f(x_j)}{||f||_{L^\infty(a,b)}} L_j(x)\right| \leq \Lambda(x_0, ..., x_n).
+	\end{align*}
+	
+	Um Gleichheit zu zeigen, wähle $x \in [a,b]$ mit $\sum_{j=0}^{n}|L_j(x)| = \Lambda(x_0, ..., x_n)$. Wähle $f \in \mathcal{C}[a, b]$ als Polygonzug mit $||f||_{L^\infty(a,b)} \leq 1$ und $f(x_j) = sign L_j(x)$. $\implies$ Gleichheit bei obiger Abschätzung.
+\end{proof}
+
+\begin{remark}
+	Derselbe Beweis zeigt für $\tilde{I}_n: \mathbb{K}^{n+1} \rightarrow \mathbb{P}_k, \tilde{I}_n(y_0, ..., y_n) := \sum_{j=0}^{n} y_j L_j$, dass $||\tilde{I}_n(y_0, ..., y_n)||_{L^\infty(a,b)} \leq \Lambda \max_{j=0,...,n} |y_j|$ mit Gleichheit für spezielle $y_j = sign(L_j(x))$, wenn $x \in [a, b]$ mit $\sum_{j=0}^{n} |L_j(x)| = \max_{\tilde{x}\in [a,b]} \sum_{j=0}^{n} |L_j(x)|$.
+	
+	$\implies \tilde{I}$ ist der (lineare) Lösungsoperator der Pol.int.
+	\begin{align*}
+		\implies ||\tilde{I}_n(y_0, ..., y_n) - I_n(\tilde{y}_0, ..., \tilde{y}_n)||_{L^\infty(a,b)} \leq \Lambda \max_{j=0,...,n} |y_j - \tilde{y}_i|
+	\end{align*}
+	d.h. $\Lambda$ ist die abstrakte Konditionszahl der Polynominterpolation.
+\end{remark}
+
+Abschließend einige Bemerkungen zum Bestapproximationsproblem.
+
+\begin{lemma}
+	$X$ normierter Raum, $Y \leq X$ endlich-dim. Teilraum, $x\in X$
+	
+	$\implies$ Ex. $y \in Y$ mit $||x-y||_X = \min_{\tilde{y} \in Y} ||x-\tilde{y}||_X$
+\end{lemma}
+
+\begin{proof}
+	Wähle Folge $(y_n)_{n\in \mathbb{N}} \subseteq Y$ mit
+	\begin{align*}
+		\lim\limits_{n\rightarrow\infty} ||x-y_n||_X = \inf_{\tilde{y} \in Y} ||x-\tilde{y}||_X\\
+		\implies ||y_n||_X \leq \underbrace{||x-y_n||_X}_{\text{glm. beschränkt wegen Konvergenz}} + ||x||_X \implies \sup_{n\in \mathbb{N}} ||y_n||_X \leq M < \infty
+	\end{align*}
+	
+	Da $Y$ endl.-dim., gilt der Satz von Bolzano-Weierstraß, d.h. $(y_n)_{n\in \mathbb{N}}$ hat eine konvergente Teilfolge. O.B.d.A. ex. $y \in Y$ mit $||y-y_n||_X \rightarrow 0$ für $n \rightarrow \infty$.
+	
+	$||x-y||_X = \lim\limits_{n\rightarrow\infty} ||x-y_n||_X = \inf_{\tilde{y} \in Y} ||x-\tilde{y}||_X$.
+\end{proof}
+
+\begin{remark}
+	Mit Satz über Lebesgue-Konstante und dem Lemma gilt für alle $q \in \mathbb{P}_n$
+	\begin{align*}
+		\underbrace{||f-I_nf||_{L^\infty(a,b)}}_{\geq \min_{q \in \mathbb{P}_n} ||f-q||_{L^\infty(a,b)}} \leq ||f-q||_{L^\infty(a,b)} + \underbrace{||I_n(f-q)||_{L^\infty(a,b)}}_{\leq \Lambda ||f-q||_{L^\infty(a,b)}}\\
+		\implies \min_{q \in \mathbb{P}_n} ||f-q||_{L^\infty(a,b)} \leq ||f-I_nf||_{L^\infty(a,b)} \leq (1+\Lambda) \min_{q \in \mathbb{P}_n} ||f-q||_{L^\infty(a,b)}
+	\end{align*}
+\end{remark}
+
+\begin{remark}
+	Nach Satz von Weierstraß gilt $\lim\limits_{n\rightarrow\infty} \min_{p \in \mathbb{P}_n} ||f-p||_{L^\infty(a,b)} = 0 \forall f \in \mathcal{C}[a,b]$.
+	
+	Nach Satz von Faber gilt allerdings, dass es für jede Folge von Stützstellen $(x_0^{(n)}, ..., x_n^{(n)})_{n\in\mathbb{N}}$ eine Funktion $f\in \mathcal{C}[a,b]$ mit der Eigenschaft, dass $||f-I_n^{(n)}f||_{L^\infty(a,b)}$ divergiert!
+	
+	Insbesondere muss also $\Lambda_n^{(n)} \rightarrow \infty$ gelten!
+\end{remark}
+
+\begin{remark}
+	Für äquidistante Stützstellen divergiert $\Lambda_n$ exponentiell schnell. Für Cebysev-Knoten gilt allerdings $\Lambda_n = \mathcal{O}(\log n)$.
+\end{remark}
+
+\begin{remark}
+	Der \textbf{Remez-Algorithmus} berechnet (in unendlich vielen Schritten) ein Polynom $q \in \mathbb{P}_n$ mit $||f-q||_{L^\infty(a,b)} = \min_{p \in \mathbb{P}_n} ||f-p||_{L^\infty(a,b)} \forall f\in\mathcal{C}[a,b]$.
+	
+	Startwert ist dafür der Cebysev-Interpoland.
+	
+	Der \textbf{Alternantensatz von Cebysev} zeigt, dass das Bestapprox.polynom $q \in \mathbb{P}_n$ bzgl. $||.||_{L^\infty(a,b)}$ in der Tat eindeutig ist.
+\end{remark}
+
+\subsection{Auswertung von Interpolationspol.}
+
+\begin{theorem}[Neville-Verfahren]
+	Seien $a \leq x_0 < ... < x_n \leq b$ Stützstellen mit Funktionswerten $y_j \in \mathbb{K}$ und $p \in \mathbb{P}_n$ mit $p(x_j) = y_j \forall j=0, ..., n, x \in [a, b]$ Auswertungspunkt.
+	
+	Für $j,m \in \mathbb{N}_0$ mit $j + m \leq n$, definiere $p_{j,m} \in \mathbb{P}_m$ als eind. Int.polynom mit $p(x_k) = y_k \forall k=j, ..., j+m$
+	\begin{align*}
+		p(x) = p_{0, n}(x)\\
+		p_{j,0}(x) = y_j\\
+		p_{j,m}(x) = \underbrace{\frac{(x-x_j) p_{j+1, m-1}(x) - (x-x_{j+m}) p_{j,m-1}}{x_{j+m}-x_j}}_{=:q(x), q \in \mathbb{P}_m}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	$q(x) = y_j, q(x_{j+m}) = y_{j+m}, q(x_k) = y_k, k=j+1, ..., n-m+1 \implies q=p_{j,m}$
+\end{proof}
+
+Dieser Satz führt auf das induktive \textbf{Neville-Schema}
+\begin{align*}
+	\begin{matrix}
+		y_0 &= & p_{0,0}(x) & \rightarrow & p_{0,1}(x) & \rightarrow & ... & p_{0,n}(x) = p(x)\\
+		                 &  & & \nearrow    &            & & & \\
+		y_1 &= & p_{1,0}(x) & \rightarrow & p_{1,1}(x) & \nearrow    & & \\
+		y_2 &= & p_{2,0}(x) & \nearrow & & & \\
+		&\vdots & & & & & \\
+		y_{n-1} &= & p_{n-1,0}(x) & \rightarrow & p_{n-1,1}(x) & & \\
+		y_n &= & p_{n,0}(x) & \nearrow & & & \\
+	\end{matrix}
+\end{align*}
+
+\begin{remark}
+	\begin{itemize}
+		\item Das Neville-Verfahren ist ein sog. \textbf{Einschritt-Verfahren}, d.h. eine ''neue Spalte'' nur mit Hilfe der vorausgegangenen Spalte berechnet.
+		\item Wenn man ''von oben nach unten rechnet'', ist kein zusätzlicher Speicher nötig. In diesem Fall sollte man die ''Diagonale'' speichern.
+		\item Man kann im Neville-Verfahren dann leicht einen neuen Punkt $(x_{n+1}, y_{n+1})$ hinzunehmen und erhält $p_{0,n+1}(x)$, indem man nur die neue Diagonale rechnet.
+	\end{itemize}
+\end{remark}
+
+\begin{algorithm}[Neville]
+	Input: Stützstellen $a \leq x_0 < ... < x_n \leq b$, Funktionswerte $y_0, ..., y_n \in \mathbb{K}$, Auswertungspunkt $x \in \mathbb{R}$
+	
+	\begin{itemize}
+		\item for $m=1:n$
+		\item for $j=0:n-m$
+		\item $y_j = \frac{(x-x_j)y_{j+1} - (x-x_{j+m})y_j}{x_{j+m}-x_j}$
+		\item end
+		\item end
+	\end{itemize}
+	
+	Output: $y_0 = p(x)$, wobei $p \in \mathbb{P}_n$ mit $p(x_j) = y_j \forall j$
+	
+	klar: Speicherbedarf $n+1$ (überschreiben von $y$-Vektor), Arithmetischer Aufwand $\frac{7}{2}n(n+1)$.
+\end{algorithm}
+
+\begin{definition}
+	Sei $p = \sum_{j=0}^{n} \lambda_j x^j \in \mathbb{P}_n$. Dann bezeichnet man $\lambda_n$ als \textbf{führenden Koeffizienten von $p$ bzgl. $\mathbb{P}_n$}.
+	
+	Falls $j=0$ oder ($\lambda_j \neq 0$ und $\lambda_k = 0 \forall k > j$), so bezeichnet man $\lambda_j$ als \textbf{Leitkoeffizient von $p$}.
+\end{definition}
+
+\begin{theorem}[Newtons Dividierte Differenzen]
+	Seien $a \leq x_0 < ... < x_n \leq b$ Stützstellen, $y_j \in \mathbb{K}, p \in \mathbb{P}_n$ mit $p(x_j) = y_j \forall j=0, ..., n$. Für $j, m \in \mathbb{N}_0$ mit $j+m \leq n$ definiere
+	\begin{align*}
+		y_{j,0} := y_j & y_{j,m} := \frac{y_{j+1,m-1}-y_{j,m-1}}{x_{j+m}-x_j}
+	\end{align*}
+	$\implies$
+	\begin{enumerate}
+		\item $y_{j,m}$ ist der führende Koeff. von $p_{j,m} \in \mathbb{P}_m$ aus dem Neville-Verfahren.
+		\item Mit $\lambda_j := y_{0,j}$ gilt $p(x) = \sum_{j=0}^{n} \lambda_j \underbrace{\prod_{k=0}^{j-1}(x-x_k)}_{=q_j \in \mathbb{P}_j}$ d.h. die dividierten Differenzen geben die Koeffizienten des Int.pol. bzgl. Newton-Basis.
+	\end{enumerate}	
+\end{theorem}
+
+\begin{proof}
+	$q_k := p_{0,k} - p_{0,k-1} \in \mathbb{P}_n$ mit führendem Koeff. $y_{0,k}$ und Nullstellen $x_0, ..., x_{n-1}$
+	
+	$\implies q_k = y_{0,k} \prod_{j=0}^{k-1}(x-x_j)$ nach Pol.div.
+	\begin{align*}
+		\implies p = p_{0,k} = p_{0,0} + \sum_{k=1}^{n} \underbrace{(p_{j,k} - p_{0,k-1})}_{=q_k} = y_{0,0} + \sum_{k=1}^{n} y_{0,k} \prod_{j=0}^{k-1} (x-x_j) = \sum_{k=0}^{n} \underbrace{y_{0,k}}_{=\lambda_k} \prod_{j=0}^{k-1} (x-x_j)
+	\end{align*}
+\end{proof}
+
+Schema der dividierten Differenzen
+\begin{align*}
+	\begin{matrix}
+		y_0 &=      & y_{0,0} & \searrow & & & \\
+		y_1 &=      & y_{1,0} & \rightarrow & y_{0,1} & & \\
+		    &\vdots &         & \searrow & & & \\
+		    &\vdots &         & \rightarrow & y_{1,1} & \rightarrow & y_{0,2} \\
+		    &\vdots &         &            & &  &\ddots\\
+		y_{n-1} &=  & y_{n-1,0} & \searrow & & & \\
+		y_n &=      & y_{n,0} & \rightarrow & y_{n-1,1} & \rightarrow & ... & y_{0,n}\\
+	\end{matrix}
+\end{align*}
+
+$\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu berechnen.
+
+\begin{remark}
+	\begin{itemize}
+		\item Die dividierten Differenzen sind ein Einschrittverfahren.
+		\item Wenn man den $y$-Vektor überschreibt, braucht man keinen zusätzlichen Speicher.
+		\item Das Verfahren löst das Vandermonde-System für die Newton-Basis, aber die Matrix aufzustellen.
+		\item Die Auswertung von $p(x)$ erfolgt mit Horner-Schema und Aufwand $3n$ pro $x \in \mathbb{K}$.
+	\end{itemize}
+\end{remark}
+
+\begin{algorithm}
+	Input: Stützstellen $x_0 < ... < x_n$, Funktionswerte $y_0, ..., y_n \in \mathbb{K}$
+	
+	\begin{itemize}
+		\item for $m=1:n$
+		\item for $j = n-m:-1:0$
+		\item $y_{j,m} := \frac{y_{j+m} - y_{j,m-1}}{x_{j+m} - x_j}$
+		\item end
+		\item end
+	\end{itemize}
+	
+	Output: Koeffizienten des Interpol.pl. $p \in \mathbb{P}_n$ $y_0, ..., y_n$ bzgl. Newton-Basis.
+\end{algorithm}
+
+\begin{remark}
+	Will man das Interpolationspolynom $p(x)$ an $N$ Stellen auswerten, so gilt für den Gesamtaufwand: Aufwand(Neville) = $\frac{7}{2}Nn(n+1)$, Aufwand(Div. Diff. + Horner) = $\underbrace{\frac{3}{2}n(n+1)}_{\text{div. Diff.}} + \underbrace{3Nn}_{\text{Horner}}$.
+	
+	Es gilt immer: Aufwand(Div. Diff. + Horner) $\leq$ Aufwand(Neville). Wenn man sich den Fortpflanzungsfehler anschaut dann sieht man aber, dass Neville weniger anfällig ist für Auslöschung.
+	
+	In der Praxis verwendet man deshalb Neville für kleine $N$ und Div. Diff. + Horner für große $N$.
+\end{remark}
+
+\subsection{Hermite-Polynominterpolation}
+
+\begin{theorem}[Wohlgestelltheit]
+	Gegeben seien Stützstellen $a \leq x_0 < ... < x_n \leq b$, Funktionswerte $y_j^(k) \in \mathbb{K}$ für $j=0, ..., n$ und $k=0, ..., n_j \in \mathbb{N}_0$ (Lagrange $n_j = 0 \forall j$), Def $N := \left(\sum_{j=0}^{n}(n_j + 1)\right)-1$
+	
+	$\implies$ Ex. eind. $p \in \mathbb{P}_N$ mit $p^{(k)}(x_j) = y_j^{(k)} \forall j=0, ..., n, \forall k=0, ..., n_j$, wobei $p^{(0)} = p$.
+\end{theorem}
+
+\begin{proof}
+	Betrachte den Auswertungsoperator $\mathcal{A}: \mathbb{P}_N \rightarrow \mathbb{K}^{N+1}, \mathcal{A}p := (p(x_0), ..., p^{(n_0)}(x_0), p(x_1), ..., p^{(n_1)}(x_1), ..., p^{(n_n)}(x_n))$
+	
+	klar: $\mathcal{A}$ ist linear und $\dim \mathbb{P}_N = N+1$
+	
+	$\implies \mathcal{A}$ ist $\underbrace{\text{bijektiv}}_{\text{=Behauptung}}$, gdw. $\mathcal{A} \underbrace{\text{injektiv}}_{\text{zu zeigen!}}$ $\underbrace{\text{(oder $\mathcal{A}$ ist surj)}}_{\text{''schwierig''}}$.
+	
+	Sei $p \in \mathbb{P}_N$ mit $\mathcal{A}p = 0$, d.h. $x_j$ eine $(n_j+1)$-fache Nullstelle von $p \forall j$. $\implies p \in \mathbb{P}_N$ hat $\sum_{j=0}^{n}(n_j+1) = N+1$ viele Nst. (bzgl. Vielfachheit) $\implies p = 0$. 
+\end{proof}
+
+\begin{remark}
+	\begin{itemize}
+		\item Der vorausgegangene Beweis ist das ''normale Beweisprinzip'' für lineare Interpolationsaufgaben. Klar: Man kann die Interpolationsaufgabe insb. lineares Gleichungssystem (äquivalent) formulieren.
+		\item Neville-Verfahren und dividierte Differenzen lassen sich auch für das Hermite-Interpolationsproblem formulieren.
+		\item Analog zu Lagrange (dieselbe Basis) kann man Fehlerdarstellung und Feherabschätzung beweisen, z.B.
+		\begin{align*}
+			|f(x)-p(x)| \leq C_{\mathbb{K}} \frac{||f^{(N+1)}||_{L^\infty(a,b)}}{(N+1)!} \prod_{j=0}^{n} |x-x_j|^{n_j+1}
+		\end{align*}
+		$C_{\mathbb{C} = \sqrt{2}}$ (vorher $2$)
+	\end{itemize}
+\end{remark}
+
+\subsection{Spline-Interpolation}
+
+Die Polynominterpolation erfordert hohe Glätte an $f$, um Fehlerabschätzung zu kriegen. Alternativ kann man deshalb stückweise Polynome betrachten (sog. Splines), um Verfahren und Fehlerkontrolle zu haben, falls $f$ nicht so glatt ist.
+
+\begin{example}[affiner Interpolationspline]
+	Zu Stützstellen $a = x_0 < x_1 < ... < x_n = b$ und $f \in \mathcal{C}[a,b]$ ist $s \in \mathcal{C}[a,b]$ mit
+	\begin{itemize}
+		\item $s|_{[x_{j-1}, x_j]} \in \mathbb{P}_1 \forall j=1, ..., n$
+		\item $s(x_j) = f(x_j) \forall j=0, ..., n$
+	\end{itemize}
+	
+	$\implies$ Offensichtlich eindeutig $s(x) = f(x_{j-1}) \frac{x-x_j}{x_{j-1}-x_j} + f(x_j) \frac{x-x_{j-1}}{x_j-x_{j-1}} \forall j \forall x \in [x_j-1, x_j]$
+\end{example}
+
+\begin{lemma}
+	Zu $f \in \mathcal{C}[a, b] \cap \mathcal{C}^2[x_{j-1}, x_j] \forall j=1, ..., n$ sei $s \in \mathcal{C}[a, b]$ der affine Interpolationsspline.
+	
+	Def $h:[a,b] \rightarrow \mathbb{R}_{>0}, h|_{[x_{j-1}, x_j]} := x_j - x_{j-1}$ \textbf{lokale Netzweite}
+	
+	$\implies ||f-s||_{L^\infty(a,b)} \leq \frac{C_{\mathbb{K}}}{8} ||h^2 f''||_{L^\infty(a,b)}$
+\end{lemma}
+
+\begin{proof}
+	Sei $x \in [x_{j-1}, x_j]$
+	\begin{align*}
+		\implies |f(x) - s(x)| \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \underbrace{|(x-x_{j-1})(x-x_j)}_{\text{maximal für }x = \frac{x_{j-1} + x_j}{2}}\\
+		\implies ||f-s||_{L^\infty(x_{j-1}, x_j)} \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \cdot \frac{(x_j - x_{j-1})^2}{9} = \frac{C_{\mathbb{K}}}{8} ||h^2 f''||_{L^\infty(x_{j-1}, x_j)}
+	\end{align*}
+\end{proof}
+
+\begin{lemma}
+	Zu $f \in \mathcal{C}[a, b]$ und $s \in \mathcal{C}[a, b]$ affiner Int.spline
+	\begin{align*}
+		\implies (i) ||f-s||_{L^2(a,b)} \leq ||h f'||_{L^2(a,b)}, \text{ sofern } f \in \mathcal{C}^1[x_{j-1}, x_j] \text{ für alle } j\\
+		(ii) ||f-s||_{L^2(a,b)} \leq ||h^2f||_{L^2(a,b)}, \text{ sofern } f \in \mathcal{C}^2[x_{j-1}, x_j] \text{ für alle } j
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+	zz: (i) elementweise für $I_j = [x_{j-1}, x_j]$
+	\begin{align*}
+		F := f-s \in \mathcal{C}^1[x_{j-1}, x_j], h_j := x_j - x_{j-1}\\
+		F(x_{j-1}) = 0 \implies \int_{I_j} |F(x)|^2 = \int_{I_j} \left|\int_{x_{j-1}}^{x_j} F' dx \right|^2 \leq h_j^2 ||F'||_{L^2(I_j)}^2\\
+		\implies ||F||_{L^2(I_j)} \leq h_j ||F'||_{L^2(I_j)}\\
+		F(x_{j-1}) = 0 = F(x_j) \implies \int_{I_j}F' dx = 0
+	\end{align*}
+	$s'|_{I_j}$ konstant
+	\begin{align*}
+		\implies s'|_{I_j} = \frac{1}{h_j} \int_{I_j}f' dx \implies <f', s'>_{L^2(I_j)} = ||s'||_{L^2(I_j)}^2\\
+		\implies ||F'||_{L^2(I_j)}^2 = ||f'||_{L^2(I_j)}^2 - 2 Re<f', s'>_{L^2(I_j)} + ||s'||_{L^2(I_j)}^2 = ||f'||_{L^2(I_j)}^2 - ||s'||_{L^2(I_j)}^2\\
+		\implies ||f-s||_{L^2(I_j)} = ||F||_{L^2(I_j)} \leq h_j ||F'||_{L^2(I_j)} \leq h_j ||f'||_{L^2(I_j)} = ||hf'||_{L^2(I_j)}
+	\end{align*}
+	
+	zz: (ii) elementweise
+	\begin{align*}
+		Re F(x_{j-1}) = 0 = ReF(x_j) \implies Re F'(\zeta) = 0 \text{ für } x_{j-1} < \zeta < x_j\\
+		|Re F'(x)| = | \int_{J} Re F'' dt| \leq h_j^{\frac{1}{2}} ||Re F''||_{L^2(I_j)}
+	\end{align*}
+	analog für $Im F'$
+	\begin{align*}
+		\implies \int_{I_j}|F'(x)|^2 \leq h_j^2 ||F''||_{L^2(I_j)}^2 \implies ||F'||_{L^2(I_j)} \leq h_j ||F''||_{L^2(I_j)}\\
+		\implies ||f-s||_{L^2(I_j)} \leq h_j ||F'||_{L^2(I_j)} \leq h_j^2 ||\underbrace{F''}_{= f'' \text{ auf } I_j}||_{L^2(I_j)} = ||h^2 f''||_{L^2(I_j)}
+	\end{align*}
+	
+	(3) $||f-s||_{L^2(a,b)}^2 = \sum_{j=1}^{n} ||f-s||_{L^2(I_j)}^2 \leq \sum_{j=1}^{n} ||h^2 f''||_{L^2(I_j)}^2 = ||h^2 f''||_{L^2(a,b)}^2$
+\end{proof}
+
+\begin{def}
+	05 1:27:07
+\end{def}
