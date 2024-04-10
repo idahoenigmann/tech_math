@@ -576,6 +576,360 @@ Die Polynominterpolation erfordert hohe Glätte an $f$, um Fehlerabschätzung zu
 	(3) $||f-s||_{L^2(a,b)}^2 = \sum_{j=1}^{n} ||f-s||_{L^2(I_j)}^2 \leq \sum_{j=1}^{n} ||h^2 f''||_{L^2(I_j)}^2 = ||h^2 f''||_{L^2(a,b)}^2$
 \end{proof}
 
-\begin{def}
-	05 1:27:07
-\end{def}
+\begin{definition}
+	Es sei $\Delta = (x_0, ..., x_n)$ eine \textbf{Zerlegung von $[a,b]$}, d.h. $a = x_0 < ... < x_n = b$. Zu gegebenen $p,q \in \mathbb{N}_0$ heißt $s:[a,b]\rightarrow\mathbb{K}$ \textbf{Spline vom Grad $p$ mit Glattheit $q$}, gdw. $s \in \mathcal{C}^q[a,b]$ mit $s|_{[x_{j-1}, x_j]} \in \mathbb{P}_p \forall j=1, ..., n$.
+	
+	Schreibweise $s \in \mathbb{S}_q^p(\Delta)$ bzw. $s \in \mathbb{S}^p(\Delta)$, falls $q=p-1$.
+\end{definition}
+
+\begin{remark}
+	Die wichtigsten Beispiele sind \textbf{affine Splines} $\mathbb{S}^1(\Delta)$, \textbf{quadratische Splines} $\mathbb{S}^2(\Delta)$, \textbf{kubische Splines} $\mathbb{S}^3(\Delta)$.
+\end{remark}
+
+\begin{remark}
+	Für Wohlgestelltheit von Interpolationsaufgaben muss man $\dim \mathbb{S}_q^p(\Delta)$ bestimmen.
+\end{remark}
+
+\begin{example}
+	$\dim \mathbb{S}_1^p(\Delta) = \underbrace{n}_{\text{Anz. Intervalle}}\underbrace{(p+1)}_{=\dim \mathbb{P}_p} \widehat{=}$ global unstetige stückweise Polynome
+	
+	$\dim \mathbb{S}_0^p(\Delta) = n(p+1) - (n-1) \widehat{=}$ global stetige stw. Polynome
+\end{example}
+
+$\implies$ Bestimmung von Basen (und Dimension) von $\mathbb{S}_q^p(\Delta)$ ist komplizierter als bei Polynomräumen, lässt sich aber über sogn. B-Splines bewerkstelligen.
+
+\begin{remark}
+	Bei Splines hat man mehrere Möglichkeiten, um den Fehler $||f-s||$ zu verringern
+	\begin{itemize}
+		\item \textbf{h-Methode}, d.h. die Zerlegung wird verfeinert
+		\item \textbf{p-Methode}, d.h. man erhöht den Polynomgrad
+		\item \textbf{r-Methode}, d.h. man erhält $\#\Delta=n$, aber man verschiebt die Stützstellen.
+	\end{itemize}
+	Zusätzlich kann man alles lokal kombinieren, z.B.
+	\begin{itemize}
+		\item \textbf{hp-Methode}: Verfeinere $\Delta$, wo $f$ unglatt ist, und erhöhe $p$, wo $f$ glatt ist.
+	\end{itemize}
+\end{remark}
+
+\begin{theorem}
+	Sei $\Delta = (x_0, ..., x_n)$ Zerlegung von $[a,b]$
+	
+	$\implies \dim \mathbb{S}^p(\Delta) = n+p$ und $\mathcal{B}:=\{x^j, \max\{x-x_k, 0\}^p | j=0, ..., p, k=1, ..., n-1\}$ ist eine Basis.
+\end{theorem}
+
+\begin{proof}
+	klar: $\mathcal{B} \subseteq \mathbb{S}^p(\Delta)$
+	
+	(1) zz. $\mathcal{B}$ ist lin. unabh.
+	
+	Seien $\lambda_j, \mu_j \in \mathbb{K}$ mit $0 = \sum_{j=0}^{p} \lambda_j x^j + \sum_{k=1}^{n-1} \mu_k q_k$
+	
+	klar: Auf $[a, b]$ gilt $q_k|_{[x_0, x_1]} = 0 \forall k=1, ..., n-1$ $\implies \lambda_j = 0 \forall j=0, ..., p$, da Monome lin. unabh. auf $[x_0, x_1]$.
+	
+	klar: Auf $[x_1, x_2]$ gilt $q_k|_{[x_1, x_2]} = 0 \forall k=2, ..., n-1$ $\implies \mu_1 q_1 = 0$ auf $[x_1, x_2]$, $q_1(x_2) \neq 0 \implies \mu_1 = 0$
+	
+	Induktives Vorgehen zeigt $\mu_k = 0 \forall k=1, ..., n-1$
+	
+	(2) zz: $\mathbb{S}^p(\Delta) \subseteq [\mathcal{B}]$
+	
+	Sei $s \in \mathbb{S}^p(\Delta)$. Sei $z_1 \in \mathbb{P}_p$ mit $s|_{[x_0, x_1]} = z_1|_{[x_0, x_1]}$.
+	
+	Für $k=2, ..., n$ definiere sukzessive
+	\begin{align*}
+		z_k := z_{k-1} + \frac{s(x_k) - z_{k-1}(x_k)}{q_{k-1}(x_n)} q_{n-1} \in span(B)
+	\end{align*} 
+	zz. $z_n = s$
+	
+	Betrache Residuum $r := s - z_n$
+	
+	klar: $r(x_k) = 0 \forall k=0, ..., n$
+	
+	Auf $[x_0, x_1]$ gilt $q_k|_{[x_0, x_1]} = 0 \forall k = 1, ..., n-1$ $\implies z_n|_{[x_0, x_1]} = z_1|_{[x_0, x_1]} = s|_{[x_0, x_1]} \implies r|_{[x_0, x_1]} = 0$.
+	
+	Auf $[x_1, x_2]$ gilt $r \in \mathbb{P}_p$ mit $r(x_1) = 0 = r(x_2)$. $r \in \mathcal{C}^{p-1}[a,b]$, insb. $(p-1)$-mal stetig diffbar in $x_1$, d.h. $x_1$ ist $p$-fache Nst. von $r$. $\implies p+1$ viele Nst. auf $[x_1, x_2] \implies r = 0$ auf $[x_1, x_2]$.
+	
+	Dasselbe Vorgegen auf allen Intervallen zeigt $r=0$ auf $[a, b]$. 
+\end{proof}
+
+\begin{remark}
+	Sei $\Delta = (x_0, ..., x_1)$ Zerlegung von $[a, b]$ und $s \in \mathbb{S}^p(\Delta)$ mit $s(x_j) = y_j \forall j=0, ..., n$. Dann sind nur $n+1$ Bedingungen fixiert, aber $\dim \mathbb{S}^p(\Delta) = n+p$, d.h. es fehlen noch $p-1$ Bedingungen für Wohlgestelltheit.
+	
+	Diese werden in der Regel als Randbedingungen formuliert, d.h. an Bedingungen an Ableitungen von $s$ in $a$ und $b$. Um diese symmetrisch zu stellen, müssen wir annehmen, dass $p-1 = 2r$ gerade ist.
+	
+	\begin{itemize}
+		\item (H) \textbf{Hermite-Randbedingungen} (oder \textbf{vollständige Randbedingungen}): Es werden $s^(j)(a), s^(j)(b)$ für $j = 1, ..., r$ zusätzlich vorgegeben.
+		
+		\item (N) \textbf{Natürliche Randbedingungen}: $r \leq n$ und $s^{(j)}(a) = 0 = s^{(j)}(b)$ für $j=r+1, ..., 2r$
+		
+		\item (P) \textbf{Periodische Randbedingungen}: $s^{(j)}(a) = s^{(b)}$ für $j=1, ..., 2r$
+	\end{itemize}
+\end{remark}
+
+\begin{theorem}
+	\begin{enumerate}
+		\item Zu $p-1 = 2r$ und Randbedingungen (H), (P), (N) existiert (jeweils) ein eindeutiger Interpolationsspline $s \in \mathbb{S}^p(\Delta)$, der diese Randbedingung und $s(x_j) = y_j \forall j=0, ..., n$ wobei $\Delta = (x_0, ..., x_n)$ und $y_j \in \mathbb{K}$ gegeben.
+		
+		\item Erfüllt $g \in \mathcal{C}^{(r+1)}[a, b]$ dieselben Interpolations- und Randbedingungen wie $s$, so gilt
+		\begin{align*}
+			||g^{(r+1)} - s^{(r+1)}||_{L^2(a,b)}^2 = ||g^{(r+1)}||_{L^2(a,b)}^2 - ||s^{(r+1)}||_{L^2(a,b)}^2
+		\end{align*}
+		d.h. der Spline erfüllt die Minimaleigenschaft
+		\begin{align*}
+			||s^{(r+1)}||_{L^2(a,b)} \leq ||g^{(r+1)}||_{L^2(a,b)}
+		\end{align*}
+		
+		\item Falls $s$ (N) erfüllt, so muss $g$ nur die Interpolationsbedingungen erfüllen!
+	\end{enumerate}
+\end{theorem}
+
+\begin{remark}
+	Für $p=2$ minimieren kubische Interpolationssplines also die Krümmungsenergie $||s''||_{L^2(a,b)}^2$. Daher kommt auch der Name Spline (dt: Biegestab)
+\end{remark}
+
+\begin{proof}
+	(1) zz. (i) unter der Veraussetzung, dass (ii) gilt.
+	
+	Seien $s, \tilde{s} \in \mathbb{S}^p(\Delta)$ mit derselben Interpolations- und Randbedingungen. Aus (ii) folgt dann
+	\begin{align*}
+		||\tilde{s}^{(r+1)} - s^{(r+1)}||_{L^2(a,b)} = 0 \implies \rho := \tilde{s} - s \in \mathbb{P}_r
+	\end{align*}
+	
+	(H) $\rho(a) = 0$ und $\rho^{(j)}(a) = 0$ für $j=1, ..., r$ $\implies a$ ist $(r+1)$-fache Nullstelle $\implies \rho = 0$
+	
+	(N) $\rho(x_j) = 0$ für $j=0, ..., n$ und $r \leq n$ $\implies$ mehr als $r+1$ Nullstellen $\implies \rho = 0$
+	
+	(P) $\rho^{(j)}(a) = \rho^{(j)}(b)$ für $j = 1, ..., 2r$. $\rho \in \mathbb{P}_r \implies \rho^{(r-1)} \in \mathbb{P}_1$ und $\rho^{(r-1)}(a) = \rho^{(r-1)}(b) \implies \rho^{(r-1)} \in \mathbb{P}_0 \implies \rho \in \mathbb{P}_{r-1}$. Induktiv $\rho \in \mathbb{P}_0$ mit $\rho(a) = 0 \implies \rho = 0$.
+	
+	Jetzt folgt mit Standardargumentation, dass der lineare Auswertungsoperator $\mathcal{A}: \mathbb{S}^p(\Delta) \rightarrow \mathbb{K}^{n+p}$ bijektiv ist und aus Dimensionsgründen bijektiv. Insbesondere ist der Lösungsoperator $\mathcal{L} = \mathcal{A}^{-1}$ bijektiv.
+	
+	(ii) Betrachte $|x-y|^2 = |x|^2 - 2 Re x \bar{y} + |y|^2 = |x|^2 - |y|^2 - 2 Re (x-y)\bar{y}$
+	
+	$\implies ||g^{(r+1)} - s^{(r+1)}||_{L^2(a,b)}^2 = ||g^{(r+1)}||_{L^2(a,b)}^2 - ||s^{(r+1)}||_{L^2(a,b)}^2 - 2 Re \underbrace{\int_{a}^{b} (g^{(r+1)} - s^2{(r+1)}) \overline{s^{(r+1)}} dx}_{\text{zz: }=0}$
+	
+	Wh: $\int_{a}^{b}F'G + FG' dx = [FG]_a^b$
+	
+	\begin{align*}
+		\int_{a}^{b} (g^{(r+1)} - s^{(r+1)}) \overline{s^{(r+1)}} dx = \left[(g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx \right]_a^b - \int_{a}^{b} (g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx =\\
+		\left[(g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx \right]_a^b - \left[(g^{(r-1)} - s^{(r-1)}) \overline{s^{(r+2)}} dx \right]_a^b + \int_{a}^{b} (g^{(r-1)} - s^{(r-1)}) \overline{s^{(r+3)}} dx =\\
+		\left(\sum_{j=0}^{r-1} (-1)^j \left[(g^{(r-j)} - s^{(r-j)}) \overline{s^{(r+1+j)}}\right]_a^b \right) + (-1)^j \int_{a}^{b} (g' - s') \underbrace{\overline{s^{(2r+1)}}_{=\overline{s^(p)} \leftarrow \text{ ist konstant auf }[x_{j-1}, x_j]}} dx
+	\end{align*}
+	
+	\begin{align*}
+		\int_{a}^{b} (g' - s') \overline{s^{(p)}} dx = \sum_{j=1}^{n} \underbrace{\int_{x_{j-1}}^{x_j} (g' - s') \underbrace{\overline{s^{(p)}}}_{\in \mathbb{K}} dx}_{= \overline{s^{(p)}}_{[x_{j-1}, x_j]} \underbrace{\int_{x_{j-1}}^{x_j} (g' - s') dx}_{=[g-s]_{x_{j-1}}^{x_j} = 0} }
+	\end{align*}
+	
+	(H) $(g^{(r-j)} - s^{(r-j)})(\frac{a}{b}) = 0 \implies \sum(.) = 0$
+	
+	(N) $\overline{s^{(r+1+j)}}(\frac{a}{b})=0 \implies \sum (.) = 0$
+	
+	(P) $[g^{(r-j)}]_a^b = 0, [s^{(r-j)}]_a^b = 0 \implies \sum(.) = 0$
+\end{proof}
+
+\begin{remark}
+	Man kann mit Hilfe der sog. B-Splines Basen von allgemeineren Spline-Räumen konstruieren:
+	
+	Sei $(t_j)_{j \in \mathbb{Z}}$ monoton steigend mit $\lim\limits_{j \rightarrow \pm \infty} t_j = \pm \infty$.
+	
+	Def $B_{j, 0} := \Xi_{[t_j, t_{j+1})}$ für $p = 0$, $B_{j,p} := w_{j,p} B_{j,p-1} + (1-w_{j,p})B_{j+1,p-1}$ für $p \geq 1$ mit $w_{j,p}(x) = \frac{x-t_j}{t_{j+p} - t_j}$ für $t_j < t_{j+p}$ und $w_{j,p}(x) = 0$ für $t_j = t_{j+p}$
+	
+	\begin{itemize}
+		\item Man kann zeigen, dass für $t_j = x_j$ mit $\Delta=(x_0, ..., x_n)$ Zerlegung von $[a,b]$ gilt $\mathbb{S}^p(\Delta) = span\{B_{j,p}|_{[a,b]}: j=p, ..., n-1\}$ und diese $B_{j,p}$ bilden auch eine Basis (da $n+p$ viele).
+		
+		\item Ferner haben die $B_{j,p}$ ''gute'' Eigenschaften, z.B. $B_{j,p} > 0, supp(B_{j,p}) = [t_j, t_{j+p+1}], \sum_{j \in \mathbb{Z}} B_{j,p} = 1$.
+		
+		\item Die Vielfachheit eines Knotens $t_j = ... = t_{j+k}$ reduiert die Differenzierbarkeit der Splines bei $t_k$ um $k$, d.h. $\mathcal{C}^{p-(k+1)}$-Differenzierbarkeit.
+	\end{itemize}
+\end{remark}
+
+Übung: Sei $s \in \mathbb{S}^p(\Delta)$ interpolierend $s(x_j) = y_j$ mit natürlichen Randbedingungen ($\rightsquigarrow$ ''naives'' Gleichungssystem mit Basis aus Satz wobei $(n+3)\times(n+3)$ Gleichungssysteme mit vollbesetzter Vandermonde-Matrix). Auf $[x_{j-1}, x_j]$ machen wir den Ansatz $s|_{[x_{j-1, x_j}]} = a_0^{(j)} + a_1^{(j)} (x-x_j) + a_2^{(j)} (x-x_j)^2 + a_3^{(j)}(x-x_j)^3$ mit unbekannten Koeffizienten $a_0^{(j)}, a_1^{(j)}, a_2^{(j)}, a_3^{(j)} \forall j=1, ..., n$.
+\begin{align*}
+	\implies a_0^{(j)} = y_j, a_1^{(j)} = \frac{y_j - y_{j-1}}{h_j} + \frac{h_j}{3} (2 a_2^{(j)} + a_2^{(j-1)}), a_3^{(j)} = \frac{a_2^{(j)} - a_2^{(j-1)}}{3h_j}, h_j := x_j - x_{j-1} \text{ und } a_2^{(j)} = 0 
+\end{align*}
+
+TODO Matrix 07 27:32
+
+\begin{remark}
+	Für interpolierende Splines kann man Fehlerabschätzungen der Form $||f-s||_{L^\infty(a,b)} \leq C h^{p+1} ||f^{(p+1)}||_{L^\infty(a,b)}$ wobei $h := \max_j (x_j - x_{j-1})$. Aber $C > 0$ hängt an der Glattheit der Splines. Das ist technisch zu beweisen und hängt (natürlich) auch an den Randbdg.
+\end{remark}
+
+\subsection{Diskrete und schnelle Fourier-Transformation}
+
+Das Ziel dieses Abschnitts ist die Präsentation und Analyse des FFT-Algorithmus (''fast Fourier transform''), der in der Numerik einer der wichtigsten und vielfaltigsten Algorithmen ist. Unsere ''Motivation'' ist die einfachste Anwendung.
+
+\begin{definition}
+	Wir bezeichnen $\mathbb{T}_n := \{ \sum_{j=0}^{n-1} \lambda_j \exp(ijx) | \lambda_0, ..., \lambda_{n-1} \in \mathbb{C}\}$ als Raum der \textbf{trigonometrischen Polynome}.
+\end{definition}
+
+\begin{theorem}
+	\begin{enumerate}
+		\item $\dim \mathbb{T}_{n-1} = n$
+		
+		\item Zu Stützstellen $0 \leq x_0 < ... < x_{n-1} \lneq 2\pi$ und Funktionswerten $y_j \in \mathbb{C}$ ex. eind. $p \in \mathbb{T}_{n-1}$ mit $p(x_j) = y_j \forall j=0, ..., n-1$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	klar: $\dim \mathbb{T}_{n-1} \leq n$
+	
+	Sei $p(x) = \sum_{j=0}^{n-1} \lambda_j \exp(ijx) \in \mathbb{T}_n$ mit $p(x_j) = 0 \forall j=0, ..., n-1$
+	
+	zz: $\lambda_j = 0 \forall j=0, ..., n-1$ (dann lin. unabh. und Eind. des Int.pol.)
+	
+	Def $z_k := \exp(ix_k) \in \mathbb{C}, \exp(ijx_k) = z_k^j$ 
+	
+	$\implies 0 = p(x_k) = \sum_{j=0}^{n-1} \lambda_j z_k^j =: \tilde{p}(z_n), \tilde{p} \in \mathbb{P}_{n-1} \implies \tilde{p} = 0$, da $\tilde{p} n$ Nullstellen hat $\implies \lambda_j = 0 \forall j=0, ..., n-1$.
+\end{proof}
+
+Im restlichen Abschnitt betrachten wir \textbf{äquidistante Stützstellen} (oder \textbf{uniforme Stützstellen}) $x_k = \frac{2\pi k}{n}$ für $k=0, ..., n-1$. Dies führt auf zusätzliche Struktur der Vandermonde-Matrix, die durch FFT genutzt werden kann.
+
+\begin{theorem}
+	Seien $x_k = \frac{2\pi k}{n}, y_k \in \mathbb{C}$ gegeben für $k=0, ..., n-1$. Sei $p \in \mathbb{T}_n$ das eind. trig. Int.pol. mit $p(x_j) = y_j \forall k$.
+	
+	Sei $p(x) = \sum_{j=0}^{n-1} \lambda_j \exp(ijx)$ mit Koeff. $\lambda_j \in \mathbb{C}$.
+	
+	Def $w_n := \exp(- \frac{2\pi i}{n})$ \textbf{$n$-te Einheitswurzel} und $V_n \in \mathbb{C}^{n\times n}, V_n := (w_n^{jk})_{j,k=0}^{n-1}$ \textbf{Fourier-Matrix} (oder: \textbf{DFT-Matrix})
+	
+	$\implies$
+	\begin{enumerate}
+		\item $\frac{1}{n}V_n y = \lambda$ mit $y=(y_0, ..., y_{n-1})$, d.h. $\lambda_j = \frac{1}{n} \sum_{k=0}^{n-1} w_n^{jk} y_k$
+		\item $\frac{1}{\sqrt{n}} V_n$ ist symmetrisch und orthogonal, d.h. $\left(\frac{1}{\sqrt{n}}V_n\right)^{-1} = \frac{1}{\sqrt{n}}\overline{V_n}$.
+		\item Insb. ist $W=\overline{V_n}$ die Vandermonde-Matrix der trigonometrischen Interpolation
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(iii) $\lambda$ ist Lösung des Vandermonde-Systems $W\lambda = y$ mit
+	\begin{align*}
+		W = \left(\begin{matrix}
+			p_0(x_0) & \cdots & p_{n-1}(x_0)\\
+			\vdots & & \vdots\\
+			p_0(x_{n-1}) & \cdots & p_{n-1}(x_{n-1})
+		\end{matrix}\right) \text{ mit } p_j = \exp(ijx)
+	\end{align*}
+	
+	$W_{jk} = p_k(x_j) = \exp(ikx_j) = \exp\left(\frac{2\pi i}{n} jk\right) = w_n^{-jk} = (\overline{w_n})^{jk} \implies W = \overline{V_n} = W$ symmetrisch.
+	
+	Beweis (i), (ii): Sei $W^{(k)} = (W_{jk})_{j=0}^{n-1}$ $k$-te Spalte von $W$.
+	\begin{align*}
+		W^{(k)} \cdot W^{(k)} = \sum_{j=0}^{n-1} W_{jk} \overline{W}_{jk} = \sum_{j=0}^{n-1} \underbrace{|W_{jk}|^2}_{=|w_n|^{2jk}=1} = n
+	\end{align*}
+	Für $k+l$ gilt
+	\begin{align*}
+		W^{(k)} \cdot W^{(l)} = \sum_{j=0}^{n-1} W_{jk} \overline{W_{jl}} = \sum_{j=0}^{n-1} \underbrace{w_n^{j(l-k)}}_{=(w_n^{(l-k)})^j=0} = \frac{1-(w_n^{(l-k)})^n}{1-w_n^{(l-k)}}\\
+		(w_n^{(l-k)})^n = (w_n^n)^{l-k} = 1
+	\end{align*}
+	$\implies \frac{1}{\sqrt{n}}W$ ist symmetrisch und orthogonal und $W^{-1} = \frac{1}{\sqrt{n}} \left(\frac{1}{\sqrt{n}}W\right)^{-1} = \frac{1}{n} \bar{W} = \frac{1}{n} V_n$.
+\end{proof}
+
+\begin{definition}
+	Die Abbildung $\mathcal{F}:\mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n(x) = V_n x$ bezeichnet man als \textbf{diskrete Fourier-Transformation (DFT) der Länge $n$}. Die Inverse $\mathcal{F}_n^{-1} \mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n^{-1}(x) = \frac{1}{n}\bar{V}_nx$ heißt \textbf{diskrete Fourier-Rücktransformation}.
+\end{definition}
+
+\begin{remark}
+	Die Skalierung von $\mathcal{F}_n$ ist in der Literatur uneinheitlich. Manchmal $\frac{1}{n}V_n, \frac{1}{\sqrt{n}}V_n$, \textbf{hier} $\mathcal{F}_n(x) = V_n x$.
+\end{remark}
+
+\begin{theorem}
+	Für $p \in \mathbb{N}$ und $n=2^p$ und $m = \frac{n}{2}$ sei $w_n := \exp(- \frac{2\pi i}{n})$. Betrachte Permutation $\sigma_n : \mathbb{C}^n \rightarrow \mathbb{C}^n, \sigma_n(x) = (\underbrace{x_1, x_3, ..., x_{n-1}}_{\text{ungerade Indizes}}, \underbrace{x_2, x_4, ..., x_n}_{\text{gerade Indizes}})$.
+	
+	Für $x \in \mathbb{C}^n$ definiere $a,b \in \mathbb{C}^m$ durch $a_j := x_j + x_{j+m}, b_j = (x_j - x_{j+m})w_n^{j-1}$ für $j=1, ..., m = \frac{n}{2}$.
+	
+	$\implies \sigma_n(\mathcal{F}_n(x)) = (\mathcal{F}_m(a), \mathcal{F}_m(b))$, d.h. Auswertung von $\mathcal{F}_n(x)$ wird auf Fourier-Trafo halber Länge $\mathcal{F}_m(a), \mathcal{F}_m(b)$ zurückgeführt (+ Vertauschen).
+\end{theorem}
+
+\begin{proof}
+	\begin{align*}
+		\mathcal{F}_n(y_0, ..., y_{n-1}) = \left(\sum_{l=0}^{n-1} w_n^{jl} y_l | j = 0, ..., n-1\right)\\
+		\mathcal{F}_n(x_1, ..., x_n) = \left(\sum_{l=0}^{n-1} w_n^{(j-1)l} x_{l+1} | j = 1, ..., n\right)\\
+	\end{align*}
+	
+	(1) zz: $(\mathcal{F}_n(x))_{2j-1} = (\mathcal{F}_m(a))_j$
+	
+	klar: $w_n^2 = w_m, w_m^m = 1$
+	\begin{align*}
+		\implies (\mathcal{F}_n(x))_{2j-1} = \sum_{l=0}^{n-1} w_n^{(2j-2)l} x_{l+1} = \sum_{l=0}^{m-1} ( \underbrace{w_n^{2(j-1)l}}_{=w_m^{(j-1)l}} x_{l+1} + \underbrace{w_n^{2(j-1)(l+m)}}_{=w_m^{(j-1)l} \underbrace{ w_m^{2(j-1)m}}_{=1}} x_{l+m+1}) =\\
+		\sum_{l=0}^{m-1} w_m^{(j-1)l} \underbrace{(x_{l+1} + x_{l+m+1})}_{=a_{l+1}} = (\mathcal{F}_m(a))_j
+	\end{align*}
+	
+	(2) zz: $(\mathcal{F}_n(x))_{2j} = (\mathcal{F}_m(b))_j$
+	
+	klar: $w_n^{(2j-1)l} = w_n^{2(j-1)l}w_n^l = w_m^{(j-1)l} w_n^l$, $w_n^{(2j-1)(l+m)} = w_n^{2(j-1)l} w_n^l \underbrace{w_n^{(2j-1)m}}_{=(w_n^{n/2})^(2j+1) = -1} = - w_m^{(j-1)l} w_n^l$
+	\begin{align*}
+		\implies (\mathcal{F}_n(x))_{2j} = \sum_{l=0}^{n-1} w_n^{(2j-1)}x_{l+1} = \sum_{l=0}^{n-1} \underbrace{(w_n^{(2j-1)l} x_{l+1} + w_n^{(2j-1)(l+m)} x_{l+m+1})}_{= w_m^{(j-1)l}} \underbrace{(x_{l+1} - x_{l+m+1}) w_n^l}_{=b_{l+1}} = (\mathcal{F}_m(b))_j
+	\end{align*}
+	
+\end{proof}
+
+\begin{remark}
+	In Matrixform kann man die FFT als Faktorisierung schreiben:
+	\begin{align*}
+		V_n = P_n \left(\begin{matrix}
+			V_{n/2} & 0\\
+			0 & V_{n/2}
+		\end{matrix}\right) \left(\begin{matrix}
+		I_{n/2} & I_{n/2}\\
+		D_{n/2} & - D_{n/2}
+		\end{matrix}\right)
+	\end{align*}
+	mit $P_n = (e_1, e_3, ..., e_{n-1}, e_2, e_4, ..., e_n) \in \mathbb{R}^{n\times n}$, $I_{n/2}$ Identität, $D_{n/2} = diag(w_n^0, ..., w_n^{n-1}) \in \mathbb{C}^{n \times n}$
+\end{remark}
+
+\begin{corollary}
+	Als \textbf{Fast-Fourier-Transformation (FFT)} bezeichnet man die rekursive Berechnung von $\mathcal{F}_n(x)$ mit $n=2^p$ mittels der Rekursion aus dem Satz. Die gesamte Rekursion behötigt weniger als $\frac{3}{2}n \log_2 n$ arithmetische Operationen plus die Berechnung von $w_n^l$ für $l = 0, ...,  n-1$.
+\end{corollary}
+
+\begin{proof}
+	(1) Wegen $w_{n/2}^l = w_n^{2l}$ reicht es, alle $w_n^l$ für $l=0, ..., n-1$ und das maximale $n$ zu berechnen.
+	
+	(2) Beweis des arithm. Aufwands durch Induktion nach $p$.
+	\begin{itemize}
+		\item $A(p) = $ Anzahl Additionen/Subtraktionen
+		\item $M(p) = $ Anzahl Multiplikationen
+	\end{itemize}
+	
+	Beh: $A(p) = p^{2^p}, M(p) \leq \frac{1}{2} p^{2^p}$ (dann fertig, da Aufwand$(\mathcal{F}_n(x)) = A(p) + M(p) \leq \frac{2}{3} p^{2^p} = \frac{3}{2} n \log_2n$)
+	
+	Ind.anf. $p=1, n=2, ..., m-1 \implies A(p) = 2, M(p) = 0$ \checkmark
+	
+	Ind.schritt: Die Aussage gelte für $p$, dann $A(p+1) = 2 \underbrace{A(p)}_{=p^{2^p}} + 2 \cdot 2^p = (p+1) 2^{p+1}$ \checkmark. $M(p+1) = 2 \underbrace{M(p)}_{\leq \frac{1}{2} p^{2^p}} + 2^p \leq p^{2^p} + 2^p = \frac{1}{2} (p+1)2^{p+1}$ \checkmark
+\end{proof}
+
+\begin{remark}
+	Die FFT ist eine schnelle Matrix-Vektor-Multiplikation für vollbesetzte Matrizen, die eine gewisse Struktur haben, ohne die Matrix jeweils voll aufzubauen, d.h. Speicherbedarf $\mathcal{O}(n)$.
+\end{remark}
+
+UE: $A \in \mathbb{K}^{n \times n}$ \textbf{zirkulant}, d.h.
+\begin{align*}
+	A = \left(\begin{matrix}
+		a_0 & a_{n-1} & \cdot & a_1\\
+		a_1 & a_0 & \ddots & \vdots\\
+		\vdots & \ddots & \vdots\\
+		a_{n-1} & a_{n-2} & \cdots & a_0
+	\end{matrix}\right)
+\end{align*}
+
+$\implies V_n A V_n^{-1} = D = diag(p(1), p(w_n), ..., p(w_n^{n-1}))$ mit $p(x) = \sum_{j=0}^{n} a_j x^j$
+
+$\implies$ klar: $A$ ist regulär, gdw. $p(w_n^j) \neq 0 \forall j=0, ..., n-1$
+
+Sei $A$ zusätzlich regulär, $b \in \mathbb{K}^k$, Ziel: Löse $Ax=b$
+
+$\implies A = V_n^{-1}DV_n, A^{-1} = V_n^{-1}D^{-1}V_n \implies x = V_n^{-1}D^{-1}V_nb = \frac{1}{n} \overline{V_n}D^{-1}V_nb$, $\overline{V_n\bar{y}}$
+
+Frage: Wie berechnet man die Diagonale von $D$ effizient?
+
+naiv: $\mathcal{O}(n^2)$, clever: $V_nA=DV_n$, insb. $V_na = D(1, ..., 1)^T = diag(D) \implies$ FFT liefert $diag(D)$.
+
+\begin{remark}
+	\begin{itemize}
+		\item Die FFT verdankt ihren Namen dem Zusammenhang mit der Fourier-Transformation: Für $f \in L^2[0, 2\pi]$ definiere $\hat{f}(k) := \frac{1}{2\pi} \int_{0}^{2\pi}f(t)e^{-ikt}dt$ und $S_n(t) := \sum_{k=-n}^{n} \hat{f}(k) e^{ikt}$
+		
+		$\implies \lim_n ||f-S_n||_{L^2(0, 2\pi)} = 0$ und $\frac{1}{2\pi} ||f||_{L^2(0,2\pi)}^2 = \sum_{k=-\infty}^{\infty}|\hat{f}(k)|^2$
+		
+		\item Die trig. Interpolation ist auch für $p(x) := \sum_{k=-n}^{n} c_k \exp(ikt)$ mit $p(x_j) = y_j \forall j=-n, ..., n$ eind. lösbar, denn $p(x) = \sum_{l=0}^{2n} c_{l-n} \underbrace{\exp(i(l-n)x)}_{=\exp(ilk)\exp(-inx) \neq 0}$
+	\end{itemize}
+\end{remark}
+
+
+
+

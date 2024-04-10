@@ -47,6 +47,7 @@ We now describe the general structure of the algorithm from reading the data fil
 The EEG data is stored in European data format (EDF) files. They provide a standard for exchanging and storing medical time-series data.
 
 First we split the recorded data into 30 second sections, as is common in sleep stage classification. For each of these sections we get the data as a function of amplitude over time. An example segment is shown in the upper figure of~\ref{fig:example_30s_segment}. We apply a Fourier transformation as described in section~\ref{sec:fourier_transformation} and get a function of amplitude over frequency. This gives a frequency based representation of the data. As the sleep stages are characterized by different frequencies and amplitudes, as described in chapter~\ref{chapter:introduction}, this will help us to distinguish them. The output of such an FFT can be seen in the lower figure of~\ref{fig:example_30s_segment}. The pseudo code for this processing is presented in algorithm~\ref{alg:process_eeg_data}.
+\newpage
 
 \begin{figure}[h]
 	\centering	
@@ -87,15 +88,18 @@ First we split the recorded data into 30 second sections, as is common in sleep 
 	\end{algorithmic}
 \end{algorithm}
 
+We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start finding the clusters in the data we want to find a lower dimensional representation. This is were PCA can be used.
+
 \newpage
-We now have high dimensional data points, as each 30 second segment is represented by the amplitudes for each of the distinct frequencies output by the FFT. Before we can start finding the clusters in the data we want to find a lower dimensional representation. This is were PCA can be used. From the output of algorithm~\ref{alg:pca_of_eeg_data} we get principal components, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages of the different segments in the recording. We show a visual representation of the data in the first three principal components in figure~\ref{fig:pca_output_3d}.
+
+We now show pseudo code of the part of our algorithm, which takes labeled data to derive information, to be used later. This information enables the other part of the algorithm to label previously unlabeled data. This is the training phase and is only needed to be run once.
 
 \begin{algorithm}[h!]
 	\caption{Apply PCA to the EEG data}\label{alg:pca_of_eeg_data}
 	\begin{algorithmic}
 		\For{each patient}
-			\State Read FFT output from patients file
-			\State Read sleep stages from another file
+		\State Read FFT output from patients file
+		\State Read sleep stages from another file
 		\EndFor
 		\State Concatenate FFT data of all patients
 		\State Concatenate sleep stages of all patients
@@ -105,7 +109,11 @@ We now have high dimensional data points, as each 30 second segment is represent
 	\end{algorithmic}
 \end{algorithm}
 
-\begin{figure}
+From the output of algorithm~\ref{alg:pca_of_eeg_data} we get principal components, which reveal the frequencies were the most variance is shown. Under our assumptions this variation is caused by the different sleep stages of the different segments in the recording. We show a visual representation of the data in the first three principal components in figure~\ref{fig:pca_output_3d}.
+
+\vspace{0.5cm}
+
+\begin{figure}[h]
 	\centering	
 	\begin{tikzpicture}
 		\begin{axis}[xlabel=PC 1, ylabel=PC 2, zlabel=PC 3, width=0.8\textwidth, height=0.3\textwidth, view/az=-45, view/el=45, legend entries={awake, REM, S3, S2, S1}, legend pos=outer north east, z post scale=3.5]
@@ -120,6 +128,7 @@ We now have high dimensional data points, as each 30 second segment is represent
 	\label{fig:pca_output_3d}
 \end{figure}
 
+\newpage
 If we have a new recording and want to know the sleep stages we have to follow similar steps. First, the recording has to be split into 30 second segments. These have to be transformed by a FFT. The output can be converted to the PCA basis by multiplying with the matrix of principal components. Lastly, we can get an estimate of the sleep stage by using the $k$-nearest-neighbor algorithm. The pseudo code is shown in algorithm~\ref{alg:gues_sleep_stage}.
 
 \begin{algorithm}[h]
@@ -136,3 +145,5 @@ If we have a new recording and want to know the sleep stages we have to follow s
 		\State \Return results of $k$-nearest-neighbor
 	\end{algorithmic}
 \end{algorithm}
+
+For every EEG recording which we want to label we need to run Algorithm~\ref{alg:gues_sleep_stage}.

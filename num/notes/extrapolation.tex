@@ -1,0 +1,202 @@
+\section{Extrapolation}
+
+Bei einem Interpolationsproblem versucht man einen Funktionswert $\Phi(x)$ zu approximieren mit $x \in [x_0, x_n]$ und $x_0 < ... < x_n$ Stützstellen. Bei der Extrapolation ist der einzige Unterschied, dass $x \notin [x_0, x_n]$.
+
+\subsection{Richardson-Extrapolation}
+
+Problemstellung: $\Phi:[0, 1] \rightarrow \mathbb{K}$ stetig und $\Phi(h)$ berechenbar für $h>0$, Ziel: Approximiere $\Phi(0)$
+
+\begin{algorithm}
+	Input: Die stetige Funktion $\Phi$ habe eine asympotische Entwicklung
+	\begin{align*}
+		\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + \mathcal{O}(h^{\alpha (n+1)}) 
+	\end{align*}
+	für $h>0$ und $n\in \mathbb{N}$, wobei $\alpha > 0$ bekannt, aber $\Phi(0)$ und $a_1, ..., a_n$ unbekannt.
+	
+	Prozedur: Berechne $\Phi(h_j)$ für $h_0 > ... > h_n$ und werte das eindeutige $p_n \in \mathbb{P}_n$ mit $p_n(h_j^\alpha) = \Phi(h_j) \forall j=0, ..., n$ mittels Neville-Verfahren bei $h=0$ aus, d.h. $\Phi(0) \approx p_n(0)$.
+\end{algorithm}
+
+\begin{remark}
+	Meist versucht man kein fixes $n$, sondern iteriert, bis $p_{n+1}(0) \approx p_n(0)$. Dabei nutzt die Implementierung, dass man das Neville-Verfahren ''leicht'' um den Knoten $(h_{n+1}^\alpha, \Phi(h_{n+1}))$ erweitern kann.
+\end{remark}
+
+\begin{remark}
+	Aus der asymp. Entwicklung folgt, dass $|\Phi(0) - \Phi(h)| = \mathcal{O}(h^\alpha)$, sofern $a_1 \neq 0$, und $\alpha > 0$ ist nicht verbesserbar, d.h. maximale Konvergenzordnung.
+\end{remark}
+
+\begin{example}[einseitiger Diff.quotient]
+	$\Phi(h) = \frac{f(x+h) - f(x)}{h}$ für $h>0$ und $\Phi(0) = f'(x)$.
+	
+	Taylor $\implies f(x+h) = f(x) + \sum_{j=1}^{n+1} \frac{f^{(j)}(x)}{j!}h^j + \mathcal{O}(h^{n+2})$
+	\begin{align*}
+		\implies \underbrace{\frac{f(x+h)-f(x)}{h}}_{=\Phi(h)} = \underbrace{f'(x)}_{=\Phi(0)} + \underbrace{\sum_{j=2}^{n+1} \frac{f^{(j)}(x)}{j!} h^{j-1}}_{=\sum_{k=1}^{n} \underbrace{\frac{f^{(k+1)}(x)}{(k+1)!}}_{=a_k} h^k} + \mathcal{O}(h^{n+1})
+	\end{align*}
+	und $\alpha = 1$.
+\end{example}
+
+\begin{example}[zentraler Diff.quotient]
+	$\Phi(h) = \frac{f(x+h)-f(x-h)}{2h}$ für $h>0$ und $\Phi(0) = f'(x)$.
+	
+	Taylor: $f(x\pm h) = \sum_{j=0}^{2n+2} \frac{f^{(j)}(x)}{j!}(\pm h)^j + \mathcal{O}(h^{2n+3})$
+	\begin{align*}
+		\implies \Phi(h) = \frac{1}{2n} \left(\sum_{j=0}^{2n+2} \frac{f^{(j)}(x)}{j!} \underbrace{(h^j - (-h)^j)}_{=0 \text{ für } j \text{ gerade, } = 2h^j \text{ für } j \text{ ungerade}} + \mathcal{O}(h^{2n+3}) \right) =\\
+		\frac{1}{2n} \left(\sum_{l=1}^{n+1} \frac{f^{(2l-1)}(x)}{(2l-1)!} h^{2(l-1)} + \mathcal{O}(h^{2n+3}) \right) = \underbrace{f'(x)}_{=\Phi(0)} + \underbrace{\sum_{l=2}^{n+1} \frac{f^{(2l-1)}(x)}{(2l-1)!} h^{2(l-1)}}_{= \sum_{k=1}^{n} \frac{f^{(2(k+1)-1)}(x)}{(2(k+1)-1)!}h^{2k} + \mathcal{O}(h^{2(n+1)})} + \mathcal{O}(h^{2n+2})
+	\end{align*}
+	$\implies$ asymp. Entwicklung mit $\alpha=2$.
+\end{example}
+
+\begin{algorithm}[Richardson Extrapolation]
+	Die stetige Funktion $\Phi:[0, 1] \rightarrow \mathbb{K}$ erfülle $\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + \mathcal{O}(h^{\alpha (n+1)})$ für $h>0$, wobei $\alpha > 0$ bekannt, $\Phi(0), a_1, ..., a_n$ unbekannt. Sind für $h_0 > ... > h_n$ die Funktionswerte $\Phi(h_j)$ bekannt, so sei $p \in \mathbb{P}_n$ mit $p(h_j^\alpha) = \Phi(h_j) \forall j=0, ..., n$. Verwende Neville-Verfahren, um $p(0) \approx \Phi(0)$.
+\end{algorithm}
+
+\begin{example}
+	\begin{itemize}
+		\item einseitiger Diff.quotient $\alpha = 1$
+		\item zentraler Diff.quotient $\alpha = 2$
+	\end{itemize}
+\end{example}
+
+\begin{example}[Romberg-Verfahren]
+	Sei $f \in \mathcal{C}[a,b], \Phi(0) = \int_a^b f dx$. $\Phi(h) = \frac{h}{2} \left(f(a) + 2 \sum_{j=1}^{n-1}f(x_j) + f(b)\right)$ mit $h = \frac{b-a}{n}, x_j := a + jh$, sog. \textbf{summierte Trapezregel}
+	
+	$\implies \Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{2j} + \mathcal{O}(h^{2(n+1)})$ gilt, sog. \textbf{Euler-Maclaurin'sche Summenformel}.
+	
+	\textbf{Romberg-Verfahren} = Anwendung von Richardson-Extrapol. auf summierte Trapezregel.
+\end{example}
+
+\begin{theorem}
+	Mit $C > 0, \alpha > 0$ erfülle $\Phi: [0, 1] \rightarrow \mathbb{K}$ die Entwicklung $\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + a_{n+1}(h)$ mit $|a_{n+1}(h)| \leq C h^{\alpha (n+1)} \forall h > 0$.
+	
+	Es sei $0 < q < 1$ und $h_k = q^k$ für $k=0, ..., n$. Sei $p \in \mathbb{P}_n$ mit $p(h_j^\alpha) = \Phi(h_j) \forall j=0, ..., n$.
+	
+	$\implies |\Phi(0) - p(0)| \leq M q^{\alpha \frac{n(n+1)}{2}}$ mit $M = C \underbrace{\frac{1}{1-q^\alpha} \exp\left(\frac{2q^\alpha}{(1-q^\alpha)^2}\right)}_{\text{unabhängig vom Restglied}}$
+\end{theorem}
+
+\begin{remark}
+	\begin{itemize}
+		\item Unter der Vorraussetzung des Satzes gilt $|\Phi(0) - \Phi(h_n)| = \mathcal{O}(h_n^\alpha) = \mathcal{O}(q^{\alpha n})$ bei naiver Realisierung; $|\Phi(0) - p(0)| = \mathcal{O}(q^{\alpha n^2})$ durch Extrapolation. $\implies$ wesentlich kleineres $n$ nötig, um dieselbe Genauigkeit zu erhalten. Man sagt ''Extrapolation mindert Auslöschung''.
+		
+		\item Achtung: Die Richardson-Extrapolation ist nur sinnvoll, wenn man $\alpha > 0$ kennt!
+	\end{itemize}
+\end{remark}
+
+\begin{proof}
+	(1) zz: $|\Phi(0) - p(0)| \leq C \sum_{l=0}^{n} q^{\alpha l (n+1)} |L_l(0)|$ mit $L_l(x) = \prod_{k=0, k\neq l}^{n} \frac{x-x_l}{x_k - x_l}, x_k = h_k^\alpha = q^{\alpha k}$
+	
+	klar:
+	\begin{align*}
+		p(x) = \sum_{l=0}^{n} \underbrace{\Phi(h_l)}_{\text{asymp. Entwicklung} L_l(x)} = \Phi(0) \underbrace{\sum_{l=0}^{n} L_l(x)}_{=1} + \sum_{j=1}^{n} a_j \underbrace{\sum_{l=0}^{n} \overbrace{(h_l^{\alpha j})}^{=x_l^j}}_{=x^j} + \sum_{l=0}^{n} a_{n+1}(h_l) L_l(x) =\\
+		\Phi(0) + \sum_{j=1}^{n} a_j x^j + \sum_{l=0}^{n} a_{n+1}(h) L_l(x)
+	\end{align*}
+	$\implies |p(0) - \Phi(0)| \leq \sum_{l=0}^{n} \underbrace{|a_{n+1}(h_l)|}_{\leq C h_l^{\alpha (n+1)} = C q^{\alpha l (n+1)}} |L_l(0)|$
+	
+	(2) zz: $|L_l(0)| = q^{-l\alpha (n+1)} q^{+\frac{\alpha n(n+1)}{2}} \prod_{k=0, k\neq l}^n \frac{1}{|1-q^{(k-l)\alpha}|}$
+	\begin{align*}
+		|L_l(0)| = \prod_{k=0, k\neq l}^{n} \frac{|x_k|}{|x_l - x_k|} = \frac{\prod_{k\neq l} q^{\alpha k}}{\prod_{k\neq l} |q^{\alpha l} - q^{\alpha k}|}
+	\end{align*}
+	\begin{itemize}
+		\item \begin{align*}
+			\prod_{k\neq l} q^{\alpha k} = q^{-lk} \prod_{k=0}^{n} q^{\alpha k} = q^{-lk} q^{\alpha \sum_{k=0}^{n} k} = q^{-lk} q^{\alpha \frac{n(n+1)}{2}}
+		\end{align*}
+		\item \begin{align*}
+			\prod_{k\neq l} |q^{\alpha l} - q^{\alpha k}| = \prod_{k\neq l} ( q^{\alpha l} |1- q^{\alpha (k-l)}|) = \underbrace{\left(\prod_{k\neq l} q^{\alpha l}\right)}_{= q^{\alpha l n}} \left(\prod_{k\neq l} |1- q^{\alpha(k-l)}\right)
+		\end{align*}
+	\end{itemize}
+	
+	(3) zz: $\prod_{k=0, k\neq l}^n \frac{1}{|1 - q^{(k-l)\alpha}|} \leq q^{\alpha \frac{l(l+1)}{2}} \prod_{k=1}^{n} \frac{1}{(1-q^{k\alpha})^2}$
+	
+	Betrache $\{k-l | k=0, ..., n \text{ mit } k\neq l\} = \{-l, ..., -1\} \cup \{1, ..., n-l\}$
+	\begin{align*}
+		\implies \prod_{k=0, k\neq l}^{n} |1-q^{(k-l)\alpha}| = \underbrace{\left(\prod_{k=1}^{n-l} \underbrace{|1-q^{k\alpha}|}_{=(1-q^{k\alpha})}\right)}_{\geq \prod_{k=1}^{n} (1-q^{k\alpha})} \left(\prod_{k=1}^{l} \underbrace{|1-q^{-k\alpha}|}_{=|1-\frac{1}{q^{k\alpha}}| = \frac{1-q^{k\alpha}}{q^{k\alpha}}}\right) \geq\\
+		\prod_{k=1}^{n} (1-q^{k\alpha}) \prod_{k=1}^{l} q^{-k\alpha} \prod_{k=1}^{l} (1-q^{k\alpha}) = \prod_{k=1}^{n} (1-q^{k\alpha})^2 q^{-\alpha \frac{l(l+1)}{2}}
+	\end{align*}
+	
+	(4) zz: $\prod_{k=1}^{n} \frac{1}{(1-q^{k\alpha})^2} \leq \exp\left(\frac{2q^\alpha}{(1-q^\alpha)^2}\right)$
+	\begin{align*}
+		\log\left(\prod_{k=1}^{n} \frac{1}{(1-q^{k\alpha})^2}\right) = 2 \sum_{k=1}^{n} \underbrace{\log\underbrace{\left(\frac{1}{1-q^{k\alpha}}\right)}_{= 1 + \frac{q^{k\alpha}}{1-q^{k\alpha}}}}_{\leq \frac{q^{k\alpha}}{1-q^{k\alpha}}} \leq
+		2 \sum_{k=1}^{n} \frac{q^{k\alpha}}{1-q^{k\alpha}} \leq
+		2 \frac{1}{1-q^\alpha} \underbrace{\sum_{k=1}^{n} q^{k\alpha}}_{\leq \frac{q^\alpha}{1-q^\alpha}} \leq
+		2 \frac{q^\alpha}{(1-q^\alpha)^2}
+	\end{align*}
+	
+	(5) \begin{align*}
+		|p(0) - \Phi(0)| \overset{\text{(1)}}{\leq} C \sum_{l=0}^{n} q^{l\alpha(n+1)} \underbrace{|L_l(0)|}_{\overset{\text{(2)}}{\leq} q^{-l\alpha(n+1)} q^{\alpha \frac{n(n+1)}{2}} \prod_{k\neq l} \frac{1}{|1-q^{(k-l)\alpha}|}} \leq\\
+		C q^{\alpha \frac{n(n+1)}{2}} \sum_{l=0}^{n} \underbrace{\prod_{k\neq l} \frac{1}{|1-q^{(k-l)\alpha}|}}_{\overset{\text{(3)}}{\leq} q^{\alpha \frac{l(l+1)}{2}} \underbrace{\prod_{k=1}^{n} \frac{1}{(1-q^{k\alpha})^2}}_{\overset{\text{(4)}}{\leq} \exp\left(\frac{2q^\alpha}{(1-q^\alpha)^2}\right)  }} \leq
+		\left[C \exp\left(\frac{2q^\alpha}{(1-q^{\alpha})^2}\right) \underbrace{\sum_{l=0}^{n} q^{\alpha \frac{l(l+1)}{2}}}_{\leq \frac{1}{1-q^\alpha}} \right] q^{\alpha \frac{n(n+1)}{2}}
+	\end{align*}
+\end{proof}
+
+\subsection{Aitken'sches $\Delta^2$-Verfahren}
+
+Beim $\Delta^2$-Verfahren handelt es sich um ein Verfahren zur \textbf{Konvergenzbeschleunigung}, d.h. sei $(x_n)_{n \in \mathbb{N} \subset \mathbb{K}}$ eine bekannte, konvergente Folge mit unbekanntem Limes $x = \lim\limits_{n\rightarrow\infty} x_n$
+
+Ziel: Konstruiere eine Folge $(y_n)_{n\in \mathbb{N}}$ mit $\lim\limits_{n\rightarrow\infty} \frac{x-y_n}{x-x_n} = 0$, d.h. $(y_n)$ konvergiert schneller gegen $x$.
+
+\begin{remark}
+	Sei $(x_n)_{n\in \mathbb{N}}$ eine geometrisch konvergente Folge mit Limes $x$, d.h. ex. $q \in \mathbb{K}$ mit $|q| < 1$ und $x-x_{n+1} = q(x-x_n) \forall n \in \mathbb{N}$
+	
+	klar: $\lim\limits_{n\rightarrow\infty} x_n = x$
+	
+	Betrachte Differenzenoperator $\Delta y_n := y_{n+1} - y_n$
+	
+	zz: $x = x_n - \frac{(\Delta x_n)^2}{\Delta^2x_n} = x_n - \frac{(x_{n+1} - x_n)^2}{\Delta(x_{n+1} - x_n)} = x_n - \frac{(x_{n+1} - x_n)^2}{x_{n+2} - 2x_{n+1} + x_n}$, d.h. Limes $x$ kann aus 3 Folgegliedern $x_n, x_{n+1}, x_{n+2}$ exakt berechnet werden.
+\end{remark}
+
+\begin{proof}
+	\begin{align*}
+		x_{n+2} - 2x_{n+1} + x_n = (x_{n+2} - x) - 2(x_{n+1} - x) + (x_n - x) = \underbrace{[q^2 - 2q + 1]}_{\neq 0} \underbrace{(x_n - x)}_{\neq 0 \text{ o.B.d.A}}\\
+		\left(x_n - \frac{(\Delta x_n)^2}{\Delta^2 x_n}\right)- x = (x_n - x) - \frac{(q-1)^2(x_n - x)^2}{(q-1)^2 (x_n - x)} = 0
+	\end{align*}
+\end{proof}
+
+\begin{theorem}
+	Sei $(x_n)_{n\in \mathbb{N}} \subset \mathbb{K}$ mit $x_n \neq x \in \mathbb{K}$ und $x_{n+1} - x = (q + \delta_n)(x_n - x) \forall n \in \mathbb{N}$ mit $q \in \mathbb{K}, |q| < 1, (\delta_n)_{n\in \mathbb{N}} \subset \mathbb{K}$ mit $\lim_n \delta_n = 0$.
+	
+	$\implies$ \begin{enumerate}
+		\item $\lim_n x_n = x$
+		\item Ex. $n_0 \in \mathbb{N}$, sodass $y_n := x_n - \frac{(\Delta x_n)^2}{\Delta^2 x_n} \in \mathbb{K}$ wohldef. für $n \geq n_0$
+		\item $\lim_n \frac{x-y_n}{x-x_n} = 0$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(i) Sei $0 < |y| < \kappa < 1$. Wegen $\lim_n \delta_n = 0$, ex. $\tilde{n}_0 \in \mathbb{N}$ mit $|q + \delta_n| \leq \kappa \forall n \geq \tilde{n}_0$
+	
+	$\implies |x_{n+1} - x| \leq \underbrace{|q + \delta_n|}_{\leq \kappa} |x_n - x| \implies \lim_n |x_{n+1}-x| = 0 \implies x = \lim x_n$
+	
+	(ii)
+	\begin{align*}
+		x_{n+2} - 2 x_{n+1} + x_n = (x_n - x) \underbrace{[(q+\delta_{n+1}) (q+\delta_n) - 2(q+\delta_n) + 1]}_{=\underbrace{(q-1)^2}_{\neq 0} + \underbrace{(\delta_n \delta_{n+1} + q(\delta_n + \delta_{n+1} - 2 \delta_n))}_{=: \epsilon_n \rightarrow 0}}
+	\end{align*}
+	
+	(iii)
+	\begin{align*}
+		y_n - x = (x_n - x) - \frac{(x_{n+1} - x_n)^2}{(x_n - x)[(q-1)^2 + \epsilon_n]} =\\
+		(x_n - x) - \frac{(q+\delta_n - 1)^2 (x_n -x)^2}{(x_n - x)[(q-1)^2 + \epsilon_n]} =
+		(x_n - x)\left(1 - \frac{(q-1+\delta_n)^2}{(q-1)^2 + \epsilon_n}\right)\\
+		\implies \frac{y_n - x}{x_n - x} = 1 - \frac{(q - 1 + \delta_n)}{(q-1)^2 + \epsilon_n} \rightarrow 0
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Die Vorraussetzungen von Aitken sind defakto für jedes numerische Verfahren erfüllt, d.h. bevor man nichts macht und naiv $(x_n)$ betrachtet, macht man immer Aitken.
+\end{remark}
+
+\begin{example}[einseitiger Diff.quot.]
+	$f \in \mathcal{C}^2(\mathbb{R}), z \in \mathbb{R}, h_n > 0$
+	
+	Taylor $\implies f(z+h) = f(z) + h_nf'(z) + \frac{h_n^2}{2}f''(\zeta_n)$ mit $z < \zeta_n < z+h_n$
+	\begin{align*}
+		\implies \underbrace{f'(z)}_{=:x} - \underbrace{\frac{f(z+h) - f(z)}{h_n}}_{=:x_n} = h_n \left(-\frac{f''(\zeta_n)}{2}\right) = 
+		h_n \left(-\frac{f''(z)}{2} + \underbrace{\frac{f''(z) - f''(\zeta_n)}{2}}_{=: \epsilon_n}\right)
+	\end{align*}
+	$\epsilon_n \rightarrow 0$ für $h_n \rightarrow 0$
+	
+	In der Praxis $h_n := 2^{-n}h_0$.
+	
+	Für $f''(x) \neq 0$
+	\begin{align*}
+		\implies x - x_{n+1} = h_{n+1} \left(-\frac{f''(z)}{2} + \epsilon_{n+1}\right) =
+		\underbrace{\frac{1}{2}}_{=: q} \underbrace{\frac{-\frac{f''(z)}{2} + \epsilon_{n+1}}{- \frac{f''(z)}{2} + \epsilon_n}}_{ = 1 + \underbrace{\frac{\epsilon_{n+1} - \epsilon_n}{-\frac{f''(z)}{2} + \epsilon_n}}_{=: \frac{\delta_n}{q}}} (x - x_n)
+	\end{align*}
+\end{example}

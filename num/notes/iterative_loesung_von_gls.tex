@@ -1,0 +1,127 @@
+\section{Iterative Lösung von GLS}
+
+Ziel:
+\begin{itemize}
+	\item Wenn man nichtlineare GLS lösen will, so muss regelmäßig eine Folge von linearen GLS lösen (z.B. Newton).
+	\item Man kann lineare GLS lösen, indem man iterativ Matrix-Vektor-Produkte ausrechnet, insb. muss man die Matrix nicht speichern (z.B. FFT, dividierte Diff.)
+\end{itemize}
+
+\subsection{Fixpunktprobleme}
+
+\begin{definition}
+	Ein \textbf{Iterationsverfahren} ist ein Tripel $(X, \Phi, x*)$ mit $X$ metrischer Raum, $\Phi: X \rightarrow X, \Phi(x*) = x*$, d.h. $x*$ ist ein \textbf{Fixpunkt} von $\Phi$. Zu einem \textbf{Startwert} $x_0 \in X$, sei $x_{k+1} := \Phi(x_k) \forall x \in \mathbb{N}_0$ die erzeugte \textbf{Iteriertenfolge} $(x_n)_{n \in \mathbb{N}_0}$.
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}
+		\item Existiert $x := \lim\limits_{n\rightarrow\infty} x_n$ und ist $\Phi$ stetig bei $x$, so ist $x = \Phi(x)$, dann $x = \lim_n x_{n+1} = \lim_n \Phi(x_n) = \Phi(x)$.
+		\item Ist $X$ normiert und die Lösung von $F(x*)=0$ gesucht mit $F: X \rightarrow X$, so formuliert man dies i.d.R. als Fixpunktproblem, z.B. $x* = \Phi(x*) := x* \pm F(x*)$.
+	\end{enumerate}
+\end{remark}
+
+\begin{theorem}[Banachscher Fixpunktsatz]
+	$X$ vollständig metrischer Raum, $0 < q < 1$ und $\Phi: X \rightarrow X$ mit $d(\Phi(x), \Phi(y)) \leq q d(x,y)$
+	
+	$\implies$
+	\begin{enumerate}
+		\item Ex. eind. $x* \in X$ mit $\Phi(x*) = x*$
+		\item Für alle $x_0 \in X$ und $x_{k+1} := \Phi(x_k) \forall k \in \mathbb{N}_0$ gilt $\lim_n x_k = x*$
+		\item Für alle $k \in \mathbb{N}_0$ gilt:
+		\begin{itemize}
+			\item $d(x_k, x*) \leq q d(x_{k-1}, x*)$
+			\item $d(x_k, x*) \leq \frac{q}{1-q} d(x_k, x_{k-1}) \leq \frac{q^k}{1-q}d(x_1, x_0)$
+			\item $d(x_k, x_{k-1}) \leq (1+q) d(x_{k-1}, x*)$
+		\end{itemize}
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Eindeutigkeit Fixpunkt: Seien $x*, y* \in X$ mit $\Phi(x*) = x*, \Phi(y*) = y*$
+		
+		$\implies d(x*, y*) = d(\Phi(x*), \Phi(y*)) \leq q d(x*, y*) \implies d(x*, y*) = 0 \implies x* = y*$
+		
+		\item gezeigt: Falls $(x_k)_{k \in \mathbb{N}}$ konvergiert, ist $x* = \lim_n x_k$ ein Fixpunkt.
+		
+		\item zz: $(x_k)_{k \in \mathbb{N}}$ für alle Startwerte $x_0 \in X$ eine Cauchy-Folge ist.
+		
+		Für $m \leq n$ gilt
+		\begin{align*}
+			d(x_m, x_n) \leq \sum_{k=m}^{n-1} \overbrace{\underbrace{d(x_k, x_{k+1})}_{\leq q^k d(x_0, x_1)}}^{= d(\Phi(x_{k-1}), \Phi(x_k)) \leq q d(x_{n-1, x_k}) \leq q^{k-1} d(x_0, x_1)} \leq \left(\sum_{k=m}^{n-1} q^k\right) d(x_0, x_1) \leq\\
+			q^m \frac{1}{1-q} d(x_0, x_1) \rightarrow 0, m \rightarrow \infty.
+		\end{align*}
+		
+		\item Abschätzungen:
+		\begin{align*}
+			d(x_k, x*) = d(\Phi(x_{k-1}), \Phi(x*)) \leq q \underbrace{d(x_{k-1}, x*)}_{\leq d(x_{k-1}, x_k) + d(x_k + x*)}\\
+			\implies d(x_k, x*) (1-q) \leq q \underbrace{d(x_{n-1}, x_n)}_{\leq q^{k-1} d(x_0, x_1)} \leq q^k d(x_0, x_1)
+		\end{align*}
+		
+		und $d(x_k, x_{k-1}) \leq \underbrace{d(x_k, x*)}_{q d(x_{n-1}, x*)} + d(x_{k-1}, x*) \leq (1+q) d(x_{k-1}, x*)$
+	\end{enumerate}
+\end{proof}
+
+\begin{definition}
+	Ein Iterationsverfahren $(X, \Phi, x*)$ heißt
+	\begin{itemize}
+		\item \textbf{global konvergent}, gdw. $\forall x_0 \in X: x* = \lim\limits_{n\rightarrow\infty} x_n$ mit $(x_n)_{n\in\mathbb{N}_0}$ der Iteriertenfolge $x_{n+1} := \Phi(x_n) \forall n$
+		\item \textbf{lokal konvergent}, gdw. $\exists \epsilon > 0 \forall x_0 \in \underbrace{U_\epsilon(x*)}_{:=\{y \in X| d(x,y) < \epsilon\}}: x* = \lim_n x_n$
+		\item \textbf{linear konvergent} (oder: mit Konvergenzordnung $p=1$), gdw. $\exists q \in (0,1) \exists \epsilon > 0 \forall x_0 \in U_\epsilon(x*) \forall n \in \mathbb{N}_0: d(x*, x_{n+1}) \leq q d(x*, x_n)$
+		\item \textbf{von Konvergenzordnung $p > 1$}, gdw. $\exists C>0 \forall \epsilon>0 \forall x_0 \in U_\epsilon(x*) \forall n \in \mathbb{N}_0: d(x*, x_{n+1}) \leq C d(x*, x_n)^p$
+	\end{itemize}
+	
+	Die Menge $U_\epsilon(x*)$ nennt man auch \textbf{Konvergenzbereich}.
+\end{definition}
+
+\begin{example}
+	Ist $\Phi: X \rightarrow X$ eine (strikte) Kontraktion auf einem vollständig metrischen Raum mit Fixpunkt $x* \in X$, so ist $(X, \Phi, x*)$ global linear konv.
+\end{example}
+
+\begin{lemma}
+	Sei $(X, \Phi, x*)$ ein Iterationsverfahren mit Konvergenzordnung $p \geq 1$. Dann ist $(X, \Phi, x*)$ lokal konvergent und in jeder Konvergenzordnung $1 \leq \tilde{p} \leq p$.
+\end{lemma}
+
+\begin{proof}
+	\begin{itemize}
+		\item $p=1 \implies$ lokale konvergenz
+		
+		Wähle $0 < q < 1$ und $\epsilon > 0$ gemäß Definition. Sei $x_0 \in U_\epsilon(x*)$. Dann $d(x*, x_n) \leq q^k \underbrace{d(x*, x_0)}_{\in \mathbb{R}}$
+		
+		\item Konvergenzordnung $p > 1 \implies$ lineare konvergenz mit $q = \frac{1}{2}$. Seien $C>0, \epsilon>0$ gemäß Def. gewählt. Wähle $\delta := \min\{\epsilon, \left(\frac{1}{2C}\right)^{1/(p-1)}\}$. Sei $x_0 \in U_\delta(x*)$
+		
+		Beh. $d(x_n, x*) \leq \underbrace{2^{-n}}_{\leq 1} \underbrace{d(x_0, x*)}_{<\delta} < \delta \forall n \in \mathbb{N}_0$ (und $d(x_n, x*) \leq C \underbrace{d(x_{n-1}, x*)^{p-1}}_{\leq \delta^{p-1} \leq 1/(2C)} d(x_{n-1}, x*) \leq \frac{1}{2} d(x_{n-1}, x*) \forall n \in \mathbb{N}$)
+		
+		Beweis der Beh. durch Induktion, klar $n=0$
+		\begin{align*}
+			TODO 13 21:31
+		\end{align*}
+	\end{itemize}
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
