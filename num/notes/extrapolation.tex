@@ -6,7 +6,7 @@ Bei einem Interpolationsproblem versucht man einen Funktionswert $\Phi(x)$ zu ap
 
 Problemstellung: $\Phi:[0, 1] \rightarrow \mathbb{K}$ stetig und $\Phi(h)$ berechenbar für $h>0$, Ziel: Approximiere $\Phi(0)$
 
-\begin{algorithm}
+\begin{algorithm}[Richardson Extrapolation]
 	Input: Die stetige Funktion $\Phi$ habe eine asympotische Entwicklung
 	\begin{align*}
 		\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + \mathcal{O}(h^{\alpha (n+1)}) 
@@ -45,16 +45,16 @@ Problemstellung: $\Phi:[0, 1] \rightarrow \mathbb{K}$ stetig und $\Phi(h)$ berec
 	$\implies$ asymp. Entwicklung mit $\alpha=2$.
 \end{example}
 
-\begin{algorithm}[Richardson Extrapolation]
-	Die stetige Funktion $\Phi:[0, 1] \rightarrow \mathbb{K}$ erfülle $\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + \mathcal{O}(h^{\alpha (n+1)})$ für $h>0$, wobei $\alpha > 0$ bekannt, $\Phi(0), a_1, ..., a_n$ unbekannt. Sind für $h_0 > ... > h_n$ die Funktionswerte $\Phi(h_j)$ bekannt, so sei $p \in \mathbb{P}_n$ mit $p(h_j^\alpha) = \Phi(h_j) \forall j=0, ..., n$. Verwende Neville-Verfahren, um $p(0) \approx \Phi(0)$.
-\end{algorithm}
+%\begin{algorithm}
+%	Die stetige Funktion $\Phi:[0, 1] \rightarrow \mathbb{K}$ erfülle $\Phi(h) = \Phi(0) + \sum_{j=1}^{n} a_j h^{\alpha j} + \mathcal{O}(h^{\alpha (n+1)})$ für $h>0$, wobei $\alpha > 0$ bekannt, $\Phi(0), a_1, ..., a_n$ unbekannt. Sind für $h_0 > ... > h_n$ die Funktionswerte $\Phi(h_j)$ bekannt, so sei $p \in \mathbb{P}_n$ mit $p(h_j^\alpha) = \Phi(h_j) \forall j=0, ..., n$. Verwende Neville-Verfahren, um $p(0) \approx \Phi(0)$.
+%\end{algorithm}
 
-\begin{example}
-	\begin{itemize}
-		\item einseitiger Diff.quotient $\alpha = 1$
-		\item zentraler Diff.quotient $\alpha = 2$
-	\end{itemize}
-\end{example}
+%\begin{example}
+%	\begin{itemize}
+%		\item einseitiger Diff.quotient $\alpha = 1$
+%		\item zentraler Diff.quotient $\alpha = 2$
+%	\end{itemize}
+%\end{example}
 
 \begin{example}[Romberg-Verfahren]
 	Sei $f \in \mathcal{C}[a,b], \Phi(0) = \int_a^b f dx$. $\Phi(h) = \frac{h}{2} \left(f(a) + 2 \sum_{j=1}^{n-1}f(x_j) + f(b)\right)$ mit $h = \frac{b-a}{n}, x_j := a + jh$, sog. \textbf{summierte Trapezregel}
@@ -99,7 +99,7 @@ Problemstellung: $\Phi:[0, 1] \rightarrow \mathbb{K}$ stetig und $\Phi(h)$ berec
 			\prod_{k\neq l} q^{\alpha k} = q^{-lk} \prod_{k=0}^{n} q^{\alpha k} = q^{-lk} q^{\alpha \sum_{k=0}^{n} k} = q^{-lk} q^{\alpha \frac{n(n+1)}{2}}
 		\end{align*}
 		\item \begin{align*}
-			\prod_{k\neq l} |q^{\alpha l} - q^{\alpha k}| = \prod_{k\neq l} ( q^{\alpha l} |1- q^{\alpha (k-l)}|) = \underbrace{\left(\prod_{k\neq l} q^{\alpha l}\right)}_{= q^{\alpha l n}} \left(\prod_{k\neq l} |1- q^{\alpha(k-l)}\right)
+			\prod_{k\neq l} |q^{\alpha l} - q^{\alpha k}| = \prod_{k\neq l} ( q^{\alpha l} |1- q^{\alpha (k-l)}|) = \underbrace{\left(\prod_{k\neq l} q^{\alpha l}\right)}_{= q^{\alpha l n}} \left(\prod_{k\neq l} |1- q^{\alpha(k-l)}|\right)
 		\end{align*}
 	\end{itemize}
 	
@@ -128,7 +128,7 @@ Problemstellung: $\Phi:[0, 1] \rightarrow \mathbb{K}$ stetig und $\Phi(h)$ berec
 
 \subsection{Aitken'sches $\Delta^2$-Verfahren}
 
-Beim $\Delta^2$-Verfahren handelt es sich um ein Verfahren zur \textbf{Konvergenzbeschleunigung}, d.h. sei $(x_n)_{n \in \mathbb{N} \subset \mathbb{K}}$ eine bekannte, konvergente Folge mit unbekanntem Limes $x = \lim\limits_{n\rightarrow\infty} x_n$
+Beim $\Delta^2$-Verfahren handelt es sich um ein Verfahren zur \textbf{Konvergenzbeschleunigung}, d.h. sei $(x_n)_{n \in \mathbb{N}} \subset \mathbb{K}$ eine bekannte, konvergente Folge mit unbekanntem Limes $x = \lim\limits_{n\rightarrow\infty} x_n$
 
 Ziel: Konstruiere eine Folge $(y_n)_{n\in \mathbb{N}}$ mit $\lim\limits_{n\rightarrow\infty} \frac{x-y_n}{x-x_n} = 0$, d.h. $(y_n)$ konvergiert schneller gegen $x$.
 
@@ -160,7 +160,7 @@ Ziel: Konstruiere eine Folge $(y_n)_{n\in \mathbb{N}}$ mit $\lim\limits_{n\right
 \end{theorem}
 
 \begin{proof}
-	(i) Sei $0 < |y| < \kappa < 1$. Wegen $\lim_n \delta_n = 0$, ex. $\tilde{n}_0 \in \mathbb{N}$ mit $|q + \delta_n| \leq \kappa \forall n \geq \tilde{n}_0$
+	(i) Sei $0 < |q| < \kappa < 1$. Wegen $\lim_n \delta_n = 0$, ex. $\tilde{n}_0 \in \mathbb{N}$ mit $|q + \delta_n| \leq \kappa \forall n \geq \tilde{n}_0$
 	
 	$\implies |x_{n+1} - x| \leq \underbrace{|q + \delta_n|}_{\leq \kappa} |x_n - x| \implies \lim_n |x_{n+1}-x| = 0 \implies x = \lim x_n$
 	

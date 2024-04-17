@@ -81,10 +81,10 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 		\implies |Qf - Q_nf| \leq (||w||_{L^1(a,b)} + \sum_{j=0}^{n}|w_j^{(n)}|) \min_{p \in \mathbb{P}_m} ||f-p||_{L^\infty(a,b)}
 	\end{align*}
 	Ferner sind äquivalent:
-	\begin{itemize}
+	\begin{enumerate}
 		\item $Qf = \lim\limits_{n\rightarrow\infty} Q_n f \forall f \in \mathcal{C}[a,b]$
 		\item $Qp = \lim\limits_{n\rightarrow\infty} Q_n p \forall p \in \mathbb{P} := \bigcup_{n\in\mathbb{N}} \mathbb{P}_n$ und $\sup_{n\in\mathbb{N}} \sum_{j=0}^{n} |w_j^{(n)}| < \infty$.
-	\end{itemize}
+	\end{enumerate}
 \end{theorem}
 
 \begin{proof}
@@ -128,16 +128,16 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 \subsection{Interpolatorische Quadraturformeln}
 
 \begin{definition}
-	Zu gegebenen Stützstellen $a \leq x_0 < ... < x_n \leq b$ bezeichnet man $Q_nf := \sum_{j=0}^{n} \underbrace{\left(\int_{a}^{b} L_jw dx\right)}_{=: w_j = Q(L_j)} f(x_j)$ als \textbf{interpolatorische Quadraturformel} (oder \textbf{Interpolationsquadratur}), wobei $L_jx := \prod_{k=0}^{n}\frac{x - x_k}{x_j - x_k}$ die Lagrange-Polynome sind
+	Zu gegebenen Stützstellen $a \leq x_0 < ... < x_n \leq b$ bezeichnet man $Q_nf := \sum_{j=0}^{n} \underbrace{\left(\int_{a}^{b} L_jw dx\right)}_{=: w_j = Q(L_j)} f(x_j)$ als \textbf{interpolatorische Quadraturformel} (oder \textbf{Interpolationsquadratur}), wobei $L_jx := \prod_{k=0}^{n}\frac{x - x_k}{x_j - x_k}$ die Lagrange-Polynome sind.
 \end{definition}
 
 \begin{theorem}
 	Für $Q_nf = \sum_{j=0}^{n} w_j f(x_j)$ sind äquivalent:
-	\begin{itemize}
+	\begin{enumerate}
 		\item $Q_n$ ist interpolatorisch
 		\item Für $f \in \mathcal{C}[a,b]$ mit Lagrange-Interpolationspolynom $p \in \mathbb{P}_n$ (d.h. $p(x_j) = f(x_j) \forall j=0, ..., n$) gilt $Q_nf = Qp$
 		\item Exaktheitsgrad($Q_n$)$\geq n$.
-	\end{itemize}
+	\end{enumerate}
 \end{theorem}
 
 \begin{proof}
@@ -181,7 +181,7 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 \begin{remark}
 	Ein Satz von Kusmin besagt, dass für äquidistante Stützstellen immer gilt $\sum_{j=0}^{n} |w_j^{(n)}| \rightarrow\infty$, d.h. es gibt stetige Funktionen $f \in \mathcal{C}[a,b]$ mit $Q_nf \nrightarrow Qf$ für $n \rightarrow\infty$.
 	
-	Bei Clemshaus-Curtis kann man $w_j^{(n)} \geq 0$ zeigen, also $\sum_{j=0}^{n} |w_j^{(n)}| \overset{=}{!} \sum_{j=0}^{n} w_j^{(n)} = b-a$
+	Bei Clemshaus-Curtis kann man $w_j^{(n)} \geq 0$ zeigen, also $\sum_{j=0}^{n} |w_j^{(n)}| \overset{!}{=} \sum_{j=0}^{n} w_j^{(n)} = b-a$
 	
 	$\implies$ Konvergenz $Q_nf \rightarrow Qf \forall f \in \mathcal{C}[a,b]$
 \end{remark}
@@ -201,7 +201,7 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 \end{remark}
 
 \begin{remark}
-	Sei $\tilde{Q}_n$ eine Quadratur auf $[0, 1]$ zu $w = 1$. Sei $Q_n^j$ die induzierte Quadratur auf $[a_j, b_j]$ mit $a = a_0 < b_0 = a_1 < b_1 = ... < b_n = b$. Mit der Zerlegung
+	Sei $\tilde{Q}_n$ eine Quadratur auf $[0, 1]$ zu $w = 1$. Sei $Q_n^j$ die induzierte Quadratur auf $[a_j, b_j]$ mit $a = a_0 < b_0 = a_1 < b_1 = ... < b_N = b$. Mit der Zerlegung
 	\begin{align*}
 		Qf = \int_{a}^{b} f dx = \sum_{j=0}^{N} \underbrace{\int_{a_j}^{b_j} f dx}_{=\approx Q_n^jf}
 	\end{align*}
@@ -238,7 +238,7 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 		\sum_{j=1}^{\frac{n}{2}} w_{\frac{n}{2} - j} (x_{\frac{n}{2} - j} - \frac{a+b}{2})^{n+1} +
 		\sum_{j=1}^{\frac{n}{2}} \underbrace{w_{\frac{n}{2} + j}}_{w_{\frac{n}{2} - j}}
 		\left( \underbrace{x_{\frac{n}{2} + j} - \frac{a+b}{2} }_{= \frac{a+b}{2} - x_{\frac{n}{2} - j}} \right)^{\overbrace{n+1}^{\text{ungerade}}} = 0\\
-		Qp_{n+1} = \int_{a}^{b} p_{n+1} w dx = - \int_{a}^{b} \underbrace{\tilde{p}_{n+1}(x)}_{p_{n+1}(a+b-x)} \underbrace{w(x)}_{=w(a+b-x)} dx =
+		Qp_{n+1} = \int_{a}^{b} p_{n+1} w dx = - \int_{a}^{b} \underbrace{\tilde{p}_{n+1}(x)}_{p_{n+1}(a+b-x)} \underbrace{w(x)}_{w(a+b-x)} dx =
 		- \int_{a}^{b} p_{n+1}(y) w(y) dy = - Qp_{n+1}
 	\end{align*}
 	$\implies Qp_{n+1} = 0$
@@ -257,19 +257,19 @@ Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ St
 	\begin{enumerate}
 		\item Sei $p \in \mathbb{P}_1$ mit $p(a)=f(a), p(b)=f(b)$
 		\begin{align*}
-			\implies |Qf - Q_1f| = |Qf - Qp| \leq \int_{a}^{b} \underbrace{|f(x) - p(x)|}_{\leq C_{\mathbb{K}} \frac{||f'||_{L^\infty(a,b)}}{2!} |x-a| |x-b|} \leq
-			C_{\mathbb{K}} \frac{||f'||_{L^\infty(a,b)}}{2!} \underbrace{\int_{a}^{b}(x-a)(b-x) dx}_{= \frac{(b-a)^3}{6}}
+			\implies |Qf - Q_1f| = |Qf - Qp| \leq \int_{a}^{b} \underbrace{|f(x) - p(x)|}_{\leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(a,b)}}{2!} |x-a| |x-b|} dx \leq
+			C_{\mathbb{K}} \frac{||f''||_{L^\infty(a,b)}}{2!} \underbrace{\int_{a}^{b}(x-a)(b-x) dx}_{= \frac{(b-a)^3}{6}}
 		\end{align*}
 		\item Sei $p \in \mathbb{P}_3$ mit $p(a)=f(a), p(b)=f(b), p\left(\frac{a+b}{2}\right) = f\left(\frac{a+b}{2}\right)$ und $p'\left(\frac{a+b}{2}\right) = f'\left(\frac{a+b}{2}\right)$
 		\begin{align*}
-			\implies |Qf - Q_2f| = |Qf - \underbrace{Q_2}_{=Qp}| = |Qf - Qp| \leq \int_{a}^{b} |f(x) - p(x)| dx \leq\\
+			\implies |Qf - Q_2f| = |Qf - \underbrace{Q_2p}_{=Qp}| = |Qf - Qp| \leq \int_{a}^{b} |f(x) - p(x)| dx \leq\\
 			C_{\mathbb{K}} \frac{||f^{(4)}||_{L^\infty(a,b)}}{4!} \overbrace{\int_{a}^{b} (x-a)(b-x) \left(\frac{a+b}{2} - x\right)^2 dx}^{=\frac{(b-a)^5}{120}}
 		\end{align*}
 	\end{enumerate}
 \end{proof}
 
 \begin{remark}
-	Auch mit Fehlerabschätzung aus Konvergenzsatz + Abschätzung des Bestapprox.fehlers durch Interpolationsfehler bekommt man konkrete Fehlerabschätzungen, allerdings schlechtere Konstanten -> Trapezregel $\frac{1}{4}$ statt $\frac{1}{12}$.
+	Auch mit Fehlerabschätzung aus Konvergenzsatz + Abschätzung des Bestapprox.fehlers durch Interpolationsfehler bekommt man konkrete Fehlerabschätzungen, allerdings schlechtere Konstanten $\rightsquigarrow$ Trapezregel $\frac{1}{4}$ statt $\frac{1}{12}$.
 \end{remark}
 
 \subsection{Gauss-Quadratur}
@@ -281,13 +281,13 @@ klar: $Q_n$ muss interpolatorisch sein.
 \begin{remark}
 	Die Analysis in diesem Abschnitt geht auch für ein unbeschränktes Intervall, z.B. $(0, \infty), (-\infty, \infty)$ sofern $\int_{a}^{b} |x|^n w(x) < \infty \forall n \in \mathbb{N}_0$.
 	
-	Betrachte Innenproduktraum $H := \{f:(a,b) \rightarrow \mathbb{R} \text{ integrierbar }| ||f|| < \infty\}$ mit $||f|| = <f,f>^{\frac{1}{2}}, <f,g> = \int_{a}^{b} fgw dx$
+	Betrachte Innenproduktraum $H := \{f:(a,b) \rightarrow \mathbb{R} \text{ integrierbar }: ||f|| < \infty\}$ mit $||f|| = <f,f>^{\frac{1}{2}}, <f,g> = \int_{a}^{b} fgw dx$
 	
-	klar: $<., .>$ Skalarprodukt (-> $L^2(a,b;wdx) = H$)
+	klar: $<., .>$ Skalarprodukt ($\rightsquigarrow$ $L^2(a,b;wdx) = H$)
 \end{remark}
 
 \begin{lemma}[Gram-Schmidt-Orthogonalisierung]
-	Sei $(x^n)_{n \in \mathbb{N}}$ die Folge der Monome in $H$. Definiere induktiv $p_0 := x^0 = 1, p_n := x^n - \sum_{k=0}^{n-1} \frac{<x^n, p_k>}{||p_n||^2} p_k$
+	Sei $(x^n)_{n \in \mathbb{N}}$ die Folge der Monome in $H$. Definiere induktiv $p_0 := x^0 = 1, p_n := x^n - \sum_{k=0}^{n-1} \frac{<x^n, p_k>}{||p_k||^2} p_k$
 	
 	$\implies (p_n)_{n\in \mathbb{N}}$ sind orthogonal bzgl. $<., .>$ und insb. $\{p_0, ..., p_n\} \subseteq \mathbb{P}_n$ Basis und alle $p_n$ haben Leitkoeffizient $1$. Die Polynome $p_n$ heißen \textbf{Orthogonalpolynome}.
 \end{lemma}
@@ -312,7 +312,7 @@ klar: $Q_n$ muss interpolatorisch sein.
 		
 		$q(x) := \prod_{j=0}^{k} (x-x_j), q \in \mathbb{P}_{k+1}$
 		
-		$\implies r := q p_{n+1} \neq 0$ hat nur Nst. gerade Vielfachheit in $(a,b) \implies r \geq 0$ in $(a,b)$ oder $r \leq 0$ in $(a,b)$
+		$\implies r := q p_{n+1} \neq 0$ hat nur Nst. gerader Vielfachheit in $(a,b) \implies r \geq 0$ in $(a,b)$ oder $r \leq 0$ in $(a,b)$
 		
 		Annahme: $k < n \implies 0 = <q, p_{n+1}> = \int_{a}^{b} rw dx \implies rw = 0$ f.ü. Widerspruch zu $r \neq 0 \neq w$ fast überall. Also $k=n$.
 		
@@ -327,7 +327,7 @@ klar: $Q_n$ muss interpolatorisch sein.
 		\item Ex. eind Quadraturformel $Q_nf = \sum_{j=0}^{n} w_j f(x_j)$ mit Exaktheitsgrad($Q_n$)$=2n+1$
 		\item Die Knoten sind die Nullstellen von Orth.pol. $p_{n+1} \in \mathbb{P}_{n+1}$
 		\item Die Gewichte erfüllen $w_j = \int_{a}^{b} wL_j dx = \int_{a}^{b} wL_j^2 dx > 0$
-		\item $|Qf - Q_nf| \leq C_{\mathbb{K}} \frac{||f^{(2n+2)||_{L^\infty(a,b)}}}{(2n+2)!} \int_{a}^{b} w(x) \prod_{j=0}^{n} (x-w_j)^2 dx \forall f \in \mathcal{C}^{2n+2}(a,b)$
+		\item $|Qf - Q_nf| \leq C_{\mathbb{K}} \frac{||f^{(2n+2)}||_{L^\infty(a,b)}}{(2n+2)!} \int_{a}^{b} w(x) \prod_{j=0}^{n} (x-w_j)^2 dx \forall f \in \mathcal{C}^{2n+2}(a,b)$
 	\end{enumerate}
 \end{theorem}
 
@@ -367,14 +367,18 @@ klar: $Q_n$ muss interpolatorisch sein.
 		
 		Wähle $q \in \mathbb{P}_{2n+1}$ mit $\underbrace{q(x_j) = f(x_j)}_{\text{um interpolatorisch}}, \underbrace{q'(x_j)=f'(x_j)}_{\text{zusätzliche Freiheit für Verbesserung}} \forall j=0, ..., n$
 		\begin{align*}
-			\implies |f(x) - q(x)| \leq C_\mathbb{K} \frac{||f^{(2n+2)||_{L^\infty(a,b)}}}{(2n+2)!} \prod_{j=0}^{n} (x-x_j)^2\\
+			\implies |f(x) - q(x)| \leq C_\mathbb{K} \frac{||f^{(2n+2)}||_{L^\infty(a,b)}}{(2n+2)!} \prod_{j=0}^{n} (x-x_j)^2\\
 			\implies |Qf - \underbrace{Q_nf}_{=Q_nq=Qq}| = |Q(f-q)| \leq \int_{a}^{b} |f(x) - q(x)| w(x) dx
 		\end{align*}
 	\end{enumerate}
 \end{proof}
 
 \begin{lemma}[3-Term-Rekursion]
-	Die Orth.pol. $(p_n)_{n \in \mathbb{N}_0}$ erfüllen $p_0(x) = 1, p_1(x) = x-\beta_0, p_{n+1}(x) = (x-\beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \forall n \geq 1$ mit reellen Koeff. $\beta_n = \frac{<xp_n, p_n>}{||p_n||^2}, \gamma_n = \frac{||p_n||}{||p_{n-1}||}$
+	Die Orth.pol. $(p_n)_{n \in \mathbb{N}_0}$ erfüllen
+	
+	$p_0(x) = 1, p_1(x) = x-\beta_0, p_{n+1}(x) = (x-\beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \forall n \geq 1$
+	
+	mit reellen Koeff. $\beta_n = \frac{<xp_n, p_n>}{||p_n||^2}, \gamma_n = \frac{||p_n||}{||p_{n-1}||}$
 \end{lemma}
 
 \begin{proof}
@@ -382,11 +386,11 @@ klar: $Q_n$ muss interpolatorisch sein.
 	
 	Ind.anf. $n=0,1$:
 	
-	Erinnerung $p_0(x) = x^0 = 1, p_n(x) = x^k - \sum_{j=0}^{k-1} \frac{<x^k, p_j>}{||p_j||^2} p_j = x - \frac{<x^1, p_0>}{||p_0||^2} p_0 = x - \frac{<x, 1>}{||1||^2} 1$
+	Erinnerung $p_0(x) = x^0 = 1, p_n(x) = x^k - \sum_{j=0}^{k-1} \frac{<x^k, p_j>}{||p_j||^2} p_j \overset{k=1}{=} x - \frac{<x^1, p_0>}{||p_0||^2} p_0 = x - \frac{<x, 1>}{||1||^2} 1$
 	
-	Def $q_{n+1}(x) = (x- \beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \in \mathbb{P}_{n+1}$, Leitkoeff($q_{n+1}$)$=1=$Leitkoeff($q_{n-1}$)
+	Def $q_{n+1}(x) := (x- \beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \in \mathbb{P}_{n+1}$, Leitkoeff($q_{n+1}$)$=1=$Leitkoeff($p_{n+1}$)
 	
-	$\implies p_{n+1} - q_{n+1} \in \mathbb{P}_n$, $<p_{n+1}, q> = 0 \forall q \in \mathbb{P}_n$
+	$\implies p_{n+1} - q_{n+1} \in \mathbb{P}_n$%, $<p_{n+1}, q> = 0 \forall q \in \mathbb{P}_n$
 	
 	zz: $<q_{n+1}, q> = 0 \forall q \in \mathbb{P}_n$ (dann $<p_{n+1} - q_{n+1}, \underbrace{p_{n+1} - q_{n+1}}_{\in \mathbb{P}_n}> = 0$ also $p_{n+1} - q_{n+1} = 0$)
 	
@@ -422,6 +426,6 @@ klar: $Q_n$ muss interpolatorisch sein.
 \end{align*}
 mit $x_0, ..., x_n$ Nullstellen von $p_{n+1}, \tau_j = (-1)^j \left(\prod_{k=1}^{j} \gamma_n\right)^{-1}$
 
-$\implies Av^{(k)} = x_k v^{(k)}$, d.h. die $x_n$ sind genau die $w_k := \int_{a}^{b} L_j w dx = \frac{||w||_{L^1(a,b)}}{||v^{(k)}|^2_2}$
+$\implies Av^{(k)} = x_k v^{(k)}$, d.h. die $x_n$ sind genau die $w_k := \int_{a}^{b} L_j w dx = \frac{||w||_{L^1(a,b)}}{||v^{(k)}||^2_2}$
 
 DH: Um eine Gauss-Quadratur zu berechnen, muss man alle EW und alle EV der Matix $A$ bestimmen (d.h. das EW-Problem vollständig lösen).

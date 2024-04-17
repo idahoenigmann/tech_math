@@ -91,13 +91,11 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 \end{example}
 
 \begin{lemma}[Horner-Schema]
-	Sei $p(x) = \sum_{j=0}^{n} \lambda_j \underbrace{q_j(x)}_{\prod_{k=0}^{j-1}(x-x_k)}$
-	
-	Für einen Auswertungspunkt $x \in \mathbb{R}$ betrachte
+	Sei $p(x) = \sum_{j=0}^{n} \lambda_j \underbrace{q_j(x)}_{\prod_{k=0}^{j-1}(x-x_k)}$. Für einen Auswertungspunkt $x \in \mathbb{R}$ betrachte
 	\begin{itemize}
 		\item $y = \lambda_n$
-		\item for $k=n-1:-1_0$
-		\item $y = (x-x_k)y + \lambda_k$
+		\item for $k=n-1:-1:0$
+		\item \hspace{0.5cm} $y = (x-x_k)y + \lambda_k$
 		\item end
 	\end{itemize}
 	
@@ -107,7 +105,7 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 \begin{theorem}[Interpolationsfehlerdarstellung]
 	Sei $f \in \mathcal{C}^{n+1}[a,b], 0 \leq m \leq n, p \in \mathbb{P}_n$ mit $p(x_j) = f(x_j) \forall j=0, ..., n$, wobei $a \leq x_0 < ... < x_n \leq b$
 	\begin{align*}
-		\implies f^{(m)}(x) - p^{(m)}(x) = \frac{f^{(n+1)(\xi)}}{(n+1-m)!} \prod_{l=0}^{n-m}(x-\zeta_l),
+		\implies f^{(m)}(x) - p^{(m)}(x) = \frac{f^{(n+1)}(\xi)}{(n+1-m)!} \prod_{l=0}^{n-m}(x-\zeta_l),
 	\end{align*}
 	wobei $\xi = \xi(m,x)$ und $\zeta_l = \zeta_l(m,x,x_0,..,x_n)$ in $[a,b]$
 	
@@ -121,12 +119,12 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 	
 	o.B.d.A. $x \notin \{\zeta_0, ..., \zeta_{n-m}\}$
 	
-	Def. $F(y) := e^{(m)}(x)w(y) - e^{(m)}(y) w(x)$ mit $w(x) := \prod_{l=0}^{m-n}(y-\zeta_l)$
+	Def. $F(y) := e^{(m)}(x)w(y) - e^{(m)}(y) w(x)$ mit $w(x) := \prod_{l=0}^{n-m}(y-\zeta_l)$
 	
 	$\implies F$ hat $n+2-m$ Nullstellen $\implies F^{(n+1-m)}$ hat mind. $1$ Nullstelle $\xi$
 	
 	\begin{align*}
-		0 = F^{(n+1-m)(\xi)} = \underbrace{e^{(m)}(x)}_{=f^{(m)}(x) - p^{(m)}(x)} \underbrace{w^{(n+1-m)}(\xi)}_{=(n+1-m)!} - \underbrace{e^{(n+1)}(\xi)}_{=f^{n+1}(\xi)} \underbrace{w(x)}_{=\prod_{l=0}^{n-m}(x-\zeta_l)}
+		0 = F^{(n+1-m)}(\xi) = \underbrace{e^{(m)}(x)}_{=f^{(m)}(x) - p^{(m)}(x)} \underbrace{w^{(n+1-m)}(\xi)}_{=(n+1-m)!} - \underbrace{e^{(n+1)}(\xi)}_{=f^{n+1}(\xi)} \underbrace{w(x)}_{=\prod_{l=0}^{n-m}(x-\zeta_l)}
 	\end{align*}
 \end{proof}
 
@@ -145,7 +143,7 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 \end{proof}
 
 \begin{remark}
-	Aus der Fehlerabschätzung und der Konvergenz der Exponentialreihe $exp(y) = \sum_{k=0}^{\infty}\frac{y^k}{k!}$ folgt, dass der Interpolationsfehler ''schnell'' konvergiert, sofern sich die Ableitungen $||f^{(k)||_{L^\infty(a,b)}}$ gut verhalten (z.B. $||f^{(k)||_{L^\infty(a,b)}} \leq M < \infty$).
+	Aus der Fehlerabschätzung und der Konvergenz der Exponentialreihe $exp(y) = \sum_{k=0}^{\infty}\frac{y^k}{k!}$ folgt, dass der Interpolationsfehler ''schnell'' konvergiert, sofern sich die Ableitungen $||f^{(k)}||_{L^\infty(a,b)}$ gut verhalten (z.B. $||f^{(k)}||_{L^\infty(a,b)} \leq M < \infty$).
 \end{remark}
 
 \begin{remark}
@@ -163,7 +161,7 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 \end{definition}
 
 \begin{lemma}
-	Sei $p \in \mathbb{P}_n$ mit Nullstellen $x_1 < ... < x_k$ und $N := \sum_{j=1}^{n}n(f,x_j) > n$.
+	Sei $p \in \mathbb{P}_n$ mit Nullstellen $x_1 < ... < x_k$ und $N := \sum_{j=1}^{k}n(f,x_j) > n$.
 	
 	$\implies p=0$, d.h. ein nicht-triviales Polynom vom Grad $n$ hat $\leq n$ Nullstellen, wobei diese mit Vielfachheit gezählt werden.
 \end{lemma}
@@ -177,7 +175,7 @@ Bei einem \textbf{Interpolationsproblem} sind im einfachsten Fall Paare $(x_j, y
 	
 	$p \in \mathbb{P}_n$ hat Nullstellen $x_1 < ... < x_k$ und $N = \sum_{j=1}^{k}n(p, x_j) > n$
 	
-	$\implies p \in \mathbb{P}_{n-1}$ hat Nullstellen $\zeta_1 < ... < \zeta_{k-1}$ mit $x_j < \zeta_j < x_{j+1}$ (nach MWS) und bei allen $x_j$ mit $n(p,x_j)>1$.
+	$\implies p' \in \mathbb{P}_{n-1}$ hat Nullstellen $\zeta_1 < ... < \zeta_{k-1}$ mit $x_j < \zeta_j < x_{j+1}$ (nach MWS) und bei allen $x_j$ mit $n(p,x_j)>1$.
 	
 	Für die Nullstellen von $p'\in \mathbb{P}_{n-1}$ gilt also
 	\begin{align*}
@@ -216,8 +214,10 @@ Nun wollen wir die $x_j$ so wählen, dass $\max_{x\in [a,b]} \prod_{l=0}^{n} |x-
 	\end{enumerate}
 \end{lemma}
 
-\begin{proof}[nur die sog. Drei-Term-Rekursion in (2)]
-	Whl: Additionstheorem des Cosinus: $\cos(x)+\cos(y) = 2\cos\left(\frac{x+y}{2}\right) \cos\left(\frac{x-y}{2}\right)$
+\begin{proof}[Beweis nur die sog. Drei-Term-Rekursion in (2)]
+	Whl: Additionstheorem des Cosinus:
+	
+	$\cos(x)+\cos(y) = 2\cos\left(\frac{x+y}{2}\right) \cos\left(\frac{x-y}{2}\right)$
 	
 	$t=\cos(\Theta), x:=(n+1)\Theta, y:=(n-1)\Theta$
 	\begin{align*}
@@ -366,7 +366,7 @@ Abschließend einige Bemerkungen zum Bestapproximationsproblem.
 \end{theorem}
 
 \begin{proof}
-	$q(x) = y_j, q(x_{j+m}) = y_{j+m}, q(x_k) = y_k, k=j+1, ..., n-m+1 \implies q=p_{j,m}$
+	$q(x_j) = y_j, q(x_{j+m}) = y_{j+m}, q(x_k) = y_k, k=j+1, ..., n-m+1 \implies q=p_{j,m}$
 \end{proof}
 
 Dieser Satz führt auf das induktive \textbf{Neville-Schema}
@@ -395,9 +395,9 @@ Dieser Satz führt auf das induktive \textbf{Neville-Schema}
 	
 	\begin{itemize}
 		\item for $m=1:n$
-		\item for $j=0:n-m$
-		\item $y_j = \frac{(x-x_j)y_{j+1} - (x-x_{j+m})y_j}{x_{j+m}-x_j}$
-		\item end
+		\item \hspace{0.5cm} for $j=0:n-m$
+		\item \hspace{1cm} $y_j = \frac{(x-x_j)y_{j+1} - (x-x_{j+m})y_j}{x_{j+m}-x_j}$
+		\item \hspace{0.5cm} end
 		\item end
 	\end{itemize}
 	
@@ -415,7 +415,7 @@ Dieser Satz führt auf das induktive \textbf{Neville-Schema}
 \begin{theorem}[Newtons Dividierte Differenzen]
 	Seien $a \leq x_0 < ... < x_n \leq b$ Stützstellen, $y_j \in \mathbb{K}, p \in \mathbb{P}_n$ mit $p(x_j) = y_j \forall j=0, ..., n$. Für $j, m \in \mathbb{N}_0$ mit $j+m \leq n$ definiere
 	\begin{align*}
-		y_{j,0} := y_j & y_{j,m} := \frac{y_{j+1,m-1}-y_{j,m-1}}{x_{j+m}-x_j}
+		y_{j,0} := y_j && y_{j,m} := \frac{y_{j+1,m-1}-y_{j,m-1}}{x_{j+m}-x_j}
 	\end{align*}
 	$\implies$
 	\begin{enumerate}
@@ -452,7 +452,7 @@ $\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu ber
 	\begin{itemize}
 		\item Die dividierten Differenzen sind ein Einschrittverfahren.
 		\item Wenn man den $y$-Vektor überschreibt, braucht man keinen zusätzlichen Speicher.
-		\item Das Verfahren löst das Vandermonde-System für die Newton-Basis, aber die Matrix aufzustellen.
+		\item Das Verfahren löst das Vandermonde-System für die Newton-Basis, ohne die Matrix aufzustellen.
 		\item Die Auswertung von $p(x)$ erfolgt mit Horner-Schema und Aufwand $3n$ pro $x \in \mathbb{K}$.
 	\end{itemize}
 \end{remark}
@@ -462,9 +462,9 @@ $\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu ber
 	
 	\begin{itemize}
 		\item for $m=1:n$
-		\item for $j = n-m:-1:0$
-		\item $y_{j,m} := \frac{y_{j+m} - y_{j,m-1}}{x_{j+m} - x_j}$
-		\item end
+		\item \hspace{0.5cm} for $j = n-m:-1:0$
+		\item \hspace{1cm} $y_{j,m} := \frac{y_{j+m} - y_{j,m-1}}{x_{j+m} - x_j}$
+		\item \hspace{0.5cm} end
 		\item end
 	\end{itemize}
 	
@@ -482,7 +482,7 @@ $\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu ber
 \subsection{Hermite-Polynominterpolation}
 
 \begin{theorem}[Wohlgestelltheit]
-	Gegeben seien Stützstellen $a \leq x_0 < ... < x_n \leq b$, Funktionswerte $y_j^(k) \in \mathbb{K}$ für $j=0, ..., n$ und $k=0, ..., n_j \in \mathbb{N}_0$ (Lagrange $n_j = 0 \forall j$), Def $N := \left(\sum_{j=0}^{n}(n_j + 1)\right)-1$
+	Gegeben seien Stützstellen $a \leq x_0 < ... < x_n \leq b$, Funktionswerte $y_j^{(k)} \in \mathbb{K}$ für $j=0, ..., n$ und $k=0, ..., n_j \in \mathbb{N}_0$ (Lagrange $n_j = 0 \forall j$), Def $N := \left(\sum_{j=0}^{n}(n_j + 1)\right)-1$
 	
 	$\implies$ Ex. eind. $p \in \mathbb{P}_N$ mit $p^{(k)}(x_j) = y_j^{(k)} \forall j=0, ..., n, \forall k=0, ..., n_j$, wobei $p^{(0)} = p$.
 \end{theorem}
@@ -505,7 +505,7 @@ $\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu ber
 		\begin{align*}
 			|f(x)-p(x)| \leq C_{\mathbb{K}} \frac{||f^{(N+1)}||_{L^\infty(a,b)}}{(N+1)!} \prod_{j=0}^{n} |x-x_j|^{n_j+1}
 		\end{align*}
-		$C_{\mathbb{C} = \sqrt{2}}$ (vorher $2$)
+		$C_{\mathbb{C}} = \sqrt{2}$ (vorher $2$)
 	\end{itemize}
 \end{remark}
 
@@ -520,7 +520,7 @@ Die Polynominterpolation erfordert hohe Glätte an $f$, um Fehlerabschätzung zu
 		\item $s(x_j) = f(x_j) \forall j=0, ..., n$
 	\end{itemize}
 	
-	$\implies$ Offensichtlich eindeutig $s(x) = f(x_{j-1}) \frac{x-x_j}{x_{j-1}-x_j} + f(x_j) \frac{x-x_{j-1}}{x_j-x_{j-1}} \forall j \forall x \in [x_j-1, x_j]$
+	$\implies$ Offensichtlich eindeutig $s(x) = f(x_{j-1}) \frac{x-x_j}{x_{j-1}-x_j} + f(x_j) \frac{x-x_{j-1}}{x_j-x_{j-1}} \forall j \forall x \in [x_{j-1}, x_j]$
 \end{example}
 
 \begin{lemma}
@@ -534,8 +534,8 @@ Die Polynominterpolation erfordert hohe Glätte an $f$, um Fehlerabschätzung zu
 \begin{proof}
 	Sei $x \in [x_{j-1}, x_j]$
 	\begin{align*}
-		\implies |f(x) - s(x)| \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \underbrace{|(x-x_{j-1})(x-x_j)}_{\text{maximal für }x = \frac{x_{j-1} + x_j}{2}}\\
-		\implies ||f-s||_{L^\infty(x_{j-1}, x_j)} \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \cdot \frac{(x_j - x_{j-1})^2}{9} = \frac{C_{\mathbb{K}}}{8} ||h^2 f''||_{L^\infty(x_{j-1}, x_j)}
+		\implies |f(x) - s(x)| \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \underbrace{|(x-x_{j-1})(x-x_j)|}_{\text{maximal für }x = \frac{x_{j-1} + x_j}{2}}\\
+		\implies ||f-s||_{L^\infty(x_{j-1}, x_j)} \leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(x_{j-1}, x_j)}}{2} \cdot \frac{(x_j - x_{j-1})^2}{4} = \frac{C_{\mathbb{K}}}{8} ||h^2 f''||_{L^\infty(x_{j-1}, x_j)}
 	\end{align*}
 \end{proof}
 
@@ -636,7 +636,7 @@ $\implies$ Bestimmung von Basen (und Dimension) von $\mathbb{S}_q^p(\Delta)$ ist
 	
 	Für $k=2, ..., n$ definiere sukzessive
 	\begin{align*}
-		z_k := z_{k-1} + \frac{s(x_k) - z_{k-1}(x_k)}{q_{k-1}(x_n)} q_{n-1} \in span(B)
+		z_k := z_{k-1} + \frac{s(x_k) - z_{k-1}(x_k)}{q_{k-1}(x_n)} q_{k-1} \in span(B)
 	\end{align*} 
 	zz. $z_n = s$
 	
@@ -657,11 +657,11 @@ $\implies$ Bestimmung von Basen (und Dimension) von $\mathbb{S}_q^p(\Delta)$ ist
 	Diese werden in der Regel als Randbedingungen formuliert, d.h. an Bedingungen an Ableitungen von $s$ in $a$ und $b$. Um diese symmetrisch zu stellen, müssen wir annehmen, dass $p-1 = 2r$ gerade ist.
 	
 	\begin{itemize}
-		\item (H) \textbf{Hermite-Randbedingungen} (oder \textbf{vollständige Randbedingungen}): Es werden $s^(j)(a), s^(j)(b)$ für $j = 1, ..., r$ zusätzlich vorgegeben.
+		\item (H) \textbf{Hermite-Randbedingungen} (oder \textbf{vollständige Randbedingungen}): Es werden $s^{(j)}(a), s^{(j)}(b)$ für $j = 1, ..., r$ zusätzlich vorgegeben.
 		
 		\item (N) \textbf{Natürliche Randbedingungen}: $r \leq n$ und $s^{(j)}(a) = 0 = s^{(j)}(b)$ für $j=r+1, ..., 2r$
 		
-		\item (P) \textbf{Periodische Randbedingungen}: $s^{(j)}(a) = s^{(b)}$ für $j=1, ..., 2r$
+		\item (P) \textbf{Periodische Randbedingungen}: $s^{(j)}(a) = s^{(j)}(b)$ für $j=1, ..., 2r$
 	\end{itemize}
 \end{remark}
 
@@ -704,23 +704,23 @@ $\implies$ Bestimmung von Basen (und Dimension) von $\mathbb{S}_q^p(\Delta)$ ist
 	
 	(ii) Betrachte $|x-y|^2 = |x|^2 - 2 Re x \bar{y} + |y|^2 = |x|^2 - |y|^2 - 2 Re (x-y)\bar{y}$
 	
-	$\implies ||g^{(r+1)} - s^{(r+1)}||_{L^2(a,b)}^2 = ||g^{(r+1)}||_{L^2(a,b)}^2 - ||s^{(r+1)}||_{L^2(a,b)}^2 - 2 Re \underbrace{\int_{a}^{b} (g^{(r+1)} - s^2{(r+1)}) \overline{s^{(r+1)}} dx}_{\text{zz: }=0}$
+	$\implies ||g^{(r+1)} - s^{(r+1)}||_{L^2(a,b)}^2 = ||g^{(r+1)}||_{L^2(a,b)}^2 - ||s^{(r+1)}||_{L^2(a,b)}^2 - 2 Re \underbrace{\int_{a}^{b} (g^{(r+1)} - s^{(r+1)}) \overline{s^{(r+1)}} dx}_{\text{zz: }=0}$
 	
 	Wh: $\int_{a}^{b}F'G + FG' dx = [FG]_a^b$
 	
 	\begin{align*}
 		\int_{a}^{b} (g^{(r+1)} - s^{(r+1)}) \overline{s^{(r+1)}} dx = \left[(g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx \right]_a^b - \int_{a}^{b} (g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx =\\
 		\left[(g^{(r)} - s^{(r)}) \overline{s^{(r+2)}} dx \right]_a^b - \left[(g^{(r-1)} - s^{(r-1)}) \overline{s^{(r+2)}} dx \right]_a^b + \int_{a}^{b} (g^{(r-1)} - s^{(r-1)}) \overline{s^{(r+3)}} dx =\\
-		\left(\sum_{j=0}^{r-1} (-1)^j \left[(g^{(r-j)} - s^{(r-j)}) \overline{s^{(r+1+j)}}\right]_a^b \right) + (-1)^j \int_{a}^{b} (g' - s') \underbrace{\overline{s^{(2r+1)}}_{=\overline{s^(p)} \leftarrow \text{ ist konstant auf }[x_{j-1}, x_j]}} dx
+		\left(\sum_{j=0}^{r-1} (-1)^j \left[(g^{(r-j)} - s^{(r-j)}) \overline{s^{(r+1+j)}}\right]_a^b \right) + (-1)^j \int_{a}^{b} (g' - s') \underbrace{\overline{s^{(2r+1)}}}_{=\overline{s^{(p)}} \leftarrow \text{ ist konstant auf }[x_{j-1}, x_j]} dx
 	\end{align*}
 	
 	\begin{align*}
 		\int_{a}^{b} (g' - s') \overline{s^{(p)}} dx = \sum_{j=1}^{n} \underbrace{\int_{x_{j-1}}^{x_j} (g' - s') \underbrace{\overline{s^{(p)}}}_{\in \mathbb{K}} dx}_{= \overline{s^{(p)}}_{[x_{j-1}, x_j]} \underbrace{\int_{x_{j-1}}^{x_j} (g' - s') dx}_{=[g-s]_{x_{j-1}}^{x_j} = 0} }
 	\end{align*}
 	
-	(H) $(g^{(r-j)} - s^{(r-j)})(\frac{a}{b}) = 0 \implies \sum(.) = 0$
+	(H) $(g^{(r-j)} - s^{(r-j)})(a/b) = 0 \implies \sum(.) = 0$
 	
-	(N) $\overline{s^{(r+1+j)}}(\frac{a}{b})=0 \implies \sum (.) = 0$
+	(N) $\overline{s^{(r+1+j)}}(a/b)=0 \implies \sum (.) = 0$
 	
 	(P) $[g^{(r-j)}]_a^b = 0, [s^{(r-j)}]_a^b = 0 \implies \sum(.) = 0$
 \end{proof}
@@ -730,7 +730,7 @@ $\implies$ Bestimmung von Basen (und Dimension) von $\mathbb{S}_q^p(\Delta)$ ist
 	
 	Sei $(t_j)_{j \in \mathbb{Z}}$ monoton steigend mit $\lim\limits_{j \rightarrow \pm \infty} t_j = \pm \infty$.
 	
-	Def $B_{j, 0} := \Xi_{[t_j, t_{j+1})}$ für $p = 0$, $B_{j,p} := w_{j,p} B_{j,p-1} + (1-w_{j,p})B_{j+1,p-1}$ für $p \geq 1$ mit $w_{j,p}(x) = \frac{x-t_j}{t_{j+p} - t_j}$ für $t_j < t_{j+p}$ und $w_{j,p}(x) = 0$ für $t_j = t_{j+p}$
+	Def $B_{j, 0} := \Phi_{[t_j, t_{j+1})}$ für $p = 0$, $B_{j,p} := w_{j,p} B_{j,p-1} + (1-w_{j,p})B_{j+1,p-1}$ für $p \geq 1$ mit $w_{j,p}(x) = \frac{x-t_j}{t_{j+p} - t_j}$ für $t_j < t_{j+p}$ und $w_{j,p}(x) = 0$ für $t_j = t_{j+p}$
 	
 	\begin{itemize}
 		\item Man kann zeigen, dass für $t_j = x_j$ mit $\Delta=(x_0, ..., x_n)$ Zerlegung von $[a,b]$ gilt $\mathbb{S}^p(\Delta) = span\{B_{j,p}|_{[a,b]}: j=p, ..., n-1\}$ und diese $B_{j,p}$ bilden auch eine Basis (da $n+p$ viele).
@@ -807,7 +807,7 @@ Im restlichen Abschnitt betrachten wir \textbf{äquidistante Stützstellen} (ode
 		\end{matrix}\right) \text{ mit } p_j = \exp(ijx)
 	\end{align*}
 	
-	$W_{jk} = p_k(x_j) = \exp(ikx_j) = \exp\left(\frac{2\pi i}{n} jk\right) = w_n^{-jk} = (\overline{w_n})^{jk} \implies W = \overline{V_n} = W$ symmetrisch.
+	$W_{jk} = p_k(x_j) = \exp(ikx_j) = \exp\left(\frac{2\pi i}{n} jk\right) = w_n^{-jk} = (\overline{w_n})^{jk} \implies W = \overline{V_n}$ symmetrisch.
 	
 	Beweis (i), (ii): Sei $W^{(k)} = (W_{jk})_{j=0}^{n-1}$ $k$-te Spalte von $W$.
 	\begin{align*}
@@ -822,7 +822,7 @@ Im restlichen Abschnitt betrachten wir \textbf{äquidistante Stützstellen} (ode
 \end{proof}
 
 \begin{definition}
-	Die Abbildung $\mathcal{F}:\mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n(x) = V_n x$ bezeichnet man als \textbf{diskrete Fourier-Transformation (DFT) der Länge $n$}. Die Inverse $\mathcal{F}_n^{-1} \mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n^{-1}(x) = \frac{1}{n}\bar{V}_nx$ heißt \textbf{diskrete Fourier-Rücktransformation}.
+	Die Abbildung $\mathcal{F}:\mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n(x) = V_n x$ bezeichnet man als \textbf{diskrete Fourier-Transformation (DFT) der Länge $n$}. Die Inverse $\mathcal{F}_n^{-1}: \mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n^{-1}(x) = \frac{1}{n}\bar{V}_nx$ heißt \textbf{diskrete Fourier-Rücktransformation}.
 \end{definition}
 
 \begin{remark}
