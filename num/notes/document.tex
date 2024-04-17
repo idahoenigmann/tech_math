@@ -1,0 +1,45 @@
+\documentclass[]{article}
+\usepackage[a4paper, margin=2cm]{geometry}
+%\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[many]{tcolorbox}
+\usepackage{listings}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{hyperref}
+\usepackage{biblatex}
+\usepackage{wasysym}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Satz}
+\newtheorem{definition}{Definition}
+\newtheorem{algorithm}{Algorithmus}
+\newtheorem{example}{Beispiel}
+\newtheorem{remark}{Bemerkung}
+\newtheorem{recap}{Wiederholung}
+\newtheorem{corollary}{Korollar}
+
+%opening
+\title{Numerik WS 2021/22}
+\author{Ida Hönigmann}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\input{grundbegriffe.tex}
+\input{interpolation.tex}
+\input{extrapolation.tex}
+\input{numerische_integration.tex}
+\input{iterative_loesung_von_gls.tex}
+\input{eliminationsverfahren.tex}
+\input{eigenwertprobleme.tex}
+
+\end{document}

@@ -106,17 +106,21 @@ For data that can be represented in $\mathbbm{R}^m$ and $l$ categories the pseud
 	\end{algorithmic}
 \end{algorithm}
 
+Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbbm{R}^2$ and ${k=10}$.
+
+\vspace{0.5cm}
+\begin{figure}[h]
+	\centering
+	\includesvg[width=0.45\linewidth]{figs/k_nearest_neighbors.svg}
+	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the $k$-nearest-neighbors algorithm for $k=10$.}
+	\label{fig:k_nearest_neighbors}
+\end{figure}
+
 If there are significantly more data points in a certain category KNN can be dominated by these categories. As there are more points in the category, they are statistically more common in the $k$ nearest, which leads to $k$-nearest-neighbor giving bad results.
+
+\newpage
 
 Variations of KNN are achieved by applying a weight to the data points. The weight can depend on the distance between the points.
 
 This algorithm is slow for big datasets as for each point the distance to $x$ has to be calculated. One possibility to reduce calculation time is to partition the space into smaller chunks. Then the loop only has to be over data points lying in the same or close chunks as the point we are interested in.
 
-Figure~\ref{fig:k_nearest_neighbors} shows a graphical representation of the algorithm for points in $\mathbbm{R}^2$ and ${k=10}$.
-
-\begin{figure}
-	\centering
-	\includesvg[width=0.45\linewidth]{figs/k_nearest_neighbors.svg}
-	\caption{Data points in three categories are given. The black point is classified as a blue, circular point by the k-nearest-neighbors algorithm for $k=10$.}
-	\label{fig:k_nearest_neighbors}
-\end{figure}

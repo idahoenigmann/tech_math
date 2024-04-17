@@ -1,0 +1,431 @@
+\section{Numerische Integration}
+
+Im ganzen Kapitel seien $a, b \in \mathbb{R}$ mit $a < b$. Ferner sei $w \in L^1(a, b)$ eine Gewichtsfunktion mit $w(x) > 0$ fast überall.
+
+Ziel: Approximiere $Qf := \int_{a}^{b} fw dx$ für $f \in \mathcal{C}[a,b]$
+
+\begin{remark}
+	Soll eine Funktion $g \in L^1(a,b)$ numerisch integriert werden, so zerlegt man $g = fw$ mit $f$ dem glatten Anteil von $g$ und $w$ dem singulären Anteil, z.B. $g(x) = \frac{\sin x}{\sqrt{1-x^2}}$, dann $f(x) = \sin(x), w(x) = \frac{1}{\sqrt{1-x^2}}$ analog $g(x) = x\log x$, dann $f(x)=x, w(x)=\log x$.
+\end{remark}
+
+\subsection{Quadraturformeln}
+
+\begin{definition}
+	Gegeben seinen \textbf{Stützstellen} (oder: \textbf{Quadraturknoten}) $a \leq x_0 < ... < x_n \leq b$ und \textbf{Gewichte} $w_0, ..., w_n \in \mathbb{K}$. Dann bezeichnet man $Q_nf = \sum_{j=0}^{n} w_j f(x_j)$ als \textbf{Quadraturformel (der Länge $n$)}. $Q_n$ hat \textbf{Exaktheitsgrad} $m \in \mathbb{N}_0$, gdw. $Q_np = Qp$ für alle $p \in \mathbb{P}_m$, d.h. Polynome vom Grad $m$ werden exakt integriert.
+\end{definition}
+
+\begin{lemma}
+	\begin{enumerate}
+		\item $Q, Q_n$ sind linear und stetig auf $\mathcal{C}[a,b]$ mit Operatornorm $||Q|| := \sup_{f \in \mathcal{C}[a, b], f \neq 0} \frac{|Qf|}{||f||_{L^\infty(a,b)}} = ||w||_{L^1(a,b)}$, $||Q_n|| = \sum_{j=0}^{n} |w_j|$
+		\item Der Exaktheitsgrad von $Q_n \leq 2n+1$
+		\item Ist $Q_n$ exakt auf $\mathbb{P}_{2n+1}$, so gibt es kein $p \in \mathbb{P}_{2n+2}\setminus \mathbb{P}_{2n+1}$ mit $Q_np = Qp$
+		\item Ist $Q_n$ exakt auf $\mathbb{P}_0$, so gilt $\sum_{j=0}^{n}w_j = ||w||_{L^1(a,b)}$
+		\item Für $w(x) = 1$ und $Q_n$ exakt auf $\mathbb{P}_1$, so gilt $\sum_{j=0}^{n} w_j = b-a, \sum_{j=1}^{n} w_j x_j = \frac{b^2 - a^2}{2}$
+	\end{enumerate}
+\end{lemma}
+
+\begin{remark}
+	Oft verwendet man banale Identitäten wie (iv), (v) um zu testen, ob eine Quadratur korrekt implementiert ist.
+\end{remark}
+
+\begin{proof}
+	(i) klar: $|Qf| \leq ||f||_{L^\infty(a,b)} ||w||_{L^1(a,b)}$
+	
+	$\implies ||Q|| \leq ||w||_{L^1(a,b)}$
+	
+	klar: $|Q_nf| \leq \sum_{j=0}^{n} |w_j| |f(x_j)| \leq ||f||_{L^\infty(a,b)} \sum_{j=0}^{n} |w_j|$
+	
+	$\implies ||Q_n|| \leq \sum_{j=0}^{n} |w_j|$
+	
+	Wähle einen Polygonzug $f \in \mathcal{C}[a,b]$ mit $||f||_{L^\infty(a,b)} \leq 1$ mit $w_j f(x_j) = |w_j|$, d.h. $f(x_j) = sign w_j$ also $|f(x_j)| \leq 1$
+	
+	$\implies Q_nf = \sum_{j=0}^{n} w_j f(x_j) \implies ||Q_n|| = \sum_{j=0}^{n} |w_j|$
+	
+	(ii) Wähle $p(x) = \prod_{j=0}^{n} (x-x_j)^2$. $p \in \mathbb{P}_{2n+2}$ und $p > 0$ fü
+	
+	$\implies Qf = \int_{a}^{b} \underbrace{p w}_{> 0 \text{ fü}} dx > 0 = Q_np$
+	
+	$\implies p$ wird nicht exakt integriert $\implies$ Exaktheit$(Q_n) \leq 2n+1$
+	
+	(iii) $R := Q - Q_n$ linear. Sei $\{p_0, ..., p_{2n+1}\} \subseteq \mathbb{P}_{2n+1}$ Basis. Falls $p_{2n+2} \in \mathbb{P}_{2n+2} \setminus \mathbb{P}_{2n+1}$, so ist $\{p_0, ..., p_{2n+2}\} \subseteq \mathbb{P}_{2n+2}$ Basis.
+	
+	Es gilt $R = 0$ auf $\mathbb{P}_{2n+2}$ gdw. $R(p_j) = 0 \forall j=0, ..., 2n+2$
+	
+	(iv) $||w||_{L^1(a,b)} = Q1 = Q_n1 = \sum_{j=0}^{n}w_j$
+	
+	(v) Für $w=1$ gilt $||w||_{L^1(a,b)} = b-a$, $\underbrace{Qx}_{=\int_{a}^{b}x dx = \frac{b^2}{2} - \frac{a^2}{2}} = Q_n x = \sum_{j=0}^{n} w_j x_j$, da $Q_n$ exakt auf $\mathbb{P}_{1}$ und $x$ ein Monom $\in \mathbb{P}_1$.
+\end{proof}
+
+Achtung: Meistens verwendet Quadratur den Laufindex $j=0, ..., n$ (d.h. $n+1$ Stützstellen, Exaktheit $\leq 2n+1$). Manchmal wird aber $j=1, ..., n$ betrachtet, d.h. $n$ Stützstellen, Exaktheit $\leq 2n-1$.
+
+\begin{remark}
+	In der Literatur (z.B. Abramowitz oder Secrest-Strand) sind Quadraturformeln auf Standardintervallen tabelliert, z.B. $[0, 1], [-1, 1]$. Um Quadraturformeln auf $[a, b]$ zu erhalten, verwendet man in der Regel eine affine Transformation:
+	\begin{align*}
+		\Phi: [-1, 1] \rightarrow [a, b], \Phi(t) = \frac{1}{2} \{a + b + t(b-a)\}\\
+		\implies \int_{a}^{b} fw dx = \int_{-1}^{1} f(\Phi(x)) \underbrace{w(\Phi(x))}_{=: \tilde{w}(x)} \underbrace{|\det D\Phi(x)|}_{\frac{b-a}{2}} dx =\\
+		\frac{b-a}{2} \tilde{Q}(f \circ \Phi) \approx
+		\frac{b-a}{2} \tilde{Q}_n(f\circ \Phi) =\\
+		\sum_{j=0}^{n} \underbrace{\frac{b-a}{2} \tilde{w}_j}_{=: w_j} f(\underbrace{\Phi(\tilde{x}_j)}_{=: x_j}) =
+		\sum_{j=0}^{n} w_j f(x_j) =:
+		Q_n f
+	\end{align*}
+	
+	analog für $\Phi: [0, 1] \rightarrow [a, b], \Phi(t) = a + t(b-a)$
+	
+	klar: Falls $f \in \mathbb{P}_m$, dann $f \circ \Phi \in \mathbb{P}_m \implies$ Exaktheit($\tilde{Q}_n$) = Exaktheit($Q_n$)
+\end{remark}
+
+\begin{theorem}[Fehlerabschätzung + Konvergenz]
+	Sei $Q_nf = \sum_{j=0}^{n} w_j^{(n)} f(x_j^{(n)})$ eine Quadraturformel der Länge $n$ und Exaktheit $m$.
+	\begin{align*}
+		\implies |Qf - Q_nf| \leq (||w||_{L^1(a,b)} + \sum_{j=0}^{n}|w_j^{(n)}|) \min_{p \in \mathbb{P}_m} ||f-p||_{L^\infty(a,b)}
+	\end{align*}
+	Ferner sind äquivalent:
+	\begin{enumerate}
+		\item $Qf = \lim\limits_{n\rightarrow\infty} Q_n f \forall f \in \mathcal{C}[a,b]$
+		\item $Qp = \lim\limits_{n\rightarrow\infty} Q_n p \forall p \in \mathbb{P} := \bigcup_{n\in\mathbb{N}} \mathbb{P}_n$ und $\sup_{n\in\mathbb{N}} \sum_{j=0}^{n} |w_j^{(n)}| < \infty$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	Sei $p \in \mathbb{P}_m$ mit $||f-p||_{L^\infty(a,b)} = \min_{\tilde{p} \in \mathbb{P}_m} ||f-\tilde{p}||_{L^\infty(a,b)}$
+	\begin{align*}
+		|Qf - Q_nf| < |Qf - Qp| + |Q_np - Qf| \leq ||Q|| ||f-p||_{L^\infty(a,b)} + ||Q_n|| ||f-p||_{L^\infty(a,b)}
+	\end{align*}
+	
+	zz: (ii $\implies$ i)
+	
+	Sei $\epsilon > 0$. Nach Weierstrass ex. $m \in \mathbb{N}$ und $p \in \mathbb{P}_m$ mit $||f-p||_{L^\infty(a,b)} \leq \epsilon$
+	\begin{align*}
+		\implies |Qf - Q_nf| \leq \underbrace{|Qf - Qp|}_{\leq ||Q|| \underbrace{||f-p||_{L^\infty(a,b)}}_{\leq \epsilon}} + \underbrace{|Qp - Q_np|}_{\rightarrow 0 \text{ für } n\rightarrow\infty} + \underbrace{|Q_np - Q_nf|}_{\leq \underbrace{||Q_n||}_{\leq M} \underbrace{||f-p||_{L^\infty(a,b)}}_{\leq \epsilon}} \leq
+		(||w||_{L^1(a,b)} + M)\epsilon + |Qp - Q_np|\\
+		\implies \limsup_n |Qf - Q_nf| \leq (||w||_{L^1(a,b)} + M) \epsilon \forall \epsilon > 0\\
+		\implies 0 \leq \liminf_n |Qf - Q_nf| \leq \limsup_n |Qf - Q_nf| = 0
+	\end{align*}
+	
+	(i $\implies$ ii) mittels \textbf{Satz von Banach-Steinhaus}:
+	
+	$X, Y$ Banach-Räume, $T_n \in L(X,Y)$
+	
+	Dann sind äquivalent:
+	\begin{itemize}
+		\item $sup_{n \in \mathbb{N}} ||T_n||_{L(X,Y)} < \infty$ glm. Beschränktheit
+		\item $\forall x \in X: \sup_{n\in\mathbb{N}} ||T_nx||_Y < \infty$ pktw. Beschränktheit
+	\end{itemize}
+	jetzt $X \in \mathcal{C}[a,b], Y=\mathbb{K}, T_n=Q_n$
+	
+	d.h. $(Q_nf)_{n\in\mathbb{N}}$ konvergent nach (i), also punktweise Beschränktheit $\implies \infty > \sup_n ||Q_n|| = \sup_n \sum_{j=0}^{n} |w_j^{(n)}|$.
+\end{proof}
+
+\begin{remark}
+	\begin{enumerate}
+		\item Die Implikation (i $\implies$ ii) ist nur mathematisch interessant. Der Satz von Banach-Steinhaus ist einer der Fundamentalsätze der Funktionalanalysis.
+		\item Die Implikation (ii $\implies$ i) ist praktisch relevant. Die Eigenschaft $\lim_n Q_n p = Qp \forall p \in \mathbb{P}$ gilt für alle interpolatorischen Quadraturformeln.
+		\item Die zentrale Bedingung $\sup_n \sum_{j=0}^{n} |w_j^{(n)}| < \infty$ ist kritisch, aber für alle Gauss-Quadraturen erfüllt. $\implies$ Konvergenz gilt immer für Gauss-Quadratur.
+	\end{enumerate}
+\end{remark}
+
+\subsection{Interpolatorische Quadraturformeln}
+
+\begin{definition}
+	Zu gegebenen Stützstellen $a \leq x_0 < ... < x_n \leq b$ bezeichnet man $Q_nf := \sum_{j=0}^{n} \underbrace{\left(\int_{a}^{b} L_jw dx\right)}_{=: w_j = Q(L_j)} f(x_j)$ als \textbf{interpolatorische Quadraturformel} (oder \textbf{Interpolationsquadratur}), wobei $L_jx := \prod_{k=0}^{n}\frac{x - x_k}{x_j - x_k}$ die Lagrange-Polynome sind.
+\end{definition}
+
+\begin{theorem}
+	Für $Q_nf = \sum_{j=0}^{n} w_j f(x_j)$ sind äquivalent:
+	\begin{enumerate}
+		\item $Q_n$ ist interpolatorisch
+		\item Für $f \in \mathcal{C}[a,b]$ mit Lagrange-Interpolationspolynom $p \in \mathbb{P}_n$ (d.h. $p(x_j) = f(x_j) \forall j=0, ..., n$) gilt $Q_nf = Qp$
+		\item Exaktheitsgrad($Q_n$)$\geq n$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(i) $\iff$ (ii).
+	
+	Betrachte $p = \sum_{j=0}^{n} f(x_j)L_j \implies Qp = \sum_{j=0}^{n} f(x_j) \int_{a}^{b}L_jw dx$
+	
+	(i $\implies$ iii) klar $Q_n(L_j) = Q(L_j)$, da $L_j(x_k) = \delta_{jk}$
+	
+	$\implies R=Q-Q_n$ ist Null auf Basis $\{L_0, ..., L_n\} \implies R=0$ auf $\mathbb{P}_n \implies$ Exaktheit($Q_n$) $\geq n$.
+	
+	(iii $\implies$ i) \checkmark
+\end{proof}
+
+\begin{remark}
+	Die Gewichte einer Interpolationsquadratur kann man durch Lösen eines lin. GLS berechnen. Sei $\{p_0, ..., p_n\} \subseteq \mathbb{P}_n$ Basis, sei $Q_nf := \sum_{j=0}^{n} w_j f(x_j)$ eine Int.quadratur
+	\begin{align*}
+		\implies \underbrace{\left(\begin{matrix}
+				p_0(x_0) & ... & p_0(x_n)\\
+				\vdots & & \vdots\\
+				p_n(x_0) & ... & p_n(x_n)
+			\end{matrix}\right)}_{\text{Transponierte der Vandermonde-Matrix aus der Interpolation, also regulär}}
+		\left(\begin{matrix}
+			w_0\\ \vdots\\ w_n
+		\end{matrix}\right) =
+		\left(\begin{matrix}
+			\int_{a}^{b} p_0 w dx\\ \vdots \\ \int_{a}^{b} p_n w dx
+		\end{matrix}\right)
+	\end{align*}
+\end{remark}
+
+\begin{example}
+	\begin{itemize}
+		\item \textbf{abgeschlossene Newton-Cotes-Formeln} $x_j := a + j \frac{b-a}{n}$ für $j=0, ..., n$
+		\item \textbf{affine Newton-Cotes-Formeln} $x_j := a + (j+1) \frac{b-a}{n+2}$ für $j=0, ..., n$
+		\item \textbf{Moolavrin-Formeln} $x_j := a + (j+\frac{1}{2}) \frac{b-a}{n+1}$
+		\item \textbf{Clemshaus-Curtis-Formeln} Verwende die Extrema oder die Nullstellen des Cebysev-Polynoms.
+	\end{itemize}
+\end{example}
+
+\begin{remark}
+	Ein Satz von Kusmin besagt, dass für äquidistante Stützstellen immer gilt $\sum_{j=0}^{n} |w_j^{(n)}| \rightarrow\infty$, d.h. es gibt stetige Funktionen $f \in \mathcal{C}[a,b]$ mit $Q_nf \nrightarrow Qf$ für $n \rightarrow\infty$.
+	
+	Bei Clemshaus-Curtis kann man $w_j^{(n)} \geq 0$ zeigen, also $\sum_{j=0}^{n} |w_j^{(n)}| \overset{!}{=} \sum_{j=0}^{n} w_j^{(n)} = b-a$
+	
+	$\implies$ Konvergenz $Q_nf \rightarrow Qf \forall f \in \mathcal{C}[a,b]$
+\end{remark}
+
+\begin{remark}
+	Einige der abg. Newton-Cotes-Formeln haben auch eigene Namen.
+	\begin{itemize}
+		\item $n=1$ Trapezregel,
+		\item $n=2$ Simpson-Regel,
+		\item $n=3$ Newton'sche $\frac{3}{8}$-Regel,
+		\item $n=4$ Milne-Regel
+	\end{itemize}
+\end{remark}
+
+\begin{remark}
+	Man verwendet die NC-Formeln in der Parix nur für $n \leq 8$, da für $n \geq 9$ negative Gewichte auftreten, was zur Auslöschung führt.
+\end{remark}
+
+\begin{remark}
+	Sei $\tilde{Q}_n$ eine Quadratur auf $[0, 1]$ zu $w = 1$. Sei $Q_n^j$ die induzierte Quadratur auf $[a_j, b_j]$ mit $a = a_0 < b_0 = a_1 < b_1 = ... < b_N = b$. Mit der Zerlegung
+	\begin{align*}
+		Qf = \int_{a}^{b} f dx = \sum_{j=0}^{N} \underbrace{\int_{a_j}^{b_j} f dx}_{=\approx Q_n^jf}
+	\end{align*}
+	erhalte eine sogenannte \textbf{summierte Quadraturformel} $Q_{nN}f := \sum_{j=0}^{N} Q_n^jf$.
+	
+	Falls Exaktheitsgrad($\tilde{Q}_n$)$\geq 0$ und $\max_{j=0, ..., N}(b_j^N - a_j^N) \rightarrow 0$, so folgt $Q_{nN}f \rightarrow Qf$ für $N \rightarrow \infty, \forall f \in \mathcal{C}[a,b]$ und sie kriegen sogar a-priori Fehlerabschätzungen!
+\end{remark}
+
+\begin{theorem}
+	Sie Stützstellen seien symmetrisch, d.h. $x_j = a + b - x_{n-j} \forall j=0, ..., n$. Das Gewicht sei symmetrisch, d.h. $w(x) = w(a+b-x) \forall x \in [a,b]$
+	
+	$\implies$
+	\begin{enumerate}
+		\item Die Gewichte der zugehörigen Interpolationsquad. $Q_n$ sind symmetrisch, d.h. $w_j = w_{n-j} \forall j=0, ..., n$
+		\item Falls $n$ gerade, so gilt Exaktheit($Q_n$)$\geq n+1$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(i) Betrachte $\tilde{Q}_nf := \sum_{j=0}^{n} w_{n-j} f(x_j)$
+	
+	zz: Exaktheit($\tilde{Q}_n$)$\geq n$ (dann $\tilde{Q}_n$ interpolatorisch, d.h. $\{w_j\}$ eindeutig durch $\{x_j\}$)
+	
+	Betrachte $p_k(x) := \left(x - \frac{a+b}{2}\right)^k$, $\tilde{p}_k(x) := p_k(a+b-x) = \left(\frac{a+b}{2} - x\right)^k = (-1)^k p_k(x)$
+	\begin{align*}
+		\tilde{Q}_np_k = \sum_{j=0}^{n} w_{n-j}p_k(x_j) = \sum_{l=0}^{n} w_l \overbrace{p_k(\underbrace{x_{n-l}}_{=a+b-x_l})}^{=\tilde{p}_k(x_l)} = Q_n\tilde{p}_k = Q\tilde{p}_k \forall k=0, ..., n\\
+		Q\tilde{p}_k = \int_{a}^{b} p_k(a+b-x) \underbrace{w(x)}_{=w(a+b-x)} dx = \int_{a}^{b} p_k(y) w(y) dy = Qp_k
+	\end{align*}
+	$\implies \tilde{Q}_np_k = Qp_k \forall k=0, ..., n \implies \tilde{Q}_n$ interpolatorisch.
+	
+	(ii) zz: $Q_np_{n+1} = Qp_{n+1} = 0$, $x_{\frac{1}{2}} = \frac{a+b}{2}$
+	\begin{align*}
+		Q_np_{n+1} = \sum_{j=0}^{n} w_j p_{n+1}(x_j) =
+		\sum_{j=1}^{\frac{n}{2}} w_{\frac{n}{2} - j} (x_{\frac{n}{2} - j} - \frac{a+b}{2})^{n+1} +
+		\sum_{j=1}^{\frac{n}{2}} \underbrace{w_{\frac{n}{2} + j}}_{w_{\frac{n}{2} - j}}
+		\left( \underbrace{x_{\frac{n}{2} + j} - \frac{a+b}{2} }_{= \frac{a+b}{2} - x_{\frac{n}{2} - j}} \right)^{\overbrace{n+1}^{\text{ungerade}}} = 0\\
+		Qp_{n+1} = \int_{a}^{b} p_{n+1} w dx = - \int_{a}^{b} \underbrace{\tilde{p}_{n+1}(x)}_{p_{n+1}(a+b-x)} \underbrace{w(x)}_{w(a+b-x)} dx =
+		- \int_{a}^{b} p_{n+1}(y) w(y) dy = - Qp_{n+1}
+	\end{align*}
+	$\implies Qp_{n+1} = 0$
+\end{proof}
+
+\begin{corollary}[Konkrete Fehlerabschätzungen]
+	Sei $w(x)=1$, $C_\mathbb{K} = 1$ für $f$ reellwertig, $C_{\mathbb{K}} = \sqrt{2}$ für $f$ komplexwertig.
+	\begin{enumerate}
+		\item Die Trapezregel $Q_1f = \frac{b-a}{2} (f(a) + f(b))$ erfüllt $|Qf - Q_1f| \leq C_{\mathbb{K}} \frac{(b-a)^3}{12} ||f''||_{L^\infty(a,b)} \forall f \in \mathcal{C}^2[a,b]$
+		\item Die Simpson-Regel $Q_2f = \frac{b-a}{6} \left(f(a) + 2f\left(\frac{a+b}{2}\right) + f(b)\right)$ erfüllt $|Qf - Q_2f| \leq C_{\mathbb{K}} \frac{(b-a)^5}{2880} ||f^{(4)}||_{L^\infty(a,b)} \forall f \in \mathcal{C}^4[a,b]$
+	\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+	$Q_1, Q_2$ sind abg. Newton-Cotens-Formeln, also interpolatorisch.
+	\begin{enumerate}
+		\item Sei $p \in \mathbb{P}_1$ mit $p(a)=f(a), p(b)=f(b)$
+		\begin{align*}
+			\implies |Qf - Q_1f| = |Qf - Qp| \leq \int_{a}^{b} \underbrace{|f(x) - p(x)|}_{\leq C_{\mathbb{K}} \frac{||f''||_{L^\infty(a,b)}}{2!} |x-a| |x-b|} dx \leq
+			C_{\mathbb{K}} \frac{||f''||_{L^\infty(a,b)}}{2!} \underbrace{\int_{a}^{b}(x-a)(b-x) dx}_{= \frac{(b-a)^3}{6}}
+		\end{align*}
+		\item Sei $p \in \mathbb{P}_3$ mit $p(a)=f(a), p(b)=f(b), p\left(\frac{a+b}{2}\right) = f\left(\frac{a+b}{2}\right)$ und $p'\left(\frac{a+b}{2}\right) = f'\left(\frac{a+b}{2}\right)$
+		\begin{align*}
+			\implies |Qf - Q_2f| = |Qf - \underbrace{Q_2p}_{=Qp}| = |Qf - Qp| \leq \int_{a}^{b} |f(x) - p(x)| dx \leq\\
+			C_{\mathbb{K}} \frac{||f^{(4)}||_{L^\infty(a,b)}}{4!} \overbrace{\int_{a}^{b} (x-a)(b-x) \left(\frac{a+b}{2} - x\right)^2 dx}^{=\frac{(b-a)^5}{120}}
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{remark}
+	Auch mit Fehlerabschätzung aus Konvergenzsatz + Abschätzung des Bestapprox.fehlers durch Interpolationsfehler bekommt man konkrete Fehlerabschätzungen, allerdings schlechtere Konstanten $\rightsquigarrow$ Trapezregel $\frac{1}{4}$ statt $\frac{1}{12}$.
+\end{remark}
+
+\subsection{Gauss-Quadratur}
+
+Ziel: Konstruiere (eindeutige) Quadraturformel $Q_n$ mit Exaktheit($Q_n$)$=2n+1$
+
+klar: $Q_n$ muss interpolatorisch sein.
+
+\begin{remark}
+	Die Analysis in diesem Abschnitt geht auch für ein unbeschränktes Intervall, z.B. $(0, \infty), (-\infty, \infty)$ sofern $\int_{a}^{b} |x|^n w(x) < \infty \forall n \in \mathbb{N}_0$.
+	
+	Betrachte Innenproduktraum $H := \{f:(a,b) \rightarrow \mathbb{R} \text{ integrierbar }: ||f|| < \infty\}$ mit $||f|| = <f,f>^{\frac{1}{2}}, <f,g> = \int_{a}^{b} fgw dx$
+	
+	klar: $<., .>$ Skalarprodukt ($\rightsquigarrow$ $L^2(a,b;wdx) = H$)
+\end{remark}
+
+\begin{lemma}[Gram-Schmidt-Orthogonalisierung]
+	Sei $(x^n)_{n \in \mathbb{N}}$ die Folge der Monome in $H$. Definiere induktiv $p_0 := x^0 = 1, p_n := x^n - \sum_{k=0}^{n-1} \frac{<x^n, p_k>}{||p_k||^2} p_k$
+	
+	$\implies (p_n)_{n\in \mathbb{N}}$ sind orthogonal bzgl. $<., .>$ und insb. $\{p_0, ..., p_n\} \subseteq \mathbb{P}_n$ Basis und alle $p_n$ haben Leitkoeffizient $1$. Die Polynome $p_n$ heißen \textbf{Orthogonalpolynome}.
+\end{lemma}
+
+\begin{remark}
+	Für $(a,b) = (-1, 1), w=1$ erhält man die \textbf{Legendre-Polynome}. Für $(a,b)=(-1, 1), w(x)=\frac{1}{\sqrt{1-x^2}}$ erhält man \textbf{Cebysev-Polynome}. Für $(a,b)=(0, \infty)$ und $w(x)=e^{-x}$ erhält man \textbf{Lagrange-Polynome}.
+\end{remark}
+
+\begin{lemma}
+	Es seinen $x_0, ..., x_n \in \mathbb{C}$ die gemäß Vielfachheit gezählten Nullstellen des Orth.pl. $p_{n+1} \in \mathbb{P}_{n+1}$
+	
+	$\implies$
+	\begin{enumerate}
+		\item alle Nullstellen sind einfach und liegen in $(a,b)$
+		\item Mit den Lagrange-Polynomen $L_j(x) = \prod_{k=0}^{n} \frac{x-x_k}{x_j - x_k}$ gilt $x_j = \frac{<xL_j, L_j>}{||L_j||^2}$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Seien $x_0, ..., x_k \in (a,b)$ alle Nullstellen von $p_{n+1}$, die ungeraden Vielfachheit haben und in $(a,b)$ liegen, bzw. $k=-1$, falls keine solchen existieren.
+		
+		$q(x) := \prod_{j=0}^{k} (x-x_j), q \in \mathbb{P}_{k+1}$
+		
+		$\implies r := q p_{n+1} \neq 0$ hat nur Nst. gerader Vielfachheit in $(a,b) \implies r \geq 0$ in $(a,b)$ oder $r \leq 0$ in $(a,b)$
+		
+		Annahme: $k < n \implies 0 = <q, p_{n+1}> = \int_{a}^{b} rw dx \implies rw = 0$ f.ü. Widerspruch zu $r \neq 0 \neq w$ fast überall. Also $k=n$.
+		
+		\item Polynomdivision $p_{n+1} = (x-x_j)q$ mit $q \in \mathbb{P}_n$
+		
+		$\implies \underbrace{<p_{n+1}, q>}_{=0} = <xq,q> - x_j <q,q> \implies x_j = \frac{<xq,q>}{<q,q>}$ und $q = \prod_{k=0, k\neq j}^{n} (x-x_k) = cL_j$
+	\end{enumerate}
+\end{proof}
+
+\begin{theorem}[Existenz + Eindeutigkeit der Gauss-Quadratur]
+	\begin{enumerate}
+		\item Ex. eind Quadraturformel $Q_nf = \sum_{j=0}^{n} w_j f(x_j)$ mit Exaktheitsgrad($Q_n$)$=2n+1$
+		\item Die Knoten sind die Nullstellen von Orth.pol. $p_{n+1} \in \mathbb{P}_{n+1}$
+		\item Die Gewichte erfüllen $w_j = \int_{a}^{b} wL_j dx = \int_{a}^{b} wL_j^2 dx > 0$
+		\item $|Qf - Q_nf| \leq C_{\mathbb{K}} \frac{||f^{(2n+2)}||_{L^\infty(a,b)}}{(2n+2)!} \int_{a}^{b} w(x) \prod_{j=0}^{n} (x-w_j)^2 dx \forall f \in \mathcal{C}^{2n+2}(a,b)$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Existenz: Wähle Nullstellen $x_0, ..., x_n$ von $p_{n+1}$, definiere $w_j = \int_{a}^{b} wL_j dx$
+		
+		$\implies$ Exaktheitsgrad($Q_n$)$\geq n$
+		
+		Sei $q \in \mathbb{P}_{2n+1}$. zz: $Q_nq = Qq$
+		
+		Polynomdivision $\implies q = p_{n+1} \alpha + \beta$ mit $\alpha, \beta \in \mathbb{P}_n$
+		\begin{align*}
+			Q_nq = Q_n\beta = Q\beta = <\beta, 1> + \underbrace{<p_{n+1}, \alpha>}_{=0} = <\underbrace{\beta + \alpha p_{n+1}}_{=q} , 1> = Qq
+		\end{align*}
+		
+		\item Eindeutigkeit: Sei $\tilde{Q}_nf = \sum_{j=0}^{n} \tilde{w}_j f(\tilde{x}_j)$ eine weitere Quadraturformel mit Exaktheit($\tilde{Q}_n$)$=2n+1$
+		
+		zz: $\tilde{x}_j \in \{x_0, ..., x_n\} \forall j=0, ..., n$
+		
+		(dann folgt $\{\tilde{x}_0, ..., \tilde{x}_n\} = \{x_0, ..., x_n\}$ und damit $\tilde{Q}_n = Q_n$)
+		
+		Sei $j \in \{0, ..., n\}$.
+		\begin{align*}
+			q(x) := \left(\prod_{k=0}^{n} (x-x_n) \right) \left( \prod_{k=0, k\neq j}^{n} (x-\tilde{x}_k) \right) \in \mathbb{P}_{2n+1}\\
+			\implies 0 = Q_nq = Qq = \tilde{Q}_nq = \underbrace{\tilde{w}_j}_{\neq 0} q(\tilde{x}_j)\\
+			q(\tilde{x}_j) = \left( \prod_{k=0}^{n} (\tilde{x}_j - x_k) \right) \underbrace{\left( \prod_{k=0, k\neq j}^{n} (\tilde{x}_j - \tilde{x}_k) \right)}_{\neq 0}\\
+			\implies \tilde{x}_j \in \{x_0, ..., x_n\}.
+		\end{align*}
+		
+		\item $w_j = \int_{a}^{b} wL_j^2 dx > 0$
+		\begin{align*}
+			w_j = \int_{a}^{b} L_jw dx = Q(L_j) = Q_n(L_j) = \sum_{k=0}^{n} w_k \underbrace{L_j(x_k)^2}_{=\delta_{jk}} = Q_n(L_j^2) = Q(L_j^2) = \int_{a}^{b} L_j^2 w dx
+		\end{align*}
+		
+		\item zz. Fehlerabschätzung
+		
+		Wähle $q \in \mathbb{P}_{2n+1}$ mit $\underbrace{q(x_j) = f(x_j)}_{\text{um interpolatorisch}}, \underbrace{q'(x_j)=f'(x_j)}_{\text{zusätzliche Freiheit für Verbesserung}} \forall j=0, ..., n$
+		\begin{align*}
+			\implies |f(x) - q(x)| \leq C_\mathbb{K} \frac{||f^{(2n+2)}||_{L^\infty(a,b)}}{(2n+2)!} \prod_{j=0}^{n} (x-x_j)^2\\
+			\implies |Qf - \underbrace{Q_nf}_{=Q_nq=Qq}| = |Q(f-q)| \leq \int_{a}^{b} |f(x) - q(x)| w(x) dx
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{lemma}[3-Term-Rekursion]
+	Die Orth.pol. $(p_n)_{n \in \mathbb{N}_0}$ erfüllen
+	
+	$p_0(x) = 1, p_1(x) = x-\beta_0, p_{n+1}(x) = (x-\beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \forall n \geq 1$
+	
+	mit reellen Koeff. $\beta_n = \frac{<xp_n, p_n>}{||p_n||^2}, \gamma_n = \frac{||p_n||}{||p_{n-1}||}$
+\end{lemma}
+
+\begin{proof}
+	durch Induktion nach $n$.
+	
+	Ind.anf. $n=0,1$:
+	
+	Erinnerung $p_0(x) = x^0 = 1, p_n(x) = x^k - \sum_{j=0}^{k-1} \frac{<x^k, p_j>}{||p_j||^2} p_j \overset{k=1}{=} x - \frac{<x^1, p_0>}{||p_0||^2} p_0 = x - \frac{<x, 1>}{||1||^2} 1$
+	
+	Def $q_{n+1}(x) := (x- \beta_n) p_n(x) - \gamma_n^2 p_{n-1}(x) \in \mathbb{P}_{n+1}$, Leitkoeff($q_{n+1}$)$=1=$Leitkoeff($p_{n+1}$)
+	
+	$\implies p_{n+1} - q_{n+1} \in \mathbb{P}_n$%, $<p_{n+1}, q> = 0 \forall q \in \mathbb{P}_n$
+	
+	zz: $<q_{n+1}, q> = 0 \forall q \in \mathbb{P}_n$ (dann $<p_{n+1} - q_{n+1}, \underbrace{p_{n+1} - q_{n+1}}_{\in \mathbb{P}_n}> = 0$ also $p_{n+1} - q_{n+1} = 0$)
+	
+	zz: $<q_{n+1}, p_j> = 0 \forall j=0, ..., n$
+	
+	Sei $j \in \{0, ..., n-2\}$:
+	\begin{align*}
+		<q_{n+1}, p_j> = \underbrace{<p_n, \underbrace{(x - \beta_n) p_j}_{\in \mathbb{P}_{n-1}}>}_{=0} - \gamma_n^2 \underbrace{<p_{n-1}, \underbrace{p_j}_{\in \mathbb{P}_{n-2}}>}_{=0} = 0
+	\end{align*}
+	
+	Sei $j = n-1:$
+	\begin{align*}
+		<q_{n+1}, p_{n-1}> = <p_1, xp_{n-1}> - \beta_n \underbrace{<p_n, p_{n-1}>}_{=0} - \underbrace{\gamma_n^2 <p_{n-1}, p_{n-1}>}_{=<p_n, p_n> \text{ Def.} \gamma_n} = <p_n, \underbrace{xp_{n-1} - p_n}_{\in \mathbb{P}_{n-1}}> = 0
+	\end{align*}
+	
+	Sei $j=n$:
+	\begin{align*}
+		<q_{n+1}, p_n> = <xp_n, p_n> - \underbrace{\beta_n <p_n, p_n>}_{=<xp_n, p_n> \text{ Def. } \beta_n} - \gamma_n^2 \underbrace{<p_{n-1}, p_n>}_{=0} = 0
+	\end{align*}
+\end{proof}
+
+Übung: Mit den Konstanten $\gamma_n, \beta_n$ der 3-Term-Rekursion betrachte
+\begin{align*}
+	A = \left(\begin{matrix}
+		\beta_0   & -\gamma_1 & 0 & ... & 0\\
+		-\gamma_1 & \beta_1   & \gamma_2 & ... & 0\\
+		\vdots    & & & & \vdots \\
+		0         & ... & ... & -\gamma_n & \beta_n
+	\end{matrix}\right) \in \mathbb{R}^{(n+1)\times(n+1)}_{\text{sym}} &&
+	v^{(k)} = \left(\begin{matrix}
+		\tau_0 p_0(x_k)\\ \vdots\\ \tau_n p_n(x_k)
+	\end{matrix}\right) \in \mathbb{R}^{n+1}
+\end{align*}
+mit $x_0, ..., x_n$ Nullstellen von $p_{n+1}, \tau_j = (-1)^j \left(\prod_{k=1}^{j} \gamma_n\right)^{-1}$
+
+$\implies Av^{(k)} = x_k v^{(k)}$, d.h. die $x_n$ sind genau die $w_k := \int_{a}^{b} L_j w dx = \frac{||w||_{L^1(a,b)}}{||v^{(k)}||^2_2}$
+
+DH: Um eine Gauss-Quadratur zu berechnen, muss man alle EW und alle EV der Matix $A$ bestimmen (d.h. das EW-Problem vollständig lösen).

@@ -1,0 +1,730 @@
+\section{Eliminationsverfahren}
+
+\textbf{Eliminationsverfahren} oder \textbf{direkte Löser} sind Algorithmen zur Lösung von $Ax=b$, die in endlich vielen Schritten die exakte Lösung $x$ berechnen (zumindest bei exakter Arithmetik), z.B. Gauss-Elimination.
+
+\begin{remark}
+	Aufgrund der Rechnerarithmetik und unvermeidlichen Fehlern in der rechten Seite gilt $\frac{||x-\tilde{x}||}{||x||} \leq cond(A) \frac{||b-\tilde{b}||}{||b||}$ mit $\tilde{b} \approx b$ Approx. der RHS, $Ax=b, A\tilde{x} = \tilde{b}$, wobei $\tilde{x}$ ist berechnete Lsg.
+\end{remark}
+
+\begin{remark}
+	In der Numerik werden nie Inverse berechnet, sondern immer Gleichungen gelöst, z.B. $y = BA^{-1}z$
+	
+	$\implies$ Zunächst lösen $Ax=z$ (d.h. $x = A^{-1}z$), dann berechnen $y=Bx$.
+\end{remark}
+
+\subsection{Dreiecksmatrizen}
+
+\begin{definition}
+	$L \in \mathbb{K}^{n\times n}$ heißt \textbf{untere Dreiecksmatrix}, gdw. $L_{jk} = 0$ für $k > j$.
+	
+	$U \in \mathbb{K}^{n\times n}$ heißt \textbf{obere Dreiecksmatrix}, gdw. $U_{jk} = 0$ für $j > k$.
+\end{definition}
+
+\begin{remark}
+	Falls $A$ eine Dreiecksmatrix, so gilt $\sigma(A) = \{A_{11}, ..., A_{nn}\}$ und $\det(A)=\prod_{j=1}^{n}A_{jj}$. Insb. $A$ regulär $\iff \forall j=1, ..., n: A_{jj} \neq 0$.
+\end{remark}
+
+\begin{algorithm}[Lösen einer oberen Dreiecksmatrix]
+	Input: $U \in \mathbb{K}^{n\times n}$ regulär, $b \in \mathbb{K}^n$
+	\begin{itemize}
+		\item for $j=n:-1:1$
+		\item \hspace{0.5cm} $x_j = \left(b_j - \sum_{k=j+1}^{n} U_{jk} x_k\right)/U_{jj}$
+		\item end
+	\end{itemize}
+	Output: $x \in \mathbb{K}^n$
+\end{algorithm}
+
+\begin{lemma}
+	Algorithmus ist wohldef. und berechnet in $n^2$ arithmetischen Operationen die Lösung $x \in \mathbb{K}^n$ von $Ux=b$.
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		Ux = b \iff \sum_{k=1}^{n} \underbrace{U_{jk}}_{=0 \text{ für } j>k} x_k = b_j \forall j \iff
+		\underbrace{\sum_{k=j}^{n} U_{jk} x_k}_{=\underbrace{U_jj}_{\neq 0} x_j + \sum_{k=j+1}^{n} U_{jk} x_k} = b_j \forall j
+	\end{align*}
+	
+	Aufwand pro $j$: $n-j$ Multiplikationen + Subtraktionen, $1$ Division
+	
+	$\implies$ Aufwand $= \sum_{j=1}^{n} \{2(n-j) + 1\} = n + 2\underbrace{\sum_{k=0}^{n-1}k}_{=\frac{(n-1)n}{2}} = n^2$
+\end{proof}
+
+\begin{algorithm}[Lösen einer unteren Dreiecksmatrix]
+	Input: $L \in \mathbb{K}^{n\times n}$ regulär, $b \in \mathbb{K}^n$
+	\begin{itemize}
+		\item for $j=1:n$
+		\item \hspace{0.5cm} $x_j = \left(b_j - \sum_{k=1}^{j-1} L_{jk} x_k\right)/L_{jj}$
+		\item end
+	\end{itemize}
+	Output: $x \in \mathbb{K}^n$
+\end{algorithm}
+
+\begin{lemma}
+	Algorithmus ist wohldef. und berechnet in $n^2$ arithm. Op. die Lösung $x \in \mathbb{K}^n$ von $Lx=b$.
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		Lx = b \iff \sum_{k=1}^{n} \underbrace{L_{jk}}_{=0 \text{ für } k>j} x_k = b_j \forall j \iff
+		\underbrace{\sum_{k=1}^{j} L_{jk} x_k}_{=\underbrace{L_jj}_{\neq 0} x_j + \sum_{k=1}^{j-1} L_{jk} x_k} = b_j \forall j
+	\end{align*}
+\end{proof}
+
+\begin{lemma}
+	Sei $\mathcal{U} := \{U \in \mathbb{K}^{n\times n} \text{ obere } \triangle\text{-Matrix}\}$
+	
+	$\implies$
+	\begin{enumerate}
+		\item $A, B \in \mathcal{U} \implies AB \in \mathcal{U}$
+		\item $A \in \mathcal{U}$ regulär $\implies B:=A^{-1} \in \mathcal{U}$ und $B_{jj}=A_{jj}^{-1} \forall j$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Seien $A, B \in \mathcal{U}, C := AB$
+		\begin{align*}
+			C_{jl} = \sum_{k=1}^{n} \underbrace{A_{jk}}_{=0 \text{ für } j > k} \underbrace{B_{kl}}_{=0 \text{ für } k > l} = \sum_{k=j}^{l} A_{jk} B_{kl}
+		\end{align*}
+		$\implies C_{jl} = 0$ für $j > l$ $\implies C \in \mathcal{U}$.
+		
+		\item Sei $A \in \mathcal{U}$ regulär. Falls $B := A^{-1} \in \mathcal{U}$ existiert, so folgt $1 = (AB)_{jj} = A_{jj} B_{jj}$, d.h. $B_{jj} = A_{jj}^{-1}$.
+		
+		Sei $b^{(l)} \in \mathbb{K}^n$ $l$-te Spalte von $B$, d.h. $Ab^{(l)} = e_l \rightsquigarrow$ Man kann $b^{(l)}$ berechnen durch
+		\begin{itemize}
+			\item for $j=n:-1:1$
+			\item \hspace{0.5cm} $b_j^{(l)} = \left(\delta_{jl} - \sum_{k=j+1}^{n} A_{jk} b_k^{(l)}\right) / A_{jj}$
+			\item end
+		\end{itemize}
+		
+		Beh: $b_j^{(l)} = 0 \forall j > l$
+		
+		Ind.anf. $j=n>l$: $b_j^{(l)} = \delta_{jl} / A_{jj} = 0$
+		
+		Ind.schritt: Aussage gelte bis $j$, zz: $j-1>l$
+		\begin{align*}
+			b_{j-1}^{(l)} = \left( \underbrace{\delta_{j-1,l}}_{=0} - \sum_{k=j}^{n} A_{jk \underbrace{b_k^{(l)}}_{=0 \text{ nach Ind.}}} \right) / A_{jj} = 0
+		\end{align*}
+		$\implies B_{jl} = b_j^{(l)} = 0 \forall j > l \implies B \in \mathcal{U}$.
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	Sei $\mathcal{L} := \{L \in \mathbb{K}^{n\times n} \text{ untere } \triangle\text{-Matrix}\}$
+	
+	$\implies$
+	\begin{enumerate}
+		\item $A, B \in \mathcal{L} \implies AB \in \mathcal{L}$
+		\item $A \in \mathcal{L}$ regulär $\implies B:=A^{-1} \in \mathcal{L}$ und $B_{jj}=A_{jj}^{-1} \forall j$
+	\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+	$\mathcal{L} = \{U^T | U \in \mathcal{U}\}$.
+\end{proof}
+
+\subsection{LU-Zerlegung}
+
+Im ganzen Abschnitt sei $A \in \mathbb{K}^{n \times n}$ regulär, $b \in \mathbb{K}^n$.
+
+\begin{definition}
+	Eine Faktorisierung $A=LU$ mit $L \in \mathcal{L}, U \in \mathcal{U}$ heißt \textbf{LU-Zerlegung von $A$}.
+\end{definition}
+
+\begin{remark}
+	Falls LU-Zerlegung existiert, so sind $L,U$ regulär. Es braucht $n$ zusätzliche Bedingungen, damit LU-Zerlegung eindeutig sein kann (denn $A$ hat $n^2$ Einträge und $L,U$ jeweils $\frac{n(n+1)}{2}$)
+	
+	Die Lösung von $Ax=b$ erhält man durch 
+	\begin{itemize}
+		\item Löse $Ly=b$
+		\item Löse $Ux=y$
+	\end{itemize}
+	$\implies Ax = L\underbrace{Ux}_{=y} = b$ in $2n^2$ arithm. Op.
+\end{remark}
+
+\begin{theorem}[Existenz + Eindeutigkeit]
+	Es sind äquivalent
+	\begin{enumerate}
+		\item Alle Untermatrizen $A_l = (A_{jk})_{j,k=1}^l$ sind regulär
+		\item Ex. LU-Zerlegung $A=LU$.
+	\end{enumerate}
+	In diesem Fall existiert eine eindeutige LU-Zerlegung mit $L_{jj} = 1 \forall j$, sog. \textbf{normalisierte LU-Zerlegung}.
+\end{theorem}
+
+\begin{proof}
+	\begin{align*}
+		A = \left(\begin{matrix}
+			A_l & *\\
+			* & *
+		\end{matrix}\right) = \left(\begin{matrix}
+			L_l & 0\\
+			* & *
+		\end{matrix}\right) \left(\begin{matrix}
+		U_l & *\\
+		0 & *
+		\end{matrix}\right) = LU
+	\end{align*}
+	
+	(ii $\implies$ i) Es gilt $A=LU$ und $L, U$ regulär $\implies L_l, U_l$ regulär $\implies A_l$ regulär.
+	
+	(i $\implies$ ii) zz: Eindeutige Existenz der norm. LU-Zerl. durch Induktion nach $n$.
+	
+	Ind.anf. $n=1$ \checkmark
+	
+	Ind.schritt: Aussage gelte für $n-1$, d.h. $A_{n-1}$
+	
+	Wir machen einen Ansatz
+	\begin{align*}
+		A = \left(\begin{matrix}
+			A_{n-1} & \beta\\
+			\alpha^T & a_{nn}
+		\end{matrix}\right) \overset{!}{=} \left(\begin{matrix}
+		L_{n-1} & 0\\
+		\gamma^T & 1
+		\end{matrix}\right) \left(\begin{matrix}
+		U_{n-1} & \delta\\
+		0 & u_{nn}
+		\end{matrix}\right)
+	\end{align*}
+	
+	zz: $\gamma, \delta \in \mathbb{K}^{n-1}, u_nn\in \mathbb{K}$ existiert eindeutig.
+	
+	$L_{n-1}\delta = \beta$ hat eind. Lsg.
+	
+	$\gamma^T U_{n-1} = \alpha^T \iff U_{n-1}^T \gamma = \alpha$ hat eind. Lsg.
+	
+	$\gamma^T\delta + u_{nn} = a_{nn} \iff u_{nn} = a_{nn} - \gamma^T \delta$ hat eind. Lsg.
+\end{proof}
+
+\begin{example}
+	Die Matrix $\left(\begin{matrix}
+		0 & 1\\
+		1 & 0
+	\end{matrix}\right)$ hat keine LU-Zerlegung.
+\end{example}
+
+\begin{example}
+	Positiv definite Matrizen (d.h. $<Ax,x>_2 > 0 \forall x \in \mathbb{K}^n\setminus\{0\}$) und strikt diagonaldominante Matrizen haben eine LU-Zerlegung.
+\end{example}
+
+Erinnerung: Beim Lösen von $Ax=b$ gilt $\frac{||x-\tilde{x}||}{||x||} \leq cond(A) \frac{||b-\tilde{b}||}{||b||}$, und diese Abschätzung ist scharf. Wenn man mittels LU-Zerlegung löst, gilt also $\frac{||x-\tilde{x}||}{||x||} \leq cond(U)\frac{||y-\tilde{y}||}{||y||} \leq cond(U)cond(L) \frac{||b-\tilde{b}||}{||b||}$.
+
+\begin{remark}
+	Das GLS $Ax=b$ mittels LU-Zerlegung ist also instabil, falls $cond(U)cond(L) \gg cond(A)$. Dies ist der sog. \textbf{Standardfehler der Numerik}: Man zerlegt ein Problem $\Phi = \Phi_1 \circ \Phi_2$ in Teilprobleme, sodass eines der Teilprobleme $\Phi_j$ wesentlich schlechter konditioniert ist als $\Phi$.
+\end{remark}
+
+\begin{example}
+	$A = \left(\begin{matrix}
+		\epsilon & 1\\
+		1 & 0
+	\end{matrix}\right)$ mit $\epsilon$ klein. $\implies A^{-1} = \left(\begin{matrix}
+		0 & 1\\
+		1 & -\epsilon
+	\end{matrix}\right)$ mit $||A||_\infty = 1 + \epsilon = ||A^{-1}||_\infty, cond_\infty(A) = (1+\epsilon)^2$ und
+	\begin{align*}
+		A = \underbrace{\left(\begin{matrix}
+				1 & 0\\
+				\frac{1}{\epsilon} & 1
+			\end{matrix}\right)}_{=L} \underbrace{\left(\begin{matrix}
+			\epsilon & 1\\
+			0 & -\frac{1}{\epsilon}
+			\end{matrix}\right)}_{=U} \text{ mit } L^{-1} = \left(\begin{matrix}
+			1 & 0\\
+			-\frac{1}{\epsilon} & 1
+		\end{matrix}\right), U^{-1} = \left(\begin{matrix}
+			\frac{1}{\epsilon} & 1\\
+			0 & -\epsilon
+		\end{matrix}\right)
+	\end{align*}
+	$\implies cond_\infty(L) = (\frac{1}{\epsilon} + 1)^2, cond_\infty(U) = \frac{1}{\epsilon}(1 + \frac{1}{\epsilon})$
+\end{example}
+
+\begin{remark}
+	Falls $A \in \mathbb{K}^{n\times n}$ SPD ist, so existiert eine spezielle LU-Zerlegung mit $A=LL^H$ mit eindeutigen $L \in \mathcal{L}$ mit $L_{jj} > 0 \forall j$, sog. \textbf{Cholesky-Zerlegung}. Es gilt $cond_2(L) = cond_2(L^H) = \sqrt{cond_2(A)}$, d.h. Cholesky-Zerlegung ist stabiles Verfahren zur Lösung von $Ax=b$.
+\end{remark}
+
+\begin{algorithm}[Crout]
+	Input: $A \in \mathbb{K}^{n\times n}$ mit LU-Zerlegung
+	
+	\begin{itemize}
+		\item for $i=1:n$
+		\item \hspace{0.5cm} for $k=i:n$
+		\item \hspace{1cm} $U_{ik} = A_{ik} - \sum_{j=1}^{i-1} L_{ij}L_{jk}$
+		\item \hspace{0.5cm} end
+		\item \hspace{0.5cm} for $k = i+1:n$
+		\item \hspace{1cm} $L_{ki} = \left(A_{ki} - \sum_{j=1}^{i-1} L_{kj} U_{ji}\right)/U_{ii}$
+		\item \hspace{0.5cm} end
+		\item end
+	\end{itemize}
+\end{algorithm}
+
+\begin{theorem}
+	Der Crout-Algorithm ist wohldef. und berechnet in $\frac{2}{3}n^3 + \mathcal{O}(n^2)$ arithm. Op. die nicht-trivialen Einträge der normalisierten LU-Zerlegung. Man kann $A_{ik}$ durch $U_{ik}$ und $A_{ki}$ durch $L_{ki}$ überschreiben, d.h. es wird kein zusätzlicher Speicher benötigt.
+\end{theorem}
+
+Idee des Algorithmus = Parkettierung von $A$.
+
+\begin{proof}
+	Für $i \leq k \implies A_{ik} = \sum_{j=1}^{n} \overbrace{L_{ij}}^{=0 \text{ für } j > i} U_{jk} = \sum_{j=1}^{i} L_{ij}U_{jk} = \underbrace{L_{ii}}_{=1}U_{ik} + \sum_{j=1}^{i-1}L_{ij}U_{jk}$
+	
+	Für $i > k \implies A_{ki} = \sum_{j=1}^{n} L_{kj} \overbrace{U_{ji}}^{=0 \text{ für } j > i} = \sum_{j=1}^{i} L_{kj} U_{ji} = L_{ki} U_{ii} + \sum_{j=1}^{i-1} L_{kj}U_{ji}$
+	
+	Aufwand für fixes $i$: $(n-i+1)(i-1)2 + (n-i)[(i-1)2 + 1]$
+	
+	Gesamtaufwand:
+	\begin{align*}
+		\sum_{i=1}^{n}\{(n-(i-1))(i-1)2 + (n-(i-1))(i-1)2 - (i-1)2 + n-i\} =
+		4 \sum_{j=0}^{n-1}(n-j)j - 2 \sum_{j=0}^{n-1} j + \sum_{j=0}^{n-1} j =\\
+		4n \underbrace{\sum_{j=0}^{n-1}j}_{=\frac{(n-1)n}{2}} - 4\underbrace{\sum_{j=0}^{n-1} j^2}_{= \frac{(n-1)n (2n-1)}{6}} - \underbrace{\sum_{j=0}^{n-1} j}_{=\frac{n(n-1)}{2} = \mathcal{O}(n^2)} =
+		\underbrace{2n^3}_{=\frac{6}{3} n^3} - \underbrace{4 \frac{2n^3}{6}}_{= \frac{4}{3}n^3} + \mathcal{O}(n^2) =
+		\frac{2}{3} n^3 + \mathcal{O}(n^2)
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Mit Hilfe des Crout-Algorithmus kann man sehen, dass gewisse Struktur von $A$ bei LU-Zerlegung erhalten bleibt, z.B. Bandstruktur oder Skyline-Struktur.
+\end{remark}
+
+\subsection{Gauss-Elimination}
+
+\begin{algorithm}
+	Input: $A^{(1)} = A \in \mathbb{K}^{n \times n}$ regulär, $b^{(1)} := b \in \mathbb{K}^n$
+	
+	1. Schritt: Erhalte $A^{(2)} \in \mathbb{K}^{n\times n}$, indem erste Zeile von $A^{(1)}$ unverändert bleibt und in allen folgenden Zeilen der Eintrag $A_{i1}^{(1)}$ eliminiert wird, d.h. def $L_{i1} := \frac{A_{i1}^{(1)}}{A_{11}^{(1)}}, A_{ij}^{(2)} = A_{ij}^{(1)} - L_{i1} A_{1j}^{(1)}, b_i^{(2)} = b_i^{(1)} - L_{i1}b_1^{(1)}$
+	\begin{align*}
+		A^{(2)} = \left(\begin{matrix}
+			a_{11} & a_{12} & ... & a_{1n}\\
+			0 & a_{22}^{(2)} & ... & a_{2n}\\
+			\vdots & & & \vdots\\
+			0 & a_{n2}^{(2)} & ... & a_{nn}^{(n)}
+		\end{matrix}\right) = \underbrace{\left(\begin{matrix}
+			1 & & & \\
+			-L_{21} & 1 & &\\
+			\vdots & & \ddots &\\
+			-L_{n1} & & & 1
+		\end{matrix}\right)}_{=:L^{(1)}} A^{(1)}
+	\end{align*}
+	
+	k-ter Schritt: $L_{ik} := \frac{A_{ik}^{(k)}}{A_{kk}^{(k)}}, A_{ij}^{(k+1)} = A_{ij}^{(k)} - L_{ik} A_{kj}^{(k)}, b_i^{(k+1)} = b_i^{(k)} - L_{ik}b_k^{(k)}$
+	\begin{align*}
+		\implies A^{(k+1)} = \left(\begin{matrix}
+			a_{11} &              &        &                     &     &*\\
+			       & a_{22}^{(2)} &        & \\
+			       &              & \ddots & \\
+			       &              &        & a_{k+1,k+1}^{(k+1)} & ... & a_{k+1, n}^{(k+1)}\\
+			       &              &        & \vdots              &     & \vdots\\
+			0      &              &        & a_{n,k+1}^{(k+1)}   & ... & a_{nn}^{k+1}
+		\end{matrix}\right) = \underbrace{\left(\begin{matrix}
+				1 &        &          &\\
+				  & \ddots &          &\\
+				  &        & 1        &\\
+				  &        &-L_{k+1,k}& 1\\
+				  &        & \vdots   & &  \ddots \\
+				0 &        &-L_{k,k}  & 0  & & 1 
+			\end{matrix}\right)}_{=:L^{(k)}} A^{(k)}
+	\end{align*}
+	$b^{(k+1)} = L^{(k)}b^{(k)}$
+	
+	Output nach $(n-1)$ Schritten: $U = A^{(n-1)}$ obere Dreiecksmatrix und Vektor $y := y^{(n-1)}, L$ normalisierte untere Dreicksmatrix.
+\end{algorithm}
+
+\begin{theorem}
+	Das Gauss-Verfahren ist genau dann durchführbar, wenn $A$ eine LU-Zerlegung hat. In diesem Fall ist $A=LU$ die eindeutige normalisierte LU-Zerleung und $y = L^{-1}b$. Man erhält also die Lösung von $Ax=b$ durch Lösen von $Ux=y$.
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $A$ besitze eine LU-Zerlegung.
+		
+		zz: $A_{kk}^{(k)} \neq 0 \forall k=1, ..., n-1$ (dann Gauss durchführbar)
+		
+		Induktion nach $k$, klar: $A_{11} = A_{11}^{(1)} \neq 0$ (da LU-Zerlegung existiert) $A^{(k)} = \underbrace{L^{(k-1)}...L^{(1)}}_{\text{ reguläre Dreiecksmatrix}}A^{(1)}$
+		
+		$\implies$ Untermatrix $\underbrace{A_k^{(k)}}_{\text{regulär}} = \underbrace{L_k^{(k-1)}... L_k^{(n)}}_{\text{regulär}} \underbrace{A_k^{(n)}}_{\text{regulär, da LU existiert}}$
+		\begin{align*}
+			A_k^{(k)} = \left(\begin{matrix}
+				A_{11} & ...          & ... & A_{1n}\\
+				       & A_{22}^{(2)} & ... & A_{2n}^{(2)}\\
+				       &              & \ddots\\
+				0      &              &     & A_{kk}^{(k)}
+			\end{matrix}\right) \implies A_{kk}^{(k)} \neq 0
+		\end{align*}
+		
+		\item Das Gauss-Verfahren sei durchführbar, d.h. $U=A^{(n)} = \underbrace{L^{(n-1)} ... L^{(1)}}_{=: L^{-1}}A$ ist obere Dreiecksmatrix
+		
+		klar: $A=LU$, $L$ untere Dreiecksmatrix
+		
+		zz: $L_{ik}$ aus Algorithmus bilden $L$.
+		
+		Def. $l_k = (0, ..., 0, L_{k+1,k}, ..., L_{nk}) \in \mathbb{K}^n, e_k \in \mathbb{K}^n$ Einheitsvektor
+		\begin{align*}
+			\implies L^{(k)} = \left(\begin{matrix}
+				1 &        &          &\\
+				& \ddots &          &\\
+				&        & 1        &\\
+				&        &-L_{k+1,k}& 1\\
+				&        & \vdots   & &  \ddots \\
+				0 &        &-L_{k,k}  & 0  & & 1 
+			\end{matrix}\right) = Id - l_k e_k^T\\
+			\implies L^{(k)}(Id + l_ke_k^T) = Id - l_k\underbrace{e_k^Tl_k}_{=0}e_k^T\\
+			\implies (L^{(k)})^{-1} = Id + l_k e_k^T
+		\end{align*}
+		Ind. beh. $(L^{(1)})^{-1} ... (L^{(k)})^{-1} = Id + \sum_{j=1}^{k} l_j e_j^T$
+		
+		Ind.anf. $k=1$\checkmark
+		
+		Ind.schritt:
+		\begin{align*}
+			(L^{(1)})^{-1} ... (L^{(k+1)})^{-1} = (Id + \sum_{j=1}^{k} l_j e_j^T) (Id + l_{k+1}e_{k+1}^T) =
+			Id + \sum_{j=1}^{k+1} l_j e_j^T + \sum_{j=1}^{k} l_j \underbrace{e_j^T l_{k+1}}_{=0} e_{k+1}^T\\
+			\implies L = (L^{(n-1)} ... L^{(1)})^{-1} = (L^{(1)})^{-1} ... (L^{(n-1)})^{-1} =
+			Id + \sum_{j=1}^{n-1} l_j e_j^T = \left(\begin{matrix}
+				1 & & 0\\
+				 &\ddots&\\
+				 L_{ik} & &1
+			\end{matrix}\right)
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{algorithm}[Implementierung]
+	Input: $A \in \mathbb{K}^{n \times n}$ mit LU-Zerlegung, $b \in \mathbb{K}^n$
+	
+	\begin{itemize}
+		\item for $k=1:n-1$
+		\item \hspace{0.5cm} $i=k+1:n$
+		\item \hspace{1cm} $L_{ik} = \frac{A_{ik}^{(k)}}{A_{kk}^{(k)}}$
+		\item \hspace{1cm} $b_i^{k+1} = b_i - L_{ik} b_k^{(k)}$
+		\item \hspace{1cm} for $j=k+1:n$
+		\item \hspace{1.5cm} $A_{ij}^{(k+1)} = A_{ij}^{(k)} - L_{ik}A_{ij}^{(k)}$
+		\item \hspace{1cm} end
+		\item \hspace{0.5cm} end
+		\item end
+	\end{itemize}
+	
+	Output: Nicht-triviale Einträge der normalisierten LU-Zerlegung sowie modifizierte rechte Seite $b^{(n)} = L^{-1}b$.
+\end{algorithm}
+
+\begin{lemma}
+	Gauss-Algorithmus benötigt $\frac{2}{3} n^3 + \mathcal{O}(n^2)$ arith. Operationen. Eine Implementierung darf die obenen Indizes weglassen und $A$ und $b$ überschreiben (dann kein zusätzlicher Speicher nötig), d.h. nicht-triviale $L_{ik}$ auf $A_{ik}$ speichern.
+\end{lemma}
+
+\begin{algorithm}[Gauss-Elimination mit Zeilenvertauschung]
+	\begin{itemize}
+		\item Im $k$-ten Schritt bestimme Index $p=p(k) \in \{k, ..., n\}$ mit $|A_{pk}^{(k)}| = \max_{i=k,...,n} |A_{ik}^{(k)}|$
+		\item Vertausche Zeilen $p$ und $k$ in $(A^{(k)}, b^{(k)})$ und erhalten $(\tilde{A}^{(k)}, \tilde{b}^{(k)})$
+		\item Führe Eliminationsschritt für $(\tilde{A}^{(k)}, \tilde{b}^{(k)})$ und erhalte $(A^{(k+1)}, b^{(k+1)})$
+	\end{itemize}
+\end{algorithm}
+
+\begin{remark}
+	Das Verfahren wird üblicherweise ohne Vertauschung im Speicher über einen Permutationsvektor realisiert, d.h. anfangs $\pi = (1, ..., n)$ und Vertauschen vertauscht nur $\pi(k)$ und $\pi(p)$.
+\end{remark}
+
+\begin{algorithm}
+	Input: $A \in \mathbb{K}^{n \times n}$ regulär, $b \in \mathbb{K}^n$
+	
+	Initialisierung: $\pi := (1,...,n) \in \mathbb{N}^n$
+	
+	\begin{itemize}
+		\item for $k=1:n-1$
+		\item \hspace{0.5cm} Finde $p \in \{k,...,n\}$ mit $|A_{pk}^{(k)}| = \max_{i=k,...,n}|A_{ik}^{(k)}|$
+		\item \hspace{0.5cm} Vertausche $\pi(k)$ und $\pi(p)$
+		\item \hspace{0.5cm} for $i=k+1:n$
+		\item \hspace{1cm} $L_{\pi(i),k} := A_{\pi(i), k}^{(k)} / A_{\pi(k), k}^{(k)}$
+		\item \hspace{1cm} $b_{\pi(i)}^{(k+1)} := b_{\pi(i)}^{(k)} - L_{\pi(i), k} b_{\pi(k)}^{(k)}$
+		\item \hspace{1cm} for $j=k+1:n$
+		\item \hspace{1.5cm} $A_{\pi(i),j}^{(k+1)} := A_{\pi(i),j}^{(k)} - L_{\pi(i),k} A_{\pi(k),j}^{(k)}$
+		\item \hspace{1cm} end
+		\item \hspace{0.5cm} end
+		\item end
+	\end{itemize}
+	
+	Output: Matrizen $L,U \in \mathbb{K}^{n\times n}$ mit nicht-trivialen Einträgen $U_{ij} := A_{\pi(i),j}^{(n-1)}$ für $i \leq j, L_{ij} := A_{\pi(i),j}^{(n-1)}$ für $i > j$ modifiziere rechte Seite $y_i := b_{\pi(i)} \forall i=1, ..., n$ und Permutationsvektor $\pi$.
+\end{algorithm}
+
+\begin{remark}
+	klar: Aufwand ist $\frac{2}{3}n^3 + \mathcal{O}(n^2)$, da Matrixnormsuche $\mathcal{O}(n-k)$ in jedem Durchlauf der $k$-Schleife.
+\end{remark}
+
+\begin{remark}
+	Falls man $A$ überschreibt, muss man zusätzlich das Lösen von $Ux=y$ mit Permutationsvektor realisieren.
+\end{remark}
+
+\begin{theorem}
+	Für jedes reguläre $A \in \mathbb{K}^{n\times n}$ und $b \in \mathbb{K}^n$ ist die Gauss-Elimination mit Zeilenvertauschung durchführbar und berechnet die normalisierte LU-Zerlegung $PA=LU$, wobei $P \in \{0, 1\}^{n \times n}$ die Matrix zum abschleißen Permutationsvektor ist, d.h. $Pe_i = e_{\pi(i)} \forall i$. Ferner gilt $|L_{ij}| \leq 1 \forall i,j$ und $b^{(n)} = L^{-1}Pb$.
+\end{theorem}
+
+\begin{remark}
+	Aus Kenntnis von $PA=LU$ folgt
+	\begin{itemize}
+		\item Löse $Ly = Pb$
+		\item Löse $Ux = y$
+	\end{itemize}
+	$\implies \underbrace{LU}_{PA}x = Pb \implies Ax=b$. Das erste Lösen wird durch das Verfahren erledigt!
+\end{remark}
+
+\begin{proof}
+	Im $k$-ten Schritt ist $p^{(k)} = (e_1, e_2, ..., e_{k-1}, e_p, e_{k+1}, ..., e_{p-1}, e_k, e_{p+1}, ..., e_n)$ die Matrix der Zeilenvertauschung.
+	
+	klar: $p^{(k)}$ regulär, $p^{(k)} = (p^{(k)})^{-1}$
+	
+	$\implies A^{(k+1)} = L^{(k)} p^{(k)} A^{(k)}, b^{(k+1)} = L^{(k)}p^{(k)}b^{(k)}$
+	
+	\begin{enumerate}
+		\item zz: Wohldefiniertheit
+		
+		Gauss mit Zeilenvertauschung ist nicht wohldef, falls ex. $k \in \{1, ..., n-1\}$ mit $\max_{i=k,...,n} |A_{ik}^{(k)}| = 0$
+		
+		$\implies$ ersten $k$ Spalten von $A^{(k)}$ linear abhängig.
+		
+		Andererseits gilt $rang(A^{(n)}) = rang(A^{(n-1)}) = ... = rang(A)$
+		
+		Widerspruch aus Existenz von minmalen $k$ liefert wohldef.
+		
+		\item zz: $|L_{ij}| \leq 1 \forall i,j$ denn $L_{ik} = \frac{A_{\pi(i), k}^{(k)}}{A_{\pi(k),k}^{(k)}}$ und $|A_{\pi(k),k}^{(k)}| = \max_{i=k,...,n}|A_{ik}^{(k)}|$
+		
+		\item zz: $PA=LU$
+		\begin{align*}
+			A^{(1)} = A\\
+			A^{(2)} = L^{(1)}P^{(1)}A^{(1)}\\
+			A^{(3)} = L^{(2)}P^{(2)}A^{(2)} = L^{(2)}P^{(2)}L^{(1)}P^{(1)}A
+			= L^{(2)} (P^{(2)} L^{(1)} \underbrace{P^{(2)})(P^{(2)}}_{=Id}P^{(1)})A\\
+			A^{(4)} = L^{(3)}P^{(3)}A^{(2)} = L^{(3)}P^{(3)}L^{(2)} (P^{(2)}L^{(1)}P^{(2)})(P^{(2)}P^{(1)})A =\\
+			L^{(3)}(P^{(3)}L^{(2)}P^{(2)})(P^{(3)}P^{(2)}L^{(1)}P^{(2)}P^{(3)})(P^{(3)}P^{(2)}P^{(1)})A
+		\end{align*}
+		$\implies A^{(n)} = \hat{L}^{(n-1)} ... \hat{L}^{(1)}PA \text{ und } b^{(n)} = \hat{L}^{(n-1)} ... L^{(1)}Pb$ mit $P=P^{(n-1)} ... P^{(1)}$
+		
+		$\hat{L}^{(k)} = P^{(n-1)} ... P^{(k+1)}L^{(k)}P^{(k+1)}...P^{(n-1)}$ und $U := A^{(n)}$ obere Dreiecksmatrix.
+		
+		Wh: $L^{(k)} = Id - l_ke_k^T, l_k=(\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)$
+		
+		klar: $P^{(j)}(Id - l_ke_k^T)P^{(j)} = Id - \underbrace{P^{(j)l_k}}_{=\tilde{l}_k = (\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)} \underbrace{e_k^TP^{(j)}}_{=e_k^T \text{ für } j> k}$
+		
+		$\implies \hat{L}^{(k)} = Id - \hat{l}_k e_k^T$ mit $\hat{l}_k = (\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)$
+		
+		$\implies L=(\hat{L}^{(n+1)} ... \hat{L}^{(n)})^{-1}$ normalisierte untere $\triangle$-Matrix $\implies U = L^{-1}PA \implies LU=PA$.
+	\end{enumerate}
+\end{proof}
+
+\subsection{QR-Zerlegung}
+
+\begin{definition}
+	Zu $A \in \mathbb{K}^{m\times n}$ mit $m \geq n$ heißt $A=QR$ mit $Q\in \mathbb{K}^{m\times m}$ unitär und $R \in \mathbb{K}^{m\times n}$ \textbf{verallgemeinerte obere Dreiecksmatrix} (d.h. $R_{jk} = 0$ für $j > k$) \textbf{QR-Zerlegung von $A$}.
+\end{definition}
+
+\begin{remark}
+	In der Literatur wird manchmal auch (äquivalent!) $A=\tilde{Q}\tilde{R}$ mit $\tilde{R} \in \mathbb{K}^{n\times n}$ obere Dreiecksmatrix und $\tilde{Q} \in \mathbb{K}^{m\times n}$ mit orthogonalen Spalten als QR-Zerlegung definiert.
+\end{remark}
+
+\begin{remark}
+	Falls $m=n$ und $A$ regulär, so gilt für die QR-Zerlegung $A=QR$, dass $cond_2(A) = cond_2(R)$, da $||Q||_2 = 1 = ||Q^{-1}||_2$, und $Ax=b$ ist äquivalent zu $Rx = Q^Hb$. $\implies$ QR-Zerlegung gibt stabile Lösungsstrategie für jede reguläre Matrix.
+\end{remark}
+
+\begin{lemma}[Householder-Transformation]
+	\begin{enumerate}
+		\item Zu $w \in \mathbb{K}^n$ definiere $W:=ww^H \in \mathbb{K}^{n\times n}$
+		
+		$\implies W=W^H$ und $Wx=(w^Hx)w \forall x \in \mathbb{K}^n$
+		
+		\item Ist $||w||_2 = 1$, so ist die \textbf{Householder-Transformation} $H := Id - 2ww^H \in \mathbb{K}^{n\times n}$ unitär und $H^H = H^{-1} = H$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	(ii) $H^2 = Id - 4ww^H + 4w\underbrace{w^Hw}_{=||w||_2^2=1}w^H = Id$.
+\end{proof}
+
+\begin{remark}
+	Geometrisch sind die Householder-Transformationen Spiegelungen an der Ebene $E = \{x \in \mathbb{K}^n : x^Hw=0\}$ mit Normalvektor $w$. Man kann für $x \in \mathbb{K}^n\setminus span\{e_1\}$ den Vektor $w$ so wählen, dass $Hx \in span\{e_1\}$ liegt.
+\end{remark}
+
+\begin{lemma}
+	Sei $x \in \mathbb{K}^n\setminus span\{e_1\}$ und $\lambda \in \mathbb{K}$ mit $|\lambda| = 1$ und $x_1 = \lambda |x_1|$.
+	
+	Definiere $w := \frac{x + \sigma e_1}{||x + \sigma e_1||_2}$ mit $\sigma := \lambda ||x||_2$
+	
+	$\implies ||w||_2 = 1$ und $Hx := (Id - 2ww^H)x = -\sigma e_1$
+\end{lemma}
+
+\begin{proof}
+	klar: $w$ ist wohldef. und $||w||_2 = 1$, da $x \notin span\{e_1\}$
+	\begin{align*}
+		||x + \sigma e_1||_2^2 = ||x||^2 + 2 Re\underbrace{(\sigma e_1)^H x}_{= \bar{\sigma} x_1 = \underbrace{\bar{\lambda}x_1}_{=|x_1|} ||x||_2 \in \mathbb{R}} + \underbrace{|\sigma|^2}_{=||x||_2^2} =
+		2(x+\sigma e_1)^H x\\
+		Hx = x - \underbrace{2 (w^Hx)w}_{= \underbrace{\frac{(x+\sigma e_1)^Hx}{||x+\sigma e_1||_2^2}}_{=1} (x+\sigma e_1)} = -\sigma e_1
+	\end{align*}
+\end{proof}
+
+\begin{algorithm}[Householder-Verfahren zur Berechnung der QR-Zerlegung]
+	Input: $A \in \mathbb{K}^{m\times n}$ mit $m \geq n$
+	
+	1. Schritt: Falls erste Spalte $A_{(1)}^(0)$ mit $A^{(0)} := A$ in $span\{e_1\}$ liegt, def. $H:=Id$. Ansonsten wähle Householder-Trafo mit $HA_{(1)}^{(0)} \in span\{e_1\}$.
+	
+	Def $A^{(1)} := Q^{(1)} A$ mit $Q^{(1)} := H$
+	
+	2. Schritt: Betrachte $B_2 \in \mathbb{K}^{(m-1)\times (n-1)}$ mit $B_2 = \left(\begin{matrix}
+		A_{22}^{(1)} & ... & A_{2n}^{(1)}\\
+		\vdots & & \vdots\\
+		A_{m2}^{(1)} & ... & A_{mn}^{(1)}
+	\end{matrix}\right)$
+	
+	Falls erste Spalte $B_{2,(1)} \in span\{e_1\} \subseteq \mathbb{K}^{m-1}$, wähle $H:=Id$, andernfalls wähle Householder-Trafo $H$ mit $HB_{2,(1)} \in span\{e_1\}$.
+	
+	Def $Q^{(2)} = \left(\begin{matrix}
+		1 & 0\\
+		0 & H
+	\end{matrix}\right)$ unitär, $A^{(2)} := Q^{(2)}A^{(1)}$
+	
+	k-ter Schritt: Betrachte $B_k \in \mathbb{K}^{(m-(k-1))\times (n-(k-1))}$ mit $B_k = \left(\begin{matrix}
+		A_{kk}^{(k-1)} & ... & A_{kn}^{(k-1)}\\
+		\vdots & & \vdots\\
+		A_{mk}^{(k-1)} & ... & A_{mn}^{(k-1)}
+	\end{matrix}\right)$
+	
+	Falls erste Spalte $B_{k,(1)} \in span\{e_1\} \subseteq \mathbb{K}^{m-(k-1)}$, wähle $H:=Id \in \mathbb{K}^{(k-1)\times (k-1)}$, andernfalls wähle Householder-Trafo mit $HB_{k,(1)} \in span\{e_1\}$.
+	
+	Def $Q^{(k)} = \left(\begin{matrix}
+		Id_{k-1} & 0\\
+		0 & H
+	\end{matrix}\right)$ unitär, $A^{(k)} := Q^{(k)}A^{(k-1)}$
+	
+	Output: Nach $n$ Schritten ist $R:=A^{(n)}$ eine verallgemeinerte obere Dreiecksmatrix und $Q:=Q^{(n)}...Q^{(1)}$ unitär.
+\end{algorithm}
+
+\begin{theorem}
+	Das Householder-Verfahren berechnet für $A \in \mathbb{K}^{m\times n}$ mit $m \geq n$ eine QR-Zerlegung. Falls $m = n$, so werden nur $n-1$ Schritte gebraucht.
+\end{theorem}
+
+\begin{proof}
+	$R := A^{(n)} = Q^{(n)}A^{(n-1)} = Q^{(n)} ... Q^{(1)}A$
+	\begin{align*}
+		Q^{(j)} = \left(\begin{matrix}
+			Id & 0\\
+			0 & H
+		\end{matrix}\right) \implies Q^{(j)} Q^{(j)} = Id\\
+		\implies A = \underbrace{(Q^{(n)} ... Q^{(1)})^{-1}}_{=\underbrace{(Q^{(1)})^{-1}}_{=Q^{(1)}} ... \underbrace{(Q^{(n)})^{-1}}_{=Q^{(n)}}}R = QR
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Bei der Implementierung müssen Matrix-Matrix-Multiplikationen berechnet werden.
+	\begin{align*}
+		A^{(n+1)} = \left(\begin{matrix}
+			Id_k & 0\\
+			0 & H_{m-k}
+		\end{matrix}\right)\left(\begin{matrix}
+			U & X\\
+			0 & B_{k+1}
+		\end{matrix}\right) = \left(\begin{matrix}
+			U & X\\
+			0 & H_{m-k}B_{k+1}
+		\end{matrix}\right)
+	\end{align*}
+	mit $U \in \mathbb{K}^{k\times k}$ obere $\triangle$-Matrix, $X \in \mathbb{K}^{k\times (n-k)}$ i.a. voll besetzt $B_{k+1} \in \mathbb{K}^{(m-k)\times (n-k)}$ i.a. voll besetzt.
+	
+	Man darf $H_{m-k}B_{k+1}$ nicht als Matrix-Matrix-Produkt realisieren. Stattdessen nutzt man die Struktur $H_{m-k}B_{k+1} = (Id - 2ww^H)B_{k+1} = B_{k+1} - wv^T$ mit $v := 2 B_{k+1}^T \bar{w}$, d.h. ''quadratischer'' Aufwand statt ''kubischer'' Aufwand pro Schritt. Die Realisierung erfordert zusätzlichen Speicher. In der Regel speichert man die Diagonalelemente in einem Zusatzvektor $(A_{11}^{(1)}, A_{22}^{(2)}, ..., A_{nn}^{(n)})$. Dann kann man den Householder-Vektor im unteren Dreieck speichern.
+	
+	Unter diesen Vorraussetzungen gilt für $m=n$ der Gesamtaufwand $\frac{4}{3} n^3 + \mathcal{O}(n^2)$.
+\end{remark}
+
+$Ax=b \iff PAx = Pb$ mit $P$ regulär und $\underbrace{cond_2(PA)}_{\approx 1} \leq cond_2(A)$ und $P$ ''billig'' und Matrix-Vektor-Mult. $Py$ und $PA$ SPD bzgl. geeinetem Skalarprodukt.
+
+\begin{theorem}[Eindeutigkeit von QR-Zerlegung]
+	Sei $m=n$ und $A \in \mathbb{K}^{n\times n}$ regulär und $\sigma \in \mathbb{K}^n$ mit $|\sigma_j|=1$
+	
+	$\implies$ Ex. eind. Zerlegung $A=QR$ mit $Q$ unitär und $R$ verallg. obere $\triangle$-Matrix auf $R_{jj} = \sigma_j |R_{jj}| \forall j$
+\end{theorem}
+
+\begin{theorem}
+	\begin{enumerate}
+		\item Existenz: Wähle $A = \tilde{Q} \tilde{R}$ Zerlegung. $A = \underbrace{(\tilde{Q}D^{-1})}_{\text{unitär}}\underbrace{(D\tilde{R})}_{\text{obere verall. }\triangle\text{-Matrix}}$ mit $D \in \mathbb{K}^{n\times n}$ diagonal mit $D_{jj} = \underbrace{\frac{|\tilde{R}_{jj}|}{\tilde{R}_{jj}}\sigma_j}_{\text{wohldef., da} \tilde{R} \text{ regulär}}, |D_{jj}| = 1$
+		
+		$(D\tilde{R})_{jj} = D_{jj} = \tilde{R}_{jj} \overset{!}{=} \sigma_j |\tilde{R}_{jj}|$
+		
+		$\implies Q:= \tilde{Q}D^{-1}, R := D\tilde{R}$ zeigt Existenz
+		
+		\item Eindeutigkeit: Seien $QR=A=\tilde{Q}\tilde{R}$ zwei QR-Zerlegungen mit $R_{jj} = \sigma_j |R_{jj}|, \tilde{R}_{jj} = \sigma_j |\tilde{R}_{jj}|$
+		
+		$\implies D := \underbrace{Q^{-1}\tilde{Q}}_{\text{unitär}} = \underbrace{R\tilde{R}^{-1}}_{\text{obere }\triangle\text{-Matrix}}$
+		
+		zz: $D$ diagonal per Induktion
+		
+		1. Spalte $|D_{11}| = 1$, insb. $D_{1k} = 0 \forall k > j$
+		
+		j-te Spalte: analog
+		
+		$\implies D_{jj} = \frac{R_{jj}}{\tilde{R}_{jj}} = \frac{\sigma_j |R_{jj}|}{\sigma_j |\tilde{R}_{jj}|}$ und $|D_{jj}| = 1$ $\implies R_{jj} = \tilde{R}_{jj}$.
+	\end{enumerate}
+\end{theorem}
+
+\subsection{Lineare Ausgleichsprobleme}
+
+Gegeben $A \in \mathbb{K}^{m\times n}, b \in \mathbb{K}^m$
+
+Das \textbf{lineare Ausgleichsproblem (LAP)} sucht $x \in \mathbb{K}^n$ mit $||Ax-b||_2 = \min_{y \in \mathbb{K}^n} ||Ay-b||_2$.
+
+\begin{example}
+	Gegeben $(a_j, b_j)$ für $j=1, ..., m$ finde $p(t) = \sum_{k=0}^{n} x_k t^k \in \mathbb{P}_n$ mit $\sum_{j=1}^{m} |p(a_j) - b_j|^2 = \min_{q \in \mathbb{P}_n} \sum_{j=1}^{m} |q(a_j) - b_j|^2$ (z.B. $n=1$ entspricht Ausgleichsgerade).
+	
+	$\implies A = (a_j^k)_{j=1, ..., m, k=0, ..., m} \in \mathbb{K}^{m \times (n+1)}$ ''Vandermonde-Matrix''
+	
+	$Ay = (q(a_j))_{j=1, ..., m} \in \mathbb{K}^m$ mit $q(t) := \sum_{k=0}^{m}y_kt^k$
+	
+	$\implies \min_{q \in \mathbb{P}_n} \sum_{j=1}^{m} |q(a_j) - b_j|^2 = \min_{y \in \mathbb{K}^{n+1}} ||Ax - b||_2^2$
+\end{example}
+
+\begin{theorem}
+	\begin{enumerate}
+		\item Für beliebige $m,n \in \mathbb{N}, A \in \mathbb{K}^{m \times n}, b \in \mathbb{K}^m$ hat LAP eine Lösung $x \in \mathbb{K}^n$.
+		\item $x \in \mathbb{K}^n$ löst LAP $\iff x$ löst die \textbf{Gauss'sche Normalgleichung} $A^HAx = A^Hb$
+		\item Für $m \geq n = rang(A)$ hat LAP eine eindeutige Lsg.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $Bild(A)^\perp = Kern(A^H)$
+		\begin{align*}
+			Bild(A)^\perp = \{y \in \mathbb{K}^m: \forall v \in Bild(A) : v^Hy = 0\} =\\
+			\{y \in \mathbb{K}^m: \forall x \in \mathbb{K}^n: \underbrace{(Ax)^Hy}_{=x^HA^Hy} = 0\} =
+			\{y \in \mathbb{K}^m: A^Hy = 0\} = 
+			Kern(A^H)
+		\end{align*}
+		
+		\item $\mathbb{K}^m = Bild(A) + Bild(A)^\perp$, d.h. $b=v+w$ mit eind. $v \in Bild(A), w \in Bild(A)^\perp$, insb. $v=Ax$ mit $x \in \mathbb{K}^n$.
+		
+		$\implies A^Hb = A^HAx + \underbrace{A^Hw}_{=0} \implies$ GNG hat mind. eine Lsg.
+		
+		\item zz: $x$ löst LAP $\implies x$ löst GNG
+		
+		$||Ax-b||_2^2 = ||\underbrace{Ax - v}_{\in Bild(A)}||_2^2 + ||\underbrace{w}_{\in Bild(A)^\perp}||_2^2$. Falls $x$ LAP löst, muss $Ax=v \implies A^HAx = A^Hb$ wie oben.
+		
+		\item zz: $x$ löst GNG $\implies x$ löst LAP.
+		
+		Sei $y \in \mathbb{K}^n$
+		
+		$||Ay - b||_2^2 = \overbrace{||\underbrace{Ay - Ax}_{\in Bild(A)}||_2^2}^{\geq 0} + ||\underbrace{Ax - b}_{\text{löst GNG, } \in Kern(A^H) = Bild(A)^\perp}||_2^2 \geq ||Ax - b||_2^2$
+		
+		\item $m \geq n = rang(A) \implies A^HA \in \mathbb{K}^{n\times n}$ SPD
+		
+		$<A^HAx, x>_2 = <Ax,Ax>_2 = ||Ax||_2^2 > 0 \forall x \neq 0$.
+	\end{enumerate}
+\end{proof}
+
+\begin{remark}
+	Sei $A = QR \in \mathbb{K}^{m\times n}$ mit $m \geq n = rang(A)$. Partioniere $R = \left(\begin{matrix}
+		\tilde{R}\\ 0
+	\end{matrix}\right)$ mit $\tilde{R} \in \mathbb{K}^{n\times n}$ obere $\triangle$-Matrix, $b = \left(\begin{matrix}
+		v\\ v
+	\end{matrix}\right)$ mit $v \in \mathbb{K}^n$
+	
+	$\implies ||Ax-b||_2^2 = ||QR x - b||_2^2 = ||Rx - Q^Hb||_2^2  =||\tilde{R}x - v||_2^2 + ||r||_2^2$, d.h. erhalte Lsg. von LAP durch Lösen von $\tilde{R}x = v$.
+\end{remark}
+
+\begin{remark}
+	Im selben Fall könnte man Cholesky verwenden von $A^HA$, aber $cond_2(A^HA) = cond_2(A)^2$ (für $m=n$), aber $cond_2(A) = cond_2(\tilde{R})$
+	
+	D.h. Cholesky wäre ggf. keine stabile Strategie zur Lsg des LAP.
+\end{remark}
+

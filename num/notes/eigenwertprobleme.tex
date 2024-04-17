@@ -1,0 +1,835 @@
+\section{Eigenwertprobleme}
+
+\subsection{Lineare Algebra + Stabilität}
+
+\begin{theorem}[Jordan-Form]
+	Zu $A \in \mathbb{K}^{n\times n}$ ex. $X \in \mathbb{C}^{n\times n}$ regulär mit $J := X^{-1}AX = \left(\begin{matrix}
+		J_1 & &\\
+		 & \ddots &\\
+		 & & J_p
+	\end{matrix}\right)$ blockdiagonal und $J_i = \left(\begin{matrix}
+		\lambda_i & 1 & & &\\
+		 & \ddots & \ddots & &\\
+		  & & \ddots & 1\\
+		  & & & \lambda_i
+	\end{matrix}\right)$, wobei $\lambda_i$ die EW von $A$. Die $J_i$ heißen \textbf{Jordan-Blöcke}.
+\end{theorem}
+
+\begin{remark}
+	Die \textbf{algebraische Vielfachheit} eines EW $\lambda_i$ ist die Vielfachheit der Nullstelle im char. Polynom (= die Summer der Dimensionen der Jordan-Blöcke zu $\lambda_i$). Die \textbf{geometrische Vielfachheit} ist die Dimension des Eigenraums zu $\lambda_i$ (= Anzahl der Jordan-Blöcke zu $\lambda_i$)
+\end{remark}
+
+\begin{corollary}
+	Mit der Jordan-Form $J=X^{-1}AX$ mit Jordan-Blöcken $J_i$ definiere $\tilde{A}:= X\tilde{J}X^-{-1}$ mit $\tilde{J} = \left(\begin{matrix}
+		\tilde{J}_1 & &\\
+		 & \ddots &\\
+		 & & \tilde{J}_p
+	\end{matrix}\right)$ und $\tilde{J}_i := \left(\begin{matrix}
+		\lambda_i + \epsilon_{i_1} & 1\\
+		 & \ddots & \ddots\\
+		  & & \lambda_i + \epsilon_{i_m}
+	\end{matrix}\right)$ mit $\epsilon_{i_j} > 0$
+	
+	$\implies$ Falls alle $\lambda_i + \epsilon_{i_j}$ unterschiedlich, so ist $\tilde{A}$ diagonalisierbar und $||A - \tilde{A}|| \leq C \max_{i,j}|\epsilon_{i_j}|$, wobei $C$ nur von $||.||$ abhängt und von $X$.
+\end{corollary}
+
+\begin{remark}
+	Korollar zeigt, dass die diagonisierbare Matrizen dicht sind im Raum aller Matrizen. Insbesondere kann man also die Jordan-Form numerisch nicht berechnet.
+\end{remark}
+
+\begin{theorem}[Schur-Zerlegung]
+	Sei $A \in \mathbb{K}^{n\times n}$. Für $\mathbb{K} = \mathbb{R}$ gelte ferner $\sigma(A) := \{\lambda \in \mathbb{C}| \exists v \in \mathbb{C}^n\setminus\{0\}, Av=\lambda v\} \subseteq \mathbb{R}$.
+	
+	$\implies$ Ex. $Q \in \mathbb{K}^{n\times n}$ unitär/orthogonal mit $R := Q^HAQ$ rechte obere $\triangle$-Matrix, insb. $\sigma(R) = \sigma(A)$.
+\end{theorem}
+
+\begin{corollary}[Spektralzerlegung]
+	Sei $A \in \mathbb{K}^{n\times n}$ mit $A=A^H$. $\implies \sigma(A) \subseteq \mathbb{R}$ und ex. $Q \in \mathbb{K}^{n\times n}$ unitär/orthogonal mit $D:=Q^H A Q$ diagonal.
+\end{corollary}
+
+\begin{proof}
+	Für $Av = \lambda v$ folgt $\lambda ||v||_2^2 = \lambda v^Hv = v^HAv = (Av)^Hv = \bar{\lambda} ||v||_2^2$
+	
+	$\implies R=Q^HAQ, R^H = Q^HA^HQ = Q^HAQ=R$ diagonal.
+\end{proof}
+
+\begin{theorem}[Bauer-Fike]
+	Sei $||.||$ induzierte Operatornorm mit $||D|| := \sup_{\tilde{x} \in \tilde{K}^n\setminus\{0\}} \frac{||Dx||}{||x||} = \max_j |D_{jj}|$ für alle $D \in \mathbb{K}^{n\times n}$ Diagonalmatrix, z.B. $||.||_p$. Sei $A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $T \in \mathbb{K}^{n\times n}$ regulär mit $D:=T^{-1}AT$ diagonal, $\tilde{A} \in \mathbb{K}^{n\times n}$
+	
+	$\implies \forall \tilde{\lambda} \in \sigma(\tilde{A}): \min_{\lambda\in\sigma(A)} |\lambda - \tilde{\lambda}| \leq \underbrace{cond(T)}_{= ||T|| ||T^{-1}||} ||A-\tilde{A}||$
+\end{theorem}
+
+\begin{corollary}
+	Sei $A=A^H \in \mathbb{K}^{n\times n}, \tilde{A} \in \mathbb{K}^{n\times n}$
+	
+	$\implies \forall \tilde{\lambda} \in \sigma(\tilde{A}): \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq ||A - \tilde{A}||_2$
+\end{corollary}
+
+\begin{proof}[Bauer-Fike]
+	Sei $\tilde{\lambda} \in \sigma(\tilde{A})$, o.B.d.A. $\tilde{\lambda} \notin \sigma(A)$.
+	
+	Sei $v \in \mathbb{K}^n\setminus\{0\}$ mit $\tilde{A}v = \tilde{\lambda}v$
+	
+	\begin{align*}
+		\implies 0 = (\tilde{A} - \tilde{\lambda})v = \underbrace{(A - \tilde{\lambda})}_{\text{regulär}}v + (\tilde{A} - A)v\\
+		\implies v = -(A - \tilde{\lambda})^{-1}(\tilde{A} - A)v\\
+		\implies 1 = \frac{||(A - \tilde{\lambda})^{-1}(\tilde{A} - A)v||}{||v||} \leq ||(A-\tilde{\lambda})^{-1}|| ||\tilde{A} - A||\\
+		(A - \tilde{\lambda})^{-1} = (TDT^{-1} - \tilde{\lambda})^{-1} = (T \underbrace{(D-\tilde{\lambda})}_{\text{regulär}}T^{-1})^{-1} = T(D - \tilde{\lambda})^{-1}T^{-1}\\
+		\implies ||(A - \tilde{\lambda})^{-1}|| \leq \underbrace{||T|| ||T^{-1}||}_{=cond(T)} \underbrace{||\overbrace{(D-\tilde{\lambda})^{-1}}^{\text{diagonal}}||}_{=\max_j \frac{1}{|D_{jj} - \tilde{\lambda}|} = \frac{1}{\min_j |D_{jj} - \tilde{\lambda}|} = \frac{1}{\min_{\lambda \in \sigma(D) = \sigma(A)}|\lambda - \tilde{\lambda}|}}
+	\end{align*}
+\end{proof}
+
+\subsection{Vektoriteration}
+
+Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikationen, die ein EW-EV-Paar berechnen.
+
+\begin{lemma}
+	Für $X,Y \leq \mathbb{K}^n$ Unterräume definiere $d(X,Y) := \begin{cases}
+		1 & \text{für } \dim X \neq \dim Y\\
+		|| \mathbb{P}_X - \mathbb{P}_Y ||_2 & \text{für } \dim X = \dim Y
+	\end{cases}$ wobei $\mathbb{P}_Z: \mathbb{K}^n \rightarrow Z$ Orth.proj. auf $Z \leq \mathbb{K}^n$ bzgl. $||.||_2$
+	
+	$\implies d(., .)$ ist eine Metrik auf den Unterräumen von $\mathbb{K}^n$ mit $d(X,Y) = d(X^\perp, Y^\perp) \forall X,Y \leq \mathbb{K}^n$.
+\end{lemma}
+
+\begin{proof}
+	\begin{itemize}
+		\item Definitheit: $\forall X,Y \leq \mathbb{K}^n: d(X,Y) = 0 \implies X=Y$
+		
+		Seien $X,Y \leq \mathbb{K}^n$ mit $\mathbb{P}_X = \mathbb{P}_Y$. Für $x \in X$ gilt $x = \mathbb{P}_Xx = \mathbb{P}_Yx \in Y$, d.h. $X \subseteq Y$ analog $Y \subseteq X$.
+		
+		\item Symmetrie: $\forall X,Y \leq \mathbb{K}^n: d(X,Y) = d(Y,X)$
+		
+		\item Dreiecksungleichung: $\forall X,Y,Z \leq \mathbb{K}^n: d(X,Y) \leq d(X,Z) + d(Z,Y)$
+		
+		1. Fall $\dim X \neq \dim Y: d(X,Y) = 1 \leq d(X,Z) + d(Z,Y)$
+		
+		2. Fall $\dim X = \dim Y \neq \dim Z: d(X,Y) \leq ||\mathbb{P}_X||_2 + ||\mathbb{P}_Y||_2, ||z||_2^2 = ||\mathbb{P}_Xz||_2^2 + ||(1-\mathbb{P}_X)z||_2^2$, $\mathbb{P}_Xz = \sum_{j=1}^{m}(v_j^Hz)v_j, m = \dim X$.
+		
+		3. Fall $\dim X = \dim Y = \dim Z$ $\implies d(X,Y) \leq ||\mathbb{P}_X - \mathbb{P}_Z||_2 + ||\mathbb{P}_Z - \mathbb{P}_Y||_2 = d(X,Z) + d(Z,Y)$.
+		
+		4. Fall $\dim X^\perp = n - \dim X$, d.h. $\dim X = \dim Y \iff \dim X^\perp = \dim Y^\perp$
+		
+		O.B.d.A $\dim X = \dim Y$
+		
+		$d(X,Y) = ||\underbrace{(1-\mathbb{P}_X)}_{=\mathbb{P}_{X^\perp}} - \underbrace{(1- \mathbb{P}_Y)}_{=\mathbb{P}_{Y^\perp}}||_2 = d(X^\perp, Y^\perp).$
+	\end{itemize}
+\end{proof}
+
+\begin{lemma}[Rayleigh-Quotient]
+	$A \in \mathbb{K}^{n\times n}, x \in \mathbb{K}^n\setminus\{0\}$
+	\begin{itemize}
+		\item $x$ EV zu EW $\lambda \in \mathbb{K} \implies \lambda = \underbrace{\frac{x^HAx}{||x||_2^2}}_{\text{sog. \textbf{Rayleight-Quotient}}}$
+		\item Sei $\lambda \in \mathbb{K}$ mit $||Ax - \lambda x||_2 = \min_{\mu \in \mathbb{K}} ||Ax - \mu x||_2$
+		
+		$\implies \lambda = \frac{x^HAx}{||x||_2^2}$
+	\end{itemize}
+\end{lemma}
+
+\begin{proof}
+	$\min_{\mu \in \mathbb{K}} ||Ax - \mu x||_2 = \min_{y \in span\{x\}} ||Ax - y||_2$
+	
+	$\implies$ Minimum wird eindeutig in $y = \underbrace{\mathbb{P}_X(Ax)}_{=\frac{x^HAx}{||x||_2^2}x}$ angenommen mit $X = span\{x\} \implies \lambda = \frac{x^HAx}{||x||_2^2}$
+\end{proof}
+
+\begin{lemma}[Residuum als Fehlerkontrolle]
+	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $x \in \mathbb{K}^n$ mit $||x||_2 = 1, \tilde{\lambda} \in \mathbb{K}, r=r(\tilde{\lambda}, x) := Ax - \tilde{\lambda}x$ \textbf{Residuum}. Dann gilt
+	\begin{enumerate}
+		\item $\min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq cond_2(T) ||r||_2$, sofern $T \in \mathbb{K}^{n\times n}$ regulär mit $D := T^{-1}AT$ diagonal.
+		
+		\item $A = A^H \implies \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq ||r||_2$
+		
+		\item $\tilde{\lambda} := x^HAx, A=A^H, \lambda \in \sigma(A)$ mit $|\lambda - \tilde{\lambda}| = \min_{\lambda' \in \sigma(A)} |\lambda' - \tilde{\lambda}|$
+		
+		$\implies |\lambda - \tilde{\lambda}| \leq C ||r||_2^2, C := \frac{2}{\min_{\lambda' \in \sigma(A) \setminus \{\lambda\}}|\lambda' - \lambda|}$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $\tilde{A} := A - rx^H, \implies \tilde{A}x = Ax - r\underbrace{x^Hx}_{=||x||_2^2 = 1} = \tilde{\lambda}x$
+		
+		Bauer-Fike $\implies \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq cond_2(T) \underbrace{||A - \tilde{A}||_2}_{= \sup_{y \in \mathbb{K}\setminus\{0\}} \frac{||rx^Hy||_2}{||y||_2} = ||r||_2 }$
+		
+		\item Wähle $T$ orthogonal/unitär \checkmark
+		
+		\item Beweis in 2 Schritten:
+		\begin{enumerate}
+			\item Sei $\tilde{\lambda} \in (\alpha, \beta) \subseteq \mathbb{R}$ und $\sigma(A) \cap (\alpha, \beta) = \emptyset$
+			
+			zz: $0 < (\beta - \tilde{\lambda})(\tilde{\lambda} - \alpha) \leq ||r||_2^2$
+			
+			Sei $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ ONB aus EV zu $A$, $Av_j = \lambda_j v_j$.
+			
+			Sei $x = \sum_j \mu_j v_j$ mit geeigneten $\mu_j \in \mathbb{K}$
+			\begin{align*}
+				\implies <(A - \alpha)x, (A - \beta)x>_2 = \sum_{j,k} \bar{\mu}_j (\lambda_j - \alpha) \mu_k (\lambda_k - \beta) \underbrace{<v_j, v_k>_2}_{\delta_{jk}} = \sum_j |\mu_j|^2 \underbrace{(\lambda_j - \alpha)(\lambda_j - \beta)}_{\geq 0} \geq 0\\
+				<(A - \alpha)x, (A - \beta)x>_2 = <\underbrace{(A - \tilde{\lambda})x}_{=r} + (\tilde{\lambda} - \alpha)x, \underbrace{(A-\tilde{\lambda})}_{r} + (\tilde{\lambda} - \beta)x>_2 =\\
+				||r||_2^2 + \tilde{\lambda} - \alpha \underbrace{<x, r>_2}_{x^H(Ax - (x^HAx)x) = x^HAx - \underbrace{x^Hx}_{=1}(x^HAx) = 0} + (\tilde{\lambda} - \beta)<r, x>_2 + (\tilde{\lambda} - \alpha)(\tilde{\lambda} - \beta)||x||_2^2
+			\end{align*}
+			
+			\item Sei $\tilde{\lambda} \in (a,b) \subseteq \mathbb{R}$ mit $\sigma(A) \cap (a,b) = \{\lambda\}$ zz: Behauptung.
+			
+			1.Fall $\lambda = \tilde{\lambda}$ \checkmark
+			
+			2.Fall $a < \tilde{\lambda} < \lambda$
+			
+			Wähle $\alpha = a, \beta = \lambda$
+			
+			$\implies (\lambda - \tilde{\lambda}) (\tilde{\lambda} - a) \leq ||r||_2^2 \implies |\lambda - \tilde{\lambda}| = \lambda - \tilde{\lambda} \leq \frac{1}{\tilde{\lambda} - a}||r||_2^2$
+			
+			Durch Wahl von $a$, $\tilde{\lambda} - a \geq \frac{1}{2} \min_{\lambda' \in \sigma(A), \lambda' \neq \lambda} |\lambda' - \lambda|$
+			
+			\item $\lambda < \tilde{\lambda} < b$
+			
+			Wähle $\alpha = \lambda$, $\beta = b$
+			
+			$\implies (b-\tilde{\lambda})(\tilde{\lambda} - \lambda) \leq ||r||_2^2 \implies |\tilde{\lambda} - \lambda| = \tilde{\lambda} - \lambda \leq \frac{1}{b-\tilde{\lambda}} ||r||_2^2 \rightsquigarrow$ analog zu zuvor.
+		\end{enumerate}
+	\end{enumerate}
+\end{proof}
+
+\begin{algorithm}[Power-Iteration]
+	Input: $A \in \mathbb{K}^{n\times n}, x_0 \in \mathbb{K}^n\setminus\{0\}$
+	\begin{itemize}
+		\item Für $l=0,1,2,...$ (solange wie $||Ax_l - \mu_lx_l||_2$ ''zu groß'')
+		\item \hspace{0.5cm} $y_{l+1} := Ax_l$
+		\item \hspace{0.5cm} $x_{l+1} := \frac{y_{l+1}}{||y_{l+1}||_2}$ \% approximativer EV
+		\item \hspace{0.5cm} $\mu_{l+1} := x_{l+1}^HAx_{l+1}$ \% approximativer EW
+	\end{itemize}
+\end{algorithm}
+
+\begin{theorem}[Konvergenz der Power-It.]
+	Sei $A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ Basis aus EV, $Av_j = \lambda_j v_j$ mit $|\lambda_1| \gneq |\lambda_2| \geq |\lambda_3| \geq ...$
+	
+	Sei $x_0 = \sum_{j} \alpha_j v_j$ mit $\alpha_1 \neq 0$
+	
+	$\implies$ Power-Iteration ist wohldefiniert und ex. $l_0 \in \mathbb{N}$ und $C > 0$ mit
+	
+	$|\mu_l - \lambda_1| \leq C \left|\frac{\lambda_2}{\lambda_1}\right|^l, d(span\{x_l\}, span\{v_1\}) \leq C \left|\frac{\lambda_2}{\lambda_1}\right|^l \forall l \geq l_0$
+		
+	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_2 - \lambda_1| \leq C \left|\frac{\lambda_l}{\lambda_1}\right|^{2l}$.
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $x_0 = \sum_j \alpha_j v_j \implies A^l x_0 = \sum_j \alpha_j \lambda_j^l v_j$ insb. Power-It. ist wohldef, da $A^lx_0 \neq 0$.
+		
+		$\implies x_l = c_lA^lx_0$ mit $c_l\neq 0$
+		\begin{align*}
+			\implies x_l = c_l \sum_{j} \alpha_j \lambda_j^l v_j = c_l \alpha_1 \lambda_1^l \left(v_1 + \underbrace{\sum_{j\geq 2} \frac{\alpha_j}{\alpha_1} \left(\frac{\lambda_j}{\lambda_1}\right)^l v_j}_{=: \epsilon_l \in \mathbb{K}^n}\right)\\
+			\implies ||\epsilon_l||_2 \leq \sum_{j\geq 2} \left|\frac{\alpha_j}{\alpha_1}\right| \underbrace{\left|\frac{\lambda_j}{\lambda_1}\right|^l}_{\leq \left|\frac{\lambda_2}{\lambda_1}\right|^l} ||v_j||_2 =: C \left|\frac{\lambda_2}{\lambda_1}\right|^l
+		\end{align*}
+		
+		\item
+		\begin{align*}
+			d(\underbrace{span\{x_l\}}_{=:X}, \underbrace{span\{v_1\}}_{=:Y}) = ||\mathbb{P}_X - \mathbb{P}_Y||_2 = \max_{z \in \mathbb{K}^n\setminus\{0\}} \frac{||\frac{(x_l^Hz)}{||x_l||_2^2}x_l - \frac{v_1^Hz}{||v_1||_2^2}v_1||_2}{||z||_2}\\
+			\frac{x_l^Hz}{||x_l||_2^2}x_l = \frac{(v_1 + \epsilon_l)^Hz}{||v_1 + \epsilon_l||_2^2}(v_1 + \epsilon_l)\\
+			\frac{x_l^Hz}{||x_l||_2^2}x_l - \frac{v_1^Hz}{||v_1||_2^2}v_1 =
+			\frac{(v_1 + \epsilon_l)^Hz}{||v_1 + \epsilon_l||_2^2}(v_1 + \epsilon_l) - \frac{(v_1 + \epsilon_l)^Hz}{||v_1||_2^2}(v_1 + \epsilon_l) + \frac{(v_1 + \epsilon_l)^Hz}{||v_1||_2^2}(v_1 + \epsilon_l) - \frac{v_1^Hz}{||v_1||_2^2}v_1 \leq\\
+			\frac{| ||v_1||_2^2 - ||v_1 + \epsilon_l||_2^2 (v_1 + \epsilon_l)^H ||z||_2}{||v_1||_2^2 ||v_1 + \epsilon_l||_2^2}(v_1 + \epsilon_l) + \underbrace{\frac{||(v_1 + \epsilon_l)^Hz(v_1 + \epsilon_l) - v_1^Hz v_1||_2}{||v_1||_2^2}}_{=\frac{||\epsilon_l^Hz(v_1+\epsilon_l) + v_1^Hz\epsilon_l||_2}{||v_1||_2^2}}\\
+			d(X,Y) \leq \frac{| ||v_1||_2^2 - ||v_1 + \epsilon_l||_2^2 |}{||v_1||_2^2} + \underbrace{\frac{||\epsilon_l||_2 ||v_1 + \epsilon_l||_2 + ||v_1||_2 ||\epsilon_l||_2}{||v_1||}}_{=\mathcal{O}(||\epsilon_l||_2)} =
+			\underbrace{\frac{|-2Rev_1^H\epsilon_l + ||\epsilon_l||_2^2|}{||v_1||_2^2}}_{\mathcal{O}(||\epsilon_l||_2)} + \mathcal{O}(||\epsilon_l||_2)
+		\end{align*}
+		
+		\item $\mu_l = x_l^HAx_l = \frac{(v_1 + \epsilon_l)^HA(v_1+\epsilon_l)}{||v_1 + \epsilon_l||_2^2} = \frac{v_1^HAv_1 + v_1^HA\epsilon_l + \epsilon_l^HAv_1 + \epsilon_l^HA\epsilon_l}{||v_1 + \epsilon_l||_2^2}$ und $v_1^HAv_1 = \lambda_1 ||v_1||_2^2$
+		\begin{align*}
+			||v_1 + \epsilon_l||_2 \geq ||v_1||_2 - \underbrace{||\epsilon_l||_2}_{\rightarrow 0}; ||\epsilon_l||_2 \leq \frac{1}{4} ||v_1||_l \forall l \geq l_0\\
+			\mu_l - \lambda_1 = \lambda_1 \underbrace{\left(\frac{||v_1||_2^2}{||v_1 + \epsilon_l||_2^2} - 1\right)}_{= \frac{||v_1||_2^2 - ||v_1 + \epsilon_l||_2^2}{||v_1 + \epsilon_l||_2^2} \leq \tilde{C} \frac{||v_1||_2^2 - ||v_1 + \epsilon_l||_2^2}{||v_1||_2} = \mathcal{O}(||\epsilon_l||_2^2)} =
+			\mathcal{O}(||\epsilon_l||_2^2)
+		\end{align*}
+		
+		\item Falls $A=A^H$, wähle $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ ONB aus EV.
+		
+		$\implies ||v_1 + \epsilon_l||_2^2 = ||v_1||_2^2 + ||\epsilon_l||_2^2$, $Av_1 \in span\{v_1\}, A\epsilon_l \in span\{v_2, ..., v_n\}$
+		
+		Orthogonalität $\implies \mu_l - \lambda_1 = \mathcal{O}(||\epsilon_l||_2^2)$
+	\end{enumerate}
+\end{proof}
+
+\begin{algorithm}[Inverse Iteration]
+	$A \in \mathbb{K}^{n\times n}, x_0 \in \mathbb{K}^n\setminus\{0\}, \lambda \in \mathbb{K}\setminus\sigma(A)$
+	
+	\begin{itemize}
+		\item Für $l=0,1,2,...$ (solange wie $||Ax_l - \mu_l x_l||_2 $ ''zu groß'')
+		\item \hspace{0.5cm} Löse $(A-\lambda)y_{l+1} = x_l$
+		\item \hspace{0.5cm} $x_{l+1} := \frac{y_{l+1}}{||y_{l+1}||_2}$
+		\item \hspace{0.5cm} $\mu_{l+1} := x_{l+1}^HAx_{l+1}$
+	\end{itemize}
+	also Power-Iteration für $(A-\lambda)^{-1}$
+\end{algorithm}
+
+\begin{corollary}
+	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ EV-Basis, $Av_j = \lambda_j v_j$ mit $\frac{1}{|\lambda_1 - \lambda|} \gneq \frac{1}{|\lambda_2 - \lambda|} \geq ...$
+	
+	Sei $x_0 = \sum_j \alpha_j v_j$ mit $\alpha_j \neq 0$
+	
+	$\implies$ Inverse Iteration wohldef. und ex $C>0, l_0 \in \mathbb{N}$ mit
+	
+	$|\mu_l - \lambda_1| \leq C {\underbrace{\left|\frac{\lambda_2-\lambda}{\lambda_1-\lambda}\right|}_{=:q<1}}^l, d(span\{x_l\}, span\{v_1\}) \leq C q^l \forall l \geq l_0$
+	
+	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_2 - \lambda_1| \leq C q^{2l}$.
+\end{corollary}
+
+\begin{proof}
+	$Av_j = \lambda_j v_j, (A - \lambda)v_j = (\lambda_j - \lambda)v_j, \frac{1}{\lambda_j - \lambda}v_j = (A-\lambda)^{-1}v_j$
+\end{proof}
+
+\begin{remark}
+	\begin{itemize}
+		\item Aussagen über Konvergenz $\mu_l$ für Power-It. und inverse It. gelten auch, falls $\lambda_1$ ein mehrfacher EW ist. Aber inv. It scheitert, falls $\lambda_1 \neq \lambda_2$, aber $|\lambda_1| = |\lambda_2|$. Analoges gilt für inv. It. Dort aber $\lambda$ wählbar mit $\left|\frac{1}{\lambda_1 - \lambda}\right| \gneq \left|\frac{1}{\lambda_2 - \lambda}\right|$, sofern $\lambda_1 \neq \lambda_2$.
+		\item In der Praxis wählt man $x_0 \neq 0$ zufällig und dann gilt (mit Wahrscheindlichkeit $1$) $\alpha_1 \neq 0$ (oder erfüllt durch Rundungsfehler im Verfahren).
+	\end{itemize}	
+\end{remark}
+
+\begin{lemma}
+	$\implies d(X,Y) := ||\mathbb{P}_X - \mathbb{P}_Y||_2 \overset{!}{=} ||(1-\mathbb{P}_X)\mathbb{P}_Y||_2 = \sup_{x\in X\setminus\{0\}} \inf_{y\in Y} \frac{||x-y||_2}{||x||_2}$
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item zz: $D(X,Y) := ||(1-\mathbb{P}_Y)\mathbb{P}_X||_2 = \sup_{x\in X\setminus\{0\}} \inf_{y\in Y} (...) \leq d(X,Y)$
+		
+		klar: $D(X,Y) = ||(\mathbb{P}_X - \mathbb{P}_Y)\mathbb{P}_X||_2 \leq \underbrace{||\mathbb{P}_X - \mathbb{P}_Y||_2}_{=d(X,Y)} \underbrace{||\mathbb{P}_X||_2}_{=1}$
+		
+		\item TODO
+		\item TODO
+		\item TODO
+		\begin{align*}
+			||(\mathbb{P}_X - \mathbb{P}_Y)z||_2^2 = ||\underbrace{\mathbb{P}_X(\mathbb{P}_X - \mathbb{P}_Y)}_{= \mathbb{P}_X(1-\mathbb{P}_Y)^2}z||_2^2 + ||\underbrace{(1-\mathbb{P}_X)(\mathbb{P}_X - \mathbb{P}_Y)}_{=-(1-\mathbb{P}_X)\mathbb{P}_Y^2}z||_2^2 \leq\\
+			||\mathbb{P}_X(1-\mathbb{P}_Y)||_2^2 ||(1-\mathbb{P}_Y)z||_2^2 + ||(1-\mathbb{P}_X)\mathbb{P}_Y||_2^2 ||\mathbb{P}_Yz||_2^2 \leq\\
+			\max\{\underbrace{||\mathbb{P}_X(1-\mathbb{P}_Y)||_2^2}_{=D(X,Y)^2}, \underbrace{||(1-\mathbb{P}_X)\mathbb{P}_Y||_2^2}_{=D(Y,X)^2}\underbrace{(||(1-\mathbb{P}_Y)z||_2^2 + ||\mathbb{P}_Yz||_2^2)}_{=||z||_2^2}\}
+		\end{align*}
+		
+		$||(1-\mathbb{P}_Y)x||_2 = \min_{y \in Y}||x-y||_2 \forall x \in \mathbb{K}^n$ und min wird eindeutig für $y = \mathbb{P}_Yx$ angenommen!
+		
+		\item zz: $D(X,Y) = D(Y,X)$ (dann folgt $d(X,Y) = D(X,Y)$)
+		\begin{align*}
+			D(X,Y)^2 = \sup_{x \in X\setminus\{0\}} \inf_{y\in Y} \frac{||x-y||_2^2}{||x||_2^2} =
+			\sup_{x\in X, ||x||_2\leq1} \inf_{y\in Y, ||y||_2 \leq 1} \underbrace{||x-y||_2^2}_{= ||x||_2^2  + ||y||_2^2 - 2Re(x^Hy)}
+		\end{align*}
+		1. Fall: $\dim X = 1 = \dim Y$, wähle $x \in X, ||x||_2 = 1, y \in Y, ||y||_2 = 1$
+		
+		$\implies D(X,Y)^2 = \sup_{s \in \mathbb{K}} \inf_{t\in \mathbb{K}} (|s|^2 + |t|^2 - 2Re(\bar{s}tx^Hy)) \implies s,t$ vertauschbar! $\implies D(X,Y) = D(Y,X)$
+		
+		2. Fall: $\dim X = k = \dim Y$
+		
+		Seien $\hat{X}, \hat{Y} \in \mathbb{K}^{n\times k}$ ONB (als Matrix geschrieben) zu $X$ bzw. $Y$.
+		
+		Singulärwertzerlegung $\implies \hat{X}^H \hat{Y} = U\Sigma V^H$ mit $U,V \in \mathbb{K}^{k\times k}$ unitär/orthogonal, $\Sigma \in \mathbb{R}_{\geq 0}^{k \times k}$ diagonal
+		\begin{align*}
+			\implies D(X,Y)^2 = \sup_{\alpha \in \mathbb{K}^k, ||U^h\alpha||_2 \leq 1}  \inf_{\beta \in \mathbb{K}^n, ||\beta||_2 \leq 1} \underbrace{||\hat{X}\alpha - \hat{Y}\beta||_2^2}_{= ||\hat{X}\alpha||_2^2 + ||\hat{Y}\beta||_2^2 - 2Re(\hat{X}\alpha)^H (\hat{Y}\beta)} =\\
+			\sup_{\tilde{\alpha} \in \mathbb{K}^k, ||\tilde{\alpha}||_2 \leq 1} \inf_{\tilde{\beta} \in \mathbb{K}^n, ||\tilde{\beta}||_2 \leq 1} (||\tilde{\alpha}||_2^2 + ||\tilde{\beta}||_2^2 - 2Re(\tilde{\alpha}^H \Sigma \tilde{\beta}))
+		\end{align*}
+		$\implies \tilde{\alpha}, \tilde{\beta}$ vertauschbar $\implies D(Y,X)=D(X,Y)$
+	\end{enumerate}
+\end{proof}
+
+\begin{algorithm}[Rayleigh-Iteration]
+	Input: $A=A^H \in \mathbb{K}^{n\times n}, x_0 \in \mathbb{K}^n$ mit $||x_0||_2=1, \mu_0 := x_0^HAx_0$
+	
+	\begin{itemize}
+		\item Für $l=0,1,2,...$ (solange wie $||Ax_l - \mu_l x_l||_2$ ''zu groß'')
+		\item \hspace{0.5cm} Löse $(A-\mu_l)y_{l+1} = x_l$ (Inverse It. mit $\lambda=\mu_l$)
+		\item \hspace{0.5cm} Def. $x_{l+1} := \frac{y_{l+1}}{||y_{l+1}||_2}$
+		\item \hspace{0.5cm} $\mu_{l+1} := x_{l+1}^HAx_{l+1}$
+	\end{itemize}
+\end{algorithm}
+
+\begin{theorem}
+	Sei $A = A^H \in \mathbb{K}^{n\times n}, \lambda \in \sigma(A)$ einfacher EW mit EV $v \in \mathbb{K}^n\setminus\{0\}$
+	
+	$\implies$ Ex. $C>0$ und $\epsilon_0 > 0$, sodass für alle $0 < \epsilon \leq \epsilon_0$ und alle $x_0 \in \mathbb{K}^n$ mit $||x_0||_2 = 1$ gilt $d(span\{x_0\}, span\{v\}) \leq \epsilon \implies (|\mu_0 - \lambda| \leq C \epsilon^2, |\mu_1 - \lambda| \leq C \epsilon^6, d(span\{x_1\}, span\{v\}) \leq C \epsilon^3 \leq (C\epsilon_0^2)\epsilon \leq \epsilon)$
+	
+	d.h. Rayleigh-Iteration ist (so etwas wie) lokal kubisch konvergent.
+\end{theorem}
+
+\begin{proof}
+	O.B.d.A $d(span\{x_0\}, span\{v\}) > 0$
+	
+	\begin{enumerate}
+		\item zz: Ex. $v_1 \in span\{v\}$ mit $||v||_2 = 1, ||x_0 - v_1||_2 \leq 2\epsilon$
+		
+		klar: $\inf_{w \in span\{v\}} ||x_0 - w||_2 \leq \sup_{x \in span\{x_0\}, ||x||_2 \neq 0} \inf_{w \in span\{v\}} \frac{||x-w||_2^2}{||x||_2} = d(span\{x_0\}, span\{v\}) \leq \epsilon$.
+		
+		Wähle $w \in span\{v\}$ mit $||x_0 - w||_2 \leq \epsilon$
+		
+		Def. $v_1:= \frac{w}{||w||_2}$, da $||x_0||_2 = 1$, also $w\neq 0$ für $\epsilon < 1$
+		\begin{align*}
+			\implies ||x_0 - v_1||_2 \leq \underbrace{||x_0 - w||_2}_{\leq \epsilon} + \underbrace{||w - \frac{w}{||w||_2}||_2}_{= \frac{1}{||w||_2} \underbrace{|| ||w||_2 w - w||_2}_{= ||(||w||-2 - 1)w||_2 = | ||w||_2 - 1| ||w||_2} \leq | ||w||_2 - 1| \leq ||w-x_0||_2 \leq \epsilon} \leq 2 \epsilon
+		\end{align*}
+		
+		\item klar: $v_k$ EV von $A$
+		
+		Ergänze zu ONB $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ aus EV zu $A$, $Av_j = \lambda_j v_j$ mit $\lambda_1 = \lambda$.
+		
+		Wähle $\alpha \in \mathbb{K}^n$ mit $x_0 = (1+\alpha_1)v_1 + \sum_{j\geq 2}\alpha_j v_j$
+		
+		$\implies ||\alpha||_2^2 = ||\sum_{j} \alpha_j v_j||_2^2 = ||x_0 - v_1||_2^2 \leq 4 \epsilon^2$
+		
+		\item zz: $|\lambda_1 - \mu_0| \leq 8 \rho(A) \epsilon^2$
+		\begin{align*}
+			\mu_0 = x_0^HAx_0 = |1+\alpha_1|^2 \lambda_1 + \sum_{j\geq 2} |\alpha_j|^2 \lambda_j\\
+			\implies |\lambda_1 - \mu_0| \leq \underbrace{|1 - |1+\alpha_1|^2|}_{\leq 4 \epsilon^2} \underbrace{|\lambda_1|}_{\leq \rho(A)} + \underbrace{\sum_{j\geq2} |\alpha_j|^2}_{\leq 4 \epsilon^2} \underbrace{|\lambda_j|}_{\leq \rho(A)}\\
+			1 = ||x_0||_2^2 = |1+\alpha_1|^2 + \sum_{j\geq 2} |\alpha_j|^2
+		\end{align*}
+		
+		\item zz: Für $y_1 = (A - \mu_0)^{-1}x_0 =: \sum_{j\geq 2} \beta_j v_j$ gilt ($|\beta_1| \geq \frac{1}{16\rho(A)}\epsilon^{-2}$, 		
+		$\sum_{j\geq 2} |\beta_j|^2 \leq \frac{4}{\Delta_1^2} \epsilon^2, \Delta_1 := \min_{j\neq 1} |\lambda_1 - \lambda_j| > 0$)
+		
+		$\sum_{j\geq 1}\beta_j (\lambda_j - \mu_0) v_j = (A - \mu_0)y_1 = x_0 = (1+\alpha_1)v_1 + \sum_{j \geq 2}\alpha_j v_j$
+		
+		$\implies$ lin. unabh. zeigt $(1 + \alpha_1) = \beta_1(\lambda_1 - \mu_0), \alpha_j = \beta_j(\lambda_j - \mu_0) \forall i \geq 2$
+		
+		$\implies |\beta_1| = \frac{|1 + \alpha_1|}{|\lambda_1 - \mu_0|} \geq \frac{1 - |\alpha_1|}{|\lambda_1 - \mu_0|} \geq \frac{1}{2} \frac{1}{|\lambda_1 - \mu_0|} \geq \frac{1}{16\rho(A)} \epsilon^2$
+		
+		und $|\beta_j| = \frac{|\alpha_j|}{|\lambda_j - \mu_0|} \leq \frac{2}{\Delta_1} |\alpha_j|$
+		
+		$\sum_{j\geq 2}|\beta_j|^2 \leq \frac{4}{\Delta_1^2} \underbrace{\sum_{j\geq 2}|\alpha_j|^2}_{\leq ||\alpha||_2^2 \leq 4 \epsilon^2} \leq \frac{16}{\Delta_1^2}\epsilon^2$
+		
+		\item \begin{align*}
+			d(span\{x_1\}, span\{v\}) = \sup_{x \in span\{x_1\}, x \neq 0} \inf_{w \in span\{v\}} \frac{||x-w||_2}{||x||_2} =
+			\sup_{s\in \mathbb{K}\setminus\{0\}} \inf_{t \in \mathbb{K}} \frac{||sy_1 - tv_1||_2}{||sy_1||_2} =\\
+			\inf_{t \in \mathbb{K}} \frac{||y_1 - tv_1||_2}{||y_1||_2} \leq
+			\frac{\left(\sum_{j\geq 2} |\beta_j|^2\right)^{\frac{1}{2}}}{|\beta_1|} \leq
+			\frac{4\cdot 16 \rho(A)}{\Delta_1} \epsilon^3
+		\end{align*}
+		
+		\item \begin{align*}
+			\mu_1 = \frac{y_1^HAy_1}{||y_1||_2^2} =
+			\frac{(\beta_1v_1 + e)^HA(\beta_1v_1 + e)}{||\beta_1v_1 + e||_2^2} =
+			\frac{|\beta_1|^2 \lambda_1 + e^HAe}{||\beta_1v_1 + e||_2^2}\\
+			|\mu_1 - \lambda_1| = \left|\frac{|\beta_1|^2 - ||\beta_1v_1 + e||_2^2}{||\beta_1v_1 + e||_2^2}\right| |\lambda_1| + \left|\frac{e^HAe}{||\beta_1v_1 + e||_2^2}\right| = 
+			2 \frac{||e||_2^2}{|\beta_1|^2 + ||e||_2^2} \rho(A) \leq
+			2\rho(A) \frac{\sum_{j\geq 2}|\beta_j|^2}{|\beta_1|^2} \leq
+			2 \rho(A)^3 \frac{16}{\Delta_1^2} \epsilon^6 256
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{theorem}[Singulärwertzerlegung]
+	Zu $A \in \mathbb{K}^{m\times n}$ ex. unitäre/orthogonale Matrizen $U \in \mathbb{K}^{m\times m}, V \in \mathbb{K}^{n\times n}$ und eine verallgemeinerte Diagonalmatrix $\Sigma \in \mathbb{R}^{m\times n}$ mit $\Sigma_{jk} = \sigma_j \delta_{jk}$ mit $\sigma_1 \geq \sigma_2 \geq ... \geq \sigma_{min\{m,n\}} \geq 0$ und $A = U\Sigma V^H$, sog. \textbf{Singulärwertzerleung}.
+	
+	Es gelten:
+	\begin{enumerate}
+		\item Die Matrix $\Sigma$ ist eindeutig und $\sigma_j^2 \in \sigma(A^HA)$
+		\item Mit $rang(A) = r$ gilt $\sigma_1 \geq ... \sigma_r > 0 = \sigma_{r+1} = ...$
+		\item $||A||_2 = \sigma_1$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(ii) trivial, da $rang(A) = rang(\Sigma) = \max\{j | \sigma_j \neq 0\}$
+	
+	(iii) $||A||_2 = \sqrt{\rho(A^HA)} = \sqrt{\sigma_1^2} = \sigma_1$
+	
+	(i) $A = U\Sigma V^H \implies A^HA = (V\underbrace{\Sigma^H}_{=\Sigma^T} \underbrace{U^H)U}_{=Id}\Sigma V^H = V \Sigma^T\Sigma V^H$
+	
+	$\implies \sigma(\underbrace{\Sigma^T\Sigma}_{=D \in \mathbb{R}^{n\times n}\text{ Diagonalmatrix}}) = \sigma(A^HA) \subseteq \mathbb{R}_{\geq 0} \implies \sigma(\Sigma^T\Sigma) = \{\underbrace{D_{jj}}_{=\sigma_j}| j=1,...,n\}$
+	
+	O.B.d.A. sortieren $\sigma_1 \geq \sigma_2 \geq ...$, also eindeutig. insb. $\Sigma$ eindeutig.
+	
+	Existenz: $A^HA \in \mathbb{K}^{n\times n}$ selbstadjungiert, positiv semidefinit $\implies$ Ex. $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ ONB mit $A^HAv_j = \mu_jv_j, \mu_j \geq 0, \mu_1 \geq ... \geq \mu_n$.
+	
+	Sei $r \in \mathbb{N}$ mit $\mu_1 \geq ... \geq \mu_r > 0 = \mu_{r+1} = ... = \mu_n$.
+	
+	Def. $\sigma_j := \sqrt{\mu_j}, S := diag(\sigma_1, ..., \sigma_r) \in \mathbb{R}^{r\times r}$ regulär.
+	
+	Def. $V :=(v_1, ..., v_n) = (V_1, V_2)$ unitär/orth. mit $V_1 \in \mathbb{K}^{n\times r}, V_2 \in \mathbb{K}^{n\times(n-r)}$
+	
+	klar: $A^HAV_1 = V_1S^2$
+	
+	Def. $U_1 := AV_1S^{-1} \in \mathbb{K}^{m\times r}$
+	
+	$\implies U_1^HU_1 = S^{-1}V_1^H\underbrace{A^HAV_1}_{=V_1S^2}S^{-1} = S^{-1}\underbrace{V_1^HV_1}_{=Id}S^2S^{-1}$, d.h. Spalten von $U_1$ sind orthonormal.
+	
+	Ergänze $U:=(U_1 U_2) \in \mathbb{K}^{m\times m}$ unitär/orthogonal
+	\begin{align*}
+		\implies U^HAV = \left(\begin{matrix}
+			U_1^H\\
+			U_2^H
+		\end{matrix}\right)A (V_1 V_2) = \left(\begin{matrix}
+			U_1^HAV_1 & U_1^HAV_2\\
+			U_2^HAV_1 & U_2^HAV_2
+		\end{matrix}\right) = \Sigma\\
+		U_1^HAV_1 = (S^{-1}V_1^H\underbrace{A^H)AV_1}_{=V_1S^2} = S^{-1}\underbrace{V_1^HV_1}_{=Id}S^2 = S\\
+		U_2^HAV_1 = \underbrace{U_2^HU_1}_{=0}S = 0
+	\end{align*}
+	$V_2$ sind EV zum EW $\mu = 0 \implies A^HAV_2 = 0$
+	
+	$\implies ||Av_2x||_2^2 = x^HV_2^HA^HAV_2x = 0 \forall x \implies AV_2 = 0$
+	$\implies \Sigma = \left(\begin{matrix}
+		S & 0\\
+		0 & 0
+	\end{matrix}\right)$
+\end{proof}
+
+\begin{corollary}[Pseudo-Inverse, Moare-Penrose-Inverse]
+	\begin{enumerate}
+		\item Zu $A \in \mathbb{K}^{m\times n}$ existiert eindeutiges $A^+ \in \mathbb{K}^{n\times n}$ mit
+		\begin{itemize}
+			\item $(A^+A)^H = A^+A$
+			\item $(AA^+)^H = AA^+$
+			\item $AA^+A=A$
+			\item $A^+AA^+ = A^+$
+		\end{itemize}
+		\item Ist $A \in \mathbb{K}^{n\times n}$ regulär, so gilt $A^+ = A^{-1}$
+		\item Falls $A_{jk} = \sigma_j \delta_{jk} \in \mathbb{R}$, so gilt $A_{kj}^+ = \sigma_j^+\delta_{jk}$ mit $\sigma_j^+ = \begin{cases}
+			\sigma_j^{-1} & \text{für } \sigma_j \neq 0\\
+			0 & \text{sonst}
+		\end{cases}$
+		\item Mit SWZ $A=U\Sigma V^H$ gilt $A^+ = V \Sigma^+ U^H$
+	\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+	Eindeutigkeit: Seien $B,C$ Pseudo-Inverse
+	\begin{align*}
+		\implies B = BAB = B(\underbrace{ACA}_{=A})B = BA(\underbrace{CAC}_{=C})(\underbrace{ACA}_{=A})B =
+		(BA)^H(CA)^HC(AC)^H(AB)^H =\\
+		\underbrace{A^HB^HA^H}_{=(ABA)^H=A^H} C^H C C^H \underbrace{A^HB^HA^H}_{=(ABA)^H=A^H} =
+		\underbrace{A^HC^H}_{=(CA)^H=CA} C \underbrace{C^HA^H}_{=(AC)^H=AC} =
+		\underbrace{CAC}_{=C}AC = CAC = C
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Betrachte Lösungsmenge $\mathcal{L} := \{x \in \mathbb{K}^n | \underbrace{A^HAx=A^Hb}_{\text{Gauß'sche Normalgelichung}}\} \neq \emptyset$ zu $A \in \mathbb{K}^{m\times n}, b \in \mathbb{K}^m$ zum Linearen Ausgleichsproblem.
+	
+	$\implies A^+b \in \mathbb{L}$ und eindeutig mit $||A^+b||_2 = \min_{x\in \mathbb{L}} ||x||_2$ sog. \textbf{Minimum-Norm-Lösung von LAP}.
+	
+	(folgt durch Ausrechnen!)
+\end{remark}
+
+\subsection{Orthogonale Iteration und QR-Zerlegung}
+
+\begin{remark}
+	Ab jetzt schreiben wir eine Basis $\{x_1, ..., x_k\} \subseteq \hat{X} \leq \mathbb{K}^n$ als Matrix $X:=(x_1, ..., x_k) \in \mathbb{K}^{n\times k}$
+\end{remark}
+
+\begin{algorithm}[orthogonale Iteration]
+	$A \in \mathbb{K}^{n\times n}, X_0 \in \mathbb{K}^{n\times k}$ Basis von $\hat{X}_0 \leq \mathbb{K}^n$
+	\begin{itemize}
+		\item Für $l=0,1,2,...$
+		\item \hspace{0.5cm} Berechne (reduzierte) QR-Zerlegung mit $Q_l \in \mathbb{K}^{n\times k}$ mit orthonormalen Spalten $R_l \in \mathbb{K}^{k\times k}$ rechte obere Dreiecksmatrix
+		\item Def. $X_{l+1} := AQ_l$
+	\end{itemize}
+\end{algorithm}
+
+\begin{theorem}
+	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ Basis mit $Av_j = \lambda_j v_j$ mit $|\lambda_1| \geq ... \geq |\lambda_k| \lneq |\lambda_{k+1}| \leq ... \leq |\lambda_n|$. Sei $\hat{X}_0 \leq \mathbb{K}^n$ Unterraum mit Basis $X_0 \in \mathbb{K}^{n\times k}$ und $\hat{X}_0 \cap span\{v_{k+1}, ..., v_n\} = \{0\}$
+	
+	$\implies$ Ex. $C>0$ mit $d(A^l\hat{X}_0, span\{v_1, ..., v_k\}) \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l, \max_{\tilde{\lambda} \in \sigma(Q_l^HAQ_l)} \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$, d.h. simultane Approximation der ersten $k$ EW und zugehäriger EV.
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item zz: Für $\hat{X}_l := A^l \hat{X}_0$ gilt $\dim \hat{X}_l = k$
+		
+		Sei $\{x_1, ..., x_l\} \subseteq \hat{X}_0$ Basis. zz: $\{A^lx_1, ..., A^lx_n\}$ lin. unabh.
+		
+		Seien $\alpha_j \in \mathbb{K}$ mit $0 = \sum_{j=1}^{k} \alpha_j A^l x_j = A^l \left(\sum_{j=1}^{k} \alpha_j x_j \right)$. $\implies \sum_{j=1}^{k} \alpha_j x_j \in kern(A^l) \supseteq kern(A)$
+		
+		$x \in kern A^l, A$ diagonalisierbar $A^l = T^{-1}D^lT, y:=Tx \implies D^ly = 0 \implies D_{jj}^l y_j = 0 \forall j \implies D{jj}y_j = 0 \forall j \implies Ax = T^{-1}D\underbrace{Tx}_{=0} = 0 \implies \sum_j \alpha_j x_j \in kern(A) \subseteq span\{v_{k+1}, ..., v_n\}$
+		
+		$\sum_{j=1}^{k} \alpha_j x_j \in \hat{X}_0 \cap span\{v_{k+1}, ..., v_n\} \implies \sum_{j=1}^{n} \alpha_j x_j = 0 \implies \alpha_j = 0 \forall j$
+		
+		\item Für $x = \sum_{j=1}^{n} \alpha_j v_j \in \mathbb{K}^n$ def. $||x|| := \sum_{j=1}^{n} |\alpha_j|, |||x|||:= \sum_{j=1}^{k} |\alpha_j|$
+		
+		zz: \begin{itemize}
+			\item $||.||$ ist eine Norm auf $\mathbb{K}^n$
+			\item $|||.|||$ ist eine äquivalente Norm auf $\hat{X}_0$
+		\end{itemize}
+		
+		zz: $|||.|||$ definiert auf $\hat{X}_0$. Es gelte $|||x||| = 0$ und $x \in \hat{X}_0$ zz: $x=0$
+		
+		$x = \sum_{j=k+1}^{n} \alpha_j v_j \in span\{v_{k+1}, ..., v_n\} \cap \hat{X}_0 = \{0\}$
+		
+		\item zz: $d(\underbrace{A^l\hat{X}_0}_{=\hat{X}_l}, \underbrace{span\{v_1, ..., v_n\}}_{=:V}) \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$
+		
+		Notation: $x = \sum_{j=1}^{n} \alpha_j(x) v_j \in \hat{X}_0, v = \sum_{j=1}^{k} \beta_j(v)v_j \in V$
+		
+		\begin{align*}
+			d(\hat{X}_l, V) =
+			\sup_{x \in \hat{X}_l, x \neq 0} \inf_{v \in V} \frac{||x-v||_2}{||x||_2} =
+			\sup_{x \in \hat{X}_0, x\neq 0} \inf_{u \in V} \underbrace{\frac{||A^lx - v||_2}{||A^lx||_2}_{= \frac{||A^lx - v||}{||A^lx||} \text{ Normäquivalenz}}} =\\
+			sup_{x \in \hat{X}_0, x\neq 0} \inf_{v \in V} \frac{\sum_{j=1}^{k} |\lambda_j^l - \alpha_j(x) - \beta_j(v)| + \sum_{j=k+1}^{n} |\lambda_j^l \alpha_j(x)| }{\sum_{j=1}^{n} |\lambda_j^l \alpha_j(x)|} \leq\\
+			\sup_{x \in \hat{X}_0, x\neq 0} \frac{\sum_{j=k+1}^{n}|\lambda_j^l \alpha_j(x)|}{\sum_{j=1}^{k}|\lambda_j^l \alpha_j(x)|} \leq
+			\sup_{x \in \hat{X}_0, x\neq 0} \frac{|\lambda_{k+1}|^l \sum_{j=1}^{n}|\alpha_j(x)|}{|\lambda_k|^l \sum_{j=1}^{k} |\alpha_j(x)|} =
+			\sup_{x \in \hat{X}_0, x\neq 0} \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l \underbrace{\frac{||x||}{|||x|||}}_{= 1}
+		\end{align*}
+		
+		\item $\hat{X}, \hat{Y} \leq \mathbb{K}^n, \dim X=\dim Y = k$
+		
+		$Q \in \mathbb{K}^{n\times k}$ ONB von $\hat{X}, U := \mathbb{P}_{\hat{Y}}Q \in \mathbb{K}^{n\times k}$ spaltenweise
+		
+		\begin{align*}
+			d(\hat{X}, \hat{Y}) = \sup_{x \in \hat{X}, x \neq 0} \inf_{y \in \hat{Y}} \frac{||x-y||_2}{||x||_2} =
+			\sup_{\alpha \in \mathbb{K}^k, \alpha \neq 0} \frac{||Q\alpha - \mathbb{P}_{\hat{Y}(Q\alpha)}||_2}{||Q\alpha||_2} = \sup_{\alpha \in \mathbb{K}^k, \alpha \neq 0} \frac{||Q\alpha - \overbrace{\mathbb{P}_{\hat{Y}}Q}^{=U}\alpha||_2}{||\alpha||_2} = ||Q - U||_2
+		\end{align*}
+		
+		\item Ergänze $Q_l \in \mathbb{K}^{n\times k}$ zu orth./unitäre Matrix $\tilde{Q}_l = (Q_l, Q'_l)$ mit $Q_l' \in \mathbb{K}^{n\times(n-k)}$
+		\begin{align*}
+			\implies \tilde{Q}_l^HA\tilde{Q}_l = \left(\begin{matrix}
+				Q_l^H\\
+				{Q'}_l^H
+			\end{matrix}\right)A (Q_l Q'_l) =
+			\left(\begin{matrix}
+				Q_l^HAQ_l & Q_l^HAQ'_l\\
+				{Q'}_l^HAQ_l & {Q'}_l^HAQ'_l
+			\end{matrix}\right) =: \left(\begin{matrix}
+				A_{11} & A_{12}\\
+				A_{21} & A_{22}
+			\end{matrix}\right)
+		\end{align*}
+		
+		zz: $||{Q'}_l^HAQ_l||_2 \leq 2d(\hat{X}_l, V) ||A||_2$
+		
+		Def. $U_1 := \mathbb{P}_V Q_l \in \mathbb{K}^{n\times k}, U_2 := \mathbb{P}_{V^\perp}Q'_l \in \mathbb{K}^{n\times(n-k)}$
+		
+		$A_{21} = 0$, $\max_{\tilde{\lambda} \in \sigma(\tilde{A})} \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq cond_2(T) \underbrace{||A - \tilde{A}||_2}_{=||A_{21}||_2}$
+		
+		$||Q'_lAQ_l||_2 \leq ||(Q'_l - U_2)^H||_2 ||A||_2 ||Q_l||_2 + ||U_2^H|| ||A||_2 ||(Q_1 - U_1)||_2 + U_2^H AU_1 \leq ||Q'_l - U_2|_2 ||A||_2$
+		
+		\item gezeigt: $\tilde{Q}_l^HAQ_l = \left(\begin{matrix}
+			A_{11} & A_{12}\\
+			A_{21} & A_{22}
+		\end{matrix}\right)$ mit $||A_{21}||_2 \leq 2 ||A||_2 d(\hat{X}_l, V) \leq \tilde{C} \left|  \frac{\tilde{\lambda}_{k+1}}{\lambda_k}\right|^l$
+		
+		Definiere $\tilde{A} := \left(\begin{matrix}
+			A_{11} & A_{12}\\
+			0 & A_{22}
+		\end{matrix}\right)$
+		
+		zz: $\sigma(\tilde{A}) = \sigma(A_{11}) \cup \sigma(A_{22})$
+		
+		''$\subseteq$'' $\left(\begin{matrix}
+			A_{11}x + A_{12}y\\
+			A_{22}y
+		\end{matrix}\right) = \tilde{A}\left(\begin{matrix}
+			x\\ y
+		\end{matrix}\right) = \lambda\left(\begin{matrix}
+			x\\
+			y
+		\end{matrix}\right)$ mit $\left(\begin{matrix}
+			x\\
+			y
+		\end{matrix}\right) \neq 0, \lambda \in \mathbb{K}$
+		
+		1. Fall: $y = 0 \implies x \neq 0 \implies A_{11}x = \lambda x \implies \lambda \in \sigma(A_{11})$
+		
+		2. Fall: $y \neq 0 \implies A_{22}y = \lambda y \implies \lambda \in \sigma(A_{22})$
+		
+		''$\geq$'': 1.Fall: $\lambda \in \sigma(A_{11}) \implies A_{11}x = \lambda x$ mit $x \neq 0$. Wähle $y=0 \implies \tilde{A}\left(\begin{matrix}
+			x\\
+			0
+		\end{matrix}\right) = \lambda \left(\begin{matrix}
+			x\\
+			0
+		\end{matrix}\right) \implies \lambda \in \sigma(\tilde{A})$
+		
+		2. Fall: $\lambda \in \sigma(A_{22}) \setminus \sigma(A_{11}) \implies A_{22}y = \lambda y$ mit $y \neq 0$
+		
+		zz: Ex. $x$ mit $A_{11} x + A_{12} y = \lambda x \iff A_{12}y = -\underbrace{(A_{11} - \lambda)x}_{\text{regulär}} \iff x = - (A_{11} - \lambda)^{-1}A_{12}y \implies \lambda \in \sigma(\tilde{A})$.
+		
+		\item $||A - \tilde{A}||_2 = ||A_{21}||_2 \leq \tilde{C} \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$ und $\tilde{\lambda} \in \sigma(\underbrace{Q_l^HAQ_l}_{=A_{11}}) \subseteq \sigma(\tilde{A})$
+		
+		Bauer-Fike $\implies \max_{\tilde{\lambda} \in \sigma(Q_l^HAQ_l)} \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq cond_2(T) ||A- \tilde{A}||_2$.
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ Basis mit $Av_j = \lambda_jv_j$ und $|\lambda_1| \gneq |\lambda_2| \gneq ... \gneq |\lambda_k| \gneq |\lambda_{k+1}|$, $\underbrace{span\{e_1, ..., e_k\}}_{\text{Eigenvektoren}} \cap span\{v_{k+1}, ..., v_n\} = \{0\} \forall k$.
+	
+	$Q_l \in \mathbb{K}^{n\times n}$ aus arth. Iteration zu $X_0 = Id \in \mathbb{K}^{n\times n}$
+	
+	$A_l := Q_l^HAQ_l$ (klar $\sigma(A_l) = \sigma(A)$)
+	
+	$\implies$ Ex. $C > 0$, sodass für alle $k$ gilt: $C^{-1} \sum_{j=k+1}^{n}|(A_l)_{jk}| \leq ||A_l(k+1:n, 1:k)||_2 \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$, d.h. $A_l$ konvergiert gegen rechte obere $\triangle$-Matrix.
+\end{corollary}
+
+\begin{proof}
+	Vorraussetzung erfüllt Vorraussetzungen für orthogonale Iteration für jedes $k$, d.h. orhtogonale Iteration mit $k=n$ macht simultan orthogonale Iteration für alle $k=1, ..., n$. Für $k$ fix, partitioniere $Q_l = (Q_{l,k}, Q'_{l,k})$ mit $Q_{l,k} \in \mathbb{K}^{n\times k}, Q'_{l,k} \in \mathbb{K}^{n\times (n-k)}$
+	\begin{align*}
+		A_l = \left(\begin{matrix}
+			Q_{l,k}^HAQ_{l,k} & Q_{l,k}^HAQ'_{l,k}\\
+			{Q'}_{l,k}^HAQ_{l,k} & {Q'}_{l,k}^HAQ'_{l,k}
+		\end{matrix}\right) = \left(\begin{matrix}
+			A_{11} & A_{12}\\
+			A_{21} & A_{22}
+		\end{matrix}\right)
+	\end{align*}
+	$\implies ||\underbrace{{A_{21}}_{=A_l(k+1:n, 1:k)}}||_2 \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$
+	\begin{align*}
+		\sum_{j=k+1}^{n} |(A_l)_{jk}| \leq \underbrace{\sum_{i=1}^{n} \sum_{j=k+1}^{n} |(A_l)_{ji}| }_{=:||A_{21}|| \text{ Norm auf } \mathbb{K}^{(n-k)\times k}} = ||A_{21}||_2
+	\end{align*}
+\end{proof}
+
+Herleitung des QR-Verfahrens
+
+$AQ_l = X_{l+1} = Q_{l+1}R_{l+1}$
+
+$\implies A_l = Q_l^HAQ_l = \underbrace{Q_l^HQ_{l+1}}_{=:\tilde{Q}_{l+1}}R_{l+1}$ ist QR-Zerlegung von $A_l$
+
+$\implies A_{l+1} = Q_{l+1}^HA\underbrace{Q_{l+1}}_{=Q_l\tilde{Q}_{l+1}} = \underbrace{\tilde{Q}_{l+1}^H \underbrace{Q_l^HAQ_l}_{=A_l}}_{=R_{l+1}}\tilde{Q}_{l+1} = R_{l+1}\tilde{Q}_{l+1}$
+
+\begin{algorithm}[QR-Zerlegung]
+	$A_0 := A \in \mathbb{K}^{n\times n}$
+	\begin{itemize}
+		\item Für $l=0, 1,2, ...$ (bis $A_l$ dicht an oberer $\triangle$-Matrix)
+		\item \hspace{0.5cm} Berechne QR-Zerlegung $A_l = Q_{l+1}R_{l+1}$
+		\item \hspace{0.5cm} Definiere $A_{l+1} := R_{l+1}Q_{l+1}$
+	\end{itemize}
+\end{algorithm}
+
+\begin{remark}
+	\begin{enumerate}
+		\item Unter den Vorraussetzungen des Korollars konvergiert QR-Verfahren und $\sigma(A_{l+1}) = \sigma(A_l) = \sigma(A)$
+		\item Naives Vergehen braucht $\mathcal{O}(n^3)$ Operationen pro Schritt (für QR-Zerlegung und Matrix-Matrix-Mult.). Tatsächlich reichen eine Initialisierung mit Aufwand $\mathcal{O}(n^3)$ und danach sind alle Schritte $\mathcal{O}(n^2)$ (bzw. $\mathcal{O}(n)$, falls $A=A^H$)
+	\end{enumerate}
+\end{remark}
+
+\subsection{Hessenberg-Form einer Matrix}
+
+\begin{definition}
+	Matrix $B \in \mathbb{K}^{n\times n}$ heißt \textbf{obere Hessenberg-Matrix}, gdw. $B_{jk} = 0 \forall j > k+1$
+\end{definition}
+
+Ziel: Zu $A \in \mathbb{K}^{n\times n}$ konstruiere $Q \in \mathbb{K}^{n\times n}$ unitär/orthogonal, sodass $B := Q^HAQ$ obere Hessenberg-Matrix und insb. $\sigma(B) = \sigma(A)$
+
+Danach: Effiziente Realisierung von QR-Verfahren für $B$.
+
+Idee: Verwende Householder-Spiegelung $H = Id - 2ww^H = H^H \in \mathbb{K}^{n-k}$
+\begin{align*}
+	\implies \left(\begin{matrix}
+		Id & 0\\
+		0 & H
+	\end{matrix}\right) \left(\begin{matrix}
+		U & V\\
+		W & X
+	\end{matrix}\right) \left(\begin{matrix}
+		Id & 0\\
+		0 & H
+	\end{matrix}\right) = \left(\begin{matrix}
+		U & V\\
+		HW & HX
+	\end{matrix}\right) \left(\begin{matrix}
+		Id & 0\\
+		0 & H
+	\end{matrix}\right) = \left(\begin{matrix}
+	U & VH\\
+	HW & HXH
+	\end{matrix}\right)
+\end{align*}
+
+Beachte: \begin{itemize}
+	\item $U$-Block bleibt unverändert
+	\item $w$ wählbar, sodass eine Spalte von $HW$ in $span\{e_1\}$
+	\item Nullspalte in $W$ bleibt Nullspalte $HW$
+\end{itemize}
+
+\begin{algorithm}
+	Input: $A_0 := A \in \mathbb{K}^{n\times n}$
+	
+	1. Schritt: $A_0 \rightsquigarrow A_1 = Q_1A_0Q_1$
+	
+	2. Schritt: $A_1 \rightsquigarrow A_2 = Q_2A_1Q_2$
+	
+	Nach $n-2$ Schritten erhalte $B = A_{n-2} = Q_{n-2}A_{n-1}Q_{n-2}$ obere Hessenberg-Matrix.
+\end{algorithm}
+
+\begin{theorem}
+	Algorithmus berechnet $B=Q^HAQ$ mit $B$ obere Hessenberg-Matrix und $Q \in \mathbb{K}^{n\times n}$ unitär/orthogonal.
+\end{theorem}
+
+\begin{proof}
+	$\implies B = A_{n-2} = \underbrace{Q_{n-2}Q_{n-3} ... Q_2Q_1}_{=(Q_1...Q_{n-2})^H=Q^H}A\underbrace{Q_1Q_2 ... Q_{n-2}}_{=Q}$
+\end{proof}
+
+\begin{remark}
+	Asymptotischer Aufwand (bei cleverer Realisierung der Householder-Matrizen) ist $\mathcal{O}(n^3) = \frac{10}{3}n^3 + \mathcal{O}(n^2)$
+\end{remark}
+
+\begin{definition}
+	Zu $t,c,s \in \mathbb{R}$ mit $c^2 + s^2 = 1$ und $t=0$ für $\mathbb{K} = \mathbb{R}$ definiere die \textbf{Givens-Rotation}
+	\begin{align*}
+		G_{kj}^{tcs} := \left(\begin{matrix}
+			1\\
+			& \ddots\\
+			& & 1\\
+			& & & c & - & - & - & (+ e^{it}s)\\
+			& & & | & 1 & & & |\\
+			& & & | & & \ddots & & |\\
+			& & & | & & & 1 & |\\
+			& & & (-e^{it}s) & - & - & - & c\\
+			& & & & & & & & 1\\
+			& & & & & & & & & \ddots\\
+			& & & & & & & & & 1 \\
+		\end{matrix}\right)
+	\end{align*}
+\end{definition}
+
+\begin{lemma}
+	\begin{enumerate}
+		\item $G_{kj}^{tcs}$ ist unitär/orthogonal.
+		\item $(G_{kj}^{tcs}A)$ hat nur $j$-te und $k$-te Zeile anders als $A$.
+		\item $(AG_{kj}^{tcs})$ hat nur $j$-te und $k$-te Spalte anders als $A$.
+	\end{enumerate}
+	(nämlich jeweils linear kombiniert).
+\end{lemma}
+
+\begin{lemma}
+	$A \in \mathbb{K}^{n\times n}, A_{kj} \neq 0, B := G_{kj}^{tcs}A$ mit $c := \frac{|A_{jj}|}{\sqrt{|A_{jj}^2| + |A_{kj}|^2}}, s := \frac{|A_{kj}|}{\sqrt{|A_{jj}|^2 + |A_{kj}|^2}}$ und $\lambda := e^{it} = \frac{sign(A_{jj})}{sign(A_{kj})}$
+	
+	$\implies B_{kj} = 0$ und nur Zeile $j$ und $k$ anders als bei $A$.
+\end{lemma}
+
+\begin{proof}
+	\begin{align*}
+		B_{kj} = \sum_{l} (G_{kj}^{tcs})_{kl} A_{lj} = (G_{kj}^{tcs})_{kk} A_{kj} + (G_{kj}^{tcs})_{kj} A_{jj} =
+		c A_{kj} + \underbrace{e^{it}s}_{=\lambda} A_{jj} =\\
+		c A_{kj} + \frac{|A_{jj}|}{sign(A_{kj})}s =
+		\frac{|A_{jj}| A_{kj}}{(...)} - \frac{|A_{jj}| |A_{kj}|}{(...)sign(A_{kj})} = 0
+	\end{align*}
+\end{proof}
+
+\begin{algorithm}[QR-Zerlegung einer oberen Hessenberg-Matrix]
+	Input: $A = A_0 \in \mathbb{K}^{n\times n}$ obere Hessenberg-Matrix
+	
+	1. Schritt: $A_1 := G_{21}A_0$ mit $G_{21} \in \{Id, \text{geeinete Givens-Rotation}\}$
+	
+	2. Schritt: $A_2 := G_{32} A_1$
+	
+	Nach $n-1$ Schritten erhalte $R := G_{n,n-1}A_{n-2}$ obere $\triangle$-Matrix und $Q := G_{21}^H ... G_{n,n-1}^H$ unitär/orthogonal
+\end{algorithm}
+
+\begin{theorem}
+	Sei $A \in \mathbb{K}^{n\times n}$ obere Hessenberg-Matrix
+	\begin{enumerate}
+		\item Alg. berechnet in $\mathcal{O}(n^2)$ Operationen eine QR-Zerlegung $A=QR$.
+		\item $B := RQ$ ist eine obere Hessenberg-Matrix und kann in $\mathcal{O}(n^2)$ Operationen berechnet werden.
+		\item $A=A^H \implies B=B^H$ und (i) + (ii) können in $\mathcal{O}(n)$ Operationen durchgeführt werden, da $R$ obere Bandbreite 2 hat
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $R = G_{n, n-1} A_{n-2} = G_{n,n-1}G_{n-1, n-2} A_{n-3} = \underbrace{G_{n,n-1} ... G_{21}}_{=Q^H}A \implies QR=A$
+		
+		Habe $\mathcal{O}(n)$ Schritte, jeder Schritt macht Linearkombinationen von 2 Zeilen, d.h. $\mathcal{O}(n)$ pro Schritt $\implies \mathcal{O}(n^2)$ insgesamt.
+		
+		\item $B = RQ = \underbrace{\underbrace{RG_{21}^H}_{=B_1}G_{32}^H}_{=B_2} ... G_{n,n-1}^H$, d.h. $n-1$ Schritte zur Berechnung und $\mathcal{O}(n)$ pro Schritt, also $\mathcal{O}(n^2)$ insgesamt.
+		
+		klar: $B = RQ$ ist Hessenberg.
+		
+		\item $A=A^H$ Hessenberg $\implies$ tridiagonal, d.h. pro Schritt maximal 3 Einträge pro Zeile linear kombinieren, d.h. $\mathcal{O}(1)$ pro Schritt, also $\mathcal{O}(n)$ zur Brechnung $A=QR$
+		
+		zz: $R$ hat obere Bandbreite 2
+		
+		$\implies \mathcal{O}(n)$ für Berechung $RQ$, da $R$ maximal 3 Elte. pro Zeile.
+	\end{enumerate}
+\end{proof}
+
+\begin{remark}
+	$B=RQ = G_{n,n-1} ... G_{2,1}A G_{2,1}^H ... G_{n,n-1}^H$, d.h. berechne $R$ aus $A$, ohne QR-Zerlegung explizit zu berechnen!
+\end{remark}

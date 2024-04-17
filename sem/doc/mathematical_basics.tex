@@ -165,13 +165,11 @@ Now we have everything we need to prove theorem~\ref{th:symmetric_matrix_diagona
 
 \begin{proof}
 	Let $(\mathbf{a}_i)_{i=1,...,m}$ be the columns of the matrix. The columns are orthogonal and normed, therefore
-	
 	\begin{align*}
 		\forall i,j: \mathbf{a}_i^T\mathbf{a}_j = \begin{cases}
 			1, & \text{if } i=j,\\
 			0, & \text{otherwise.}
-		\end{cases} \implies \mathbf{A}^T\mathbf{A} = \mathbf{I}
+		\end{cases}
 	\end{align*}
-	
-	This shows $\mathbf{A}^{-1} = \mathbf{A}^T$.
+	This corresponds to the element-wise product of $\mathbf{A}^T\mathbf{A}$ and shows $\mathbf{A}^T\mathbf{A} = \mathbf{I}$, therefore $\mathbf{A}^{-1} = \mathbf{A}^T$.
 \end{proof}

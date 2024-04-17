@@ -1,0 +1,693 @@
+\section{Iterative Lösung von GLS}
+
+Ziel:
+\begin{itemize}
+	\item Wenn man nichtlineare GLS lösen will, so muss regelmäßig eine Folge von linearen GLS lösen (z.B. Newton).
+	\item Man kann lineare GLS lösen, indem man iterativ Matrix-Vektor-Produkte ausrechnet, insb. muss man die Matrix nicht speichern (z.B. FFT, dividierte Diff.)
+\end{itemize}
+
+\subsection{Fixpunktprobleme}
+
+\begin{definition}
+	Ein \textbf{Iterationsverfahren} ist ein Tripel $(X, \Phi, x*)$ mit $X$ metrischer Raum, $\Phi: X \rightarrow X, \Phi(x*) = x*$, d.h. $x*$ ist ein \textbf{Fixpunkt} von $\Phi$. Zu einem \textbf{Startwert} $x_0 \in X$, sei $x_{k+1} := \Phi(x_k) \forall x \in \mathbb{N}_0$ die erzeugte \textbf{Iteriertenfolge} $(x_n)_{n \in \mathbb{N}_0}$.
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}
+		\item Existiert $x := \lim\limits_{n\rightarrow\infty} x_n$ und ist $\Phi$ stetig bei $x$, so ist $x = \Phi(x)$, dann $x = \lim_n x_{n+1} = \lim_n \Phi(x_n) = \Phi(x)$.
+		\item Ist $X$ normiert und die Lösung von $F(x*)=0$ gesucht mit $F: X \rightarrow X$, so formuliert man dies i.d.R. als Fixpunktproblem, z.B. $x* = \Phi(x*) := x* \pm F(x*)$.
+	\end{enumerate}
+\end{remark}
+
+\begin{theorem}[Banachscher Fixpunktsatz]
+	$X$ vollständig metrischer Raum, $0 < q < 1$ und $\Phi: X \rightarrow X$ mit $d(\Phi(x), \Phi(y)) \leq q d(x,y)$
+	
+	$\implies$
+	\begin{enumerate}
+		\item Ex. eind. $x* \in X$ mit $\Phi(x*) = x*$
+		\item Für alle $x_0 \in X$ und $x_{k+1} := \Phi(x_k) \forall k \in \mathbb{N}_0$ gilt $\lim_n x_k = x*$
+		\item Für alle $k \in \mathbb{N}_0$ gilt:
+		\begin{itemize}
+			\item $d(x_k, x*) \leq q d(x_{k-1}, x*)$
+			\item $d(x_k, x*) \leq \frac{q}{1-q} d(x_k, x_{k-1}) \leq \frac{q^k}{1-q}d(x_1, x_0)$
+			\item $d(x_k, x_{k-1}) \leq (1+q) d(x_{k-1}, x*)$
+		\end{itemize}
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Eindeutigkeit Fixpunkt: Seien $x*, y* \in X$ mit $\Phi(x*) = x*, \Phi(y*) = y*$
+		
+		$\implies d(x*, y*) = d(\Phi(x*), \Phi(y*)) \leq q d(x*, y*) \implies d(x*, y*) = 0 \implies x* = y*$
+		
+		\item gezeigt: Falls $(x_k)_{k \in \mathbb{N}}$ konvergiert, ist $x* = \lim_n x_k$ ein Fixpunkt.
+		
+		\item zz: $(x_k)_{k \in \mathbb{N}}$ für alle Startwerte $x_0 \in X$ eine Cauchy-Folge ist.
+		
+		Für $m \leq n$ gilt
+		\begin{align*}
+			d(x_m, x_n) \leq \sum_{k=m}^{n-1} \underbrace{d(x_k, x_{k+1})}_{= d(\Phi(x_{k-1}), \Phi(x_k)) \leq q d(x_{n-1, x_k}) \leq q^{k-1} d(x_0, x_1)} \leq\\ \left(\sum_{k=m}^{n-1} q^k\right) d(x_0, x_1) \leq
+			q^m \frac{1}{1-q} d(x_0, x_1) \rightarrow 0, m \rightarrow \infty.
+		\end{align*}
+		
+		\item Abschätzungen:
+		\begin{align*}
+			d(x_k, x*) = d(\Phi(x_{k-1}), \Phi(x*)) \leq q \underbrace{d(x_{k-1}, x*)}_{\leq d(x_{k-1}, x_k) + d(x_k + x*)}\\
+			\implies d(x_k, x*) (1-q) \leq q \underbrace{d(x_{n-1}, x_n)}_{\leq q^{k-1} d(x_0, x_1)} \leq q^k d(x_0, x_1)
+		\end{align*}
+		
+		und $d(x_k, x_{k-1}) \leq \underbrace{d(x_k, x*)}_{q d(x_{n-1}, x*)} + d(x_{k-1}, x*) \leq (1+q) d(x_{k-1}, x*)$
+	\end{enumerate}
+\end{proof}
+
+\begin{definition}
+	Ein Iterationsverfahren $(X, \Phi, x*)$ heißt
+	\begin{itemize}
+		\item \textbf{global konvergent}, gdw. $\forall x_0 \in X: x* = \lim\limits_{n\rightarrow\infty} x_n$ mit $(x_n)_{n\in\mathbb{N}_0}$ der Iteriertenfolge $x_{n+1} := \Phi(x_n) \forall n$
+		\item \textbf{lokal konvergent}, gdw. $\exists \epsilon > 0 \forall x_0 \in \underbrace{U_\epsilon(x*)}_{:=\{y \in X| d(x,y) < \epsilon\}}: x* = \lim_n x_n$
+		\item \textbf{linear konvergent} (oder: mit Konvergenzordnung $p=1$), gdw. $\exists q \in (0,1) \exists \epsilon > 0 \forall x_0 \in U_\epsilon(x*) \forall n \in \mathbb{N}_0: d(x*, x_{n+1}) \leq q d(x*, x_n)$
+		\item \textbf{von Konvergenzordnung $p > 1$}, gdw. $\exists C>0 \forall \epsilon>0 \forall x_0 \in U_\epsilon(x*) \forall n \in \mathbb{N}_0: d(x*, x_{n+1}) \leq C d(x*, x_n)^p$
+	\end{itemize}
+	
+	Die Menge $U_\epsilon(x*)$ nennt man auch \textbf{Konvergenzbereich}.
+\end{definition}
+
+\begin{example}
+	Ist $\Phi: X \rightarrow X$ eine (strikte) Kontraktion auf einem vollständig metrischen Raum mit Fixpunkt $x* \in X$, so ist $(X, \Phi, x*)$ global linear konv.
+\end{example}
+
+
+\begin{lemma}
+	Sei $(X, \Phi, x*)$ ein Iterationsverfahren mit Konvergenzordnung $p \geq 1$. Dann ist $(X, \Phi, x*)$ lokal konvergent und in jeder Konvergenzordnung $1 \leq \tilde{p} \leq p$.
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item $p=1 \implies$ lokale konvergenz
+		
+		Wähle $0 < q < 1$ und $\epsilon > 0$ gemäß Definition. Sei $x_0 \in U_\epsilon(x*)$. Dann $d(x*, x_n) \leq q^k \underbrace{d(x*, x_0)}_{\in \mathbb{R}}$
+		
+		\item Konvergenzordnung $p > 1 \implies$ lineare konvergenz mit $q = \frac{1}{2}$. Seien $C>0, \epsilon>0$ gemäß Def. gewählt. Wähle $\delta := \min\{\epsilon, \left(\frac{1}{2C}\right)^{1/(p-1)}\}$. Sei $x_0 \in U_\delta(x*)$
+		
+		Beh. $d(x_n, x*) \leq \underbrace{2^{-n}}_{\leq 1} \underbrace{d(x_0, x*)}_{<\delta} < \delta \forall n \in \mathbb{N}_0$ (und $d(x_n, x*) \leq C \underbrace{d(x_{n-1}, x*)^{p-1}}_{\leq \delta^{p-1} \leq 1/(2C)} d(x_{n-1}, x*) \leq \frac{1}{2} d(x_{n-1}, x*) \forall n \in \mathbb{N}$)
+		
+		Beweis der Beh. durch Induktion, klar $n=0$
+		\begin{align*}
+			d(x_{n+1}, x*) \leq C d(x_n, x*)^p \overset{\text{IV}}{\leq} C 2^{-np} \underbrace{d(x_0, x*)^p}_{\leq \delta^{p-1} d(x_0, x*) \leq \frac{1}{2C} d(x_0, x*)} \leq \frac{2^{-np}}{2} d(x_0, x*) = \underbrace{2^{-(np+1)}}_{\leq 2^{-(n+1)}} d(x_0, x*)
+		\end{align*}
+		
+		\item Konvergenzordung $p > 1 \implies$ Konvergenzord. $1 < \tilde{p} < p$
+		\begin{align*}
+			d(x*, x_n) \leq \underbrace{C \underbrace{d(x*, x_n)^{p-\tilde{p}}}_{< \delta^{p-\tilde{p}}} }_{C(p, \tilde{p}, \delta)} d(x*, x_n)^{\tilde{p}}
+			\end{align*}
+		\end{enumerate}
+	\end{proof}
+	
+	\begin{theorem}
+	Sei $(\mathbb{R}, \Phi, x*)$ ein Iterationsverfahren und $\Phi$ lokal $m$-mal stetig differenzierbar um Fixpunkt $x*$.
+	
+	$\implies$
+	\begin{enumerate}
+		\item Falls $m=1$ und $|\Phi'(x*)| < 1$, so ist $(\mathbb{R}, \Phi, x*)$ linear konvergent
+		\item Falls $\Phi^{(k)}(x*)=0 \forall k=0, ..., m-1$, so hat $(\mathbb{R}, \Phi, x*)$ Konvergenzordung $m$
+		\item Gilt (i) oder (ii) und $\Phi^{(m)}(x*) \neq 0$, so hat $(\mathbb{R}, \Phi, x*)$ nicht Ordnung $m+1$.
+		\item Gilt $|\Phi'(x*)| > 1$, so ist die Iteriertenfolge i.a. nicht konvergent, denn
+		\begin{align*}
+			\exists C>1 \exists \epsilon>0 \forall x \in U_\epsilon(x*): |x* - \Phi(x)| \geq C |x*-x|
+		\end{align*}
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	(i) + (ii): Taylor $\implies$
+	\begin{align*}
+		\Phi(x) = \sum_{k=0}^{m} \frac{\Phi^{(k)}(x*)}{k!}(x-x*)^k + o(|x-x*|^m) =
+		x* + \frac{\Phi^{(m)}(x*)}{m!}(x-x*)^m + o(|x-x*|^m)\\
+		\implies \lim\limits_{x\rightarrow x*} \frac{\Phi(x) - x*}{(x-x*)^m} = \frac{\Phi^{(m)}(x*)}{m!}\\
+		\implies \forall \epsilon > 0 \exists \delta > 0 \forall x \in U_\delta(x*): \left|\frac{\Phi(x) - x*}{(x-x*)^m} - \frac{\Phi^{(m)}(x*)}{m!}\right| \leq \epsilon\\
+		\implies \left|\frac{\Phi(x) - x*}{(x-x*)^m}\right| \leq \left(\frac{|\Phi^{(m)}(x*)|}{m!} + \epsilon\right) =: C(m, \epsilon)\\
+		\implies \exists \delta > 0 \forall x \in U_\delta(x*) : |\underbrace{\Phi(x)}_{x_{n+1}} - x*| \leq C(m, \epsilon) |\underbrace{x}_{x_n} - x*|^m
+	\end{align*}
+	$\implies$ (ii) für $m > 1$. Für $m=1$ wähle $\epsilon > 0$ mit $C(m, \epsilon) < 1$.
+	
+	(iii) Analog
+	\begin{align*}
+		\left|\frac{\Phi(x) - x*}{(x-x*)^m}\right| \geq \left|\frac{\Phi^{(m)}(x*)}{m!}\right| - \epsilon =: \tilde{C}(m, \epsilon)\\
+		\implies |x-x*| \tilde{C}(m, \epsilon) \leq |\Phi(x) - x*|
+	\end{align*}
+	Wählt man $\epsilon > 0$ mit $\tilde{C}(m, \epsilon) > 0$, so kann das Verfahren nicht Ordnung $m+1$ haben.
+	
+	(iv) Analog $|\Phi(x) - x*| \geq \tilde{C}(1, C) |x-x*|$ mit $\tilde{C}(1, \epsilon) > 1$ für $\epsilon > 0$ klein genug.
+\end{proof}
+
+\begin{example}
+	Die nichtlineare Gleichung $x^2 + \exp(x) = 2$ hat eine eindeutige Lsg. $x* > 0$. Es gibt mehrere naive Fixpunktformulierungen:
+	\begin{align*}
+		\Phi_1(x) = x \pm (x^2 + \exp(x) - 2), && \Phi_1'(x*) \approx 1 \pm 2,79\\
+		\Phi_2(x) = \sqrt{2 - \exp(x)}, && \Phi_2'(x*) \approx 1,59\\
+		\Phi_3(x) = \log(2-x^2), && \Phi_3'(x*) \approx 0,63
+	\end{align*}
+\end{example}
+
+\begin{example}[Newton-Verfahren]
+	Gegeben $f: \mathbb{R} \rightarrow \mathbb{R}$ diffbar mit $f(x*) = 0 \neq f'(x*)$.
+	
+	Vorgeben: Gegeben $x_n$, berechne $x_{n+1}$ als Nullstelle der Tangente an $x_n$, d.h. $0 = f(x_n) + f'(x_n)(x_{n+1}-x_n) \implies x_{n+1} = x_n - \frac{f(x_n)}{f(x_{n+1})}$
+	
+	$\implies \Phi(x) = x - f'(x)^{-1}f(x)$ Iterationsvorschrift
+	
+	Falls $f$ $2x$ stetig diffbar gilt $\Phi'(x) = 1- \frac{f'(x)^2 - f(x) f''(x)}{f'(x)^2} \implies \Phi'(x*) = 0$, d.h. das Newton-Verfahren ist lokal von Ordnung $p=2$ (quadratisch konvergent).
+\end{example}
+
+\begin{example}[Heron-Verfahren]
+	Gegeben $z>0$, definiere $x_1 := \frac{1}{2}(1+z), x_{n+1} := \frac{1}{2}(x_n + \frac{z}{x_n}) \forall n \in \mathbb{N}$. gezeigt: $\lim_n x_n =: x = \sqrt{z}$ (monoton fallend)
+	
+	Betrachte $x = \sqrt{z} \iff f(x) := x^2 - z = 0$ $\implies \Phi(x) = x - \frac{f(x)}{f'(x)} = x - \frac{x^2-z}{2x} = \frac{1}{2}(x + \frac{z}{x})$, d.h. spezielles Newton-Verf. (sogar lokal konv.).
+\end{example}
+
+\begin{remark}
+	Im allgemeinen ist das Newton-Verfahren nicht global konvergent, sondern nur lokal konvergent, z.B. $f(x) = \arctan(x)$ hat eindeutige Nst. $x=0$. Klar: $f$ ist beliebig nett (glatt, strikt monoton mit $f'(x) = \frac{1}{1+x^2}$). Aber man kann zeigen, dass Newton divergent für jeden Startwert $x_0$ mit $|x_0| > y$ und $y$ löst $2y = (1+y^2)\arctan(y), y\approx 1,37$
+\end{remark}
+
+\begin{remark}
+	Jedes iterative Verfahren zeigt i.a. 3 Phasen
+	\begin{itemize}
+		\item \textbf{vorasymptotische Phase}: Üblicherweise wird der Startwert $x_0 \in X$ zufällig gewählt, d.h. es ist unklar, ob die Iteriertenfolge konvergiert.
+		\item \textbf{asymptotische Phase}: Die Iterierte $x_{k+1}, ..., x_l$ konvergieren mit Konvergenzordnung gemäß Theorie.
+		\item \textbf{nachasymptotische Phase}: Aufgrund der Rechnerarithmetik und Auslöschung zeigen $x_{l+1}, ...$ keine Konvergenz mehr.
+	\end{itemize}
+	Klarerweise will man die Iteration also nach $x_l$ abbrechen, aber wie erkennt man $x_l$?
+	
+	Eine mögliche Realisierung für Nullstellensuche ist folgende:
+	
+	Input: $x_0 \in X, \tau_{abs}, \tau_{rel} > 0$ Toleranzen und $K,L \in \mathbb{N}$ maximale Iterationszahlen:
+	\begin{enumerate}
+		\item Berechne $x_1, ..., x_k$ bis
+		\begin{itemize}
+			\item entweder $k=K$ (dann Fehlerabbruch)
+			\item oder $|f(x_n)| \leq \max\{\tau_{abs}, \tau_{rel}|f(x_0)|\}$
+		\end{itemize}
+		\item Berechne $x_{k+1}, ..., x_{l}$ bis
+		\begin{itemize}
+			\item entweder $l=L$ (dann Fehlerabbruch)
+			\item oder $|f(x_l)| \leq \tau_{abs}$ und $|x_l - x_{l-1}| \leq \max\{\tau_{abs}, \tau_{rel}|x_l|\}$
+		\end{itemize}
+	\end{enumerate}
+	
+	z.B. $\tau_{rel} = 10^{-6}, \tau_{abs} = 10^{-12}, K=20, L=10$ (zumindest für Newton)
+\end{remark}
+
+\subsection{Newton in $\mathbb{R}^d$}
+
+\begin{lemma}
+	Sei $A \in \mathbb{R}^{d\times d}$ regulär, $B \in \mathbb{R}^{d\times d}$, $||.||$ eine Norm auf $\mathbb{R}^d$ und $||M|| := \sup_{x \in \mathbb{R}^d \setminus \{0\}} \frac{||Mx||}{||x||}$ die induzierte Operatornorm. Dann gilt $||B-A|| < \frac{1}{||A^{-1}||} \implies B$ ist regulär und $||B^{-1}|| < \frac{||A^{-1}||}{1- ||A^{-1}|| ||B-A||}$, d.h. $\{B \in \mathbb{R}^{d\times d} | B \text{ regulär }\} \subset \mathbb{R}^{d\times d}$ offen
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Sei $M \in \mathbb{R}^{d\times d}$ mit $||M|| < 1 \implies \sum_{j=0}^{\infty} M^j$ (absolut) konvergent (da $||AB|| \leq ||A|| ||B||$)
+		\begin{align*}
+			\implies \left( \sum_{j=0}^{\infty} M^j \right) (I-M) = \sum_{j=0}^{\infty} M^j - \sum_{j=1}^{\infty} M^j = I
+		\end{align*}
+		$\implies (I-M)$ invertierbar, $(I-M)^{-1} = \sum_{j=0}^{\infty} M^j$ und $||(I-M)^{-1}|| \leq \sum_{j=0}^{\infty} ||M||^j = \frac{1}{1-||M||}$
+		
+		\item $M := A^{-1}(A-B), ||M|| < 1$, $I-M = A^{-1}(A - (A-B)) = A^{-1}B$ regulär $\implies B$ regulär
+		\begin{align*}
+			||B^{-1}|| < ||\overbrace{B^{-1}A}^{(I-M)^{-1}}|| ||A^{-1}|| \leq \frac{||A^{-1}||}{1 - ||M||} \leq \frac{||A^{-1}||}{1 - ||A^{-1}|| ||A-B||}
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{theorem}[(gedämpftes) Newton-Verfahren]
+	$||.||$ Norm auf $\mathbb{R}^d$, $\Omega \subseteq \mathbb{R}^d$ offen, $F \in \mathcal{C}^2(\Omega; \mathbb{R}^d), x* \in \Omega$ mit $F(x*) = 0$ und $DF(x*) \in \mathbb{R}^{d\times d}$ regulär, $0 < \lambda \leq 1$ und $\lambda \leq \lambda_n \leq 1 \forall n \in \mathbb{N}$
+	
+	$\implies$ Ex $\epsilon > 0$ mit folgenden Eigenschaften:
+	\begin{enumerate}
+		\item Für alle $x_0 \in U_\epsilon(x*)$ ist die induktiv definierte Folge $x_{n+1} := x_n - \lambda_n DF(x_n)^{-1} F(x_n) \forall n \in \mathbb{N}_0$ wohldefiniert mit $x_n \in U_\epsilon(x*) \forall n \in \mathbb{N}_0$, d.h. das (gedämpfte) Newton-Verfahren ist wohldefiniert.
+		\item Ex. $0 < q < 1$ mit $||x* - x_n|| \leq q ||x* - x_{n-1}|| \forall n$, d.h. das gedämpfte Newton-Verfahren konvergiert linear.
+		\item Falls $\lambda_n = 1 \forall n$, so ex. $C>0$ mit $||x* - x_n|| \leq C ||x* - x_{n-1}||^2 \forall n$, d.h. das klass. NV konvergiert quadratisch.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	O.B.d.A. $||.|| = ||.||_2$
+	\begin{enumerate}
+		\item $DF: \Omega \rightarrow \mathbb{R}^{d\times d}$ stetig und $\{B \in \mathbb{R}^{d\times d} \text{ regulär }\} \subseteq \mathbb{R}^{d\times d}$ ist offen.
+		
+		$\implies$ Ex. $\epsilon > 0$ mit $DF(x)$ regulär $\forall x \in U_\epsilon(x*)$ und $\overline{U_\epsilon(x*)} \subseteq \Omega$
+		\begin{align*}
+			\implies M := \sup_{x \in U_\epsilon(x*)} ||DF(x)^{-1}||_2 < \infty\\
+			\tilde{M} := \sup_{x \in U_\epsilon(x*)} \left( \sum_{j,k,l=1}^{d} \left| \frac{\delta^2 F_j}{\delta x_k \delta x_l} (x)\right|^2 \right)^{\frac{1}{2}} < \infty
+		\end{align*}
+		
+		\item zz: $||F(y) - F(x) - DF(x)(x-y)||_2 \leq \frac{\tilde{M}}{2} ||y-x||_2^2 \forall x,y \in U_\epsilon(x*)$
+		
+		Betrachte $f(t) := F(x+t(y-x))$
+		\begin{align*}
+			f'(t) = DF(x + t(y-x))(y-x)\\
+			f'_j(t) = \sum_{k=1}^{d} \frac{\delta F_j}{\delta x_k} (x+t(y-x))(y_k - x_k)\\
+			f''_j(t) = \sum_{k=1}^{d} (y_k - x_k) D \frac{\delta F_j}{\delta x_k} (x+t(y-x))(y-x) =
+			\sum_{k,l=1}^{d} (y_k - x_k) \frac{\delta^2 F_j}{\delta x_k \delta x_l} (x+t(y-x))(y_l - x_l)\\
+			\implies \int_{0}^{1} (1-t) f''(t) dt = \int_{0}^{1} f'' dt - \underbrace{\int_{0}^{1} t f''(t) dt}_{= [tf'_1(t)]_{t=0}^1 - \int_{0}^{1} f' dt} =
+			f'(1) - f'(0) - f'(1) + f(1) - f(0)\\
+			\implies F(y) - F(x) - DF(x)(y-x) =
+			\int_{0}^{1} (1-t) f''(t) dt\\
+			\implies ||F(y) - F(x) - DF(x)(y-x)||_2 \leq
+			\int_{0}^{1} (1-t) ||f''(t)||_2 dt \leq \tilde{M} ||y-x||_2^2 \frac{1}{2}\\
+			||f''(t)||_2^2 = \sum_{j=1}^{d} |f''_j(t)|^2 \leq ||y-x||_2^4  \underbrace{\sum_{j,k,l} \left| \frac{\delta^2 F_j}{\delta x_k \delta x_l} (x+...) \right|^2}_{\leq \tilde{M}^2}
+		\end{align*}
+		
+		Bemerkung: Beweis von (1), (2) geht für jede Norm, aber mit anderer Konstante $\tilde{M}$.
+		
+		\item zz: $||x* - y||_2 \leq \{(1-\lambda) + \frac{M\tilde{M}}{2} ||x* - x||_2 \} ||x* - x||_2 \forall x \in U_\epsilon(x*), \forall \tilde{\lambda} \in [\lambda, 1], y:= x - \tilde{\lambda} DF(x)^{-1} F(x)$
+		\begin{align*}
+			x* - y = x* - x - \tilde{\lambda} DF(x)^{-1} \{\underbrace{F(x*)}_{=0} - F(x)\} =\\
+			(1-\tilde{\lambda}) (x* - x) - \tilde{\lambda} DF(x)^{-1} \{ (F(x*) - F(x)) - DF(x)(x*-x) \}\\
+			\implies ||x* - y||_2 \leq (1-\tilde{\lambda}) ||x*-x||_2 + \tilde{\lambda} ||DF(x)^{-1}||_2 \frac{\tilde{M}}{2} ||x* - x||_2^2 \leq
+			(1-\lambda) ||x*-x||_2 + \frac{M \tilde{M}}{2} ||x* - x||_2^2
+		\end{align*}
+		
+		\item Wähle $\epsilon$ ggf noch kleiner als in den vorausgegangenen Schritten, damit $q := (1-\lambda) + \frac{M \tilde{M}}{2} \epsilon < 1$
+		
+		$\implies$ gedämpftes Newton ist wohldef, linear konvergent und $x_n \in U_\epsilon(x*)$, wenn $x_0 \in U_\epsilon(x*)$ und (ungedämpftes) Newton ist wohldef., mit $x_n \in U_\epsilon(x*)$ für $x_0 \in U_\epsilon(x*)$ und quadratische Konvergenz mit $C = \frac{M \tilde{M}}{2}$.
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	Für das Newton-Verfahren gilt mit $x_0 \in U_\epsilon(x*)$ und $\epsilon$ klein genug:
+	\begin{align*}
+		C^{-1} ||x* - x_n|| \leq \overbrace{||F(x_n)||}^{\text{Residuum}} \leq C||x* - x_n||
+	\end{align*}
+	und insb. $||F(x_n)|| \leq C^4 ||F(x_{n-1})||^2 \forall n \in \mathbb{N}$ wobei $C > 0$ unabhängig.
+\end{corollary}
+
+\begin{proof}
+	Nach Newton-Beweis gilt
+	\begin{align*}
+		||y - x - DF(x)^{-1} \{F(y) - F(x)\}|| \leq \frac{M\tilde{M}}{2} ||y-x||^2\\
+		\implies ||x-x*|| \leq \underbrace{\frac{M \tilde{M}}{2} ||x-x*||^2}_{\leq \frac{1}{2} ||x-x*||, \text{falls} \frac{M \tilde{M}}{2} \epsilon \leq \frac{1}{2}} + ||DF(x*)^{-1} \{F(x) - \underbrace{F(x*)}_{=0}\}||\\
+		\implies \frac{1}{2} ||x-x*|| \leq M ||F(x)||
+	\end{align*}
+	
+	Ferner
+	\begin{align*}
+		||F(x)|| \leq \underbrace{||DF(x*)||}_{\leq M} \underbrace{||DF(x*)^{-1} \{F(x) - \underbrace{F(x*)}_{=0}\}||}_{\leq ||x-x*|| + \underbrace{\frac{M \tilde{M}}{2} ||x-x*||^2}_{\leq \frac{1}{2} ||x-x*||}} \leq
+		M \frac{3}{2} ||x-x*||
+	\end{align*}
+	(bisher alles unabhängig von Newton)
+	
+	Mit Newton:
+	\begin{align*}
+		||F(x_k)|| \leq C \underbrace{||x*-x_k||}_{\leq \tilde{C} \underbrace{||x*-x_{n-1}||^2}_{\leq C^2 ||F(x_{n-1})||^2}} \leq C^3 \tilde{C} ||F(x_{n-1})||^2
+	\end{align*}
+\end{proof}
+
+\begin{theorem}[Zweck der Dämpfung]
+	$\Omega \subseteq \mathbb{R}^d$ offen, $F \in \mathcal{C}^2(\Omega, \mathbb{R}^d)$ mit $DF(x)$ regulär $\forall x \in \Omega, K \subset \Omega$ kompakt
+	
+	$\implies$ Ex. $\lambda_{max}, \gamma > 0$ mit
+	\begin{align*}
+		||F(\underbrace{x - \lambda DF(x)^{-1}F(x)}_{\text{gedämpfter Newton-Schritt}})||_2^2 \leq
+		\underbrace{(1 + \gamma \lambda^2 - 2\lambda)}_{\leq q < 1 \text{ für } \lambda \text{ klein}} ||F(x)||_2^2 \forall x \in K \forall 0 < \lambda \leq \lambda_{max}
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	Betrachte $g(t) := ||F(x-t\lambda p)||_2^2$ mit $p:=DF(x)^{-1}F(x)$, $\lambda$ freier Parameter
+	\begin{align*}
+		\implies g(1) = g(0) + g'(0) + \int_{0}^{1} (1-t) g''(t) dt\\
+		f(y) := ||F(y)||_2^2 = F(y) \cdot F(y)\\
+		\implies Df(y) = 2 F(y)^T DF(y)\\
+		g(t) = f(x-t\lambda p)\\
+		g'(t) = Df(x-t\lambda p) (-\lambda p) = -2F(x-t\lambda p)^T DF(x-t\lambda p)(\lambda p)\\
+		g'(0) = -2\lambda F(x)^T \underbrace{DF(x)p}_{=F(x)} = -2\lambda ||F(x)||_2^2\\
+		g''(t) = + \lambda p \cdot D^2f(x-t\lambda p) \lambda p\\
+		\implies ||g''(t)|| \leq \underbrace{\sup_t ||D^2f(x-t\lambda p)||_2}_{\leq C < \infty} ||\lambda p||_2^2\\
+		\implies \underbrace{||F(x - \lambda DF(x)^{-1} F(x))||_2^2}_{= g(p)} \leq (1-2 \lambda + \frac{1}{2} CM^2 \lambda^2) ||F(x)||_2^2
+	\end{align*}
+	
+	klar: $D = \sup_{x\in K} ||F(x)||_2 < \infty, M = \sup_{x\in K} ||DF(x)^{-1}||_2 < \infty, dist(K, \delta\Omega) := \inf\{||x-y||_2 | x \in K, y \in \delta\Omega\} > 0, \lambda_{max} := \min\{1, \frac{1}{2DM} dist(K, \delta\Omega)\} > 0, \tilde{K} := \{x - \lambda p | x \in K, p \in \mathbb{R}^d, ||p||_2 \leq DM, \lambda \in [0, \lambda_{max}]\} \subseteq \mathbb{R}^d$ kompakt.
+	
+	Sogar $\tilde{K} \subseteq \Omega$
+	
+	$\implies \sup_{\tilde{x} \in \tilde{K}} ||D^2f(\tilde{x})||_2 =: C < \infty$
+\end{proof}
+
+\begin{algorithm}[gedämpftes Newton-Verfahren]
+	Input: $F:\mathbb{R}^d \rightarrow \mathbb{R}^d, x_0 \in \mathbb{R}^d, 0 < q < 1, 0 < \lambda_{max} < 1$
+	
+	Initialisierung: $\lambda_0 := 1$
+	
+	Schleife: For $k=0,1,2,...$ iteriere
+	\begin{itemize}
+		\item Berechne $A := DF(x_k), b:=-F(x_k)$
+		\item Löse $Ap_k = b$
+		\item Iteriere die Berechnung $x_{k+1} := x_k + \lambda_k p_k$ bis
+		\begin{itemize}
+			\item entweder $||F(x_{k+1})||_2 < ||F(x_k)||_2 \rightarrow$ ok
+			\item oder $\lambda_k := q \lambda_k < \lambda_{min} \rightarrow$ Fehlerabbruch
+		\end{itemize}
+		\item danach $\lambda_{k+1} := \min\{1, \frac{\lambda_k}{q}\}$
+		\item Fertig, falls $x_{k+1}$ hinreichend dicht bei $x*$ mit $F(x*) = 0$
+	\end{itemize}
+\end{algorithm}
+
+\begin{remark}
+	In der Praxis ist die Berechnung von $DF(x_n)$ teuer und man verwendet billigere Approximationen, sog. \textbf{Quasi-Newton-Verfahren} z.B. Sekantenverfahren in 1D (erste Ableitung durch Differenzenquotient) oder Broyden-Verfahren in $\mathbb{R}^d$.
+\end{remark}
+
+\subsection{Stationäre Iterationsverfahren zur Lösung Linearer GLS}
+
+Gegeben $A \in \mathbb{K}^{n \times n}$ regulär, $b \in \mathbb{K}^n$
+
+Gesucht $x* \in \mathbb{K}^n$ mit $Ax* = b$
+
+Vorgehen: Definiere $M \in \mathbb{K}^{n\times n}, c\in \mathbb{K}^n$, wähle $x_0 \in \mathbb{K}^n$ und betrachte $x_{k+1} := \Phi(x_k)$ mit $\Phi(x) = Mx + c$.
+
+\begin{remark}
+	Die iterative Lsg. eines linearen GLS ist dann sinnvoll, wenn $A$ schwach besetzt ist (d.h. nur $\mathcal{O}(n)$ nicht-null Einträge), aber ohne Struktur für Eliminationsverfahren (d.h. Gauss bräuchte $\mathcal{O}(n^2)$ Speicher) oder wenn $cond(A)$ groß ist (da sich iterative Verfahren ''selbst stabilisieren''). Üblicherweise brauchen iterative Verfahren nur eine (schnelle) Matrix-Vektor-Multiplikation (z.B. FFT).
+\end{remark}
+
+\begin{lemma}
+	Für $M \in \mathbb{K}^{n \times n}$ mit \textbf{Spektrum} $\sigma(M) = \{\lambda \in \mathbb{C} \text{ EW von } M\}$ und \textbf{Spektralradius} $\rho(M) = \max_{\lambda \in \sigma(M)}|\lambda|$ gilt $\rho(M) = \inf\{||M|| : ||.|| \text{ Norm auf } \mathbb{C}^n \text{ und } ||M|| := \sup_{x \in \mathbb{C}^n \setminus \{0\}} \frac{||Mx||}{||x||}\}$
+\end{lemma}
+
+\begin{proof}
+	$\leq$: Sei $||.||$ Norm auf $\mathbb{C}^n$, Sei $\lambda \in \sigma(M), x \in \mathbb{C}^n \setminus \{0\}$ mit $Mx = \lambda x$
+	
+	$\implies |\lambda| ||x|| = ||\lambda x|| = ||Mx|| \leq ||M|| ||x|| \implies |\lambda| \leq ||M|| \implies \rho(M) \leq ||M||$.
+	
+	$\geq$: Ex. $T \in \mathbb{C}^{n \times n}$ regulär mit
+	\begin{align*}
+		R := T^{-1}M T = \left(\begin{matrix}
+			r_{11} & r_{12} & ...    & r_{1n}\\
+			       & r_{22} & ...    & r_{2n}\\
+			       &        & \ddots & \vdots\\
+			 0     &        &        & r_{nn}
+		\end{matrix}\right)
+	\end{align*}
+	und $\sigma(M) = \sigma(R) = \{r_{11}, ..., r_{nn}\}$
+	
+	zz: $\forall \epsilon > 0 \exists ||.||_\epsilon$ Norm auf $\mathbb{C}^n: ||M||_\epsilon \leq \underbrace{\max_j |r_{jj}|}_{=\rho(M)} + \epsilon$
+	
+	Sei $\epsilon > 0$, definiere $||x||_\epsilon := ||D_\epsilon^{-1} T^{-1}x||_\infty, D_\epsilon := diag(1, \epsilon, ..., \epsilon^{n-1})$
+	\begin{align*}
+		||M||_\epsilon = \sup_{x \in \mathbb{C}^n \setminus \{0\}} \frac{||D_\epsilon^{-1} T^{-1}Mx||_\infty}{|| \underbrace{D_\epsilon^{-1}T^{-1}x}_{=y}||_\infty} =
+		\sup_{y \in \mathbb{C}^n \setminus \{0\}} \frac{||D_\epsilon^{-1}T^{-1}MTD_\epsilon y||_\infty}{||y||_\infty} =
+		\sup_{y \in \mathbb{C}^n \setminus \{0\}} \frac{||D_\epsilon^{-1} R D_\epsilon y||_\infty}{||y||_\infty} =
+		||D_\epsilon^{-1} R D_\epsilon||_\infty\\
+		D_\epsilon^{-1} R D_\epsilon = \left(\begin{matrix}
+			r_{11} & \epsilon r_{12} & ... & \epsilon^{n-1} r_{1n}\\
+			       & r_{22}          & ... & \epsilon^{n-2} r_{2n}\\
+			       &                 & \ddots & \vdots\\
+			     0 &                 &     & r_{nn}
+		\end{matrix}\right)
+	\end{align*}
+	
+	UE: Operatornorm zu $||.||_\infty$ ist die Zeilensummennorm
+	\begin{align*}
+		\implies ||M||_\epsilon = ||D_\epsilon^{-1} R D_\epsilon||_\infty =
+		\max_{j=1, ..., n} \sum_{k=1}^{n} |(D_\epsilon^{-1} R D_\epsilon)_{jk}| =
+		\max_{j=1, ..., n} \left( |r_jj| + \epsilon \underbrace{\sum_{k=j+1}^{n} \epsilon^{k-(j-1)} |r_{jk}|}_{\leq C} \right) \leq
+		\rho(M) + \epsilon C
+	\end{align*}
+\end{proof}
+
+\begin{remark}
+	Der Beweis zeigt, dass das Infimum über Normen auf $\mathbb{R}^n$ gebildet werden kann, wenn $M$ trigonalisierbar über $\mathbb{R}$.
+\end{remark}
+
+\begin{theorem}[globale Konvergenz]
+	Für $M \in \mathbb{K}^{n \times n}$ sind äquivalent:
+	\begin{enumerate}
+		\item $\rho(M) < 1$
+		\item Für alle $c \in \mathbb{K}^n$ und alle $x_0 \in \mathbb{K}^n$ konvergiert die Iteriertenfolge $x_{n+1} := \Phi(x_n), \Phi(x) := Mx + c$
+	\end{enumerate}
+	In diesem Fall ist $x* := \lim_n x_n$ sogar eindeutig und unabhängig von $x_0$, und $(\mathbb{K}^n, \Phi, x*)$ konvergiert global linear für eine geeigenete Norm auf $\mathbb{K}^n$.
+	
+	(Beweis zeigt, dass Ex. von einem $c \in \mathbb{K}^n, x_0 \in \mathbb{K}^n$ bereits ausreicht).
+\end{theorem}
+
+\begin{proof}
+	(i) $\implies$ (ii) Nach Lemma existiert $||.||$ auf $\mathbb{C}^n$ mit $||M|| < 1$. Sei $c \in \mathbb{K}^n$.
+	
+	$\implies ||\Phi(x) - \Phi(y)|| = ||M(x-y)|| \leq \underbrace{||M||}_{=q < 1} ||x-y||$.
+	
+	$\implies$ Behauptung folgt aus Banachschem Fixpunktsatz
+	
+	gezeigt (ii) für $\mathbb{K} = \mathbb{C}$
+	
+	$\mathbb{K} = \mathbb{R}$: auch Ok, da $\Phi: \mathbb{R}^n \rightarrow \mathbb{R}^n$, d.h. $x* \in \mathbb{R}^n$
+	
+	Beweis (ii) $\implies$ (i) für $\mathbb{K} = \mathbb{C}$
+	
+	Sei $||.||$ Norm auf $\mathbb{C}^n$. Wähle $x_0 \in \mathbb{C}^n$ mit $-x* + x_0 \in \mathbb{C}^n \setminus \{0\}$ Eigenvektor zum Eigenwert $\lambda \in \sigma(M)$ mit $|\lambda| = \rho(M)$
+	
+	$\implies \underbrace{||x_k - x*||}_{\rightarrow 0} = ||M(x_{k-1} - x*)|| = \underbrace{||M^k(x_0 - x*)||}_{=\underbrace{|\lambda|^k}_{=\rho(M)^k} \underbrace{||x_0 - x*||}_{\neq 0}} \implies \rho(M) < 1$.
+	
+	(ii) $\implies$ (i) für $\mathbb{K} = \mathbb{R}$ zz: (ii) gilt auch für $\mathbb{C}$
+	
+	Sei $c \in \mathbb{C}^n, x_0 \in \mathbb{C}^n$, def $x_{k+1} = \Phi(x_k)$ und $a_k := Re x_k, b_k := Im x_k$
+	
+	$\implies a_{k+1} = \Phi(a_k)$, denn $Re \Phi(x) = M(Re x) + Re c$, $b_{k+1} = \Phi(b_k)$
+	
+	(ii) für $\mathbb{R} \implies a_k \rightarrow a*, b_k \rightarrow b* \implies x_n \rightarrow x* := a* + i b*$
+\end{proof}
+
+\begin{example}[Richardson-Iteration]
+	$A \in \mathbb{K}^{n \times n}$ regulär, $b \in \mathbb{K}^n, \Phi(x) := \underbrace{(I-\lambda A)}_{=M}x + \underbrace{\lambda b}_{=c}$ mit $\lambda \in \mathbb{K}$ geeignet.
+	
+	klar: $\Phi(x) = x \iff Ax = b$ 
+	
+	benötigt: $\rho(I-\lambda A) < 1$
+\end{example}
+
+\begin{example}[Jacobi-Iteration]
+	$D \in \mathbb{K}^{n\times n}$ Diagonale von $A$, d.h. $D_{jk} = \begin{cases}
+		A_{jj} & \text{ für } j = k\\
+		0 & \text{ sonst}
+	\end{cases}$
+	
+	vorausgesetzt: $A_{jj} \neq 0 \forall j$, damit $D$ invertierbar
+	
+	$\Phi(x) := \underbrace{-D^{-1}(A-D)}_{=M}x + \underbrace{D^{-1}b}_{=c}$
+	
+	klar: $\Phi(x) = x \iff Dx = -(A-D)x + b \iff Ax=b$
+\end{example}
+
+\begin{example}[Gauss-Seidel-Iteration]
+	$L,U \in \mathbb{K}^{n\times n}$ mit $L_{jk} = \begin{cases}
+		A_{jk} & \text{ für } j \geq k\\
+		0 & \text{ sonst}
+	\end{cases}, U_{jk} = \begin{cases}
+		A_{jk} & \text{ für } j < k\\
+		0 & \text{ sonst}
+	\end{cases}$
+	
+	vorausgesetzt: $A_{jj} \neq 0 \forall j$, damit $L$ invertierbar
+	
+	$\Phi(x) := \underbrace{-L^{-1}U}_{=M}x + \underbrace{L^{-1}b}_{=c}$
+	
+	$\Phi(x) = x \iff Lx = -Ux + b \iff Ax = b$
+\end{example}
+
+\begin{theorem}[Konvergenz bei strikter Diagonaldominanz]
+	Sei $A \in \mathbb{K}^{n\times n}$ \textbf{strikt diagonaldominant}, d.h. $\sum_{k=1, k\neq j}^{n} |A_{jk}| < |A_{jj}| \forall j=1, ..., n$
+	
+	$\implies A$ ist regulär und Jacobi- und Gauss-Seidel-Verfahren sind wohldefiniert und konvergent mit $||M^{(GS)}||_\infty \leq ||M^{(J)}||_\infty < 1$
+\end{theorem}
+
+\begin{proof}
+	klar: $A$ ist regulär (UE) und $A_{jj} \neq 0 \forall j$, d.h. JV und GSV sind wohldef.
+	
+	\begin{enumerate}
+		\item $M^{(J)} = -D^{-1}(A-D); ||M^{(J)}||_\infty = \max_{j=1, ..., n} \sum_{k=1, k\neq j}^{n} \underbrace{|M_{jk}^{(J)}|}_{= \frac{|A_{jk}|}{|A_{jj}|}} < 1$
+		
+		\item Von nun an $|.|$ und $\leq$ komponentenweise
+		\begin{align*}
+			D^{-1}L = I + D^{-1}(L-D) \text{ und } \rho(D^{-1}(L-D)) = 0\\
+			\implies (D^{-1}L)^{-1} = (I - (-D^{-1}(L-D)))^{-1} = \sum_{k=0}^{\infty} (-D^{-1}(L-D))^k\\
+			\implies |(D^{-1}L)^{-1}| \leq \sum_{k=0}^{\infty} |D^{-1}(L-D)|^k = (I-|D^{-1}(L-D)|)^{-1}
+		\end{align*}
+		
+		\item $M^{(J)} = -D^{-1}(A-D) = -(D^{-1}(L-D) + D^{-1}U)$
+		\begin{align*}
+			\implies |M^{(J)}| = |D^{-1}(L-D)| + |D^{-1}U|\\
+			\implies |D^{-1}U| = (|M^{(J)}| - I) + (I - |D^{-1}(L-D)|)
+		\end{align*}
+		
+		\item zz: $||M^{(GS)}||_\infty \leq ||M^{(J)}||_\infty$
+		\begin{align*}
+			|M^{GS}| = |L^{-1}U| = |(D^{-1}L)^{-1} D^{-1} U| \leq |(D^{-1}L)^{-1}| |D^{-1}U| \leq\\
+			(I - |D^{-1}(L-D)|)^{-1} [(|M^{(J)}| - I) + (I - |D^{-1}(L-D)|)] =
+			(I - |D^{-1}(L-D)|)^{-1} (|M^{(J)} - I|) + I
+		\end{align*}
+		Def $e=(1, ..., 1)$
+		\begin{align*}
+			|M^{GS}| e \leq \underbrace{(I - |D^{-1}(L-D)|)^{-1}}_{= \underbrace{\sum_{k=0}^{\infty}|D^{-1}(L-D)|^k}_{\geq I}} \underbrace{(|M^{(J)}|e - e)}_{\leq ||M^{(J)}||_\infty e - e = \underbrace{(||M^{(J)}||_\infty - 1)}_{\in \mathbb{R}_{<0}} e} + e \leq
+			(||M^{(J)}||_\infty - 1)e + e = ||M^{(J)}||_\infty e\\
+			\implies ||M^{GS}||_\infty = || |M^{GS}| e||_\infty \leq || ||M^{(J)}||_\infty e ||_\infty = ||M^{(J)}||_\infty
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	Sei $A \in \mathbb{K}^{n \times n}$ mit $A^T$ strikt diagonaldominant $\implies A$ regulär, und das Jacobi-Verfahren ist wohldef und konvergent.
+\end{corollary}
+
+\begin{proof}
+	$A^T$ strikt diagonaldominant $\implies A_{jj} \neq 0 \forall j$, d.h. Jacobi wohldef. und $A$ regulär, da $\det(A^T) = \det(A)$
+	
+	UE: Die $l_1$-Norm $||x||_1 = \sum_j |x_j|$ induziert als Operatornorm die Spaltensummennorm $||M||_1 = \max_{k=1, ..., n} \sum_{j=1}^{n}|M_{jk}|$
+	
+	$||M||_1 = ||M^T||_\infty$ und analog zum letzten Beweis: $A^T$ strikt diagonaldominant $\implies ||M^J||_1 < 1 \implies \rho(M^{(J)}) < 1$
+\end{proof}
+
+\subsection{Krylov-Verfahren zur Lsg Linearer GLS}
+
+Gauss-Seidl und Jacobi benötigen Zugriff auf Matrixkoeffizienten. 
+
+Ziel: Löse $Ax=b$ mit $A \in \mathbb{K}^{n\times n}$ regulär nur durch Verwendung der Matrix-Vektor-Multiplikation, ohne auf Einträge explizit zuzugreifen.
+
+\begin{lemma}[Krylov-Räume]
+	$A \in \mathbb{K}^{n \times n}$ regulär, $n \in \mathbb{K}^n\setminus\{0\}$, $x* \in \mathbb{K}^n$ mit $Ax*=b$. Zu $l \in \mathbb{N}$ definiere $\mathcal{K}_l := \mathcal{K}_l(A,b) := span\underbrace{\{b, Ab, ..., A^{l-1}b\}}_{= \{A^jb | j=0, ..., l-1\}}$ \textbf{Krylov-Räume}.
+	
+	Dann sind äquivalent:
+	\begin{enumerate}
+		\item $\dim \mathcal{K}_{l+1} \leq l$
+		\item $\mathcal{K}_{l} = \mathcal{K}_{l+1}$
+		\item $A(\mathcal{K}_l) \subseteq \mathcal{K}_l$
+		\item $x* \in \mathcal{K}_l$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	(i $\implies$ ii): Wähle $m < l$ minimal mit $\{b, Ab, ..., A^mb\}$ linear abhängig. $\implies$ Ex $\lambda_j \in \mathbb{K}$ mit $A^mb = \sum_{j=0}^{m-1} \lambda_j A^j b$
+	
+	zz. $\mathcal{K}_{l+1} \subseteq \mathcal{K}_l$, d.h. zz: $A^lb \in \mathcal{K}_l$
+	
+	$A^lb = A^{l-m}(A^mb) = \sum_{j=0}^{m-1} \lambda_j \underbrace{A^{j+l-m}b}_{\in \mathcal{K}_l} \in \mathcal{K}_l$
+	
+	(ii $\implies$ iii) $A(\underbrace{A^jb}_{\text{Basiselm von } \mathcal{K}_l}) \in \mathcal{K}_{l+1} = \mathcal{K}_l \forall j=0, ..., l-1 \implies A(\mathcal{K}_l) \subseteq \mathcal{K}_l$
+	
+	(iii $\implies$ iv) $A: \mathcal{K}_l \rightarrow \mathcal{K}_l$ linear, wohldef., injektiv $\implies$ bijektiv, $b \in \mathcal{K}_l \implies \underbrace{A^{-1}b}_{=x*} \in \mathcal{K}_l$
+	
+	(iv $\implies$ i): $x* \in \mathcal{K}_l = span\{b, ..., A^{l-1}b\} \implies b = Ax* \in span\{Ab, ..., A^lb\} \implies \underbrace{\{b, Ab, ..., A^lb\}}_{\text{ erzeugt } \mathcal{K}_{l+1}}$ lin. abh. $\implies \dim \mathcal{K}_{l+1} \leq l$.
+\end{proof}
+
+\begin{example}[Krylov-Verfahren]
+	\begin{itemize}
+		\item \textbf{CG-Verfahren}: Für $A \in \mathbb{K}^{n \times n}$ SPD (selbstadjungiert $A^H=A$, positiv definit) berechnet CG die Iterieten $x_l \in \mathcal{K}_l = \mathcal{K}_l(A,b)$ mit $||x* - x_l||_A = \min_{y_l \in \mathcal{K}_l} ||x* - y_l||_A$ mit $||y||_A := (y^HAy)^{\frac{1}{2}}$
+		
+		\item \textbf{CGNR-Verfahren}: Für $A \in \mathbb{K}^{n\times n}$ regulär berechne $x_l \in \mathcal{K}_l := \mathcal{K}_l(\underbrace{A^HA}_{\text{SPD}}, A^Hb)$ mit $||x* - x_l||_{A^HA} = \min_{y_l \in \mathcal{K}_l} ||x* - y_l||_{A^HA}$
+		
+		betrachte $||x* - y_l||_{A^HA}^2 = (x* - y_l)^H A^H A (x* - y_l) = ||\underbrace{b}_{=Ax*} - Ay_l||_2^2$
+		
+		\item \textbf{GMRES-Verfahren}: Für $A \in \mathbb{K}^{n\times n}$ regulär berechne $x_l \in \mathcal{K}_l = \mathcal{K}_l(A, b)$ mit $||b - Ax_l||_2 = \min_{y_l \in \mathcal{K}_l} ||b - Ay_l||_2 (= \min_{z_l \in A(\mathcal{K}_l)} ||b - z_l||_2)$
+	\end{itemize}
+	$\implies$ Alle Verfahren sind wohldefiniert (sogar mit eindeutigen $x_l$!) und brechen nach endlich vielen Schritten mit $x* = x_{l*}$ ab und $l^* \leq n$ (zumindest theoretisch!)
+\end{example}
+
+Im Folgenden betrachten wir nur noch CG (bzw. CGNR) $\rightsquigarrow$ VO ''Iterative Lösung großer Gleichungssysteme''.
+
+\begin{lemma}[Orthogonalprojektion]
+	$X$ Hilbert-Raum, $Y \leq X$ Teilraum mit $\dim Y = n, \{y_1, ..., y_n\} \subseteq Y$ Orthonormalbasis.
+	
+	Definiere $\mathcal{P}: X \rightarrow Y, \mathcal{P}x := \sum_{j=1}^{n} <y_j, x>_X y_j$
+	
+	Dann gilt:
+	\begin{enumerate}
+		\item $\mathcal{P}$ ist linear mit $\mathcal{P}y = y \forall y \in Y$ und $<x-\mathcal{P}x, y> = 0 \forall x \in X \forall y \in Y$, sog. \textbf{Orthogonalprojektion auf $Y$}.
+		
+		\item $||x-\mathcal{P}x||_X = \min_{y \in Y} ||x-y||$ und $||x-y||_X^2 = ||x-\mathcal{P}x||_X^2 + ||\mathcal{P}x - y||_X^2 \forall x \in X \forall y \in Y$, d.h. $y = \mathcal{P}x$ ist der eindeutige Minimierer.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	Für $y \in Y$ existieren $\lambda_j \in \mathbb{K}$ mit $y = \sum_{j=1}^{n} \lambda_j y_j$
+	\begin{align*}
+		\implies <y_k, y> = \sum_{j=1}^{n} \lambda_j \underbrace{<y_k, y_j>}_{=\delta_{jk}} = \lambda_k\\
+		\implies y = \sum_{j=1}^{n} <y_j, y> y_j = \mathcal{P}y\\
+		<y_k, x-\mathcal{P}x> = <y_k, x> - \underbrace{<y_k, \overbrace{\mathcal{P}x}^{= \sum_j <y_j, x>_X y_j}>}_{= \sum_{j=1}^{n} <y_j, x>\underbrace{<y_k, y_j>}_{=\delta_{jk}} = <y_k, x>} = 0 \forall k=1, ..., n\\
+		\implies <x-\mathcal{P}x, y> = 0 \forall y \in Y\\
+		a := x - \mathcal{P}x, b := \underbrace{\mathcal{P}x - y}_{\in Y} \implies <a, b>_X = 0\\
+		\implies \underbrace{||a+b||_X^2}_{=||x-y||_X^2} = ||a||_X^2 + ||b||_X^2 = ||x-\mathcal{P}x||_X^2 + ||\mathcal{P}x - y||_X^2
+	\end{align*}
+\end{proof}
+
+\begin{theorem}
+	Sei $A \in \mathbb{K}^{n\times n}$ SPD und $b, x* \in \mathbb{K}^n, Ax* = b$. Zu $l \in \mathbb{N}_0$ sei $\mathcal{K}_l = span\{A^jb | j=0, ..., l-1\}$ und $x_l \in \mathcal{K}_l$ mit $||x* - x_l||_A = \min_{y_l \in \mathcal{K}_l} ||x* - y_l||_A$. Sei $l* \leq n$ minimal mit $x* \in \mathcal{K}_{l*}$.
+	
+	Definiere $r_l := b-Ax_l$, das sog. Residuum $\implies \{r_0, ..., r_{l-1}\} \subseteq \mathcal{K}_l$ Basis $\forall l < l*$ und Gram-Schmidt liefert $\{d_0, ..., d_{l-1}\} \subset \mathcal{K}_l$ orthogonale Basis bzgl. $<., .>_A$.
+	
+	$\implies d_0 = b, d_{l+1} = r_{l+1} + \beta_l d_l$ mit $\beta_l = \frac{||r_{l+1}||_2^2}{||r_l||_2^2}$, $x_0=0, r_0=b$ und $x_{l+1} = x_l + \alpha_l d_l, r_{l+1} = r_l - \alpha_l A d_l$ mit $\alpha_l = \frac{||r_l||_2^2}{||d_l||_A^2} \forall l < l*$.
+\end{theorem}
+
+\begin{algorithm}
+	$A \in \mathbb{K}^{n \times n}$ SPD, $b \in \mathbb{K}^n$
+	
+	Initialisierung: $r_0 := b, d_0 := b, x_0 := 0$
+	
+	Für alle $l=0,1,2,...$ iteriere:
+	\begin{enumerate}
+		\item Abbruch, falls $r_l = 0$ (d.h. $x* = x_l$)
+		\item Def $\alpha_l := \frac{||r_l||_2^2}{d_l^H A d_l}$ und $x_{l+1} := x_l + \alpha_l d_l, r_{l+1} := r_l - \alpha_l A d_l$
+		\item Def. $\beta_l := \frac{||r_{l+1}||_2^2}{||r_l||_2^2}$ und $d_{l+1} := r_{l+1} + \beta_l d_l$
+	\end{enumerate}
+	
+	Output: $x* = x_l$ und $l = l*$ minimal mit $x* \in \mathcal{K}_{l*}$.
+\end{algorithm}
+
+\begin{remark}
+	CG-Algorithmus braucht pro Schritt eine Matrix-Vektor-Multiplikation zur Berechnung $Ad_l$, danach nur Vektor- und Skalar-Operationen.
+	
+	$\implies$ Aufwand $=\mathcal{O}(n) + \mathcal{O}$(Matrix-Vektor-Multiplikation) pro Schritt.
+\end{remark}
+
+\begin{proof}
+	\begin{enumerate}
+		\item \begin{align*}
+			<r_k, y>_2 = <b - Ax_k, y>_2 = <A(x* - x_k), y>_2 = \underbrace{\overline{<x* - x_k, y>_A}}_{\text{Minimum, d.h. } x_k = \mathcal{P}_{\mathcal{K}_l}x*} = 0 \forall y \in \mathcal{K}_l
+		\end{align*}
+		$\implies$ Induktiv: $\{r_0, ..., r_{l-1}\} \subseteq \mathcal{K}_l$ Basis von $\mathcal{K}_l$ und orthogonal bzgl. $<., .>_2$ \checkmark
+		
+		Gram-Schmidt: $d_0 := r_0 := b, d_{k+1} = r_{k+1} - \sum_{j=0}^{k} \frac{\overline{<r_{k+1}, d_j>_A}}{||d_j||_A^2} d_j$
+		
+		$\implies \{d_0, ..., d_j\}$ orthogonal bzgl. $<., .>_A$ und $span\{d_0, ..., d_j\} = span\{r_0, ..., r_j\}$ und $<r_{k+1}, d_j>_A = <r_{k+1}, \underbrace{Ad_j}_{\in \mathcal{K}_{j+1}}>_2$
+		
+		$r_k \in \mathcal{K}_{k+1}$ mit $r_k \perp \mathcal{K}_k$ in $<., .>_2$, $d_k \in \mathcal{K}_{k+1}$ mit $d_k \perp \mathcal{K}_k$ in $<., .>_A$
+		\begin{align*}
+			\implies d_{k+1} = r_{k+1} \underbrace{- \frac{\overline{<r_{k+1}, d_k>_A}}{||d_k||_A^2}}_{=: \tilde{p}_k} d_k
+		\end{align*}
+		
+		\item \begin{align*}
+			x_{k+1} = \sum_{j=0}^{k} \frac{<x*, d_j>_A}{||d_j||_A^2} d_j = x_k + \underbrace{\frac{<x*, d_k>_A}{||d_k||_A^2}}_{=: \tilde{\alpha}_k} d_k\\
+			r_{k+1} = b - Ax_{k+1} = b - (x_k + \tilde{\alpha}_k d_k) = r_k - \tilde{\alpha}_k d_k
+		\end{align*}
+		
+		\item zz $\tilde{\alpha}_k = \frac{<x*, d_k>_A}{||d_k||_A^2} \overset{!}{=} \frac{||r_k||_2^2}{||d_k||_A^2} = \alpha_k$
+		\begin{align*}
+			||r_k||_2^2 = <r_k, r_k>_2 \overset{\text{(1)}}{=} <r_k, d_k>_2 = <b-Ax_k, d_k>_2 =
+			<A(x* - x_k), d_k>_2 =\\
+			\overline{<x*, x_k, d_k>_A} = \overline{<x*, d_k>_A} = <x*, d_k>_A
+		\end{align*}
+		
+		\item zz: $\tilde{\beta}_k = - \frac{\overline{<r_{k+1}, d_k>_A}}{||d_k||_A^2} = \frac{||r_{k+1}||_2^2}{||r_k||_2^2} = \beta_k$
+		\begin{align*}
+			||r_{k+1}||_2^2 = - \alpha_k <r_{k+1}, Ad_k>_2 = - \alpha_k <r_{k+1}, d_k>_A = \overline{\tilde{\beta}_k} ||r_k||_2^2
+		\end{align*}
+	\end{enumerate}
+\end{proof}
+
+\begin{remark}
+	Man kann zeigen, dass im CG-Verfahren stets gilt $||x* - x_{k+1}||_A \leq q ||x* - x_k||_A$ mit $q = \left(1 - \frac{1}{cond_2(A)}\right)^{1/2}, cond_2(A) = ||A||_2 ||A^{-1}||_2$
+	
+	$\implies$ CG passt auch in den Rahmen von Banachschen Fixpunktsatz, d.h. man a priori und a posteriori Fehlerabschätzungen.
+\end{remark}
+
+\begin{proof}[Beweisidee]
+	$||x* - x_{k+1}||_A^2 = \min_{y_{k+1} \in \mathcal{K}_{k+1}} ||x* - y_{k+1}||_A^2 \leq \min_{t \in \mathbb{R}} ||x* - (x_k + t r_k)||_A^2$
+	
+	$\implies \tilde{x}_{k+1} = x_k + t_{min}r_k \implies ||x* - \tilde{x}_{k+1}||_A \leq q ||x* - x_k||_A \rightsquigarrow t$ ausrechnen!
+\end{proof}
