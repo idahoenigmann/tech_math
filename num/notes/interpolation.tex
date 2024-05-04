@@ -463,7 +463,7 @@ $\implies$ arithmetischer Aufwand $3 \frac{n(n+1)}{2}$, um alle $y_{0,j}$ zu ber
 	\begin{itemize}
 		\item for $m=1:n$
 		\item \hspace{0.5cm} for $j = n-m:-1:0$
-		\item \hspace{1cm} $y_{j,m} := \frac{y_{j+m} - y_{j,m-1}}{x_{j+m} - x_j}$
+		\item \hspace{1cm} $y_{j,m} := \frac{y_{j,m} - y_{j,m-1}}{x_{j+m} - x_j}$
 		\item \hspace{0.5cm} end
 		\item end
 	\end{itemize}
@@ -822,7 +822,7 @@ Im restlichen Abschnitt betrachten wir \textbf{äquidistante Stützstellen} (ode
 \end{proof}
 
 \begin{definition}
-	Die Abbildung $\mathcal{F}:\mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n(x) = V_n x$ bezeichnet man als \textbf{diskrete Fourier-Transformation (DFT) der Länge $n$}. Die Inverse $\mathcal{F}_n^{-1}: \mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n^{-1}(x) = \frac{1}{n}\bar{V}_nx$ heißt \textbf{diskrete Fourier-Rücktransformation}.
+	Die Abbildung $\mathcal{F}_n:\mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n(x) = V_n x$ bezeichnet man als \textbf{diskrete Fourier-Transformation (DFT) der Länge $n$}. Die Inverse $\mathcal{F}_n^{-1}: \mathbb{C}^n \rightarrow \mathbb{C}^n, \mathcal{F}_n^{-1}(x) = \frac{1}{n}\bar{V}_nx$ heißt \textbf{diskrete Fourier-Rücktransformation}.
 \end{definition}
 
 \begin{remark}
