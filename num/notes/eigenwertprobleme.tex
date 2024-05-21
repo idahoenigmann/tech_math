@@ -50,7 +50,7 @@
 \begin{proof}
 	Für $Av = \lambda v$ folgt $\lambda ||v||_2^2 = \lambda v^Hv = v^HAv = (Av)^Hv = \bar{\lambda} ||v||_2^2$
 	
-	$\implies R=Q^HAQ, R^H = Q^HA^HQ = Q^HAQ=R$ diagonal.
+	$\implies R=Q^HAQ, R^H = Q^HA^HQ = Q^HAQ=R^H$ diagonal.
 \end{proof}
 
 \begin{theorem}[Bauer-Fike]
@@ -65,7 +65,7 @@
 	$\implies \forall \tilde{\lambda} \in \sigma(\tilde{A}): \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq ||A - \tilde{A}||_2$
 \end{corollary}
 
-\begin{proof}[Bauer-Fike]
+\begin{proof}[Beweis Bauer-Fike]
 	Sei $\tilde{\lambda} \in \sigma(\tilde{A})$, o.B.d.A. $\tilde{\lambda} \notin \sigma(A)$.
 	
 	Sei $v \in \mathbb{K}^n\setminus\{0\}$ mit $\tilde{A}v = \tilde{\lambda}v$
@@ -108,7 +108,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 		
 		3. Fall $\dim X = \dim Y = \dim Z$ $\implies d(X,Y) \leq ||\mathbb{P}_X - \mathbb{P}_Z||_2 + ||\mathbb{P}_Z - \mathbb{P}_Y||_2 = d(X,Z) + d(Z,Y)$.
 		
-		4. Fall $\dim X^\perp = n - \dim X$, d.h. $\dim X = \dim Y \iff \dim X^\perp = \dim Y^\perp$
+		\item $\dim X^\perp = n - \dim X$, d.h. $\dim X = \dim Y \iff \dim X^\perp = \dim Y^\perp$
 		
 		O.B.d.A $\dim X = \dim Y$
 		
@@ -163,7 +163,9 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 			
 			Sei $x = \sum_j \mu_j v_j$ mit geeigneten $\mu_j \in \mathbb{K}$
 			\begin{align*}
-				\implies <(A - \alpha)x, (A - \beta)x>_2 = \sum_{j,k} \bar{\mu}_j (\lambda_j - \alpha) \mu_k (\lambda_k - \beta) \underbrace{<v_j, v_k>_2}_{\delta_{jk}} = \sum_j |\mu_j|^2 \underbrace{(\lambda_j - \alpha)(\lambda_j - \beta)}_{\geq 0} \geq 0\\
+				\implies <(A - \alpha)x, (A - \beta)x>_2 =
+				\sum_{j,k} \bar{\mu}_j (\lambda_j - \alpha) \mu_k (\lambda_k - \beta) \underbrace{<v_j, v_k>_2}_{\delta_{jk}} =\\
+				\sum_j |\mu_j|^2 \underbrace{(\lambda_j - \alpha)(\lambda_j - \beta)}_{\geq 0} \geq 0\\
 				<(A - \alpha)x, (A - \beta)x>_2 = <\underbrace{(A - \tilde{\lambda})x}_{=r} + (\tilde{\lambda} - \alpha)x, \underbrace{(A-\tilde{\lambda})}_{r} + (\tilde{\lambda} - \beta)x>_2 =\\
 				||r||_2^2 + \tilde{\lambda} - \alpha \underbrace{<x, r>_2}_{x^H(Ax - (x^HAx)x) = x^HAx - \underbrace{x^Hx}_{=1}(x^HAx) = 0} + (\tilde{\lambda} - \beta)<r, x>_2 + (\tilde{\lambda} - \alpha)(\tilde{\lambda} - \beta)||x||_2^2
 			\end{align*}
@@ -208,7 +210,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 	
 	$|\mu_l - \lambda_1| \leq C \left|\frac{\lambda_2}{\lambda_1}\right|^l, d(span\{x_l\}, span\{v_1\}) \leq C \left|\frac{\lambda_2}{\lambda_1}\right|^l \forall l \geq l_0$
 		
-	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_2 - \lambda_1| \leq C \left|\frac{\lambda_l}{\lambda_1}\right|^{2l}$.
+	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_l - \lambda_1| \leq C \left|\frac{\lambda_2}{\lambda_1}\right|^{2l}$.
 \end{theorem}
 
 \begin{proof}
@@ -268,7 +270,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 	
 	$|\mu_l - \lambda_1| \leq C {\underbrace{\left|\frac{\lambda_2-\lambda}{\lambda_1-\lambda}\right|}_{=:q<1}}^l, d(span\{x_l\}, span\{v_1\}) \leq C q^l \forall l \geq l_0$
 	
-	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_2 - \lambda_1| \leq C q^{2l}$.
+	Falls $A=A^H$, so gilt $l_0 = 0$ und $|\mu_l - \lambda_1| \leq C q^{2l}$.
 \end{corollary}
 
 \begin{proof}
@@ -496,7 +498,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 \begin{remark}
 	Betrachte Lösungsmenge $\mathcal{L} := \{x \in \mathbb{K}^n | \underbrace{A^HAx=A^Hb}_{\text{Gauß'sche Normalgelichung}}\} \neq \emptyset$ zu $A \in \mathbb{K}^{m\times n}, b \in \mathbb{K}^m$ zum Linearen Ausgleichsproblem.
 	
-	$\implies A^+b \in \mathbb{L}$ und eindeutig mit $||A^+b||_2 = \min_{x\in \mathbb{L}} ||x||_2$ sog. \textbf{Minimum-Norm-Lösung von LAP}.
+	$\implies A^+b \in \mathcal{L}$ und eindeutig mit $||A^+b||_2 = \min_{x\in \mathbb{L}} ||x||_2$ sog. \textbf{Minimum-Norm-Lösung von LAP}.
 	
 	(folgt durch Ausrechnen!)
 \end{remark}
@@ -517,7 +519,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 \end{algorithm}
 
 \begin{theorem}
-	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ Basis mit $Av_j = \lambda_j v_j$ mit $|\lambda_1| \geq ... \geq |\lambda_k| \lneq |\lambda_{k+1}| \leq ... \leq |\lambda_n|$. Sei $\hat{X}_0 \leq \mathbb{K}^n$ Unterraum mit Basis $X_0 \in \mathbb{K}^{n\times k}$ und $\hat{X}_0 \cap span\{v_{k+1}, ..., v_n\} = \{0\}$
+	$A \in \mathbb{K}^{n\times n}$ diagonalisierbar, $\{v_1, ..., v_n\} \subseteq \mathbb{K}^n$ Basis mit $Av_j = \lambda_j v_j$ mit $|\lambda_1| \geq ... \geq |\lambda_k| \gneq |\lambda_{k+1}| \geq ... \geq |\lambda_n|$. Sei $\hat{X}_0 \leq \mathbb{K}^n$ Unterraum mit Basis $X_0 \in \mathbb{K}^{n\times k}$ und $\hat{X}_0 \cap span\{v_{k+1}, ..., v_n\} = \{0\}$
 	
 	$\implies$ Ex. $C>0$ mit $d(A^l\hat{X}_0, span\{v_1, ..., v_k\}) \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l, \max_{\tilde{\lambda} \in \sigma(Q_l^HAQ_l)} \min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda}| \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$, d.h. simultane Approximation der ersten $k$ EW und zugehäriger EV.
 \end{theorem}
@@ -659,7 +661,7 @@ Ziel: Entwickle iterative Verfahren, basierend auf Matrix-Vektor-Multiplikatione
 			A_{21} & A_{22}
 		\end{matrix}\right)
 	\end{align*}
-	$\implies ||\underbrace{{A_{21}}_{=A_l(k+1:n, 1:k)}}||_2 \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$
+	$\implies ||\underbrace{A_{21}}_{=A_l(k+1:n, 1:k)}||_2 \leq C \left|\frac{\lambda_{k+1}}{\lambda_k}\right|^l$
 	\begin{align*}
 		\sum_{j=k+1}^{n} |(A_l)_{jk}| \leq \underbrace{\sum_{i=1}^{n} \sum_{j=k+1}^{n} |(A_l)_{ji}| }_{=:||A_{21}|| \text{ Norm auf } \mathbb{K}^{(n-k)\times k}} = ||A_{21}||_2
 	\end{align*}
@@ -673,7 +675,7 @@ $\implies A_l = Q_l^HAQ_l = \underbrace{Q_l^HQ_{l+1}}_{=:\tilde{Q}_{l+1}}R_{l+1}
 
 $\implies A_{l+1} = Q_{l+1}^HA\underbrace{Q_{l+1}}_{=Q_l\tilde{Q}_{l+1}} = \underbrace{\tilde{Q}_{l+1}^H \underbrace{Q_l^HAQ_l}_{=A_l}}_{=R_{l+1}}\tilde{Q}_{l+1} = R_{l+1}\tilde{Q}_{l+1}$
 
-\begin{algorithm}[QR-Zerlegung]
+\begin{algorithm}[QR-Verfahren]
 	$A_0 := A \in \mathbb{K}^{n\times n}$
 	\begin{itemize}
 		\item Für $l=0, 1,2, ...$ (bis $A_l$ dicht an oberer $\triangle$-Matrix)

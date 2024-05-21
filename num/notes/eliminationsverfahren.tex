@@ -41,7 +41,7 @@
 \begin{proof}
 	\begin{align*}
 		Ux = b \iff \sum_{k=1}^{n} \underbrace{U_{jk}}_{=0 \text{ für } j>k} x_k = b_j \forall j \iff
-		\underbrace{\sum_{k=j}^{n} U_{jk} x_k}_{=\underbrace{U_jj}_{\neq 0} x_j + \sum_{k=j+1}^{n} U_{jk} x_k} = b_j \forall j
+		\underbrace{\sum_{k=j}^{n} U_{jk} x_k}_{=\underbrace{U_{jj}}_{\neq 0} x_j + \sum_{k=j+1}^{n} U_{jk} x_k} = b_j \forall j
 	\end{align*}
 	
 	Aufwand pro $j$: $n-j$ Multiplikationen + Subtraktionen, $1$ Division
@@ -66,7 +66,7 @@
 \begin{proof}
 	\begin{align*}
 		Lx = b \iff \sum_{k=1}^{n} \underbrace{L_{jk}}_{=0 \text{ für } k>j} x_k = b_j \forall j \iff
-		\underbrace{\sum_{k=1}^{j} L_{jk} x_k}_{=\underbrace{L_jj}_{\neq 0} x_j + \sum_{k=1}^{j-1} L_{jk} x_k} = b_j \forall j
+		\underbrace{\sum_{k=1}^{j} L_{jk} x_k}_{=\underbrace{L_{jj}}_{\neq 0} x_j + \sum_{k=1}^{j-1} L_{jk} x_k} = b_j \forall j
 	\end{align*}
 \end{proof}
 
@@ -249,7 +249,7 @@ Erinnerung: Beim Lösen von $Ax=b$ gilt $\frac{||x-\tilde{x}||}{||x||} \leq cond
 	\begin{itemize}
 		\item for $i=1:n$
 		\item \hspace{0.5cm} for $k=i:n$
-		\item \hspace{1cm} $U_{ik} = A_{ik} - \sum_{j=1}^{i-1} L_{ij}L_{jk}$
+		\item \hspace{1cm} $U_{ik} = A_{ik} - \sum_{j=1}^{i-1} L_{ij}U_{jk}$
 		\item \hspace{0.5cm} end
 		\item \hspace{0.5cm} for $k = i+1:n$
 		\item \hspace{1cm} $L_{ki} = \left(A_{ki} - \sum_{j=1}^{i-1} L_{kj} U_{ji}\right)/U_{ii}$
@@ -392,11 +392,11 @@ Idee des Algorithmus = Parkettierung von $A$.
 	
 	\begin{itemize}
 		\item for $k=1:n-1$
-		\item \hspace{0.5cm} $i=k+1:n$
+		\item \hspace{0.5cm} for $i=k+1:n$
 		\item \hspace{1cm} $L_{ik} = \frac{A_{ik}^{(k)}}{A_{kk}^{(k)}}$
 		\item \hspace{1cm} $b_i^{k+1} = b_i - L_{ik} b_k^{(k)}$
 		\item \hspace{1cm} for $j=k+1:n$
-		\item \hspace{1.5cm} $A_{ij}^{(k+1)} = A_{ij}^{(k)} - L_{ik}A_{ij}^{(k)}$
+		\item \hspace{1.5cm} $A_{ij}^{(k+1)} = A_{ij}^{(k)} - L_{ik}A_{kj}^{(k)}$
 		\item \hspace{1cm} end
 		\item \hspace{0.5cm} end
 		\item end
@@ -499,7 +499,7 @@ Idee des Algorithmus = Parkettierung von $A$.
 		
 		Wh: $L^{(k)} = Id - l_ke_k^T, l_k=(\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)$
 		
-		klar: $P^{(j)}(Id - l_ke_k^T)P^{(j)} = Id - \underbrace{P^{(j)l_k}}_{=\tilde{l}_k = (\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)} \underbrace{e_k^TP^{(j)}}_{=e_k^T \text{ für } j> k}$
+		klar: $P^{(j)}(Id - l_ke_k^T)P^{(j)} = Id - \underbrace{P^{(j)}l_k}_{=\tilde{l}_k = (\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)} \underbrace{e_k^TP^{(j)}}_{=e_k^T \text{ für } j> k}$
 		
 		$\implies \hat{L}^{(k)} = Id - \hat{l}_k e_k^T$ mit $\hat{l}_k = (\underbrace{0, ..., 0}_{k\text{ viele}}, *, ..., *)$
 		
@@ -559,7 +559,7 @@ Idee des Algorithmus = Parkettierung von $A$.
 \begin{algorithm}[Householder-Verfahren zur Berechnung der QR-Zerlegung]
 	Input: $A \in \mathbb{K}^{m\times n}$ mit $m \geq n$
 	
-	1. Schritt: Falls erste Spalte $A_{(1)}^(0)$ mit $A^{(0)} := A$ in $span\{e_1\}$ liegt, def. $H:=Id$. Ansonsten wähle Householder-Trafo mit $HA_{(1)}^{(0)} \in span\{e_1\}$.
+	1. Schritt: Falls erste Spalte $A_{(1)}^{(0)}$ mit $A^{(0)} := A$ in $span\{e_1\}$ liegt, def. $H:=Id$. Ansonsten wähle Householder-Trafo mit $HA_{(1)}^{(0)} \in span\{e_1\}$.
 	
 	Def $A^{(1)} := Q^{(1)} A$ mit $Q^{(1)} := H$
 	
@@ -636,7 +636,7 @@ $Ax=b \iff PAx = Pb$ mit $P$ regulär und $\underbrace{cond_2(PA)}_{\approx 1} \
 	$\implies$ Ex. eind. Zerlegung $A=QR$ mit $Q$ unitär und $R$ verallg. obere $\triangle$-Matrix auf $R_{jj} = \sigma_j |R_{jj}| \forall j$
 \end{theorem}
 
-\begin{theorem}
+\begin{proof}
 	\begin{enumerate}
 		\item Existenz: Wähle $A = \tilde{Q} \tilde{R}$ Zerlegung. $A = \underbrace{(\tilde{Q}D^{-1})}_{\text{unitär}}\underbrace{(D\tilde{R})}_{\text{obere verall. }\triangle\text{-Matrix}}$ mit $D \in \mathbb{K}^{n\times n}$ diagonal mit $D_{jj} = \underbrace{\frac{|\tilde{R}_{jj}|}{\tilde{R}_{jj}}\sigma_j}_{\text{wohldef., da} \tilde{R} \text{ regulär}}, |D_{jj}| = 1$
 		
@@ -656,7 +656,7 @@ $Ax=b \iff PAx = Pb$ mit $P$ regulär und $\underbrace{cond_2(PA)}_{\approx 1} \
 		
 		$\implies D_{jj} = \frac{R_{jj}}{\tilde{R}_{jj}} = \frac{\sigma_j |R_{jj}|}{\sigma_j |\tilde{R}_{jj}|}$ und $|D_{jj}| = 1$ $\implies R_{jj} = \tilde{R}_{jj}$.
 	\end{enumerate}
-\end{theorem}
+\end{proof}
 
 \subsection{Lineare Ausgleichsprobleme}
 
@@ -716,7 +716,7 @@ Das \textbf{lineare Ausgleichsproblem (LAP)} sucht $x \in \mathbb{K}^n$ mit $||A
 	Sei $A = QR \in \mathbb{K}^{m\times n}$ mit $m \geq n = rang(A)$. Partioniere $R = \left(\begin{matrix}
 		\tilde{R}\\ 0
 	\end{matrix}\right)$ mit $\tilde{R} \in \mathbb{K}^{n\times n}$ obere $\triangle$-Matrix, $b = \left(\begin{matrix}
-		v\\ v
+		v\\ r
 	\end{matrix}\right)$ mit $v \in \mathbb{K}^n$
 	
 	$\implies ||Ax-b||_2^2 = ||QR x - b||_2^2 = ||Rx - Q^Hb||_2^2  =||\tilde{R}x - v||_2^2 + ||r||_2^2$, d.h. erhalte Lsg. von LAP durch Lösen von $\tilde{R}x = v$.
